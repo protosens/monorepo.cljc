@@ -1,4 +1,9 @@
 (ns protosens.maestro.profile
+
+  "Miscellaneous helpers centered around profiles.
+  
+   See the [[protosens.maestro.required]] namespace."
+
   (:require [protosens.maestro.util :as $.maestro.util]))
 
 
@@ -7,17 +12,21 @@
 
 (defn append+
 
-  [basis alias+]
+  "In `basis`, activates the given profiles by appending them to any existing ones."
+
+  [basis profile+]
 
   ($.maestro.util/append-at basis
                            :maestro/profile+
-                    alias+))
+                           profile+))
 
 
 (defn prepend+
   
-  [basis alias+]
+  "In `basis`, activates the given profiles by prepending them to any existing ones."
+
+  [basis profile+]
 
   ($.maestro.util/prepend-at basis
                              :maestro/profile+
-                             alias+))
+                             profile+))

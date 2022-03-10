@@ -1,4 +1,10 @@
 (ns protosens.maestro.aggr
+
+  "When running [[protosens.maestro.required/search]], `basis` can contain an extra key `maestro/aggr`
+   pointing to a function such as `(fn [basis alias alias-data] basis-2)`.
+  
+   By default, this function is [[default]]. Technically, power users can provided an alternative implementation
+   for additional features."
   
   (:refer-clojure :exclude [alias]))
 
@@ -8,7 +14,7 @@
 
 (defn alias
 
-  "In `basis`, adds `alias` under :`maestro/require`."
+  "In `basis`, appends `alias` under `:maestro/require`."
 
 
   ([basis alias]
@@ -28,9 +34,11 @@
 
 (defn env
 
-  "Merge `:maestro/env` from alias `data` into `:maestro/env` in `basis`.
+  "Merges `:maestro/env` from `alias-data` into `:maestro/env` in `basis`.
 
-   Those are typically used to represent environment variables."
+   Those are typically used to represent environment variables and become useful
+   when executing a process. For instance, sell utilities in Babashka accepts such
+   a map of environment variables."
 
 
   ([basis alias-data]
@@ -52,7 +60,7 @@
 
 (defn default
 
-  "Default alias aggregating function for [[protosens.maestro/walk]].
+  "Default alias aggregating function for [[protosens.maestro.required/search]].
 
    Uses:
 

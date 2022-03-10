@@ -1,5 +1,9 @@
 (ns protosens.maestro.util
 
+  "Utilities needed by Maestro.
+  
+   Not meant for regular users."
+
   {:no-doc true})
 
 
