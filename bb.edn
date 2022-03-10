@@ -1,0 +1,45 @@
+{:paths
+ ["module/maestro/src/main"]
+
+ :tasks
+ {:requires ([protosens.maestro.alias    :as $.maestro.alias]
+             [protosens.maestro.profile  :as $.maestro.profile]
+             [protosens.maestro.required :as $.maestro.required]
+             [protosens.maestro.task     :as $.maestro.task])
+
+
+  alias:dev
+  {:doc  "Print aliases for dev mode - Takes a single alias or a vector or aliases and profiles"
+   :task (-> ($.maestro.required/create-basis)
+             ($.maestro.required/cli-arg)
+             ($.maestro.alias/append+ [:task/dev])
+             ($.maestro.profile/append+ '[dev
+                                          test])
+             ($.maestro.required/search)
+             ($.maestro.required/print))}
+
+  alias:test
+  {:doc      "Print aliases for testing - See `alias:dev` for arguments"
+   :requires ([babashka.fs :as bb.fs])
+   :task     (let [basis (-> ($.maestro.required/create-basis)
+                             ($.maestro.required/cli-arg)
+                             ($.maestro.alias/append+ [:task/test])
+                             ($.maestro.profile/append+ [(with-meta 'test
+                                                                    {:direct? true})])
+                             $.maestro.required/search)]
+               (when-not (bb.fs/exists? "./private")
+                 (bb.fs/create-dir "./private"))
+               (spit "./private/maestro_kaocha.edn"
+                     {:kaocha/source-paths ($.maestro.alias/extra-path+ basis
+                                                                        ($.maestro.required/not-by-profile+ basis
+                                                                                                            '[test]))
+                      :kaocha/test-paths   ($.maestro.alias/extra-path+ basis
+                                                                        ($.maestro.required/by-profile+ basis
+                                                                                                        '[test]))})
+               ($.maestro.required/print basis))}
+
+  pprint-cp
+  {:doc  "Pretty-print the classpath received from STDIN - Great match for Clojure CLI `-SPath` argument"
+   :task ($.maestro.task/pprint-cp)}
+
+  }}

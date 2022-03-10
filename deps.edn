@@ -1,4 +1,43 @@
-{:paths ["src/main"
-         "src/test"]
+{:aliases
  
- }
+ {;; EXTERNAL DEPENDENCIES
+
+  :ext/criterium
+  {:extra-deps  {criterium/criterium {:mvn/version "0.4.6"}}
+   :maestro/doc "Benchmarking library"}
+
+  :ext/kaocha
+  {:extra-deps  {lambdaisland/kaocha {:mvn/version "1.63.998"}}
+   :maestro/doc "Test runner"}
+
+
+  ;; TASKS
+
+  :task/dev
+  {:maestro/doc     "Provides what is commonly necessary during dev"
+   :maestro/require [:ext/criterium]}
+
+  :task/test
+  {:main-opts       ["-m" "kaocha.runner"
+                     "--config-file" "kaocha.edn"]
+   :maestro/doc     "Starts the test runner"
+   :maestro/require [:ext/kaocha]}
+
+
+  ;; MODULES
+
+
+  ;- Maestro
+
+  :module/maestro
+  {:extra-paths     ["module/maestro/src/main"]
+   :maestro/doc     "Tools for managing a monorepo by leveraging `deps.edn`"
+   :maestro/require [{test :test/maestro}]}
+
+  :test/maestro
+  {:extra-paths ["module/maestro/src/test"]}
+
+  ;-
+
+
+  }}
