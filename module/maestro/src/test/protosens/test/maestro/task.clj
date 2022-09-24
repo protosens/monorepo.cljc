@@ -24,10 +24,3 @@
                                                            :h {}}
                                         :maestro/alias+   [:a]
                                         :maestro/profile+ [foo]}))))))
-
-
-(T/deftest pprint-cp
-
-  (T/is (= "a\nb\nc/d\n"
-           (with-out-str
-             ($.maestro.task/pprint-cp "a:b:c/d")))))

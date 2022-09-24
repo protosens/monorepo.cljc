@@ -39,7 +39,8 @@
                ($.maestro.required/print basis))}
 
   pprint-cp
-  {:doc  "Pretty-print the classpath received from STDIN - Great match for Clojure CLI `-SPath` argument"
-   :task ($.maestro.task/pprint-cp)}
+  {:doc      "Pretty-print the classpath received from STDIN - Great match for Clojure CLI `-SPath` argument"
+   :requires ([protosens.maestro.classpath])
+   :task     (protosens.maestro.classpath/pprint)}
 
   }}

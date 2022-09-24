@@ -4,8 +4,7 @@
   
    Great match for the [Babashka task runner](https://book.babashka.org/#tasks)."
   
-  (:require [clojure.string             :as string]
-            [protosens.maestro.required :as $.maestro.required]))
+  (:require [protosens.maestro.required :as $.maestro.required]))
 
 
 ;;;;;;;;;;
@@ -51,28 +50,3 @@
    (-> basis
        $.maestro.required/search
        $.maestro.required/print)))
-
-
-(defn pprint-cp
-
-  "Pretty-prints a classpath in alphabetical order given as argument or retrieved from STDIN.
-
-   Great match for the Clojure CLI when used as a Babasha task, such as:
-
-   ```
-   clj -A:some-aliases -Spath | bb pprint-cp
-   ```"
-
-
-  ([]
-
-   (pprint-cp (slurp *in*)))
-
-
-  ([raw-cp]
-
-   (run! println
-         (-> (map string/trim-newline
-                  (string/split raw-cp
-                                (re-pattern ":")))
-             sort))))

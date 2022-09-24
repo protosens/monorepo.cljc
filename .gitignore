@@ -1,3 +1,7 @@
 .cpcache
 .nrepl-port
 /private/
+.lsp
+.clj-kondo
+!.clj-kondo/config.edn
+!.clj-kondo/hooks

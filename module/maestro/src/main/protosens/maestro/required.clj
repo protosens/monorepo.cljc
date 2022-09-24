@@ -237,7 +237,7 @@
           (-> basis
               :maestro/profile->alias+
               (select-keys profile+)
-              vals)))
+              (vals))))
 
 
 (defn not-by-profile+
@@ -270,8 +270,7 @@
 
   [basis]
 
-  (-> basis
-      :maestro/require
-      $.maestro.alias/stringify+
-      clojure.core/print)
+  (-> (basis :maestro/require)
+      ($.maestro.alias/stringify+)
+      (clojure.core/print))
   basis)
