@@ -37,7 +37,7 @@
 
 (defn- -require-for-bb
 
-  ;;
+  ;; For the time being, the `babashka.tasks` namespace is not available to the JVM.
   
   [sym]
 

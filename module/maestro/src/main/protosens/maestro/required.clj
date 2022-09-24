@@ -48,11 +48,12 @@
 
   (:import (java.io PushbackReader))
   (:refer-clojure :exclude [print])
-  (:require [clojure.edn             :as edn]
-            [clojure.java.io         :as java.io]
-            [clojure.set             :as set]
-            [protosens.maestro.alias :as $.maestro.alias]
-            [protosens.maestro.aggr  :as $.maestro.aggr]))
+  (:require [clojure.edn               :as edn]
+            [clojure.java.io           :as java.io]
+            [clojure.set               :as set]
+            [protosens.maestro.alias   :as $.maestro.alias]
+            [protosens.maestro.aggr    :as $.maestro.aggr]
+            [protosens.maestro.profile :as $.maestro.profile]))
 
 
 ;;;;;;;;;;
@@ -124,7 +125,37 @@
                x
                [x])))))
 
+
+
+(defn ensure-basis
+
+  "Returns the given argument if it contains `:aliases`.
+   Otherwise, forwards it to [[create-basis]]."
+
+  [maybe-basis]
+
+  (if (:aliases maybe-basis)
+    maybe-basis
+    (merge maybe-basis
+           (create-basis maybe-basis))))
+
+
 ;;;;;;;;;;
+
+
+(defn- -on-require
+
+  ;; Called by [[search]] at the end to for executing `:maestro/on-require` hooks.
+
+  [basis]
+
+  (transduce (comp (map (basis :aliases))
+                   (mapcat :maestro/on-require))
+             (completing (fn [basis-2 sym]
+                           ((requiring-resolve sym) basis-2)))
+             basis
+             (basis :maestro/require)))
+
 
 
 (defn- -search
@@ -191,6 +222,8 @@
      - The result of all required aliases is a vector under `:maestro/require`
      - `:maestro/profile->alias+` is a map of `profile` -> `set of required aliases` keeping track for which
        profile each alias has been required
+     - An alias may contain a vector of qualified symbols under `:maestro/on-require` that will be resolved
+       and executed if that alias is required, passing the basis
 
 
    See the following namespaces for additional helpers:
@@ -201,10 +234,11 @@
 
   [basis]
 
-  (let [profile+ (-> (basis :maestro/profile+)
-                     vec
+  (let [profile+ (-> (:maestro/profile+ basis)
+                     (vec)
                      (conj 'default))]
     (-> basis
+        (ensure-basis)
         (assoc :maestro/profile+
                profile+)
         (update :maestro/require
@@ -219,7 +253,8 @@
                    (not (and (> depth 
                                 1)
                              (-> profile meta :direct?)))))
-        (dissoc :maestro/seen))))
+        (dissoc :maestro/seen)
+        (-on-require))))
 
 
 ;;;;;;;;;;
@@ -256,7 +291,7 @@
                                 profile))
                       (basis :maestro/profile->alias+)
                       profile+)
-              vals)))
+              (vals))))
 
 
 ;;;;;;;;;;
@@ -274,3 +309,27 @@
       ($.maestro.alias/stringify+)
       (clojure.core/print))
   basis)
+
+
+
+
+(defn task
+
+  "Uses [[search]] on the argument but prepends aliases and profiles found using [[cli-arg]] and ends by printing all required aliases.
+  
+   Well suited for a task aimed to find aliases given some context (dev, testing, etc)."
+
+
+  ([]
+
+   (task nil))
+
+
+  ([basis]
+
+   (let [from-cli (cli-arg {})]
+     (-> basis
+         ($.maestro.alias/prepend+ (from-cli :maestro/alias+))
+         ($.maestro.profile/prepend+ (from-cli :maestro/profile+))
+         (search)
+         (print)))))

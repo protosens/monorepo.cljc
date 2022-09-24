@@ -17,21 +17,30 @@
 
   :ext/kaocha
   {:extra-deps  {lambdaisland/kaocha {:mvn/version "1.63.998"}}
-   :maestro/doc "Test runner"
-   :maestro/url "https://github.com/lambdaisland/kaocha"}
+   :maestro/doc "Test runner"}
+
+
+
+  ;; BUNDLES
+
+  :bundle/test
+  {:maestro/doc        "Bundles necessities for testing"
+   :maestro/on-require [protosens.maestro.plugin.kaocha/prepare]
+   :maestro/require    [:ext/kaocha]}
 
 
   ;; TASKS
 
   :task/dev
   {:maestro/doc     "Provides what is commonly necessary during dev"
-   :maestro/require [:ext/criterium]}
+   :maestro/require [:bundle/test
+                     :ext/criterium]}
 
   :task/test
   {:main-opts       ["-m" "kaocha.runner"
                      "--config-file" "kaocha.edn"]
    :maestro/doc     "Starts the test runner"
-   :maestro/require [:ext/kaocha]}
+   :maestro/require [:bundle/test]}
 
 
   ;; MODULES
