@@ -2,23 +2,24 @@
  ["module/maestro/src/main"]
 
  :tasks
- {:requires ([protosens.maestro.required :as $.maestro.required])
-
-  aliases
-  {:doc  "Print required aliases given the input - Takes a single root alias or a vector of aliases and profiles"
-   :task ($.maestro.required/task)}
+ {aliases
+  {:doc      "Print required aliases given the input - Takes a single root alias or a vector of aliases and profiles"
+   :requires ([protosens.maestro])
+   :task     (protosens.maestro/task)}
 
   aliases:dev
   {:doc  "Print aliases for dev mode - See `aliases` for arguments"
-   :task ($.maestro.required/task {:maestro/alias+   [:task/dev]
-                                   :maestro/profile+ ['dev
-                                                      'test]})}
+   :requires ([protosens.maestro])
+   :task     (protosens.maestro/task {:maestro/alias+   [:task/dev]
+                                      :maestro/profile+ ['dev
+                                                         'test]})}
 
   aliases:test
-  {:doc  "Print aliases for testing - See `alias` for arguments"
-   :task ($.maestro.required/task {:maestro/alias+   [:task/test]
-                                   :maestro/profile+ [(with-meta 'test
-                                                                 {:direct? true})]})}
+  {:doc      "Print aliases for testing - See `alias` for arguments"
+   :requires ([protosens.maestro])
+   :task     (protosens.maestro/task {:maestro/alias+   [:task/test]
+                                      :maestro/profile+ [(with-meta 'test
+                                                                    {:direct? true})]})}
 
   lint
   {:doc      "Lint the repository using `clj-kondo`"

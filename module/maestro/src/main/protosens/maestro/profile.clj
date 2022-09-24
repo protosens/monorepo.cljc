@@ -2,7 +2,7 @@
 
   "Miscellaneous helpers centered around profiles.
   
-   See the [[protosens.maestro.required]] namespace."
+   See the [[protosens.maestro]] namespace."
 
   (:require [protosens.maestro.util :as $.maestro.util]))
 

@@ -1,4 +1,4 @@
-(ns protosens.maestro.required
+(ns protosens.maestro
 
   "Using extra key-values on aliases from `deps.edn`, this namespace is able to extract dependencies between
    those aliases. In addition, some profiles can be activated or not so that some of those dependencies can be
@@ -44,7 +44,7 @@
    [{default :alias-1}]
    ```
 
-   See [[create-basis]] and [[search]]."
+   See [[search]] and [[task]]."
 
   (:import (java.io PushbackReader))
   (:refer-clojure :exclude [print])

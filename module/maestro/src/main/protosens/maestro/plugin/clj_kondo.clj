@@ -5,8 +5,8 @@
    Assumes it is already and `clj-kondo` is available in the shell."
 
   (:refer-clojure :exclude [import])
-  (:require [protosens.maestro.classpath :as $.maestro.classpath]
-            [protosens.maestro.required  :as $.maestro.required]
+  (:require [protosens.maestro           :as $.maestro]
+            [protosens.maestro.classpath :as $.maestro.classpath]
             [protosens.maestro.util      :as $.maestro.util]))
 
 
@@ -17,7 +17,7 @@
 
   []
 
-  (let [cp (-> ($.maestro.required/create-basis)
+  (let [cp (-> ($.maestro/create-basis)
                (:aliases)
                (keys)
                ($.maestro.classpath/compute))]
@@ -32,6 +32,4 @@
   (apply @$.maestro.util/d*shell
          "clj-kondo --parallel --lint"
          (mapcat :extra-paths
-                  (-> ($.maestro.required/create-basis)
-                      :aliases
-                      vals))))
+                  (vals (:aliases ($.maestro/create-basis))))))
