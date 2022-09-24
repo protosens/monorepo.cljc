@@ -1,14 +1,24 @@
-{:aliases
+{:maestro.plugin.kaocha/path "private/maestro-kaocha.edn"
+
+ 
+ :aliases
  
  {;; EXTERNAL DEPENDENCIES
 
+  :ext/babashka.fs
+  {:extra-deps  {babashka/fs {:mvn/version "0.1.11"}}
+   :maestro/doc "Library for filesystem operations"
+   :maestro/url "https://github.com/babashka/fs"}
+
   :ext/criterium
   {:extra-deps  {criterium/criterium {:mvn/version "0.4.6"}}
-   :maestro/doc "Benchmarking library"}
+   :maestro/doc "Benchmarking library"
+   :maestro/url "https://github.com/hugoduncan/criterium"}
 
   :ext/kaocha
   {:extra-deps  {lambdaisland/kaocha {:mvn/version "1.63.998"}}
-   :maestro/doc "Test runner"}
+   :maestro/doc "Test runner"
+   :maestro/url "https://github.com/lambdaisland/kaocha"}
 
 
   ;; TASKS
@@ -32,7 +42,8 @@
   :module/maestro
   {:extra-paths     ["module/maestro/src/main"]
    :maestro/doc     "Tools for managing a monorepo by leveraging `deps.edn`"
-   :maestro/require [{test :test/maestro}]}
+   :maestro/require [:ext/babashka.fs
+                     {test :test/maestro}]}
 
   :test/maestro
   {:extra-paths ["module/maestro/src/test"]}
