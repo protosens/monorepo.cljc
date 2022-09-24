@@ -3,7 +3,8 @@
   "Simple classpath utilities."
 
   (:require [clojure.string          :as string]
-            [protosens.maestro.alias :as $.maestro.alias]))
+            [protosens.maestro.alias :as $.maestro.alias]
+            [protosens.maestro.util  :as $.maestro.util]))
 
 
 ;;;;;;;;;;
@@ -15,14 +16,13 @@
   
    Only works in Babashka."
   
-  [aliases]
+  [alias+]
 
-  (let [shell (requiring-resolve 'babashka.tasks/shell)]
-    (-> (shell {:out :string}
-               (format "clojure -A%s -Spath"
-                       ($.maestro.alias/stringify+ aliases)))
-        (deref)
-        (:out))))
+  (-> (@$.maestro.util/d*shell {:out :string}
+                               (format "clojure -Spath -A%s"
+                                       ($.maestro.alias/stringify+ alias+)))
+      (deref)
+      (:out)))
 
 
 

@@ -38,6 +38,16 @@
                                                                                                         '[test]))})
                ($.maestro.required/print basis))}
 
+  lint
+  {:doc      "Lint the repository using `clj-kondo`"
+   :requires ([protosens.maestro.plugin.clj-kondo])
+   :task     (protosens.maestro.plugin.clj-kondo/lint)}
+
+  lint:prepare
+  {:doc      "Lints dependencies using `clj-kondo` and copy configuration files"
+   :requires ([protosens.maestro.plugin.clj-kondo])
+   :task     (protosens.maestro.plugin.clj-kondo/prepare)}
+
   pprint-cp
   {:doc      "Pretty-print the classpath received from STDIN - Great match for Clojure CLI `-SPath` argument"
    :requires ([protosens.maestro.classpath])
