@@ -1,63 +1,117 @@
-{:maestro.plugin.kaocha/path "private/maestro-kaocha.edn"
+{:maestro.plugin.build.path/exclude ["(?i)^META-INF/license/.*"
+                                     "^license/.*"]
+ :maestro.plugin.kaocha/path        "private/maestro-kaocha.edn"
 
  
+
+
  :aliases
  
- {;; EXTERNAL DEPENDENCIES
+ {
+  
+  ;; EXTERNAL DEPENDENCIES
+
 
   :ext/babashka.fs
+
   {:extra-deps  {babashka/fs {:mvn/version "0.1.11"}}
    :maestro/doc "Library for filesystem operations"
    :maestro/url "https://github.com/babashka/fs"}
+  
+
+  :ext/clojure.tools.build
+
+  {:extra-deps  {io.github.clojure/tools.build {:git/sha "0d20256"
+                                                :git/tag "v0.8.3"}}
+   :maestro/doc "Building jars and uberjars"}
+
 
   :ext/criterium
+
   {:extra-deps  {criterium/criterium {:mvn/version "0.4.6"}}
    :maestro/doc "Benchmarking library"
    :maestro/url "https://github.com/hugoduncan/criterium"}
 
+
   :ext/kaocha
+
   {:extra-deps  {lambdaisland/kaocha {:mvn/version "1.63.998"}}
    :maestro/doc "Test runner"}
 
 
 
+
   ;; BUNDLES
 
+
   :bundle/test
+
   {:maestro/doc        "Bundles necessities for testing"
    :maestro/on-require [protosens.maestro.plugin.kaocha/prepare]
    :maestro/require    [:ext/kaocha]}
 
 
+
+
   ;; TASKS
 
+
+  :task/build
+
+  {:exec-fn         protosens.maestro.plugin.build/build
+   :maestro/doc     "Uses `:module/maestro` for building jars and uberjars"
+   :maestro/require [:tool/maestro]}
+
+
   :task/dev
+
   {:maestro/doc     "Provides what is commonly necessary during dev"
    :maestro/require [:bundle/test
                      :ext/criterium]}
 
+
   :task/test
+
   {:main-opts       ["-m" "kaocha.runner"
                      "--config-file" "kaocha.edn"]
    :maestro/doc     "Starts the test runner"
    :maestro/require [:bundle/test]}
 
 
+
+
   ;; MODULES
 
 
-  ;- Maestro
-
   :module/maestro
-  {:extra-paths     ["module/maestro/src/main"]
-   :maestro/doc     "Tools for managing a monorepo by leveraging `deps.edn`"
-   :maestro/require [:ext/babashka.fs
-                     {test :test/maestro}]}
+
+  {:extra-paths                         ["module/maestro/src/main"]
+   :maestro/doc                          "Tools for managing a monorepo by leveraging `deps.edn`"
+   :maestro/dir                         "module/maestro"
+   :maestro/require                     [:ext/babashka.fs
+                                         {dev :tool/maestro}
+                                         {test :test/maestro}]
+   :maestro.plugin.build/type           :jar
+   :maestro.plugin.build.alias/artifact :release/maestro
+   :maestro.plugin.build.path/output    "private/target/maestro.jar"}
+
+
+  :release/maestro
+
+  {:extra-deps {com.protosens/maestro {:mvn/version "0.0.0-alpha0"}}}
+
 
   :test/maestro
+
   {:extra-paths ["module/maestro/src/test"]}
 
-  ;-
+
+  :tool/maestro
+
+  {:maestro/doc     ["`:module/maestro` offers plugins for well-known tools and libraries without depending on them."
+                     "This alias bundles it with all those optional dependencies."]
+   :maestro/require [:ext/clojure.tools.build
+                     :module/maestro]}
 
 
   }}

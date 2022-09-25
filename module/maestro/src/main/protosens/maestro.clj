@@ -253,7 +253,7 @@
                    (not (and (> depth 
                                 1)
                              (-> profile meta :direct?)))))
-        (dissoc :maestro/seen)
+        (dissoc :maestro/seen+)
         (-on-require))))
 
 
