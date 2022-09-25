@@ -58,12 +58,12 @@
 
   test
   {:doc      "Tests the given alias(es)"
-   :requires ([protosens.maestro])
+   :requires ([protosens.maestro]
+              [protosens.maestro.alias])
    :task     (clojure (str "-M"
-                           (with-out-str
-                             (protosens.maestro/task {:maestro/alias+   [:task/test]
-                                                      :maestro/profile+ [(with-meta 'test
-                                                                                    {:direct? true})]}))))}
-
-
+                           (protosens.maestro/task {:maestro/alias+        [:task/test]
+                                                    :maestro/profile+      [(with-meta 'test
+                                                                                       {:direct? true})]
+                                                    :maestro.task/finalize (comp protosens.maestro.alias/stringify+
+                                                                                 :maestro/require)})))}
   }}
