@@ -23,7 +23,8 @@
 
   {:extra-deps  {io.github.clojure/tools.build {:git/sha "0d20256"
                                                 :git/tag "v0.8.3"}}
-   :maestro/doc "Building jars and uberjars"}
+   :maestro/doc "Building jars and uberjars"
+   :maestro/url "https://github.com/clojure/tools.build"}
 
 
   :ext/criterium
@@ -33,10 +34,17 @@
    :maestro/url "https://github.com/hugoduncan/criterium"}
 
 
+  :ext/deps-deploy
+
+  {:extra-deps  {slipset/deps-deploy {:mvn/version "0.2.0"}}
+   :maestro/doc "Deploying jars locally and to Clojars"
+   :maestro/url "https://github.com/slipset/deps-deploy"}
+
   :ext/kaocha
 
   {:extra-deps  {lambdaisland/kaocha {:mvn/version "1.63.998"}}
-   :maestro/doc "Test runner"}
+   :maestro/doc "Test runner"
+   :maestro/url "https://github.com/lambdaisland/kaocha"}
 
 
 

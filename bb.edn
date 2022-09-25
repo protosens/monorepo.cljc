@@ -22,9 +22,19 @@
                                                                     {:direct? true})]})}
 
   build
-  {:doc      "Builds the given alias"
+  {:doc      "Build the given alias"
    :requires ([protosens.maestro.plugin.build])
    :task     (protosens.maestro.plugin.build/task :tool/maestro)}
+
+  deploy:clojars
+  {:doc      "Deploy alias to Clojars: <username> <path-to-token> <alias>"
+   :requires ([protosens.maestro.plugin.deps-deploy])
+   :task     (protosens.maestro.plugin.deps-deploy/clojars :ext/deps-deploy)}
+
+  deploy:local
+  {:doc      "Deploy alias to local Maven cache"
+   :requires ([protosens.maestro.plugin.deps-deploy])
+   :task     (protosens.maestro.plugin.deps-deploy/local :ext/deps-deploy)}
 
   lint
   {:doc      "Lint the repository using `clj-kondo`"
