@@ -3,7 +3,7 @@
 
  :tasks
  {aliases
-  {:doc      "Print required aliases given the input - Takes a single root alias or a vector of aliases and profiles"
+  {:doc      "Print required aliases given the alias or vector of aliases and profiles"
    :requires ([protosens.maestro])
    :task     (protosens.maestro/task)}
 
@@ -50,5 +50,15 @@
   {:doc      "Pretty-print the classpath received from STDIN - Great match for Clojure CLI `-SPath` argument"
    :requires ([protosens.maestro.classpath])
    :task     (protosens.maestro.classpath/pprint)}
+
+  test
+  {:doc      "Tests the given alias (or vector of aliases and profiltes)"
+   :requires ([protosens.maestro])
+   :task     (clojure (str "-M"
+                           (with-out-str
+                             (protosens.maestro/task {:maestro/alias+   [:task/test]
+                                                      :maestro/profile+ [(with-meta 'test
+                                                                                    {:direct? true})]}))))}
+
 
   }}
