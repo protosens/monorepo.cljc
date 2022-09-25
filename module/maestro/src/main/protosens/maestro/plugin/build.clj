@@ -11,6 +11,18 @@
             [protosens.maestro.util    :as $.maestro.util]))
 
 
+;;;;;;;;;; Failures
+
+
+(defn- -fail
+
+  ;;
+
+  [message]
+
+  (throw (Exception. message)))
+
+
 ;;;;;;;;;; Accessing `tools.build` (brought by users)
 
 
@@ -102,6 +114,8 @@
 
   [arg+]
 
+  (when-not (arg+ :maestro.plugin.build.path/output)
+    (-fail "Missing output path"))
   (let [required-alias+ (arg+ :maestro/require)
         dir-tmp         (str (Files/createTempDirectory "maestro-build-"
                                                         (make-array FileAttribute
@@ -127,6 +141,8 @@
 
   [arg+]
 
+  (when-not (arg+ :maestro.plugin.build.alias/artifact)
+    (-fail "Missing artifact alias"))
   (let [{:as        ctx
          path-class :maestro.plugin.build.path/class
          path-jar   :maestro.plugin.build.path/output}
@@ -158,7 +174,10 @@
 
   [arg+]
 
-  (let [{:as          ctx
+  (let [main          (arg+ :maestro.plugin.build.uberjar/main)
+        _             (when-not main
+                        (-fail "Missing main method for uberjar"))
+        {:as          ctx
          basis        :maestro.plugin.build/basis
          path-class   :maestro.plugin.build.path/class
          path-uberjar :maestro.plugin.build.path/output} (-jar arg+)]
@@ -182,6 +201,16 @@
 
 (defmulti by-type
   :maestro.plugin.build/type)
+
+
+
+(defmethod by-type
+
+  :default
+
+  [_arg+]
+
+  (-fail "Missing build type"))
 
 
 
@@ -211,14 +240,16 @@
 
   [arg+]
 
-  (let [root-alias    (arg+ :maestro.plugin.build/alias)
-        basis-maestro ($.maestro/search (-> {:maestro/alias+   [root-alias]
+  (let [alias-build   (arg+ :maestro.plugin.build/alias)
+        _             (when-not alias-build
+                        (-fail "Missing alias to build"))
+        basis-maestro ($.maestro/search (-> {:maestro/alias+   [alias-build]
                                              :maestro/profile+ ['release]}
                                             ($.maestro.profile/prepend+ (arg+ :maestro/profile+))))]
     (-> (merge basis-maestro
                (get-in basis-maestro
                        [:aliases
-                        root-alias])
+                        alias-build])
                (dissoc arg+
                        :maestro/alias+
                        :maestro/profile+))
@@ -239,7 +270,7 @@
 
   ([alias-maestro alias-build]
 
-   (@$.maestro.util/d*clojure (str "-T"
+   (@$.maestro.util/d*clojure (str "-X"
                                    (with-out-str
                                      (protosens.maestro/task {:maestro/alias+ [alias-maestro]})))
                               'protosens.maestro.plugin.build/build
