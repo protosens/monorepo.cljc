@@ -1,0 +1,9 @@
+Shortcut for launching tests for an alias or a vector of aliases and profiles.
+
+For instance, this:
+
+    bb test :module/maestro
+
+Is equivalent to:
+
+    clojure -M$( bb aliases:test :module/maestro )

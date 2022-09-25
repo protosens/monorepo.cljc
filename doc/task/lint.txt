@@ -1,0 +1,3 @@
+Using `clj-kondo` which must be installed (https://github.com/clj-kondo/clj-kondo).
+
+See the `lint:prepare` task which is necessary for initialization.

@@ -55,6 +55,7 @@
              body      (if (bb.fs/exists? path-body)
                          (slurp path-body)
                          "No documentation found for this task.")]
+         (println)
          (when docstring
            (println docstring)
            (println)

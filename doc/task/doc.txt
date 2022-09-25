@@ -1,0 +1,2 @@
+Uses `protosens.maestro.doc/task` to display extra information about a task,
+given there is some.

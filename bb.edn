@@ -3,19 +3,19 @@
 
  :tasks
  {aliases
-  {:doc      "Print required aliases given the alias or vector of aliases and profiles"
+  {:doc      "Print all aliases required for the given alias(es)"
    :requires ([protosens.maestro])
    :task     (protosens.maestro/task)}
 
   aliases:dev
-  {:doc  "Print aliases for dev mode - See `aliases` for arguments"
+  {:doc      "Like `aliases` but add extra aliases and profiles for dev and testing"
    :requires ([protosens.maestro])
    :task     (protosens.maestro/task {:maestro/alias+   [:task/dev]
                                       :maestro/profile+ ['dev
                                                          'test]})}
 
   aliases:test
-  {:doc      "Print aliases for testing - See `alias` for arguments"
+  {:doc      "Like `aliases` but add extra aliases and profiles for testing"
    :requires ([protosens.maestro])
    :task     (protosens.maestro/task {:maestro/alias+   [:task/test]
                                       :maestro/profile+ [(with-meta 'test
@@ -32,32 +32,32 @@
    :task     (protosens.maestro.plugin.deps-deploy/clojars :ext/deps-deploy)}
 
   deploy:local
-  {:doc      "Deploy alias to local Maven cache"
+  {:doc      "Deploy the given alias to the local Maven repository"
    :requires ([protosens.maestro.plugin.deps-deploy])
    :task     (protosens.maestro.plugin.deps-deploy/local :ext/deps-deploy)}
 
   doc
-  {:doc      "Prints documentation for the given task"
+  {:doc      "Print documentation for the given task"
    :requires ([protosens.maestro.doc])
    :task     (protosens.maestro.doc/task "doc/task")}
 
   lint
-  {:doc      "Lint the repository using `clj-kondo`"
+  {:doc      "Lint Clojure code throughout the whole repository"
    :requires ([protosens.maestro.plugin.clj-kondo])
    :task     (protosens.maestro.plugin.clj-kondo/lint)}
 
   lint:prepare
-  {:doc      "Lints dependencies using `clj-kondo` and copy configuration files"
+  {:doc      "Prepare for `lint`"
    :requires ([protosens.maestro.plugin.clj-kondo])
    :task     (protosens.maestro.plugin.clj-kondo/prepare)}
 
   pprint-cp
-  {:doc      "Pretty-print the classpath received from STDIN - Great match for Clojure CLI `-SPath` argument"
+  {:doc      "Pretty-print the classpath received from STDIN"
    :requires ([protosens.maestro.classpath])
    :task     (protosens.maestro.classpath/pprint)}
 
   test
-  {:doc      "Tests the given alias (or vector of aliases and profiltes)"
+  {:doc      "Tests the given alias(es)"
    :requires ([protosens.maestro])
    :task     (clojure (str "-M"
                            (with-out-str
