@@ -1,5 +1,5 @@
 {:paths
- ["module/maestro/src/main"]
+ ["module/maestro/src/main/clj"]
 
  :tasks
  {aliases
