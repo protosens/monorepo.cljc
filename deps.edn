@@ -19,12 +19,26 @@
    :maestro/url "https://github.com/babashka/fs"}
   
 
+  :ext/clojure.java.classpath
+
+  {:extra-deps  {org.clojure/java.classpath {:mvn/version "1.0.0"}}
+   :maestro/doc "Examining the Java classpath"
+   :maestro/url "https://github.com/clojure/java.classpath"}
+
+
   :ext/clojure.tools.build
 
   {:extra-deps  {io.github.clojure/tools.build {:git/sha "0d20256"
                                                 :git/tag "v0.8.3"}}
    :maestro/doc "Building jars and uberjars"
    :maestro/url "https://github.com/clojure/tools.build"}
+
+
+  :ext/clojure.tools.namespace
+
+  {:extra-deps  {org.clojure/tools.namespace {:mvn/version "1.3.0"}}
+   :maestro/doc "Tools for managing namespaces"
+   :maestro/url "https://github.com/clojure/tools.namespace"}
 
 
   :ext/criterium
@@ -75,7 +89,8 @@
 
   {:maestro/doc     "Provides what is commonly necessary during dev"
    :maestro/require [:bundle/test
-                     :ext/criterium]}
+                     :ext/criterium
+                     :module/dev]}
 
 
   :task/test
@@ -91,11 +106,22 @@
   ;; MODULES
 
 
+  :module/dev
+
+  {:extra-paths     ["module/dev/src/main/clj"]
+   :maestro/doc     "Dev utilities used in this repository"
+   :maestro/root    "module/dev"
+   :maestro/require [:module/maestro]}
+
+  ;---
+
   :module/maestro
 
   {:extra-paths                         ["module/maestro/src/main"]
    :maestro/doc                         "Tools for managing a (mono)repo by leveraging `deps.edn`"
    :maestro/require                     [:ext/babashka.fs
+                                         :ext/clojure.java.classpath
+                                         :ext/clojure.tools.namespace
                                          {dev :tool/maestro}
                                          {test :test/maestro}]
    :maestro/root                        "module/maestro"

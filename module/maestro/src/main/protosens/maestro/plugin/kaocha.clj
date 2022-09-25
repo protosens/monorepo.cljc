@@ -24,7 +24,7 @@
    ```clojure
    #kaocha/v1
    {:tests [#meta-merge [{:id                 :unit
-                          :kaocha/ns-patterns [".+"]}
+                          :kaocha/ns-patterns [\".+\"]}
                          #include \"<path>\"]]}
    ```
 
