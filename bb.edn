@@ -27,7 +27,7 @@
    :task     (protosens.maestro.plugin.build/task :tool/maestro)}
 
   deploy:clojars
-  {:doc      "Deploy alias to Clojars: <username> <path-to-token> <alias>"
+  {:doc      "Deploy the given alias to Clojars"
    :requires ([protosens.maestro.plugin.deps-deploy])
    :task     (protosens.maestro.plugin.deps-deploy/clojars :ext/deps-deploy)}
 
@@ -35,6 +35,11 @@
   {:doc      "Deploy alias to local Maven cache"
    :requires ([protosens.maestro.plugin.deps-deploy])
    :task     (protosens.maestro.plugin.deps-deploy/local :ext/deps-deploy)}
+
+  doc
+  {:doc      "Prints documentation for the given task"
+   :requires ([protosens.maestro.doc])
+   :task     (protosens.maestro.doc/task "doc/task")}
 
   lint
   {:doc      "Lint the repository using `clj-kondo`"

@@ -1,8 +1,12 @@
-{:maestro.plugin.build.path/exclude ["(?i)^META-INF/license/.*"
+{
+ 
+ ;; OPTIONS
+ 
+ :maestro.plugin.build.path/exclude ["(?i)^META-INF/license/.*"
                                      "^license/.*"]
  :maestro.plugin.kaocha/path        "private/maestro-kaocha.edn"
 
- 
+
 
 
  :aliases

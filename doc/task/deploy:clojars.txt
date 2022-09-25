@@ -1,0 +1,11 @@
+Args:  <username> <path-to-token> <alias>
+
+
+<username>
+  Clojars username with access to the relevant organization.
+
+<path-to-token>
+  Clojars deploy token.
+
+<alias>
+  Alias to deploy, assumes the artifact has been built using the `build` task.
