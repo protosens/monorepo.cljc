@@ -4,9 +4,11 @@
 
   (:import (java.nio.file Files)
            (java.nio.file.attribute FileAttribute))
-  (:require [protosens.maestro         :as $.maestro]
+  (:require [clojure.edn               :as edn]
+            [protosens.maestro         :as $.maestro]
             [protosens.maestro.alias   :as $.maestro.alias]
-            [protosens.maestro.profile :as $.maestro.profile]))
+            [protosens.maestro.profile :as $.maestro.profile]
+            [protosens.maestro.util    :as $.maestro.util]))
 
 
 ;;;;;;;;;; Accessing `tools.build` (brought by users)
@@ -223,3 +225,23 @@
         (assoc :maestro/require
                (basis-maestro :maestro/require))
         (by-type))))
+
+
+
+(defn task
+
+
+  ([alias-maestro]
+
+   (task alias-maestro
+         nil))
+
+
+  ([alias-maestro alias-build]
+
+   (@$.maestro.util/d*clojure (str "-T"
+                                   (with-out-str
+                                     (protosens.maestro/task {:maestro/alias+ [alias-maestro]})))
+                              'protosens.maestro.plugin.build/build
+                              {:maestro.plugin.build/alias (or alias-build
+                                                               (edn/read-string (first *command-line-args*)))})))

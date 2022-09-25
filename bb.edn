@@ -21,6 +21,11 @@
                                       :maestro/profile+ [(with-meta 'test
                                                                     {:direct? true})]})}
 
+  build
+  {:doc ""
+   :requires ([protosens.maestro.plugin.build])
+   :task     (protosens.maestro.plugin.build/task :tool/maestro)}
+
   lint
   {:doc      "Lint the repository using `clj-kondo`"
    :requires ([protosens.maestro.plugin.clj-kondo])
