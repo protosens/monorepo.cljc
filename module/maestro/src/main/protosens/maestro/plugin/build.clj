@@ -63,6 +63,11 @@
 
 
 
+(def ^:private -d*copy-file
+     (delay
+       (-resolve 'clojure.tools.build.api/copy-file)))
+
+
 (def ^:private -d*create-basis
      (delay
        (-resolve 'clojure.tools.build.api/create-basis)))
@@ -79,6 +84,11 @@
      (delay
        (-resolve 'clojure.tools.build.api/jar)))
 
+
+
+(def ^:private -d*pom-path
+     (delay
+       (-resolve 'clojure.tools.build.api/pom-path)))
 
 
 (def ^:private -d*uber
@@ -164,12 +174,14 @@
 
    | Key                                    | Value                         | Mandatory? | Default       |
    |----------------------------------------|-------------------------------|------------|---------------|
+   | `:maestro/root`                        | Root directory of the alias   | Yes        | /             |
    | `:maestro.plugin.build.alias/artifact` | Artifact alias (see below)    | Yes        | /             |
    | `:maestro.plugin.build.path/output`    | Output path for the jar       | Yes        | /             |
    | `:maestro.plugin.build.path/pom`       | Path to the template POM file | No         | `\"pom.xml\"` |
 
    A POM file will be created if necessary but it is often best starting from one that hosts key information
-   that does not change from build to build like SCM, organization, etc.
+   that does not change from build to build like SCM, organization, etc. It will be copied to `./pom.xml` under
+   `:maestro/root`.
 
    The artifact alias is an alias representing your release in its `:extra-deps` and nothing else. This is
    where the artifact name and version are extracted from. For instance, in this repository, `deps.edn` contains
@@ -210,9 +222,17 @@
 
   [arg+]
 
-  (when-not (arg+ :maestro.plugin.build.alias/artifact)
-    (-fail "Missing artifact alias"))
-  (let [{:as        ctx
+  (let [alias-artifact
+       (arg+ :maestro.plugin.build.alias/artifact)
+       _  (or alias-artifact
+              (-fail "Missing artifact alias"))
+       ;;
+       dir-root
+       (arg+ :maestro/root)
+       _ (or dir-root
+             (-fail "Missing root directory"))
+       ;;
+        {:as        ctx
          path-class :maestro.plugin.build.path/class
          path-jar   :maestro.plugin.build.path/output}
         (-jar arg+)
@@ -221,17 +241,26 @@
          version-map]
         (-> ctx
             (get-in [:aliases
-                     (ctx :maestro.plugin.build.alias/artifact)
+                     alias-artifact
                      :extra-deps])
-            (first))]
+            (first))
+        ;;
+        pom-config
+        {:basis     (ctx :maestro.plugin.build/basis)
+         :class-dir path-class
+         :lib       artifact
+         :src-dirs  (ctx :maestro.plugin.build.path/src+)
+         :src-pom   (or (ctx :maestro.plugin.build.path/pom)
+                        "pom.xml")
+         :version   (version-map :mvn/version)}]
     (println "Preparing POM file")
-    (@-d*write-pom {:basis     (ctx :maestro.plugin.build/basis)
-                    :class-dir path-class
-                    :lib       artifact
-                    :src-dirs  (ctx :maestro.plugin.build.path/src+)
-                    :src-pom   (or (ctx :maestro.plugin.build.path/pom)
-                                   "pom.xml")
-                    :version   (version-map :mvn/version)})
+    (@-d*write-pom pom-config)
+    (let [path-pom-module (str dir-root
+                               "/pom.xml")]
+      (println "Copying POM file to:"
+               path-pom-module)
+      (@-d*copy-file {:src    (@-d*pom-path pom-config)
+                      :target path-pom-module}))
     (println "Assemling jar to:"
              path-jar)
     (@-d*jar {:class-dir path-class
