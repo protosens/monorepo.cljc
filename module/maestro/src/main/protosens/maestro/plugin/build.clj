@@ -301,7 +301,7 @@
                       :class-dir    path-class
                       :compile-opts (ctx :maestro.plugin.build.uberjar/compiler)
                       :src-dirs     (ctx :maestro.plugin.build.path/src+)})
-    (println "Assembling uberjar to: %s"
+    (println "Assembling uberjar to:"
              path-uberjar)
     (@-d*uber {:basis     basis
                :class-dir path-class

@@ -332,4 +332,5 @@
          ($.maestro.alias/prepend+ (from-cli :maestro/alias+))
          ($.maestro.profile/prepend+ (from-cli :maestro/profile+))
          (search)
-         (print)))))
+         ((or (:maestro.task/finalize basis)
+              print))))))
