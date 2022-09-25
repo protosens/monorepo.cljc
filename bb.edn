@@ -22,7 +22,7 @@
                                                                     {:direct? true})]})}
 
   build
-  {:doc ""
+  {:doc      "Builds the given alias"
    :requires ([protosens.maestro.plugin.build])
    :task     (protosens.maestro.plugin.build/task :tool/maestro)}
 

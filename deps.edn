@@ -86,7 +86,7 @@
   :module/maestro
 
   {:extra-paths                         ["module/maestro/src/main"]
-   :maestro/doc                          "Tools for managing a monorepo by leveraging `deps.edn`"
+   :maestro/doc                         "Tools for managing a (mono)repo by leveraging `deps.edn`"
    :maestro/dir                         "module/maestro"
    :maestro/require                     [:ext/babashka.fs
                                          {dev :tool/maestro}
@@ -98,7 +98,8 @@
 
   :release/maestro
 
-  {:extra-deps {com.protosens/maestro {:mvn/version "0.0.0-alpha0"}}}
+  {:extra-deps      {com.protosens/maestro {:mvn/version "0.0.0-alpha0"}}
+   :maestro/require [{test :test/maestro}]}
 
 
   :test/maestro
