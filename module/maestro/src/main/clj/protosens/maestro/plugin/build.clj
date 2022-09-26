@@ -285,7 +285,10 @@
    Clojure compiler options like activating direct linking are [described here](https://clojure.org/reference/compilation#_compiler_options).
   
    It is often useful providing the exclusion paths globally as a top-level key-value in `deps.edn` rather than duplicating it in every alias.
-   to build."
+   to build.
+
+   JVM options passed to the Clojure compiler are deduced by concatenating `:jvm-opts` found in all aliases
+   involved in the build."
 
   [arg+]
 
@@ -300,6 +303,10 @@
     (@-d*compile-clj {:basis        basis
                       :class-dir    path-class
                       :compile-opts (ctx :maestro.plugin.build.uberjar/compiler)
+                      :java-opts    (into []
+                                          (comp (map (ctx :aliases))
+                                                (mapcat :jvm-opts))
+                                          (ctx :maestro/require))
                       :src-dirs     (ctx :maestro.plugin.build.path/src+)})
     (println "Assembling uberjar to:"
              path-uberjar)
