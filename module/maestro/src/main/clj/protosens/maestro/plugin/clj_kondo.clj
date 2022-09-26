@@ -49,9 +49,19 @@
 
    (apply @$.maestro.util/d*shell
           "clj-kondo --parallel --lint"
-          (let [path-filter (:path-filter option+)]
-            (cond->>
+          (let [basis       ($.maestro/create-basis)
+                path-filter (:path-filter option+)]
+            (if path-filter
+              (reduce-kv (fn [acc alias data]
+                           (reduce (fn [acc-2 path]
+                                     (cond->
+                                       acc-2
+                                       (path-filter alias
+                                                    path)
+                                       (conj path)))
+                                   acc
+                                   (:extra-paths data)))
+                         []
+                         (basis :aliases))
               (mapcat :extra-paths
-                      (vals (:aliases ($.maestro/create-basis))))
-              path-filter
-              (filter path-filter))))))
+                      (vals (:aliases ($.maestro/create-basis)))))))))
