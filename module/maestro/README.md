@@ -54,6 +54,9 @@ bringing dev dependencies, test namespaces, and such. required only in some
 contexts. When a map is encountered in `:maestro/require`. the algorithm uses
 activated profiles to find a required alias (if any).
 
+A profile with a `:direct?` metadata will only remain active for aliases
+directly needed by aliases provided in `:maestro/alias+`.
+
 A task for printing required aliases makes this scheme easy to use as a
 [Babashka](https://github.com/babashka/babashka) task in you `bb.edn` file,
 after adding Maestro to dependencies. For instance, our own `aliases:dev` task
@@ -66,7 +69,8 @@ injecting the `:task/dev` and a couple profiles:
   {:requires ([protosens.maestro])
    :task     (protosens.maestro/task {:maestro/alias+   [:task/dev]
                                       :maestro/profile+ ['dev
-                                                         'test]})}}}
+                                                         (with-meta 'test
+                                                                    {:direct? true})]})}}}
 ```
 
 Such a task is then easily combined with [Clojure

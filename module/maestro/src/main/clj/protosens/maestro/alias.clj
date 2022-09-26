@@ -1,6 +1,6 @@
 (ns protosens.maestro.alias
 
-  "Miscellaneous helpers centered around profiles.
+  "Miscellaneous helpers centered around aliases.
   
    See the [[protosens.maestro]] namespace."
 

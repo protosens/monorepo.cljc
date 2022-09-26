@@ -25,7 +25,7 @@
    #kaocha/v1
    {:tests [#meta-merge [{:id                 :unit
                           :kaocha/ns-patterns [\".+\"]}
-                         #include \"<path>\"]]}
+                         #include \"<PATH>\"]]}
    ```
 
    Test paths are deduced from aliases that were required by activing the `test` profile`. Source

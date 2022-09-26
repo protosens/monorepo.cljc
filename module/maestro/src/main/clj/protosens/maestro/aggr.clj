@@ -1,6 +1,6 @@
 (ns protosens.maestro.aggr
 
-  "When running [[protosens.maestro/search]], `basis` can contain an extra key `maestro/aggr`
+  "When running [[protosens.maestro/search]], `basis` can contain an extra key `:maestro/aggr`
    pointing to a function such as `(fn [basis alias alias-data] basis-2)`.
   
    By default, this function is [[default]]. Technically, power users can provided an alternative implementation

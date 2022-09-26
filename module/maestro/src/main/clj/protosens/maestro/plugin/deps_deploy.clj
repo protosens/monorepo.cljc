@@ -1,6 +1,6 @@
 (ns protosens.maestro.plugin.deps-deploy
 
-  "Maestro plugin for deploying artifacts via `slipset/deps-deploy`: https://github.com/slipset/deps-deploy
+  "Maestro plugin for installing and deploying artifacts via `slipset/deps-deploy`.
 
    Works even better in combination with [[protosens.maestro.plugin.build]].
 
@@ -42,7 +42,7 @@
    |`env`               | Map of environment variables to set | 
 
    The alias data of `alias-deploy` may contain arguments for `deps-deploy` under
-   `:maestro.plugin.deps-deploy/exec-args`. Those ones are filled in based on alias data
+   `:maestro.plugin.deps-deploy/exec-args`. Those ones are filled-in based on alias data
    when not provided:
 
    | Key         | Value                                             |

@@ -16,7 +16,7 @@
    `root` is a path to a directory hosting documentation text files, one per task.
    Those must be named after the task they document.
 
-   For instance, at the root of public Protosens monorepo, try:
+   For instance, at the root of the public Protosens monorepo, try:
 
    ```
    bb doc deploy:clojars

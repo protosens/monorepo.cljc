@@ -404,8 +404,8 @@
    Merges the result with the alias data of the alias to build and the given option map, prior to being
    passed to [[by-type]].
 
-   In other words, options can be used to overwrite some information in the alias data, like the output
-   path of the artifact."
+   In other words, options can be used to overwrite some information in the alias data of the target alias,
+   like the output path of the artifact."
 
   [option+]
 
@@ -439,6 +439,7 @@
 
    ```
    bb build :module/maestro
+   ```
   
    Options will be passed to [[build]]."
 

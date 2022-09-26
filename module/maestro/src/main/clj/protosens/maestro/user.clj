@@ -13,7 +13,7 @@
 
   "Filters all namespaces found on the classpath and requires them.
 
-   Useful to invoke in `user` for ensuring that all expected namespaces load correctly.
+   Useful to invoke in `user` for ensuring that all expected namespaces compiles correctly.
 
    Actually, it is useful defining in `user` a short function that calls this one.
    Since `user` is accessible from everywhere, it is an easy solution for quickly requiring needed
@@ -30,7 +30,7 @@
    | `:require.fail`   | Function called with a namespace and an exception in case of failure | /       |
 
    The value returned by `:map-namespace`, if any, will be passed to `require` as well as to any
-   `:require...` function."
+   of `:require...` functions above."
 
   [option+]
 

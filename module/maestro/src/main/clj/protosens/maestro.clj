@@ -1,50 +1,6 @@
 (ns protosens.maestro
 
-  "Using extra key-values on aliases from `deps.edn`, this namespace is able to extract dependencies between
-   those aliases. In addition, some profiles can be activated or not so that some of those dependencies can be
-   selectively enforced or ignored.
-
-   A typical `deps.edn` would look like this:
-
-   ```clojure
-   {:aliases {:foo {:extra-paths     [\"...\"]
-                    :maestro/require [:bar
-                                      {some-profile :baz}]}
-              :bar {:extra-paths [\"...\"]}
-              :baz {:extra-paths [\"...\"]}}}
-   ```
-
-   In an alias, dependencies to other aliases figure in `:maestro/require`, a vector of:
-
-   - Other aliases
-   - Maps of `profile` -> `alias`
-
-   A profile is usually a symbol used to designate aliases needed given some context. Projects usually have profiles
-   such as `dev, `test`, etc. However, Maestro does not enforce any convention or naming besides the fact that a `default`
-   profile is always activated.
-
-   Hence, a profile can be used to ignore an alias dependency when not activated or select one among others.
-   Order matters. Activated profiles are provided under `:maestro/profile+` in the basis (see [[create-basis]]).
-
-   ```clojure
-   ;; If profile `foo` is not activated, `:alias-1` will be required.
-   ;;
-   [{foo :alias-1}]
-
-   ;; Selects which ever is activated.
-   ;; If both are activated, selects the first one found in `:maestro/profile+`.
-   ;;
-   [{foo :alias-1
-     bar :alias-2}]
-
-   ;; The `default` profile is implicit.
-   ;; This:
-   [:alias-1]
-   ;; Is functionally equivalent to:
-   [{default :alias-1}]
-   ```
-
-   See [[search]] and [[task]]."
+  "See README about core principles, [[search]] being the star of this namespace."
 
   (:import (java.io PushbackReader))
   (:refer-clojure :exclude [print])
@@ -95,7 +51,7 @@
 
    Uses the first item of `*command-line-args*` by default.
 
-   Given aliases and/or profiles are respectively appended to `:maestro/alias+` and `:maestro/profile+`.
+   Given aliases and profiles are respectively appended to `:maestro/alias+` and `:maestro/profile+`.
    See [[search]] for more information about the net effect.
   
    Often used right after [[create-basis]]."
@@ -145,7 +101,7 @@
 
 (defn- -on-require
 
-  ;; Called by [[search]] at the end to for executing `:maestro/on-require` hooks.
+  ;; Called by [[search]] at the for executing `:maestro/on-require` hooks.
 
   [basis]
 
@@ -212,19 +168,15 @@
 
 (defn search
 
-  "Given a `basis` originally resulting from [[create-basis]], search for all required aliases by resolving
-   everything thas is needed by given \"root\" aliases.
+  "Given input aliases and profiles, under `:maestro/alias+` and `:maestro/profile+` respectively, searches
+   for all necessary aliases and puts the results in a vector under `:maestro/require`.
 
-   In `basis`:
+   Input will go through [[ensure-basis]] first.
 
-     - Root aliases must be provided as a vector under `:maestro/alias+`
-     - Profiles to activate are optionally provided as a vector under `:maestro/profile+`
-     - The result of all required aliases is a vector under `:maestro/require`
-     - `:maestro/profile->alias+` is a map of `profile` -> `set of required aliases` keeping track for which
-       profile each alias has been required
-     - An alias may contain a vector of qualified symbols under `:maestro/on-require` that will be resolved
-       and executed if that alias is required, passing the basis
+   Also remembers which profiles resulted in which aliases being selected under `:maestro/profile->alias+`.
 
+   Alias data in `deps.edn` can also contain a vector of qualified symbols under `:maestro/on-require`. Those
+   are resolved to functions and executed with the results at the very end if required.
 
    See the following namespaces for additional helpers:
 
@@ -299,7 +251,7 @@
 
 (defn print
 
-  "Prints aliases from `:maestro/require` after concatenating them, like Clojure CLI likes it.
+  "Prints aliases from `:maestro/require` after concatenating them, the way Clojure CLI likes it.
   
    See [[search]]."
 
@@ -315,9 +267,9 @@
 
 (defn task
 
-  "Uses [[search]] on the argument but prepends aliases and profiles found using [[cli-arg]] and ends by printing all required aliases.
-  
-   Well suited for a task aimed to find aliases given some context (dev, testing, etc)."
+  "Like [[search]] but prepends aliases and profiles found using [[cli-arg]] and ends by [[print]]ing all required aliases.
+
+   Commonly used as a Babashka task."
 
 
   ([]
