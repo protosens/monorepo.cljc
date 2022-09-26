@@ -15,6 +15,10 @@
 
 (defn prepare
 
+  "Prepares the Clj-kondo cache by linting all dependencies and copying configuration files.
+  
+   Should be called prior to [[lint]]ing for the first time and on dependency updates."
+
   []
 
   (let [cp (-> ($.maestro/create-basis)
@@ -26,10 +30,28 @@
 
 
 (defn lint
-        
-  []
 
-  (apply @$.maestro.util/d*shell
-         "clj-kondo --parallel --lint"
-         (mapcat :extra-paths
-                  (vals (:aliases ($.maestro/create-basis))))))
+  "Lints the whole repository by extracting `:extra-paths` from aliases.
+
+   Options may be:
+
+   | Key            | Value                                                       |
+   |----------------|-------------------------------------------------------------|
+   | `:path-filter` | Predicate function deciding whether a path should be linted |"
+        
+
+  ([]
+
+   (lint nil))
+
+
+  ([option+]
+
+   (apply @$.maestro.util/d*shell
+          "clj-kondo --parallel --lint"
+          (let [path-filter (:path-filter option+)]
+            (cond->>
+              (mapcat :extra-paths
+                      (vals (:aliases ($.maestro/create-basis))))
+              path-filter
+              (filter path-filter))))))
