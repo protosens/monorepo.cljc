@@ -126,7 +126,11 @@
   [basis]
 
   (println "Copying source paths")
-  (@-d*copy-dir {:src-dirs   (basis :maestro.plugin.build.path/src+)
+  (@-d*copy-dir {:src-dirs   (let [path-filter (basis :maestro.plugin.build.path/copy-filter)] 
+                               (cond->>
+                                 (basis :maestro.plugin.build.path/src+)
+                                 path-filter
+                                 (filter path-filter)))
                  :target-dir (basis :maestro.plugin.build.path/class)})
   basis)
 
@@ -293,14 +297,16 @@
   
    Alias data for the build alias must or contain:
 
-   | Key                                      | Value                         | Mandatory? |
-   |------------------------------------------|-------------------------------|------------|
-   | `:maestro.plugin.build.path/exclude`     | Paths to exclude              | No         |
-   | `:maestro.plugin.build.path/output`      | Output path for the uberjar   | Yes        |
-   | `:maestro.plugin.build.uberjar/compiler` | Clojure compiler options      | No         |
-   | `:maestro.plugin.build.uberjar/main`     | Namespace containing `-main`  | No         |   
+   | Key                                      | Value                            | Mandatory? |
+   |------------------------------------------|----------------------------------|------------|
+   | `:maestro.plugin.build.path/exclude`     | Paths to exclude (regex strings) | No         |
+   | `:maestro.plugin.build.path/output`      | Output path for the uberjar      | Yes        |
+   | `:maestro.plugin.build.uberjar/bind`     | Map of bindings for compilation  | No         |
+   | `:maestro.plugin.build.uberjar/compiler` | Clojure compiler options         | No         |
+   | `:maestro.plugin.build.uberjar/main`     | Namespace containing `-main`     | No         |   
 
    Clojure compiler options like activating direct linking are [described here](https://clojure.org/reference/compilation#_compiler_options).
+   Bindings will be applied with `binding` when starting compilation. Useful for things like setting `*warn-on-reflection*`.
   
    It is often useful providing the exclusion paths globally as a top-level key-value in `deps.edn` rather than duplicating it in every alias.
    to build.
@@ -316,6 +322,12 @@
          path-uberjar :maestro.plugin.build.path/output} (-jar basis)]
     (println "Compiling" (ctx :maestro.plugin.build/alias))
     (@-d*compile-clj {:basis        basis
+                      :bindings     (update-keys (basis :maestro.plugin.build.uberjar/bind)
+                                                 (fn [k]
+                                                   (cond->
+                                                     k
+                                                     (symbol? k)
+                                                     (resolve))))
                       :class-dir    path-class
                       :compile-opts (ctx :maestro.plugin.build.uberjar/compiler)
                       :java-opts    (into []

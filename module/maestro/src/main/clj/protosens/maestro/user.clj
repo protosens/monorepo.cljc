@@ -21,13 +21,13 @@
 
    Options are:
 
-   | Key               | Value | Default |
-   |-------------------|-------|---------|
-   | `:fail-fast?`     | Stop when requiring one namespace fails?                             | `true` |
-   | `:map-namespace`  | Function used for mapping found namespaces                           | /      |
-   | `:require.after`  | Function called with a namespace after requiring it                  | /      |
-   | `:require.before` | Function called with a namespace before requiring it                 | /      |
-   | `:require.fail`   | Function called with a namespace and an exception in case of failure | /      |
+   | Key               | Value                                                                | Default |
+   |-------------------|----------------------------------------------------------------------|---------|
+   | `:fail-fast?`     | Stop when requiring one namespace fails?                             | `true`  |
+   | `:map-namespace`  | Function used for mapping found namespaces                           | /       |
+   | `:require.after`  | Function called with a namespace after requiring it                  | /       |
+   | `:require.before` | Function called with a namespace before requiring it                 | /       |
+   | `:require.fail`   | Function called with a namespace and an exception in case of failure | /       |
 
    The value returned by `:map-namespace`, if any, will be passed to `require` as well as to any
    `:require...` function."
