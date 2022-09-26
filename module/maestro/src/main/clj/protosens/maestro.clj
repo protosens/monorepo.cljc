@@ -9,7 +9,7 @@
    ```clojure
    {:aliases {:foo {:extra-paths     [\"...\"]
                     :maestro/require [:bar
-                                      {some-profile :bar}]}
+                                      {some-profile :baz}]}
               :bar {:extra-paths [\"...\"]}
               :baz {:extra-paths [\"...\"]}}}
    ```
