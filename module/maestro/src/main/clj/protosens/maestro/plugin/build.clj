@@ -109,13 +109,13 @@
 
   "Deletes the file under `:maestro.plugin.build.path/output`."
 
-  [ctx]
+  [basis]
 
-  (let [path (ctx :maestro.plugin.build.path/output)]
+  (let [path (basis :maestro.plugin.build.path/output)]
     (println "Removing any previous output:"
              path)
     (@-d*delete {:path path}))
-  ctx)
+  basis)
 
 
 
@@ -123,12 +123,32 @@
 
   "Copies source from `:maestro.plugin.build.path/src+` to `:maestro.plugin.build.path/class`."
 
-  [ctx]
+  [basis]
 
   (println "Copying source paths")
-  (@-d*copy-dir {:src-dirs   (ctx :maestro.plugin.build.path/src+)
-                 :target-dir (ctx :maestro.plugin.build.path/class)})
-  ctx)
+  (@-d*copy-dir {:src-dirs   (basis :maestro.plugin.build.path/src+)
+                 :target-dir (basis :maestro.plugin.build.path/class)})
+  basis)
+
+
+
+(defn tmp-dir
+
+  "Creates a temporary directory and returns its path as a string.
+   A prefix for the name may be provided."
+
+
+  ([]
+
+   (tmp-dir nil))
+
+
+  ([prefix]
+
+   (str (Files/createTempDirectory (or prefix
+                                       "maestro-build-")
+                                   (make-array FileAttribute
+                                               0)))))
 
 
 ;;;;;;;;;;
@@ -140,27 +160,25 @@
   ;;
   ;; Prepares paths and a temporary directory for work.
 
-  [arg+]
+  [basis]
 
-  (when-not (arg+ :maestro.plugin.build.path/output)
+  (when-not (basis :maestro.plugin.build.path/output)
     (-fail "Missing output path"))
-  (let [required-alias+ (arg+ :maestro/require)
-        dir-tmp         (str (Files/createTempDirectory "maestro-build-"
-                                                        (make-array FileAttribute
-                                                                    0)))
+  (let [required-alias+ (basis :maestro/require)
+        dir-tmp         (tmp-dir)
         path-class      (str dir-tmp
                              "/classes")
-        path-src+       ($.maestro.alias/extra-path+ arg+
+        path-src+       ($.maestro.alias/extra-path+ basis
                                                      required-alias+)]
     (println "Using temporary directory for building:"
              dir-tmp)
-    (-> (merge {:maestro.plugin.build/basis       (@-d*create-basis {:aliases required-alias+
-                                                                     :project (or (arg+ :maestro/project)
+    (-> (merge basis
+               {:maestro.plugin.build/basis       (@-d*create-basis {:aliases required-alias+
+                                                                     :project (or (basis :maestro/project)
                                                                                   "deps.edn")})
                 :maestro.plugin.build.path/class  path-class
                 :maestro.plugin.build.path/src+   path-src+
-                :maestro.plugin.build.path/target dir-tmp}
-               arg+)
+                :maestro.plugin.build.path/target dir-tmp})
         (clean)
         (copy-src))))
 
@@ -220,22 +238,22 @@
 
    Note: it is best activating the `release` alias when doing that sort of things."
 
-  [arg+]
+  [basis]
 
   (let [alias-artifact
-       (arg+ :maestro.plugin.build.alias/artifact)
+       (basis :maestro.plugin.build.alias/artifact)
        _  (or alias-artifact
               (-fail "Missing artifact alias"))
        ;;
        dir-root
-       (arg+ :maestro/root)
+       (basis :maestro/root)
        _ (or dir-root
              (-fail "Missing root directory"))
        ;;
         {:as        ctx
          path-class :maestro.plugin.build.path/class
          path-jar   :maestro.plugin.build.path/output}
-        (-jar arg+)
+        (-jar basis)
         ;;
         [artifact
          version-map]
@@ -290,12 +308,12 @@
    JVM options passed to the Clojure compiler are deduced by concatenating `:jvm-opts` found in all aliases
    involved in the build."
 
-  [arg+]
+  [basis]
 
   (let [{:as          ctx
          basis        :maestro.plugin.build/basis
          path-class   :maestro.plugin.build.path/class
-         path-uberjar :maestro.plugin.build.path/output} (-jar arg+)]
+         path-uberjar :maestro.plugin.build.path/output} (-jar basis)]
     (println "Compiling" (ctx :maestro.plugin.build/alias))
     (@-d*compile-clj {:basis        basis
                       :class-dir    path-class
@@ -338,7 +356,7 @@
 
   :default
 
-  [_arg+]
+  [_basis]
 
   (-fail "Missing build type"))
 
@@ -348,9 +366,9 @@
 
   :jar
 
-  [arg+]
+  [basis]
 
-  (jar arg+))
+  (jar basis))
 
 
 
@@ -358,9 +376,9 @@
 
   :uberjar
 
-  [arg+]
+  [basis]
 
-  (uberjar arg+))
+  (uberjar basis))
 
 
 ;;; Entry points
@@ -368,37 +386,40 @@
 
 (defn build
 
-  "Given a map with an alias to build under `:maestro.plugin.build/alias`, computes all required aliases
-   after activating the `release` profile.
+  "Given a map with an alias to build under `:maestro.plugin.build/alias`, search for all required aliases
+   after activating the `release` profile, using [[protosens.maestro/search]].
 
-   Merges the contents with `deps.edn` (or the path mentioned under `:maestro/project`), the alias data of
-   the alias to build and the given `arg+`. Then, passes everything to [[by-type]]."
+   Merges the result with the alias data of the alias to build and the given option map, prior to being
+   passed to [[by-type]].
 
-  [arg+]
+   In other words, options can be used to overwrite some information in the alias data, like the output
+   path of the artifact."
 
-  (let [alias-build   (arg+ :maestro.plugin.build/alias)
-        _             (when-not alias-build
-                        (-fail "Missing alias to build"))
-        basis-maestro ($.maestro/search (-> {:maestro/alias+   [alias-build]
-                                             :maestro/profile+ ['release]}
-                                            ($.maestro.profile/prepend+ (arg+ :maestro/profile+))))]
-    (-> (merge basis-maestro
-               (get-in basis-maestro
+  [option+]
+
+  (let [alias-build (option+ :maestro.plugin.build/alias)
+        _           (when-not alias-build
+                      (-fail "Missing alias to build"))
+        basis       ($.maestro/search (-> {:maestro/alias+   [alias-build]
+                                           :maestro/profile+ ['release]}
+                                          ($.maestro.profile/prepend+ (option+ :maestro/profile+))))]
+    (-> (merge basis
+               (get-in basis
                        [:aliases
                         alias-build])
-               (dissoc arg+
+               (dissoc option+
                        :maestro/alias+
                        :maestro/profile+))
         (assoc :maestro/require
-               (basis-maestro :maestro/require))
+               (basis :maestro/require))
         (by-type))))
 
 
 
 (defn task
 
-  "Convenient way of calling [[build]] by providing an alias to build.
-   
+  "Convenient way of calling [[build]] using `clojure -X`.
+ 
    Requires at least the alias under which Maestro and `tools.build` are imported. Alias to build is read
    as first command line argument if not provided explicitly.
   
@@ -406,13 +427,8 @@
 
    ```
    bb build :module/maestro
-   ```
   
-   Options might contain:
-
-   | Key                           | Value                                          |
-   |-------------------------------|------------------------------------------------|
-   | `:maestro.plugin.build/alias` | Alias to build (first CLI argument by default) |"
+   Options will be passed to [[build]]."
 
 
   ([alias-maestro]
