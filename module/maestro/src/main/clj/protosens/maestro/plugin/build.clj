@@ -421,12 +421,14 @@
          nil))
 
 
-  ([alias-maestro alias-build]
+  ([alias-maestro option+]
 
    (@$.maestro.util/d*clojure (str "-X"
                                    (-> (protosens.maestro/search {:maestro/alias+ [alias-maestro]})
                                        (:maestro/require)
                                        ($.maestro.alias/stringify+)))
                               'protosens.maestro.plugin.build/build
-                              {:maestro.plugin.build/alias (or alias-build
-                                                               (edn/read-string (first *command-line-args*)))})))
+                              (update option+
+                                      :maestro.plugin.build/alias
+                                      #(or %
+                                           (edn/read-string (first *command-line-args*)))))))
