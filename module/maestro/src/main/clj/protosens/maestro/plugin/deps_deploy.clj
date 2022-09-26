@@ -14,6 +14,18 @@
             [protosens.maestro.util :as $.maestro.util]))
 
 
+;;;;;;;;;; Private
+
+
+(defn- -fail
+
+  ;; Used when something is not valid.
+
+  [message]
+
+  (throw (Exception. message)))
+
+
 ;;;;;;;;;; Tasks
 
 
@@ -81,9 +93,14 @@
           path-token
           str-alias]  *command-line-args*]
      (clojars alias-deps-deploy
-              username
-              path-token
-              (edn/read-string str-alias))))
+              (or username
+                  (-fail "Username missing"))
+              (or path-token
+                  (-fail "Path to token missing"))
+              (if str-alias
+                (edn/read-string str-alias)
+                (-fail "Alias to deploy missing")))))
+
 
   ([alias-deps-deploy username path-token alias-deploy]
 
@@ -108,7 +125,11 @@
   ([alias-deps-deploy]
 
    (local alias-deps-deploy
-          (edn/read-string (first *command-line-args*))))
+          (let [alias-deploy-str (first *command-line-args*)]
+            (if alias-deploy-str
+              (edn/read-string alias-deploy-str)
+              (-fail "Alias to deploy missing")))))
+
 
   ([alias-deps-deploy alias-deploy]
 
