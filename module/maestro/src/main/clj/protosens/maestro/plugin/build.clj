@@ -402,7 +402,13 @@
 
    ```
    bb build :module/maestro
-   ```"
+   ```
+  
+   Options might contain:
+
+   | Key                           | Value                                          |
+   |-------------------------------|------------------------------------------------|
+   | `:maestro.plugin.build/alias` | Alias to build (first CLI argument by default) |"
 
 
   ([alias-maestro]
@@ -414,8 +420,9 @@
   ([alias-maestro alias-build]
 
    (@$.maestro.util/d*clojure (str "-X"
-                                   (with-out-str
-                                     (protosens.maestro/task {:maestro/alias+ [alias-maestro]})))
+                                   (-> (protosens.maestro/search {:maestro/alias+ [alias-maestro]})
+                                       (:maestro/require)
+                                       ($.maestro.alias/stringify+)))
                               'protosens.maestro.plugin.build/build
                               {:maestro.plugin.build/alias (or alias-build
                                                                (edn/read-string (first *command-line-args*)))})))
