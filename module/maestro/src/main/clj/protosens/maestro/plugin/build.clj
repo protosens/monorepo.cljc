@@ -280,7 +280,7 @@
    | `:maestro.plugin.build.path/exclude`     | Paths to exclude              | No         |
    | `:maestro.plugin.build.path/output`      | Output path for the uberjar   | Yes        |
    | `:maestro.plugin.build.uberjar/compiler` | Clojure compiler options      | No         |
-   | `:maestro.plugin.build.uberjar/main`     | Namespace containing `-main`  | Yes        |   
+   | `:maestro.plugin.build.uberjar/main`     | Namespace containing `-main`  | No         |   
 
    Clojure compiler options like activating direct linking are [described here](https://clojure.org/reference/compilation#_compiler_options).
   
@@ -292,10 +292,7 @@
 
   [arg+]
 
-  (let [main          (arg+ :maestro.plugin.build.uberjar/main)
-        _             (when-not main
-                        (-fail "Missing main method for uberjar"))
-        {:as          ctx
+  (let [{:as          ctx
          basis        :maestro.plugin.build/basis
          path-class   :maestro.plugin.build.path/class
          path-uberjar :maestro.plugin.build.path/output} (-jar arg+)]
