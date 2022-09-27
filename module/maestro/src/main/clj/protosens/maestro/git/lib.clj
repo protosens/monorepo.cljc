@@ -69,7 +69,8 @@
                              (assoc-in deps-edn-2
                                        [:deps
                                         (data-required :maestro.git.lib/name)]
-                                       {:local/root (data-required :maestro/root)})
+                                       {:local/root (str (fs/relativize root-dir
+                                                                        (data-required :maestro/root)))})
                              (update deps-edn-2
                                      :paths
                                      into
