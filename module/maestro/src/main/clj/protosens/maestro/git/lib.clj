@@ -110,13 +110,15 @@
                                        (or (data :maestro/root)
                                            (throw (Exception. (str "Missing root in alias data: "
                                                                    alias)))))))
-                              (basis-3 :maestro/require))]
+                              (basis-3 :maestro/require))
+         write       (or (basis :maestro.git.lib/write)
+                         write-deps-edn)]
      (into (sorted-map)
            (map (fn [alias]
                   (let [prepared (prepare-deps-edn basis-2
                                                    alias)]
-                    (write-deps-edn (prepared :maestro.git.lib.path/deps.edn)
-                                    (prepared :maestro.git.lib/deps.edn))
+                    (write (prepared :maestro.git.lib.path/deps.edn)
+                           (prepared :maestro.git.lib/deps.edn))
                     [alias (dissoc prepared
                                    :maestro.git.lib/deps.edn)])))
            gitlib+))))
