@@ -143,7 +143,7 @@
 
   :test/maestro
 
-  {:extra-paths ["module/maestro/src/test"]}
+  {:extra-paths ["module/maestro/src/test/clj"]}
 
 
   :tool/maestro
