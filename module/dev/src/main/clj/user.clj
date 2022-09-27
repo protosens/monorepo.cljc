@@ -16,13 +16,17 @@
   []
 
   ($.maestro.user/require-filtered {:map-namespace  (fn [nmspace]
-                                                      (when (string/includes? (str nmspace)
-                                                                              "protosens")
-                                                        [nmspace
-                                                         :as
-                                                         (symbol (str "$."
-                                                                      (second (string/split (str nmspace)
-                                                                                            #"protosens\."))))]))
+                                                      (let [nmspace-str (str nmspace)]
+                                                        (when (and (string/includes? nmspace-str
+                                                                                     "protosens")
+                                                                   (not= nmspace
+                                                                         'protosens.maestro.plugin.quickdoc))
+
+                                                          [nmspace
+                                                           :as
+                                                           (symbol (str "$."
+                                                                        (second (string/split nmspace-str
+                                                                                              #"protosens\."))))])))
                                     :require.before (fn [nmspace]
                                                       (println "Require"
                                                                nmspace))}))

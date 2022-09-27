@@ -58,11 +58,19 @@
    :maestro/doc "Deploying jars locally and to Clojars"
    :maestro/url "https://github.com/slipset/deps-deploy"}
 
+
   :ext/kaocha
 
   {:extra-deps  {lambdaisland/kaocha {:mvn/version "1.63.998"}}
    :maestro/doc "Test runner"
    :maestro/url "https://github.com/lambdaisland/kaocha"}
+
+
+  :ext/quickdoc
+
+  {:extra-deps  {io.github.helins/quickdoc {:git/sha "b9072ece085c2901c7eb3fb64786e87e532abab1"}}
+   :maestro/doc "Fork of Borkdude's Quickdoc"
+   :maestro/url "https://github.com/helins/quickdoc"}
 
 
 
@@ -126,13 +134,15 @@
    :maestro/require                     [:ext/babashka.fs
                                          :ext/clojure.java.classpath
                                          :ext/clojure.tools.namespace
+                                         :ext/quickdoc
                                          {dev :tool/maestro}
                                          {test :test/maestro}]
    :maestro/root                        "module/maestro"
    :maestro.git.lib/name                com.protosens/maestro
    :maestro.plugin.build/type           :jar
    :maestro.plugin.build.alias/artifact :release/maestro
-   :maestro.plugin.build.path/output    "private/target/maestro.jar"}
+   :maestro.plugin.build.path/output    "private/target/maestro.jar"
+   :maestro.plugin.quickdoc.path/output "module/maestro/doc/API.md"}
 
 
   :release/maestro

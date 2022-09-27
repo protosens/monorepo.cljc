@@ -46,8 +46,8 @@
   
    Either:
 
-     - Single alias
-     - Vector of aliases and/or profiles
+   - Single alias
+   - Vector of aliases and/or profiles
 
    Uses the first item of `*command-line-args*` by default.
 
@@ -180,9 +180,9 @@
 
    See the following namespaces for additional helpers:
 
-     - [[protosens.maestro.aggr]] for expert users needing this function to do more
-     - [[protosens.maestro.alias]]
-     - [[protosens.maestro.profile]]"
+   - [[protosens.maestro.aggr]] for expert users needing this function to do more
+   - [[protosens.maestro.alias]]
+   - [[protosens.maestro.profile]]"
 
   [basis]
 

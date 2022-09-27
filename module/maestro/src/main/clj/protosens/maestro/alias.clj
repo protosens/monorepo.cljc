@@ -44,8 +44,8 @@
 
    Notable use-cases are:
 
-     - Working with [tools.build](https://clojure.org/guides/tools_build)
-     - Fetching test paths for tests runners like [Kaocha](https://github.com/lambdaisland/kaocha)"
+   - Working with [tools.build](https://clojure.org/guides/tools_build)
+   - Fetching test paths for tests runners like [Kaocha](https://github.com/lambdaisland/kaocha)"
 
   [basis alias+]
 

@@ -6,8 +6,8 @@
 
    Babashka tasks:
 
-     [[clojars]]
-     [[local]]"
+   - [[clojars]]
+   - [[local]]"
 
   (:require [clojure.edn            :as edn]
             [protosens.maestro      :as $.maestro]
