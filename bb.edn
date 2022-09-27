@@ -26,10 +26,10 @@
    :requires ([protosens.maestro.plugin.build])
    :task     (protosens.maestro.plugin.build/task :tool/maestro)}
 
-  deploy:clojars
-  {:doc      "Deploy the given alias to Clojars"
-   :requires ([protosens.maestro.plugin.deps-deploy])
-   :task     (protosens.maestro.plugin.deps-deploy/clojars :ext/deps-deploy)}
+  deploy:gitlib
+  {:doc      "Generate custom `deps.edn` files for module exposed as git libraries"
+   :requires ([protosens.maestro.git.lib])
+   :task     (protosens.maestro.git.lib/task)}
 
   deploy:local
   {:doc      "Deploy the given alias to the local Maven repository"

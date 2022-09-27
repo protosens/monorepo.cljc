@@ -159,7 +159,7 @@
                                            (throw (Exception. (str "Missing root in alias data: "
                                                                    alias)))))))
                               (basis-3 :maestro/require))
-         write       (or (basis :maestro.git.lib/write)
+         write       (or (:maestro.git.lib/write basis)
                          write-deps-edn)]
      (into (sorted-map)
            (map (fn [alias]
@@ -187,5 +187,6 @@
 
   ([basis]
 
-   (-> (gen-deps basis)
+   (-> basis
+       (gen-deps)
        (pprint/pprint))))
