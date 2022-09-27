@@ -108,7 +108,7 @@
                                            (throw (Exception. (str "Missing root in alias data: "
                                                                    alias)))))))
                               (basis-3 :maestro/require))]
-     (into {}
+     (into (sorted-map)
            (map (fn [alias]
                   (let [prepared (prepare-deps-edn basis-2
                                                    alias)]
@@ -119,9 +119,24 @@
            gitlib+))))
 
 
+
+(defn task
+
+  
+  ([]
+
+   (task nil))
+
+
+  ([basis]
+
+   (-> (gen-deps basis)
+       (pprint/pprint))))
+
+
 (comment
 
-  (gen-deps {:maestro/profile+ []})
+  (task {:maestro/profile+ []})
 
 
   )
