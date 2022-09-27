@@ -1,10 +1,11 @@
 (ns protosens.maestro.git.lib
 
-  (:require [babashka.fs       :as fs]
-            [clojure.java.io   :as java.io]
-            [clojure.pprint    :as pprint]
-            [clojure.string    :as string]
-            [protosens.maestro :as $.maestro]))
+  (:require [babashka.fs               :as fs]
+            [clojure.java.io           :as java.io]
+            [clojure.pprint            :as pprint]
+            [clojure.string            :as string]
+            [protosens.maestro         :as $.maestro]
+            [protosens.maestro.profile :as $.maestro.profile]))
 
 
 ;;;;;;;;;;
@@ -95,7 +96,9 @@
 
   ([basis]
 
-   (let [basis-2     ($.maestro/ensure-basis basis)
+   (let [basis-2     (-> basis
+                         ($.maestro/ensure-basis)
+                         ($.maestro.profile/append+ ['release]))
          alias->data (basis-2 :aliases)
          basis-3     (-> basis-2
                          (assoc :maestro/alias+
