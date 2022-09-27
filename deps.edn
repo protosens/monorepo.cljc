@@ -129,6 +129,7 @@
                                          {dev :tool/maestro}
                                          {test :test/maestro}]
    :maestro/root                        "module/maestro"
+   :maestro.git.lib/name                com.protosens/maestro
    :maestro.plugin.build/type           :jar
    :maestro.plugin.build.alias/artifact :release/maestro
    :maestro.plugin.build.path/output    "private/target/maestro.jar"}
