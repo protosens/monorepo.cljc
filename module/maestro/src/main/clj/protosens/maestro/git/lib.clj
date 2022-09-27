@@ -49,8 +49,12 @@
                          (assoc :maestro/alias+
                                 (vec (keys alias->data)))
                          ($.maestro/search))
-         required    (filterv (comp gitlib?
-                                    alias->data)
+         required    (filterv (fn [alias]
+                                (let [data (alias->data alias)]
+                                  (and (gitlib? data)
+                                       (or (data :maestro/root)
+                                           (throw (Exception. (str "Missing root in alias data: "
+                                                                   alias)))))))
                               (basis-3 :maestro/require))]
      (doseq [alias required]
        (let [data     (alias->data alias)
