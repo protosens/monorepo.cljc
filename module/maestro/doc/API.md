@@ -352,7 +352,7 @@ Collection of miscellaneous helpers related to documentation.
 
 
 
-## <a name="protosens.maestro.doc/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/doc.clj#L12-L74) `task`</a>
+## <a name="protosens.maestro.doc/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/doc.clj#L12-L85) `task`</a>
 ``` clojure
 
 (task root)

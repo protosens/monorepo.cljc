@@ -38,37 +38,49 @@
 
   ([root option+]
 
-   (if-some [task (or (:task option+)
-                       (some-> (first *command-line-args*)
-                               (symbol)))]
-     ;;
-     ;; User did provide a task.
-     (if-some [task-data (-> (slurp (or (:bb option+)
-                                    "bb.edn"))
-                         (edn/read-string)
-                         (get-in [:tasks
-                                  task]))]
+   (let [extension (or (:extension option+)
+                       ".txt")]
+     (if-some [task (or (:task option+)
+                         (some-> (first *command-line-args*)
+                                 (symbol)))]
        ;;
-       ;; User task found, print doc.
-       (let [docstring (:doc task-data)
-             path-body (str root
-                            "/"
-                            task
-                            (or (:extension option+)
-                                ".txt"))
-             body      (if (bb.fs/exists? path-body)
-                         (slurp path-body)
-                         "No documentation found for this task.")]
-         (println)
-         (when docstring
-           (println docstring)
+       ;; User did provide a task.
+       (if-some [task-data (-> (slurp (or (:bb option+)
+                                      "bb.edn"))
+                           (edn/read-string)
+                           (get-in [:tasks
+                                    task]))]
+         ;;
+         ;; User task found, print doc.
+         (let [docstring (:doc task-data)
+               path-body (str root
+                              "/"
+                              task
+                              extension)
+               body      (if (bb.fs/exists? path-body)
+                           (slurp path-body)
+                           "No documentation found for this task.")]
            (println)
-           (println "---")
-           (println))
-         (println body))
+           (when docstring
+             (println docstring)
+             (println)
+             (println "---")
+             (println))
+           (println body))
+         ;;
+         ;; Input task does not seem to exist.
+         (println "Task not found."))
        ;;
-       ;; Input task does not seem to exist.
-       (println "Task not found."))
-     ;;
-     ;; User did not provide a task.
-     (println "No task provided."))))
+       ;; User did not provide a task.
+       (let [n-extension (count extension)]
+         (println "Documentation available for:")
+         (println)
+         (doseq [path (sort-by str
+                               (bb.fs/list-dir root))]
+           (println (str "  "
+                         (let [file (str (.getFileName path))]
+                           (.substring file
+                                       0
+                                       (- (count file)
+                                          n-extension)))))))))))
+
