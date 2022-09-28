@@ -50,7 +50,7 @@
   doc:task
   {:doc      "Print documentation for the given task"
    :requires ([protosens.maestro.doc])
-   :task     (protosens.maestro.doc/task "doc/task")}
+   :task     (protosens.maestro.doc/print-task "doc/task")}
 
   M
   {:doc      "Executes `clojure` with `-M` and the required aliases"
@@ -82,4 +82,5 @@
   {:doc      "Executes `clojure` with `-X` and the required aliases"
    :requires ([protosens.maestro])
    :task     (protosens.maestro/clojure "-X")}
+
   }}

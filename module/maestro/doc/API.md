@@ -22,7 +22,8 @@
     -  [`compute`](#protosens.maestro.classpath/compute) - Computes the classpath using the given aliases on <code>clojure</code>.
     -  [`pprint`](#protosens.maestro.classpath/pprint) - Pretty-prints the output from [[compute]] or <code>clojure -Spath ...</code> in alphabetical order given as argument or retrieved from STDIN.
 -  [`protosens.maestro.doc`](#protosens.maestro.doc)  - Collection of miscellaneous helpers related to documentation.
-    -  [`task`](#protosens.maestro.doc/task) - Prints documentation for a Babashka task.
+    -  [`print`](#protosens.maestro.doc/print) - Prints a documentation file from the <code>root</code> directory.
+    -  [`print-task`](#protosens.maestro.doc/print-task) - Like [[print]] but targets are Babashk tasks.
 -  [`protosens.maestro.git.lib`](#protosens.maestro.git.lib)  - Aliases that contains a name under <code>:maestro.git.lib/name</code> can be exposed publicly as git libraries and consumed from Clojure CLI via <code>:deps/root</code>.
     -  [`gen-deps`](#protosens.maestro.git.lib/gen-deps) - Generates custom <code>deps.edn</code> files for all aliases having in there data a name (see namespace description) as well as a <code>:maestro/root</code> (path to the root directory of that alias).
     -  [`gitlib?`](#protosens.maestro.git.lib/gitlib?) - Returns true if an alias (given its data) is meant to be exposed as a git library.
@@ -352,31 +353,45 @@ Collection of miscellaneous helpers related to documentation.
 
 
 
-## <a name="protosens.maestro.doc/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/doc.clj#L12-L85) `task`</a>
+## <a name="protosens.maestro.doc/print">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/doc.clj#L49-L78) `print`</a>
 ``` clojure
 
-(task root)
-(task root option+)
+(print root)
+(print root option+)
 ```
 
 
-Prints documentation for a Babashka task.
-  
-   `root` is a path to a directory hosting documentation text files, one per task.
-   Those must be named after the task they document.
-
-   For instance, at the root of the public Protosens monorepo, try:
-
-   ```
-   bb doc deploy:clojars
-   ```
+Prints a documentation file from the `root` directory.
 
    Options may be:
 
    | Key          | Value                                          | Default      |
    |--------------|------------------------------------------------|--------------|
-   | `:bb`        | Path to the Babashka config file hosting tasks | `"bb.edn"` |
    | `:extension` | Extension of text files in the root directory  | `".txt"`   |
+   | `:target`    | File to print (without extension)              | CLI arg      |
+  
+   Without any target, prints all possible targets from the root.
+
+   Useful as a Babashka task, a quick way for providing help.
+   See [`print-task`](#protosens.maestro.doc/print-task).
+
+## <a name="protosens.maestro.doc/print-task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/doc.clj#L82-L124) `print-task`</a>
+``` clojure
+
+(print-task root)
+(print-task root option+)
+```
+
+
+Like [`print`](#protosens.maestro.doc/print) but targets are Babashk tasks.
+
+   Does some additional nice printing.
+
+   Options may additionally contain:
+
+   | Key          | Value                                          | Default      |
+   |--------------|------------------------------------------------|--------------|
+   | `:bb`        | Path to the Babashka config file hosting tasks | `"bb.edn"` |
 
 -----
 # <a name="protosens.maestro.git.lib">protosens.maestro.git.lib</a>
