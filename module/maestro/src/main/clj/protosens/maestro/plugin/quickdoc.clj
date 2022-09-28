@@ -5,41 +5,64 @@
    Works only with Babashka."
 
   (:require [babashka.fs             :as bb.fs]
+            [clojure.edn             :as edn]
             [protosens.maestro       :as $.maestro]
+            [protosens.maestro.alias :as $.maestro.alias]
             [quickdoc.api            :as quickdoc]))
 
 
-;;;;;;;;;;
+;;;;;;;;;; Tasks
 
 
-(defn task
+(defn bundle
 
-  "Generates documentation for all modules.
+  "Generates a single documentation file for the given aliases.
 
-   Alias data for the module must contain `:extra-paths`, those will be the source
-   provided for analysis. To activate Quickdoc, it must also contain `:maestro.plugin.quickdoc.path/output`
-   specifying the output path for the generated markdown."
+   All `:extra-paths` of those aliases will be merged and used as source paths.
 
-
-  ([]
-
-   (task nil))
-
+   For options, see the Quickdoc documentation."
+  
 
   ([option+]
+   
+   (bundle option+
+           nil))
 
-   (let [basis ($.maestro/ensure-basis option+)]
-     (doseq [[path-output
-              path-source+] (keep (fn [[alias data]]
-                                    (when-some [path (:maestro.plugin.quickdoc.path/output data)]
-                                      [path
-                                       (or (not-empty (data :extra-paths))
-                                           (throw (Exception. (str "Missing extra paths in alias data: "
-                                                                   alias))))]))
-                                  (basis :aliases))]
-       (let [dir (bb.fs/parent path-output)]
-         (when-not (bb.fs/exists? dir)
-           (bb.fs/create-dirs dir)))
-       (quickdoc/quickdoc (assoc option+
-                                 :outfile      path-output
-                                 :source-paths path-source+))))))
+
+  ([option+ alias+]
+
+   (quickdoc/quickdoc (assoc option+
+                             :source-paths
+                             ($.maestro.alias/extra-path+ ($.maestro/ensure-basis option+)
+                                                          (or alias+
+                                                              (edn/read-string (first *command-line-args*))))))))
+
+
+
+
+(defn module+
+
+  "Generates documentation for modules automatically.
+
+   Selects modules that have an `:maestro.plugin.quickdoc.path/output` in their alias data specifying
+   where the markdown file should be written to. Source paths are based on `:extra-paths`.
+
+   For options, see the Quickdoc documentation."
+
+  [option+]
+
+  (doseq [[path-output
+           path-source+] (keep (fn [[alias data]]
+                                 (when-some [path (:maestro.plugin.quickdoc.path/output data)]
+                                   [path
+                                    (or (not-empty (data :extra-paths))
+                                        (throw (Exception. (str "Missing extra paths in alias data: "
+                                                                alias))))]))
+                               (-> ($.maestro/ensure-basis option+)
+                                   (:aliases)))]
+    (let [dir (bb.fs/parent path-output)]
+      (when-not (bb.fs/exists? dir)
+        (bb.fs/create-dirs dir)))
+    (quickdoc/quickdoc (assoc option+
+                              :outfile      path-output
+                              :source-paths path-source+))))

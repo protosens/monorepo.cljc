@@ -47,7 +47,8 @@
 -  [`protosens.maestro.plugin.kaocha`](#protosens.maestro.plugin.kaocha)  - Maestro plugin for the Kaocha test runner reliably computing source and test paths for aliases you are working with.
     -  [`prepare`](#protosens.maestro.plugin.kaocha/prepare) - Given a <code>basis</code> that went through [[protosens.maestro/search]], produces an EDN file at containing <code>:kaocha/source-paths</code> and <code>:kaocha/test-paths</code>.
 -  [`protosens.maestro.plugin.quickdoc`](#protosens.maestro.plugin.quickdoc)  - Maestro plugin generating markdown documentation for modules using [Quickdoc](https://github.com/borkdude/quickdoc) Works only with Babashka.
-    -  [`task`](#protosens.maestro.plugin.quickdoc/task) - Generates documentation for all modules.
+    -  [`bundle`](#protosens.maestro.plugin.quickdoc/bundle) - Generates a single documentation file for the given aliases.
+    -  [`module+`](#protosens.maestro.plugin.quickdoc/module+) - Generates documentation for modules automatically.
 -  [`protosens.maestro.profile`](#protosens.maestro.profile)  - Miscellaneous helpers centered around profiles.
     -  [`append+`](#protosens.maestro.profile/append+) - In <code>basis</code>, activates the given profiles by appending them to any existing ones.
     -  [`prepend+`](#protosens.maestro.profile/prepend+) - In <code>basis</code>, activates the given profiles by prepending them to any existing ones.
@@ -787,19 +788,33 @@ Maestro plugin generating markdown documentation for modules using [Quickdoc](ht
 
 
 
-## <a name="protosens.maestro.plugin.quickdoc/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/plugin/quickdoc.clj#L15-L45) `task`</a>
+## <a name="protosens.maestro.plugin.quickdoc/bundle">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/plugin/quickdoc.clj#L17-L38) `bundle`</a>
 ``` clojure
 
-(task)
-(task option+)
+(bundle option+)
+(bundle option+ alias+)
 ```
 
 
-Generates documentation for all modules.
+Generates a single documentation file for the given aliases.
 
-   Alias data for the module must contain `:extra-paths`, those will be the source
-   provided for analysis. To activate Quickdoc, it must also contain `:maestro.plugin.quickdoc.path/output`
-   specifying the output path for the generated markdown.
+   All `:extra-paths` of those aliases will be merged and used as source paths.
+
+   For options, see the Quickdoc documentation.
+
+## <a name="protosens.maestro.plugin.quickdoc/module+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/plugin/quickdoc.clj#L43-L68) `module+`</a>
+``` clojure
+
+(module+ option+)
+```
+
+
+Generates documentation for modules automatically.
+
+   Selects modules that have an `:maestro.plugin.quickdoc.path/output` in their alias data specifying
+   where the markdown file should be written to. Source paths are based on `:extra-paths`.
+
+   For options, see the Quickdoc documentation.
 
 -----
 # <a name="protosens.maestro.profile">protosens.maestro.profile</a>

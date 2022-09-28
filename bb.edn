@@ -45,19 +45,28 @@
    :requires ([protosens.maestro.plugin.deps-deploy])
    :task     (protosens.maestro.plugin.deps-deploy/local :ext/deps-deploy)}
 
-  doc
+  doc:module
+  {:doc      "Generate documentation for modules"
+   :requires ([protosens.maestro.plugin.quickdoc])
+   :task     (protosens.maestro.plugin.quickdoc/module+ {:git/branch  "develop"
+                                                         :github/repo "https://github.com/protosens/monorepo.cljc"
+                                                         :toc         true
+                                                         :var-links   true
+                                                         :var-pattern :wikilinks})}
+
+  doc:module:bundle
+  {:doc      "Bundle the given vector of aliases and generate a unique API file"
+   :requires ([protosens.maestro.plugin.quickdoc])
+   :task     (protosens.maestro.plugin.quickdoc/bundle {:git/branch  "develop"
+                                                        :github/repo "https://github.com/protosens/monorepo.cljc"
+                                                        :toc         true
+                                                        :var-links   true
+                                                        :var-pattern :wikilinks})}
+
+  doc:task
   {:doc      "Print documentation for the given task"
    :requires ([protosens.maestro.doc])
    :task     (protosens.maestro.doc/task "doc/task")}
-
-  quickdoc
-  {:doc      "Generate documentation for modules"
-   :requires ([protosens.maestro.plugin.quickdoc])
-   :task     (protosens.maestro.plugin.quickdoc/task {:git/branch  "develop"
-                                                      :github/repo "https://github.com/protosens/monorepo.cljc"
-                                                      :toc         true
-                                                      :var-links   true
-                                                      :var-pattern :wikilinks})}
 
   lint
   {:doc      "Lint Clojure code throughout the whole repository"
