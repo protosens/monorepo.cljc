@@ -1,12 +1,12 @@
 # Table of contents
 -  [`protosens.maestro`](#protosens.maestro)  - See README about core principles, [[search]] being the star of this namespace.
     -  [`by-profile+`](#protosens.maestro/by-profile+) - Extracts a set of all aliases required in the context of the given collection of profiles.
-    -  [`cli-arg`](#protosens.maestro/cli-arg) - Reads a command-line argument and updates the basis accordingly.
     -  [`create-basis`](#protosens.maestro/create-basis) - Reads and prepares a <code>deps.edn</code> file.
     -  [`ensure-basis`](#protosens.maestro/ensure-basis) - Returns the given argument if it contains <code>:aliases</code>.
     -  [`not-by-profile+`](#protosens.maestro/not-by-profile+) - Extracts a set of all aliases NOT required in the context of the given collection of profiles.
     -  [`print`](#protosens.maestro/print) - Prints aliases from <code>:maestro/require</code> after concatenating them, the way Clojure CLI likes it.
     -  [`search`](#protosens.maestro/search) - Given input aliases and profiles, under <code>:maestro/alias+</code> and <code>:maestro/profile+</code> respectively, searches for all necessary aliases and puts the results in a vector under <code>:maestro/require</code>.
+    -  [`sort-arg`](#protosens.maestro/sort-arg) - Sorts aliases and vectors into a map of <code>:maestro/alias+</code> and <code>:maestro/profile+</code>.
     -  [`task`](#protosens.maestro/task) - Like [[search]] but prepends aliases and profiles found using [[cli-arg]] and ends by [[print]]ing all required aliases.
 -  [`protosens.maestro.aggr`](#protosens.maestro.aggr)  - When running [[protosens.maestro/search]], <code>basis</code> can contain an extra key <code>:maestro/aggr</code> pointing to a function such as <code>(fn [basis alias alias-data] basis-2)</code>.
     -  [`alias`](#protosens.maestro.aggr/alias) - In <code>basis</code>, appends <code>alias</code> under <code>:maestro/require</code>.
@@ -64,7 +64,7 @@ See README about core principles, [`search`](#protosens.maestro/search) being th
 
 
 
-## <a name="protosens.maestro/by-profile+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L215-L227) `by-profile+`</a>
+## <a name="protosens.maestro/by-profile+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L226-L238) `by-profile+`</a>
 ``` clojure
 
 (by-profile+ basis profile+)
@@ -74,28 +74,6 @@ See README about core principles, [`search`](#protosens.maestro/search) being th
 Extracts a set of all aliases required in the context of the given collection of profiles.
 
    See [`search`](#protosens.maestro/search).
-
-## <a name="protosens.maestro/cli-arg">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L43-L82) `cli-arg`</a>
-``` clojure
-
-(cli-arg basis)
-(cli-arg basis arg)
-```
-
-
-Reads a command-line argument and updates the basis accordingly.
-  
-   Either:
-
-   - Single alias
-   - Vector of aliases and/or profiles
-
-   Uses the first item of `*command-line-args*` by default.
-
-   Given aliases and profiles are respectively appended to `:maestro/alias+` and `:maestro/profile+`.
-   See [`search`](#protosens.maestro/search) for more information about the net effect.
-  
-   Often used right after [`create-basis`](#protosens.maestro/create-basis).
 
 ## <a name="protosens.maestro/create-basis">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L18-L40) `create-basis`</a>
 ``` clojure
@@ -113,7 +91,7 @@ Reads and prepares a `deps.edn` file.
    |--------------------|---------------------------------------|------------------|
    | `:maestro/project` | Alternative path to a `deps.edn` file | `"./deps.edn"` |
 
-## <a name="protosens.maestro/ensure-basis">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L86-L96) `ensure-basis`</a>
+## <a name="protosens.maestro/ensure-basis">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L44-L54) `ensure-basis`</a>
 ``` clojure
 
 (ensure-basis maybe-basis)
@@ -123,7 +101,7 @@ Reads and prepares a `deps.edn` file.
 Returns the given argument if it contains `:aliases`.
    Otherwise, forwards it to [`create-basis`](#protosens.maestro/create-basis).
 
-## <a name="protosens.maestro/not-by-profile+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L230-L246) `not-by-profile+`</a>
+## <a name="protosens.maestro/not-by-profile+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L241-L257) `not-by-profile+`</a>
 ``` clojure
 
 (not-by-profile+ basis profile+)
@@ -136,7 +114,7 @@ Extracts a set of all aliases NOT required in the context of the given collectio
 
    See [`search`](#protosens.maestro/search).
 
-## <a name="protosens.maestro/print">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L252-L263) `print`</a>
+## <a name="protosens.maestro/print">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L263-L274) `print`</a>
 ``` clojure
 
 (print basis)
@@ -147,7 +125,7 @@ Prints aliases from `:maestro/require` after concatenating them, the way Clojure
   
    See [`search`](#protosens.maestro/search).
 
-## <a name="protosens.maestro/search">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L169-L209) `search`</a>
+## <a name="protosens.maestro/search">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L162-L220) `search`</a>
 ``` clojure
 
 (search basis)
@@ -158,6 +136,10 @@ Given input aliases and profiles, under `:maestro/alias+` and `:maestro/profile+
    for all necessary aliases and puts the results in a vector under `:maestro/require`.
 
    Input will go through [`ensure-basis`](#protosens.maestro/ensure-basis) first.
+
+   Then, will apply the mode found under `:maestro/mode` if any. Modes are described in the basis under
+   `:maestro/mode+`, a map of where keys are modes (typically keywords) and values can contain optional
+   `:maestro/alias+` and `:maestro/profile+` to append before starting the search.
 
    Also remembers which profiles resulted in which aliases being selected under `:maestro/profile->alias+`.
 
@@ -170,7 +152,22 @@ Given input aliases and profiles, under `:maestro/alias+` and `:maestro/profile+
    - [`protosens.maestro.alias`](#protosens.maestro.alias)
    - [`protosens.maestro.profile`](#protosens.maestro.profile)
 
-## <a name="protosens.maestro/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L268-L288) `task`</a>
+## <a name="protosens.maestro/sort-arg">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L58-L89) `sort-arg`</a>
+``` clojure
+
+(sort-arg arg)
+(sort-arg hmap arg)
+```
+
+
+Sorts aliases and vectors into a map of `:maestro/alias+` and `:maestro/profile+`.
+
+   The map in question is often a basis (see [`create-basis`](#protosens.maestro/create-basis)).
+
+   `arg` can be a vector to sort out or a single item. Useful for parsing aliases and
+   profiles provided as a CLI argument.
+
+## <a name="protosens.maestro/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L279-L310) `task`</a>
 ``` clojure
 
 (task)
@@ -178,7 +175,7 @@ Given input aliases and profiles, under `:maestro/alias+` and `:maestro/profile+
 ```
 
 
-Like [`search`](#protosens.maestro/search) but prepends aliases and profiles found using [`cli-arg`](#protosens.maestro/cli-arg) and ends by [`print`](#protosens.maestro/print)ing all required aliases.
+Like [`search`](#protosens.maestro/search) but prepends aliases and profiles found using [[cli-arg]] and ends by [`print`](#protosens.maestro/print)ing all required aliases.
 
    Commonly used as a Babashka task.
 

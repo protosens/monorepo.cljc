@@ -16,16 +16,6 @@
    :requires ([protosens.maestro])
    :task     (protosens.maestro/task)}
 
-  aliases:dev
-  {:doc      "Like `aliases` but add extra aliases and profiles for dev and testing"
-   :requires ([protosens.maestro])
-   :task     (protosens.maestro/task {:maestro/mode :dev})}
-
-  aliases:test
-  {:doc      "Like `aliases` but add extra aliases and profiles for testing"
-   :requires ([protosens.maestro])
-   :task     (protosens.maestro/task {:maestro/mode :test})}
-
   build
   {:doc      "Build the given alias"
    :requires ([protosens.maestro.plugin.build])

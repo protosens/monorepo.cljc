@@ -40,48 +40,6 @@
        (edn/read))))
 
 
-(defn cli-arg
-
-  "Reads a command-line argument and updates the basis accordingly.
-  
-   Either:
-
-   - Single alias
-   - Vector of aliases and/or profiles
-
-   Uses the last `*command-line-args*` by default.
-
-   Given aliases and profiles are respectively appended to `:maestro/alias+` and `:maestro/profile+`.
-   See [[search]] for more information about the net effect.
-  
-   Often used right after [[create-basis]]."
-
-
-  ([basis]
-
-   (cli-arg basis
-            (last *command-line-args*)))
-
-
-  ([basis arg]
-
-   (let [x (edn/read-string arg)]
-     (reduce (fn [basis x]
-               (update basis
-                       (cond
-                         (keyword? x) :maestro/alias+
-                         (symbol? x)  :maestro/profile+
-                         :else        (throw (ex-info "CLI argument must be a keyword or a symbol"
-                                                      {:maestro/arg x})))
-                       (fnil conj
-                             [])
-                       x))
-             basis
-             (if (vector? x)
-               x
-               [x])))))
-
-
 
 (defn ensure-basis
 
@@ -94,6 +52,41 @@
     maybe-basis
     (merge (create-basis maybe-basis)
            maybe-basis)))
+
+
+
+(defn sort-arg
+
+  "Sorts aliases and vectors into a map of `:maestro/alias+` and `:maestro/profile+`.
+
+   The map in question is often a basis (see [[create-basis]]).
+
+   `arg` can be a vector to sort out or a single item. Useful for parsing aliases and
+   profiles provided as a CLI argument."
+
+
+  ([arg]
+
+   (sort-arg nil
+             arg))
+
+
+  ([hmap arg]
+
+   (reduce (fn [hmap-2 x]
+             (update hmap-2
+                     (cond
+                       (keyword? x) :maestro/alias+
+                       (symbol? x)  :maestro/profile+
+                       :else        (throw (ex-info "Not an alias nor a profile"
+                                                    {:maestro/arg x})))
+                     (fnil conj
+                           [])
+                     x))
+           hmap
+           (if (vector? arg)
+             arg
+             [arg]))))
 
 
 ;;;;;;;;;;
@@ -196,7 +189,7 @@
                    (or (get-in basis-2
                                [:maestro/mode+
                                 mode])
-                       (throw (Exception. (str "Missing Maestro mode: "
+                       (throw (Exception. (str "Maestro mode not found in basis: "
                                                mode)))))
         basis-3  (cond->
                    basis-2
@@ -297,10 +290,21 @@
 
   ([basis]
 
-   (let [from-cli (cli-arg {})]
+   (let [n-arg       (count *command-line-args*)
+         _           (assert (<= 1
+                                 n-arg
+                                 2))
+         basis-proto (sort-arg (edn/read-string (last *command-line-args*)))
+         mode        (when (= n-arg
+                              2)
+                       (edn/read-string (first *command-line-args*)))]
      (-> basis
-         ($.maestro.alias/prepend+ (from-cli :maestro/alias+))
-         ($.maestro.profile/prepend+ (from-cli :maestro/profile+))
+         ($.maestro.alias/prepend+ (basis-proto :maestro/alias+))
+         ($.maestro.profile/prepend+ (basis-proto :maestro/profile+))
+         (cond->
+           mode
+           (assoc :maestro/mode
+                  mode))
          (search)
          ((or (:maestro.task/finalize basis)
               print))))))

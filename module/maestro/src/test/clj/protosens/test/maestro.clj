@@ -17,19 +17,20 @@
            ($.maestro/create-basis {:maestro/project "./deps.edn"}))))
 
 
-(T/deftest cli-arg
+(T/deftest sort-arg
 
-  (let [basis ($.maestro/cli-arg {:maestro/alias+   []
-                                  :maestro/profile+ []}
-                                 "[:a :b c ^:direct? d]")]
+  (let [hmap ($.maestro/sort-arg {:maestro/alias+   [:first]
+                                  :maestro/profile+ ['first]}
+                                 '[:a :b c ^:direct? d])]
     
-    (T/is (= {:maestro/alias+   [:a :b]
-              :maestro/profile+ '[c d]}
-             basis)
+    (T/is (= {:maestro/alias+   [:first :a :b]
+              :maestro/profile+ '[first c d]}
+             hmap)
           "Aliases and profiles properly parsed")
 
-    (let [[c
-           d] (basis :maestro/profile+)]
+    (let [[_first
+           c
+           d]     (hmap :maestro/profile+)]
       (T/testing "Accounts for metadata on profiles"
 
         (T/is (nil? (meta c)))
