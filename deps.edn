@@ -1,7 +1,16 @@
-{
- 
+{:maestro/mode+ {:dev           {:maestro/alias+   [:task/dev]
+                                 :maestro/profile+ [dev
+                                                    test]}
+                 :test          {:maestro/alias+   [:task/test]
+                                 :maestro/profile+ [^:direct? test]}
+                 :test-upstream {:maestro/alias+   [:task/test]
+                                 :maestro/profile+ [test]}}
+
+
+
+
  ;; OPTIONS FOR MAESTRO PLUGINS
- 
+
  :maestro.plugin.build.path/exclude ["(?i)^META-INF/license/.*"
                                      "^license/.*"]
  :maestro.plugin.kaocha/path        "private/maestro-kaocha.edn"

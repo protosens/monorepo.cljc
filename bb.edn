@@ -19,16 +19,12 @@
   aliases:dev
   {:doc      "Like `aliases` but add extra aliases and profiles for dev and testing"
    :requires ([protosens.maestro])
-   :task     (protosens.maestro/task {:maestro/alias+   [:task/dev]
-                                      :maestro/profile+ ['dev
-                                                         'test]})}
+   :task     (protosens.maestro/task {:maestro/mode :dev})}
 
   aliases:test
   {:doc      "Like `aliases` but add extra aliases and profiles for testing"
    :requires ([protosens.maestro])
-   :task     (protosens.maestro/task {:maestro/alias+   [:task/test]
-                                      :maestro/profile+ [(with-meta 'test
-                                                                    {:direct? true})]})}
+   :task     (protosens.maestro/task {:maestro/mode :test})}
 
   build
   {:doc      "Build the given alias"
@@ -80,9 +76,7 @@
    :requires ([protosens.maestro]
               [protosens.maestro.alias])
    :task     (clojure (str "-M"
-                           (protosens.maestro/task {:maestro/alias+        [:task/test]
-                                                    :maestro/profile+      [(with-meta 'test
-                                                                                       {:direct? true})]
+                           (protosens.maestro/task {:maestro/mode          :test
                                                     :maestro.task/finalize (comp protosens.maestro.alias/stringify+
                                                                                  :maestro/require)})))}
   }}

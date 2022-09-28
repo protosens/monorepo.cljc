@@ -78,6 +78,8 @@
                                                          :not-direct {:extra-paths ["./not-direct"]
                                                                       :maestro/env {:non-direct non-direct}}}
                                       :maestro/alias+   [:a]
+                                      :maestro/mode     :some-mode
+                                      :maestro/mode+    {:some-mode {:maestro/profile+ [profile-1]}}
                                       :maestro/profile+ [profile-1
                                                          ^:direct? profile-direct]})
         required+ (basis :maestro/require)]

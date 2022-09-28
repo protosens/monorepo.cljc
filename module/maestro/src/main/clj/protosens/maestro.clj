@@ -49,7 +49,7 @@
    - Single alias
    - Vector of aliases and/or profiles
 
-   Uses the first item of `*command-line-args*` by default.
+   Uses the last `*command-line-args*` by default.
 
    Given aliases and profiles are respectively appended to `:maestro/alias+` and `:maestro/profile+`.
    See [[search]] for more information about the net effect.
@@ -60,7 +60,7 @@
   ([basis]
 
    (cli-arg basis
-            (first *command-line-args*)))
+            (last *command-line-args*)))
 
 
   ([basis arg]
@@ -92,8 +92,8 @@
 
   (if (:aliases maybe-basis)
     maybe-basis
-    (merge maybe-basis
-           (create-basis maybe-basis))))
+    (merge (create-basis maybe-basis)
+           maybe-basis)))
 
 
 ;;;;;;;;;;
@@ -173,6 +173,10 @@
 
    Input will go through [[ensure-basis]] first.
 
+   Then, will apply the mode found under `:maestro/mode` if any. Modes are described in the basis under
+   `:maestro/mode+`, a map of where keys are modes (typically keywords) and values can contain optional
+   `:maestro/alias+` and `:maestro/profile+` to append before starting the search.
+
    Also remembers which profiles resulted in which aliases being selected under `:maestro/profile->alias+`.
 
    Alias data in `deps.edn` can also contain a vector of qualified symbols under `:maestro/on-require`. Those
@@ -186,25 +190,39 @@
 
   [basis]
 
-  (let [profile+ (-> (:maestro/profile+ basis)
+  (let [mode     (:maestro/mode basis)
+        basis-2  (ensure-basis basis)
+        mode-2   (when mode
+                   (or (get-in basis-2
+                               [:maestro/mode+
+                                mode])
+                       (throw (Exception. (str "Missing Maestro mode: "
+                                               mode)))))
+        basis-3  (cond->
+                   basis-2
+                   mode-2
+                   (-> ($.maestro.alias/append+ (mode-2 :maestro/alias+))
+                       ($.maestro.profile/append+ (mode-2 :maestro/profile+))))
+        profile+ (-> (basis-3 :maestro/profile+)
                      (vec)
                      (conj 'default))]
-    (-> basis
-        (ensure-basis)
+    (-> basis-3
         (assoc :maestro/profile+
                profile+)
         (update :maestro/require
                 #(or %
                      []))
         (-search 0
-                 (or (basis :maestro/aggr)
+                 (or (basis-3 :maestro/aggr)
                      $.maestro.aggr/default)
-                 (basis :maestro/alias+)
+                 (basis-3 :maestro/alias+)
                  profile+
                  (fn [_basis depth profile]
                    (not (and (> depth 
                                 1)
-                             (-> profile meta :direct?)))))
+                             (-> profile
+                                 (meta)
+                                 (:direct?))))))
         (dissoc :maestro/seen+)
         (-on-require))))
 
