@@ -21,6 +21,12 @@
    :requires ([protosens.maestro.plugin.build])
    :task     (protosens.maestro.plugin.build/task :tool/maestro)}
 
+  dev
+  {:doc      "Starts dev mode with the given alias(ses)"
+   :requires ([protosens.maestro])
+   :task     (protosens.maestro/clojure "-M"
+                                        {:maestro/mode :dev})}
+
   deploy:gitlib
   {:doc      "Generate custom `deps.edn` files for module exposed as git libraries"
    :requires ([protosens.maestro.git.lib])
@@ -46,6 +52,11 @@
    :requires ([protosens.maestro.doc])
    :task     (protosens.maestro.doc/task "doc/task")}
 
+  M
+  {:doc      "Executes `clojure` with `-M` and the required aliases"
+   :requires ([protosens.maestro])
+   :task     (protosens.maestro/clojure "-M")}
+
   lint
   {:doc      "Lint Clojure code throughout the whole repository"
    :requires ([protosens.maestro.plugin.clj-kondo])
@@ -63,10 +74,12 @@
 
   test
   {:doc      "Tests the given alias(es)"
-   :requires ([protosens.maestro]
-              [protosens.maestro.alias])
-   :task     (clojure (str "-M"
-                           (protosens.maestro/task {:maestro/mode          :test
-                                                    :maestro.task/finalize (comp protosens.maestro.alias/stringify+
-                                                                                 :maestro/require)})))}
+   :requires ([protosens.maestro])
+   :task     (protosens.maestro/clojure "-M"
+                                        {:maestro/mode :test})}
+
+  X
+  {:doc      "Executes `clojure` with `-X` and the required aliases"
+   :requires ([protosens.maestro])
+   :task     (protosens.maestro/clojure "-X")}
   }}

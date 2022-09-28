@@ -7,9 +7,11 @@
   (:require [clojure.edn               :as edn]
             [clojure.java.io           :as java.io]
             [clojure.set               :as set]
+            [clojure.string            :as string]
             [protosens.maestro.alias   :as $.maestro.alias]
             [protosens.maestro.aggr    :as $.maestro.aggr]
-            [protosens.maestro.profile :as $.maestro.profile]))
+            [protosens.maestro.profile :as $.maestro.profile]
+            [protosens.maestro.util    :as $.maestro.util]))
 
 
 ;;;;;;;;;;
@@ -220,7 +222,7 @@
         (-on-require))))
 
 
-;;;;;;;;;;
+;;;;;;;;;; Working with post-search results
 
 
 (defn by-profile+
@@ -257,9 +259,6 @@
               (vals))))
 
 
-;;;;;;;;;;
-
-
 (defn print
 
   "Prints aliases from `:maestro/require` after concatenating them, the way Clojure CLI likes it.
@@ -274,6 +273,7 @@
   basis)
 
 
+;;;;;;;;; Meant for Babashka
 
 
 (defn task
@@ -308,3 +308,53 @@
          (search)
          ((or (:maestro.task/finalize basis)
               print))))))
+
+
+;;;;;;;;;; Interacting directly with Clojure CLI
+
+
+(defn clojure
+
+  "Executes the `clojure` command with `-?` (-M, -X, ...)
+
+   Behaves like [[task]] but instead of printing aliases, there are appended
+   to `-?`.
+
+   CLI arguments are split in 2 if there is a `--` argument. What is before
+   it will be applied as CLI arguments for [[task]]. Anything after it will
+   be feed as additional CLI arguments for the `clojure` command.
+
+   ```clojure
+   ;; E.g. CLI args like:  :some/module -- -m some.namespace 1 2 3 
+   (clojure \"-M\")
+   ```
+
+   The `basis` argument is forwarded to [[task]].
+
+   Works only with Babashka."
+
+
+  ([-?]
+
+   (clojure -?
+            nil))
+
+
+  ([-? basis]
+
+   (let [[for-task
+          [_--
+           & for-clojure]] (split-with (fn [arg]
+                                         (not= arg
+                                               "--"))
+                                       *command-line-args*)]
+     (@$.maestro.util/d*clojure (str -?
+                                     (binding [*command-line-args* for-task]
+                                       (-> basis
+                                           (assoc :maestro.task/finalize
+                                                  (comp $.maestro.alias/stringify+
+                                                        :maestro/require))
+                                           (task)))
+                                     " "
+                                     (string/join " "
+                                                  for-clojure))))))

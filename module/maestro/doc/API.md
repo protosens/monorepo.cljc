@@ -1,6 +1,7 @@
 # Table of contents
 -  [`protosens.maestro`](#protosens.maestro)  - See README about core principles, [[search]] being the star of this namespace.
     -  [`by-profile+`](#protosens.maestro/by-profile+) - Extracts a set of all aliases required in the context of the given collection of profiles.
+    -  [`clojure`](#protosens.maestro/clojure) - Executes the <code>clojure</code> command with <code>-?</code> (-M, -X, ...) Behaves like [[task]] but instead of printing aliases, there are appended to <code>-?</code>.
     -  [`create-basis`](#protosens.maestro/create-basis) - Reads and prepares a <code>deps.edn</code> file.
     -  [`ensure-basis`](#protosens.maestro/ensure-basis) - Returns the given argument if it contains <code>:aliases</code>.
     -  [`not-by-profile+`](#protosens.maestro/not-by-profile+) - Extracts a set of all aliases NOT required in the context of the given collection of profiles.
@@ -64,7 +65,7 @@ See README about core principles, [`search`](#protosens.maestro/search) being th
 
 
 
-## <a name="protosens.maestro/by-profile+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L226-L238) `by-profile+`</a>
+## <a name="protosens.maestro/by-profile+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L228-L240) `by-profile+`</a>
 ``` clojure
 
 (by-profile+ basis profile+)
@@ -75,7 +76,33 @@ Extracts a set of all aliases required in the context of the given collection of
 
    See [`search`](#protosens.maestro/search).
 
-## <a name="protosens.maestro/create-basis">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L18-L40) `create-basis`</a>
+## <a name="protosens.maestro/clojure">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L316-L360) `clojure`</a>
+``` clojure
+
+(clojure -?)
+(clojure -? basis)
+```
+
+
+Executes the `clojure` command with `-?` (-M, -X, ...)
+
+   Behaves like [`task`](#protosens.maestro/task) but instead of printing aliases, there are appended
+   to `-?`.
+
+   CLI arguments are split in 2 if there is a `--` argument. What is before
+   it will be applied as CLI arguments for [`task`](#protosens.maestro/task). Anything after it will
+   be feed as additional CLI arguments for the `clojure` command.
+
+   ```clojure
+   ;; E.g. CLI args like:  :some/module -- -m some.namespace 1 2 3 
+   (clojure "-M")
+   ```
+
+   The `basis` argument is forwarded to [`task`](#protosens.maestro/task).
+
+   Works only with Babashka.
+
+## <a name="protosens.maestro/create-basis">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L20-L42) `create-basis`</a>
 ``` clojure
 
 (create-basis)
@@ -91,7 +118,7 @@ Reads and prepares a `deps.edn` file.
    |--------------------|---------------------------------------|------------------|
    | `:maestro/project` | Alternative path to a `deps.edn` file | `"./deps.edn"` |
 
-## <a name="protosens.maestro/ensure-basis">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L44-L54) `ensure-basis`</a>
+## <a name="protosens.maestro/ensure-basis">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L46-L56) `ensure-basis`</a>
 ``` clojure
 
 (ensure-basis maybe-basis)
@@ -101,7 +128,7 @@ Reads and prepares a `deps.edn` file.
 Returns the given argument if it contains `:aliases`.
    Otherwise, forwards it to [`create-basis`](#protosens.maestro/create-basis).
 
-## <a name="protosens.maestro/not-by-profile+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L241-L257) `not-by-profile+`</a>
+## <a name="protosens.maestro/not-by-profile+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L243-L259) `not-by-profile+`</a>
 ``` clojure
 
 (not-by-profile+ basis profile+)
@@ -114,7 +141,7 @@ Extracts a set of all aliases NOT required in the context of the given collectio
 
    See [`search`](#protosens.maestro/search).
 
-## <a name="protosens.maestro/print">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L263-L274) `print`</a>
+## <a name="protosens.maestro/print">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L262-L273) `print`</a>
 ``` clojure
 
 (print basis)
@@ -125,7 +152,7 @@ Prints aliases from `:maestro/require` after concatenating them, the way Clojure
   
    See [`search`](#protosens.maestro/search).
 
-## <a name="protosens.maestro/search">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L162-L220) `search`</a>
+## <a name="protosens.maestro/search">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L164-L222) `search`</a>
 ``` clojure
 
 (search basis)
@@ -152,7 +179,7 @@ Given input aliases and profiles, under `:maestro/alias+` and `:maestro/profile+
    - [`protosens.maestro.alias`](#protosens.maestro.alias)
    - [`protosens.maestro.profile`](#protosens.maestro.profile)
 
-## <a name="protosens.maestro/sort-arg">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L58-L89) `sort-arg`</a>
+## <a name="protosens.maestro/sort-arg">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L60-L91) `sort-arg`</a>
 ``` clojure
 
 (sort-arg arg)
