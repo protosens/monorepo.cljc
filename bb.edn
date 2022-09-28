@@ -48,20 +48,12 @@
   doc:module
   {:doc      "Generate documentation for modules"
    :requires ([protosens.maestro.plugin.quickdoc])
-   :task     (protosens.maestro.plugin.quickdoc/module+ {:git/branch  "develop"
-                                                         :github/repo "https://github.com/protosens/monorepo.cljc"
-                                                         :toc         true
-                                                         :var-links   true
-                                                         :var-pattern :wikilinks})}
+   :task     (protosens.maestro.plugin.quickdoc/module+)}
 
   doc:module:bundle
   {:doc      "Bundle the given vector of aliases and generate a unique API file"
    :requires ([protosens.maestro.plugin.quickdoc])
-   :task     (protosens.maestro.plugin.quickdoc/bundle {:git/branch  "develop"
-                                                        :github/repo "https://github.com/protosens/monorepo.cljc"
-                                                        :toc         true
-                                                        :var-links   true
-                                                        :var-pattern :wikilinks})}
+   :task     (protosens.maestro.plugin.quickdoc/bundle)}
 
   doc:task
   {:doc      "Print documentation for the given task"

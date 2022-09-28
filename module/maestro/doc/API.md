@@ -788,9 +788,10 @@ Maestro plugin generating markdown documentation for modules using [Quickdoc](ht
 
 
 
-## <a name="protosens.maestro.plugin.quickdoc/bundle">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/plugin/quickdoc.clj#L17-L38) `bundle`</a>
+## <a name="protosens.maestro.plugin.quickdoc/bundle">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/plugin/quickdoc.clj#L30-L58) `bundle`</a>
 ``` clojure
 
+(bundle)
 (bundle option+)
 (bundle option+ alias+)
 ```
@@ -802,9 +803,10 @@ Generates a single documentation file for the given aliases.
 
    For options, see the Quickdoc documentation.
 
-## <a name="protosens.maestro.plugin.quickdoc/module+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/plugin/quickdoc.clj#L43-L68) `module+`</a>
+## <a name="protosens.maestro.plugin.quickdoc/module+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/plugin/quickdoc.clj#L63-L96) `module+`</a>
 ``` clojure
 
+(module+)
 (module+ option+)
 ```
 

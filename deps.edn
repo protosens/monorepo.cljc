@@ -1,10 +1,15 @@
 {
  
- ;; OPTIONS
+ ;; OPTIONS FOR MAESTRO PLUGINS
  
  :maestro.plugin.build.path/exclude ["(?i)^META-INF/license/.*"
                                      "^license/.*"]
  :maestro.plugin.kaocha/path        "private/maestro-kaocha.edn"
+ :maestro.plugin.quickdoc/option+   {:git/branch  "develop"
+                                     :github/repo "https://github.com/protosens/monorepo.cljc"
+                                     :toc         true
+                                     :var-links   true
+                                     :var-pattern :wikilinks}
 
 
 
@@ -68,7 +73,7 @@
 
   :ext/quickdoc
 
-  {:extra-deps  {io.github.helins/quickdoc {:git/sha "b9072ece085c2901c7eb3fb64786e87e532abab1"}}
+  {:extra-deps  {io.github.helins/quickdoc {:git/sha "e52dd56ab615756407d5ac22fbfa7440507d4892"}}
    :maestro/doc "Fork of Borkdude's Quickdoc"
    :maestro/url "https://github.com/helins/quickdoc"}
 

@@ -11,6 +11,19 @@
             [quickdoc.api            :as quickdoc]))
 
 
+;;;;;;;;;; Private
+
+
+(defn- -quickdoc-option+
+
+  ;;
+
+  [option+ basis]
+
+  (merge (basis :maestro.plugin.quickdoc/option+)
+         option+))
+
+
 ;;;;;;;;;; Tasks
 
 
@@ -23,6 +36,11 @@
    For options, see the Quickdoc documentation."
   
 
+  ([]
+
+   (bundle nil))
+
+
   ([option+]
    
    (bundle option+
@@ -31,11 +49,13 @@
 
   ([option+ alias+]
 
-   (quickdoc/quickdoc (assoc option+
-                             :source-paths
-                             ($.maestro.alias/extra-path+ ($.maestro/ensure-basis option+)
-                                                          (or alias+
-                                                              (edn/read-string (first *command-line-args*))))))))
+   (let [basis ($.maestro/ensure-basis option+)]
+     (quickdoc/quickdoc (-> option+
+                           (-quickdoc-option+ basis)
+                           (assoc :source-paths
+                                  ($.maestro.alias/extra-path+ basis
+                                                               (or alias+
+                                                                   (edn/read-string (first *command-line-args*))))))))))
 
 
 
@@ -49,20 +69,28 @@
 
    For options, see the Quickdoc documentation."
 
-  [option+]
+  ([]
 
-  (doseq [[path-output
-           path-source+] (keep (fn [[alias data]]
-                                 (when-some [path (:maestro.plugin.quickdoc.path/output data)]
-                                   [path
-                                    (or (not-empty (data :extra-paths))
-                                        (throw (Exception. (str "Missing extra paths in alias data: "
-                                                                alias))))]))
-                               (-> ($.maestro/ensure-basis option+)
-                                   (:aliases)))]
-    (let [dir (bb.fs/parent path-output)]
-      (when-not (bb.fs/exists? dir)
-        (bb.fs/create-dirs dir)))
-    (quickdoc/quickdoc (assoc option+
-                              :outfile      path-output
-                              :source-paths path-source+))))
+   (module+ nil))
+
+
+  ([option+]
+
+   (let [basis     ($.maestro/ensure-basis option+)
+         option-2+ (-quickdoc-option+ option+
+                                      basis)]
+     (doseq [[path-output
+              path-source+] (keep (fn [[alias data]]
+                                    (when-some [path (:maestro.plugin.quickdoc.path/output data)]
+                                      [path
+                                       (or (not-empty (data :extra-paths))
+                                           (throw (Exception. (str "Missing extra paths in alias data: "
+                                                                   alias))))]))
+                                  (-> basis
+                                      (:aliases)))]
+       (let [dir (bb.fs/parent path-output)]
+         (when-not (bb.fs/exists? dir)
+           (bb.fs/create-dirs dir)))
+       (quickdoc/quickdoc (assoc option-2+
+                                 :outfile      path-output
+                                 :source-paths path-source+))))))
