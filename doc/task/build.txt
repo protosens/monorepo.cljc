@@ -1,2 +1,2 @@
 Based on information located in the alias data in `deps.edn`.
-See `protosens.maestro.plugin.build`.
+See the `$.maestro.plugin.build` namespace.

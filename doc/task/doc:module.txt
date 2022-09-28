@@ -1,0 +1,5 @@
+Generate a markdown file for each module specifying a path via
+`:maestro.plugin.quickdoc.path/output`.
+
+It will contain a full description of all namespaces belonging to the module,
+with vars and usage.

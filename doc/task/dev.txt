@@ -1,0 +1,9 @@
+Shortcut for launching dev mode given an alias or a vector of aliases and profiles.
+
+For instance, this:
+
+    bb dev :module/maestro
+
+Is equivalent to:
+
+    clojure -M$( bb aliases :dev :module/maestro )

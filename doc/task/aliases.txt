@@ -5,3 +5,6 @@ aliases, following `:maestro/require` in `deps.edn`.
     bb aliases '[dev :module/maestro]'
 
 Based on `protosens.maestro/task`.
+Also accepts a mode, see available ones in `deps.edn`:
+
+    bb aliases :dev :module/maestro

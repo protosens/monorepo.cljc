@@ -1,0 +1,1 @@
+Exactly like the `M` task but invoke `-X` on Clojure CLI.

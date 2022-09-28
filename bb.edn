@@ -12,30 +12,20 @@
 
  :tasks
  {aliases
-  {:doc      "Print all aliases required for the given alias(es)"
+  {:doc      "Print all required aliases"
    :requires ([protosens.maestro])
    :task     (protosens.maestro/task)}
 
   build
-  {:doc      "Build the given alias"
+  {:doc      "Build the given module"
    :requires ([protosens.maestro.plugin.build])
    :task     (protosens.maestro.plugin.build/task :tool/maestro)}
 
   dev
-  {:doc      "Starts dev mode with the given alias(ses)"
+  {:doc      "Starts dev mode with the given module(s)"
    :requires ([protosens.maestro])
    :task     (protosens.maestro/clojure "-M"
                                         {:maestro/mode :dev})}
-
-  deploy:gitlib
-  {:doc      "Generate custom `deps.edn` files for module exposed as git libraries"
-   :requires ([protosens.maestro.git.lib])
-   :task     (protosens.maestro.git.lib/task)}
-
-  deploy:local
-  {:doc      "Deploy the given alias to the local Maven repository"
-   :requires ([protosens.maestro.plugin.deps-deploy])
-   :task     (protosens.maestro.plugin.deps-deploy/local :ext/deps-deploy)}
 
   doc:module
   {:doc      "Generate documentation for modules"
@@ -43,7 +33,7 @@
    :task     (protosens.maestro.plugin.quickdoc/module+)}
 
   doc:module:bundle
-  {:doc      "Bundle the given vector of aliases and generate a unique API file"
+  {:doc      "Bundle the given vector of aliases and generate a single documentation"
    :requires ([protosens.maestro.plugin.quickdoc])
    :task     (protosens.maestro.plugin.quickdoc/bundle)}
 
@@ -51,6 +41,16 @@
   {:doc      "Print documentation for the given task"
    :requires ([protosens.maestro.doc])
    :task     (protosens.maestro.doc/print-task "doc/task")}
+
+  expose
+  {:doc      "Expose modules meant to be consumed as Git libraries"
+   :requires ([protosens.maestro.git.lib])
+   :task     (protosens.maestro.git.lib/task)}
+
+  install
+  {:doc      "Deploy the given module to the local Maven repository"
+   :requires ([protosens.maestro.plugin.deps-deploy])
+   :task     (protosens.maestro.plugin.deps-deploy/local :ext/deps-deploy)}
 
   M
   {:doc      "Executes `clojure` with `-M` and the required aliases"
@@ -73,7 +73,7 @@
    :task     (protosens.maestro.classpath/pprint)}
 
   test
-  {:doc      "Tests the given alias(es)"
+  {:doc      "Tests the given module(s)"
    :requires ([protosens.maestro])
    :task     (protosens.maestro/clojure "-M"
                                         {:maestro/mode :test})}
