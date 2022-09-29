@@ -377,7 +377,7 @@ Prints a documentation file from the `root` directory.
    Useful as a Babashka task, a quick way for providing help.
    Also see [`print-task`](#protosens.maestro.doc/print-task).
 
-## <a name="protosens.maestro.doc/print-task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/doc.clj#L150-L180) `print-task`</a>
+## <a name="protosens.maestro.doc/print-task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/doc.clj#L150-L206) `print-task`</a>
 ``` clojure
 
 (print-task)
@@ -394,7 +394,7 @@ Pretty-prints extra documentation for a task (if there is any).
    | `:bb`        | Path to the Babashka config file hosting tasks | `"bb.edn"`  |
    | `:target`    | Task to print (without extension)              | First CLI arg |
 
-## <a name="protosens.maestro.doc/report-undocumented-task+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/doc.clj#L203-L222) `report-undocumented-task+`</a>
+## <a name="protosens.maestro.doc/report-undocumented-task+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/doc.clj#L230-L249) `report-undocumented-task+`</a>
 ``` clojure
 
 (report-undocumented-task+)
@@ -404,7 +404,7 @@ Pretty-prints extra documentation for a task (if there is any).
 
 Pretty-prints the result of [`undocumented-task+`](#protosens.maestro.doc/undocumented-task+).
 
-## <a name="protosens.maestro.doc/undocumented-task+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/doc.clj#L184-L199) `undocumented-task+`</a>
+## <a name="protosens.maestro.doc/undocumented-task+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/doc.clj#L210-L226) `undocumented-task+`</a>
 ``` clojure
 
 (undocumented-task+ option+)

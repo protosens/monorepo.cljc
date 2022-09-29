@@ -166,18 +166,44 @@
 
   ([option+]
 
-   (if-some [task (get (-task+ option+)
-                       (-target option+))]
-     (do
-       (when-some [docstring (task :doc)]
-         (println docstring)
-         (println)
-         (println "---")
-         (println))
-       (println (or (some-> (task :maestro/doc)
-                            (-realign-string))
-                    "No extra documentation for this task.")))
-     (println "Task not found."))))
+   (let [task+ (-task+ option+)]
+     (if-some [target (-target option+)]
+       ;;
+       ;; Target task provided.
+       (if-some [task (get task+
+                           target)]
+         ;;
+         ;; Okay, print task documentation.
+         (do
+           (when-some [docstring (task :doc)]
+             (println docstring)
+             (println)
+             (println "---")
+             (println))
+           (println (or (some-> (task :maestro/doc)
+                                (-realign-string))
+                        "No extra documentation for this task.")))
+         ;;
+         ;; Task does not exist.
+         (println "Task not found."))
+       ;;
+       ;; No target task.
+       (if-some [documented (not-empty (keep (fn [[task data]]
+                                               (when (:maestro/doc data)
+                                                 task))
+                                             task+))]
+         ;;
+         ;; Print documented tasks.
+         (do
+           (println "These tasks have extra documentation:")
+           (println)
+           (doseq [task (sort-by string/lower-case
+                                 documented)]
+             (println (str "  "
+                           task))))
+         ;;
+         ;; There isn't any documentation.
+         (println "No extra documentation found for any task."))))))
 
 
 
@@ -193,10 +219,11 @@
 
   [option+]
 
-  (sort (keep (fn [[task data]]
-                (when-not (:maestro/doc data)
-                  task))
-              (-task+ option+))))
+  (sort-by string/lower-case
+           (keep (fn [[task data]]
+                   (when-not (:maestro/doc data)
+                     task))
+                 (-task+ option+))))
 
 
 

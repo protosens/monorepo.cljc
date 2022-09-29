@@ -3,8 +3,8 @@
 ;;
 {:deps
  {babashka/fs {:mvn/version "0.1.11"},
-  io.github.helins/quickdoc
-  {:git/sha "e52dd56ab615756407d5ac22fbfa7440507d4892"},
+  io.github.borkdude/quickdoc
+  {:git/sha "fc5a18bb419ccac3c8769aa0761384025b27f68c"},
   org.clojure/java.classpath {:mvn/version "1.0.0"},
   org.clojure/tools.namespace {:mvn/version "1.3.0"}},
  :paths ["src/main/clj"]}
