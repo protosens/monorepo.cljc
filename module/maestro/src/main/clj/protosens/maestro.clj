@@ -113,9 +113,12 @@
 
   ;; Core implementation of [[search]].
   ;;
+  ;; TODO. Refactor this argument-wise.
+  ;;       Grew organically, probably just put everything in `basis`.
+  ;;
   ;; TODO. Consider converting to breadth-first.
 
-  [basis depth aggr alias+ profile+ consider-profile?]
+  [basis alias-parent depth aggr alias+ profile+ consider-profile?]
 
   (reduce (fn [basis-2 alias]
             (let [[alias-2
@@ -123,6 +126,7 @@
                               (let [profile->alias alias]
                                 (some (fn [profile]
                                         (when (consider-profile? basis
+                                                                 alias-parent
                                                                  depth
                                                                  profile)
                                           (when-some [alias (profile->alias profile)]
@@ -150,6 +154,7 @@
                                              (fnil conj
                                                    #{})
                                              alias-2)
+                                     alias-2
                                      (inc depth)
                                      aggr
                                      (:maestro/require alias-data)
@@ -185,39 +190,43 @@
 
   [basis]
 
-  (let [mode     (:maestro/mode basis)
-        basis-2  (ensure-basis basis)
-        mode-2   (when mode
-                   (or (get-in basis-2
-                               [:maestro/mode+
-                                mode])
-                       (throw (Exception. (str "Maestro mode not found in basis: "
-                                               mode)))))
-        basis-3  (cond->
-                   basis-2
-                   mode-2
-                   (-> ($.maestro.alias/append+ (mode-2 :maestro/alias+))
-                       ($.maestro.profile/append+ (mode-2 :maestro/profile+))))
-        profile+ (-> (basis-3 :maestro/profile+)
-                     (vec)
-                     (conj 'default))]
+  (let [mode           (:maestro/mode basis)
+        basis-2        (ensure-basis basis)
+        mode-2         (when mode
+                         (or (get-in basis-2
+                                     [:maestro/mode+
+                                      mode])
+                             (throw (Exception. (str "Maestro mode not found in basis: "
+                                                     mode)))))
+        basis-3        (cond->
+                         basis-2
+                         mode-2
+                         (-> ($.maestro.alias/append+ (mode-2 :maestro/alias+))
+                             ($.maestro.profile/append+ (mode-2 :maestro/profile+))))
+        profile+       (-> (basis-3 :maestro/profile+)
+                           (vec)
+                           (conj 'default))
+        alias-request+ (set (:maestro/alias+ basis))]
     (-> basis-3
         (assoc :maestro/profile+
                profile+)
         (update :maestro/require
                 #(or %
                      []))
-        (-search 0
+        (-search nil
+                 0
                  (or (basis-3 :maestro/aggr)
                      $.maestro.aggr/default)
                  (basis-3 :maestro/alias+)
                  profile+
-                 (fn [_basis depth profile]
-                   (not (and (> depth 
-                                1)
-                             (-> profile
-                                 (meta)
-                                 (:direct?))))))
+                 (fn [_basis alias-parent depth profile]
+                   (or (<= depth
+                           1)
+                       (not (-> profile
+                                (meta)
+                                (:direct?)))
+                       (contains? alias-request+
+                                  alias-parent))))
         (dissoc :maestro/seen+)
         (-on-require))))
 
