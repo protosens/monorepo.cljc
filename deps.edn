@@ -82,9 +82,9 @@
 
   :ext/quickdoc
 
-  {:extra-deps  {io.github.helins/quickdoc {:git/sha "e52dd56ab615756407d5ac22fbfa7440507d4892"}}
-   :maestro/doc "Fork of Borkdude's Quickdoc"
-   :maestro/url "https://github.com/helins/quickdoc"}
+  {:extra-deps  {io.github.borkdude/quickdoc {:git/sha "fc5a18bb419ccac3c8769aa0761384025b27f68c"}}
+   :maestro/doc "Generating markdown documentation for Clojure namespaces"
+   :maestro/url "https://github.com/borkdude/quickdoc"}
 
 
 

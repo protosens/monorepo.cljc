@@ -152,12 +152,8 @@
                          (assoc :maestro/alias+
                                 (vec (keys alias->data)))
                          ($.maestro/search))
-         gitlib+     (filterv (fn [alias]
-                                (let [data (alias->data alias)]
-                                  (and (gitlib? data)
-                                       (or (data :maestro/root)
-                                           (throw (Exception. (str "Missing root in alias data: "
-                                                                   alias)))))))
+         gitlib+     (filterv (comp gitlib?
+                                    alias->data)
                               (basis-3 :maestro/require))
          write       (or (:maestro.git.lib/write basis)
                          write-deps-edn)]
