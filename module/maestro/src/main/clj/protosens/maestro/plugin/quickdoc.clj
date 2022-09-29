@@ -40,7 +40,9 @@
 
    All `:extra-paths` of those aliases will be merged and used as source paths.
 
-   For options, see the Quickdoc documentation."
+   For options, see the Quickdoc documentation.
+  
+   Prints paths that have been bundled together."
   
 
   ([]
@@ -56,14 +58,16 @@
 
   ([option+ alias+]
 
-   (let [basis ($.maestro/ensure-basis option+)]
+   (let [basis ($.maestro/ensure-basis option+)
+         path+ (sort ($.maestro.alias/extra-path+ basis
+                                                  (or alias+
+                                                      (edn/read-string (first *command-line-args*)))))]
      (quickdoc/quickdoc (-> option+
                            (-quickdoc-option+ basis)
                            (assoc :source-paths
-                                  ($.maestro.alias/extra-path+ basis
-                                                               (or alias+
-                                                                   (edn/read-string (first *command-line-args*))))))))))
-
+                                  path+)))
+     (run! println
+           path+))))
 
 
 
@@ -74,7 +78,9 @@
    Selects modules that have an `:maestro.plugin.quickdoc.path/output` in their alias data specifying
    where the markdown file should be written to. Source paths are based on `:extra-paths`.
 
-   For options, see the Quickdoc documentation."
+   For options, see the Quickdoc documentation.
+   
+   Prints which modules have produced documentation where."
 
   ([]
 
@@ -86,10 +92,12 @@
    (let [basis     ($.maestro/ensure-basis option+)
          option-2+ (-quickdoc-option+ option+
                                       basis)]
-     (doseq [[path-output
+     (doseq [[alias
+              path-output
               path-source+] (keep (fn [[alias data]]
                                     (when-some [path (:maestro.plugin.quickdoc.path/output data)]
-                                      [path
+                                      [alias
+                                       path
                                        (or (not-empty (data :extra-paths))
                                            (throw (Exception. (str "Missing extra paths in alias data: "
                                                                    alias))))]))
@@ -100,4 +108,7 @@
            (bb.fs/create-dirs dir)))
        (quickdoc/quickdoc (assoc option-2+
                                  :outfile      path-output
-                                 :source-paths path-source+))))))
+                                 :source-paths path-source+))
+       (println (format "%s -> %s"
+                        alias
+                        path-output))))))

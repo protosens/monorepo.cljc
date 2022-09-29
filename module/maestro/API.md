@@ -30,7 +30,7 @@
     -  [`expose`](#protosens.maestro.git.lib/expose) - Generates custom <code>deps.edn</code> files for all aliases having in there data a name (see namespace description) as well as a <code>:maestro/root</code> (path to the root directory of that alias).
     -  [`gitlib?`](#protosens.maestro.git.lib/gitlib?) - Returns true if an alias (given its data) is meant to be exposed as a git library.
     -  [`prepare-deps-edn`](#protosens.maestro.git.lib/prepare-deps-edn) - Computes the content of the <code>deps.edn</code> file for the given <code>alias</code> meant to be exposed as a git library.
-    -  [`task`](#protosens.maestro.git.lib/task) - Quick wrapper over [[expose]], simply pretty-printing its result.
+    -  [`task`](#protosens.maestro.git.lib/task) - Uses and pretty-prints [[expose]].
     -  [`write-deps-edn`](#protosens.maestro.git.lib/write-deps-edn) - Default way of writing a <code>deps-edn</code> file by pretty-printing it to the given <code>path</code>.
 -  [`protosens.maestro.plugin.build`](#protosens.maestro.plugin.build)  - Maestro plugin for <code>tools.build</code> focused on building jars and uberjars, key information being located right in aliases.
     -  [`build`](#protosens.maestro.plugin.build/build) - Given a map with an alias to build under <code>:maestro.plugin.build/alias</code>, search for all required aliases after activating the <code>release</code> profile, using [[protosens.maestro/search]].
@@ -434,7 +434,7 @@ Aliases that contains a name under `:maestro.git.lib/name` can be exposed public
 
 
 
-## <a name="protosens.maestro.git.lib/expose">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L125-L168) `expose`</a>
+## <a name="protosens.maestro.git.lib/expose">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L125-L167) `expose`</a>
 ``` clojure
 
 (expose)
@@ -450,9 +450,8 @@ Generates custom `deps.edn` files for all aliases having in there data a name (s
    When a `deps.edn` file has been computed, it is written to disk by [`write-deps-edn`](#protosens.maestro.git.lib/write-deps-edn). This
    can be overwritten by providing an alternative function under `:maestro.git.lib/write`.
    
-
    Returns a map where keys are aliased for which a `deps.edn` file has been generated and values
-   are the data returned from [`prepare-deps-edn`](#protosens.maestro.git.lib/prepare-deps-edn).
+   are the data returned from [`prepare-deps-edn`](#protosens.maestro.git.lib/prepare-deps-edn) without the `deps.edn` content.
 
 ## <a name="protosens.maestro.git.lib/gitlib?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L22-L28) `gitlib?`</a>
 ``` clojure
@@ -492,7 +491,7 @@ Computes the content of the `deps.edn` file for the given `alias` meant to be ex
    | `:maestro.git.lib/deps.edn`      | `deps.edn` map                                  |
    | `:maestro.git.lib.path/deps.edn` | Path where the `deps.edn` map should be written |
 
-## <a name="protosens.maestro.git.lib/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L172-L188) `task`</a>
+## <a name="protosens.maestro.git.lib/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L171-L197) `task`</a>
 ``` clojure
 
 (task)
@@ -500,9 +499,10 @@ Computes the content of the `deps.edn` file for the given `alias` meant to be ex
 ```
 
 
-Quick wrapper over [`expose`](#protosens.maestro.git.lib/expose), simply pretty-printing its result.
-  
-   Meant to be used as a Babashka task.
+Uses and pretty-prints [`expose`](#protosens.maestro.git.lib/expose).
+
+   Output prints modules that have been exposed, the path to their `deps.edn` and which
+   aliases they each required.
 
 ## <a name="protosens.maestro.git.lib/write-deps-edn">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L107-L119) `write-deps-edn`</a>
 ``` clojure
@@ -860,7 +860,7 @@ Maestro plugin generating markdown documentation for modules using [Quickdoc](ht
 
 
 
-## <a name="protosens.maestro.plugin.quickdoc/bundle">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/plugin/quickdoc.clj#L37-L65) `bundle`</a>
+## <a name="protosens.maestro.plugin.quickdoc/bundle">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/plugin/quickdoc.clj#L37-L70) `bundle`</a>
 ``` clojure
 
 (bundle)
@@ -874,8 +874,10 @@ Generates a single documentation file for the given aliases.
    All `:extra-paths` of those aliases will be merged and used as source paths.
 
    For options, see the Quickdoc documentation.
+  
+   Prints paths that have been bundled together.
 
-## <a name="protosens.maestro.plugin.quickdoc/module+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/plugin/quickdoc.clj#L70-L103) `module+`</a>
+## <a name="protosens.maestro.plugin.quickdoc/module+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/plugin/quickdoc.clj#L74-L114) `module+`</a>
 ``` clojure
 
 (module+)
@@ -889,6 +891,8 @@ Generates documentation for modules automatically.
    where the markdown file should be written to. Source paths are based on `:extra-paths`.
 
    For options, see the Quickdoc documentation.
+   
+   Prints which modules have produced documentation where.
 
 -----
 # <a name="protosens.maestro.profile">protosens.maestro.profile</a>
