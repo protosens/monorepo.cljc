@@ -38,6 +38,11 @@
    :requires ([protosens.maestro.doc])
    :task     (protosens.maestro.doc/print-task "doc/task")}
 
+  doc:task:report
+  {:doc      "Print the status of documentation for tasks"
+   :requires ([protosens.maestro.doc])
+   :task     (protosens.maestro.doc/report-task-documentation "doc/task")}
+
   expose
   {:doc      "Expose modules meant to be consumed as Git libraries"
    :requires ([protosens.maestro.git.lib])

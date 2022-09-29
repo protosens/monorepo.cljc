@@ -24,6 +24,7 @@
 -  [`protosens.maestro.doc`](#protosens.maestro.doc)  - Collection of miscellaneous helpers related to documentation.
     -  [`print`](#protosens.maestro.doc/print) - Prints a documentation file from the <code>root</code> directory.
     -  [`print-task`](#protosens.maestro.doc/print-task) - Like [[print]] but targets are Babashk tasks.
+    -  [`report-task-documentation`](#protosens.maestro.doc/report-task-documentation) - Prints: - List of tasks that are undocumented - List of documentation not corresponding to an available task The latter happens when a task is renamed.
 -  [`protosens.maestro.git.lib`](#protosens.maestro.git.lib)  - Aliases that contains a name under <code>:maestro.git.lib/name</code> can be exposed publicly as git libraries and consumed from Clojure CLI via <code>:deps/root</code>.
     -  [`expose`](#protosens.maestro.git.lib/expose) - Generates custom <code>deps.edn</code> files for all aliases having in there data a name (see namespace description) as well as a <code>:maestro/root</code> (path to the root directory of that alias).
     -  [`gitlib?`](#protosens.maestro.git.lib/gitlib?) - Returns true if an alias (given its data) is meant to be exposed as a git library.
@@ -353,7 +354,7 @@ Collection of miscellaneous helpers related to documentation.
 
 
 
-## <a name="protosens.maestro.doc/print">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/doc.clj#L49-L78) `print`</a>
+## <a name="protosens.maestro.doc/print">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/doc.clj#L90-L119) `print`</a>
 ``` clojure
 
 (print root)
@@ -375,7 +376,7 @@ Prints a documentation file from the `root` directory.
    Useful as a Babashka task, a quick way for providing help.
    See [`print-task`](#protosens.maestro.doc/print-task).
 
-## <a name="protosens.maestro.doc/print-task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/doc.clj#L82-L124) `print-task`</a>
+## <a name="protosens.maestro.doc/print-task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/doc.clj#L127-L166) `print-task`</a>
 ``` clojure
 
 (print-task root)
@@ -392,6 +393,23 @@ Like [`print`](#protosens.maestro.doc/print) but targets are Babashk tasks.
    | Key          | Value                                          | Default      |
    |--------------|------------------------------------------------|--------------|
    | `:bb`        | Path to the Babashka config file hosting tasks | `"bb.edn"` |
+
+## <a name="protosens.maestro.doc/report-task-documentation">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/doc.clj#L170-L215) `report-task-documentation`</a>
+``` clojure
+
+(report-task-documentation root)
+(report-task-documentation root option+)
+```
+
+
+Prints:
+
+   - List of tasks that are undocumented
+   - List of documentation not corresponding to an available task
+
+   The latter happens when a task is renamed.
+
+   Takes the same `option+` as [`print-task`](#protosens.maestro.doc/print-task).
 
 -----
 # <a name="protosens.maestro.git.lib">protosens.maestro.git.lib</a>
