@@ -2,10 +2,6 @@
  {protosens/maestro {:local/root "module/maestro"}}
  
 
- :paths
- ["module/maestro/src/main/clj"]
-
-
  :pods
  {clj-kondo/clj-kondo {:version "2022.02.09"}}
 

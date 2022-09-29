@@ -30,7 +30,7 @@
 
 
 
-(T/deftest gen-deps
+(T/deftest expose
 
   (let [*deps-edn+ (atom {})]
 
@@ -38,12 +38,12 @@
                          :maestro.git.lib.path/deps.edn "a/deps.edn"}
               :module/b {:maestro/require               [:ext/c :module/b]
                          :maestro.git.lib.path/deps.edn "b/deps.edn"}}
-             ($.maestro.git.lib/gen-deps (merge basis
-                                                {:maestro.git.lib/write (fn [path deps-edn]
-                                                                          (swap! *deps-edn+
-                                                                                 assoc
-                                                                                 path
-                                                                                 deps-edn))})))
+             ($.maestro.git.lib/expose (merge basis
+                                              {:maestro.git.lib/write (fn [path deps-edn]
+                                                                        (swap! *deps-edn+
+                                                                               assoc
+                                                                               path
+                                                                               deps-edn))})))
           "Expected result")
 
     (T/is (= {"a/deps.edn" {:deps  {'ext/c     {:mvn/version "0.0.0"}

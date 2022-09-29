@@ -152,7 +152,7 @@
                                          {dev :tool/maestro}
                                          {test :test/maestro}]
    :maestro/root                        "module/maestro"
-   :maestro.git.lib/name                com.protosens/maestro
+   :maestro.git.lib/name                protosens/maestro
    :maestro.plugin.build/type           :jar
    :maestro.plugin.build.alias/artifact :release/maestro
    :maestro.plugin.build.path/output    "private/target/maestro.jar"
@@ -161,7 +161,7 @@
 
   :release/maestro
 
-  {:extra-deps      {com.protosens/maestro {:mvn/version "0.0.0-alpha0"}}
+  {:extra-deps      {protosens/maestro {:local/root "module/maestro"}}
    :maestro/require [{test :test/maestro}]}
 
 

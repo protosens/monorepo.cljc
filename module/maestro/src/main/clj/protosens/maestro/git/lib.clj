@@ -6,7 +6,7 @@
    A name is a symbol `<organization>/<artifact>` such as `com.acme/some-lib`.
 
    In order to do so, each such module must have its own `deps.edn` file.
-   See [[gen-deps]]."
+   See [[expose]] and [[task]]."
 
   (:require [babashka.fs               :as fs]
             [clojure.java.io           :as java.io]
@@ -122,7 +122,7 @@
 ;;;
 
 
-(defn gen-deps
+(defn expose
 
   "Generates custom `deps.edn` files for all aliases having in there data a name (see namespace
    description) as well as a `:maestro/root` (path to the root directory of that alias).
@@ -139,7 +139,7 @@
 
   ([]
 
-   (gen-deps nil))
+   (expose nil))
 
 
   ([basis]
@@ -175,7 +175,7 @@
 
 (defn task
 
-  "Quick wrapper over [[gen-deps]], simply pretty-printing its result.
+  "Quick wrapper over [[expose]], simply pretty-printing its result.
   
    Meant to be used as a Babashka task."
 
@@ -188,5 +188,5 @@
   ([basis]
 
    (-> basis
-       (gen-deps)
+       (expose)
        (pprint/pprint))))
