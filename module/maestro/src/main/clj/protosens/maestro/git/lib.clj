@@ -132,9 +132,8 @@
    When a `deps.edn` file has been computed, it is written to disk by [[write-deps-edn]]. This
    can be overwritten by providing an alternative function under `:maestro.git.lib/write`.
    
-
    Returns a map where keys are aliased for which a `deps.edn` file has been generated and values
-   are the data returned from [[prepare-deps-edn]]."
+   are the data returned from [[prepare-deps-edn]] without the `deps.edn` content."
 
 
   ([]
@@ -171,9 +170,10 @@
 
 (defn task
 
-  "Quick wrapper over [[expose]], simply pretty-printing its result.
-  
-   Meant to be used as a Babashka task."
+  "Uses and pretty-prints [[expose]].
+
+   Output prints modules that have been exposed, the path to their `deps.edn` and which
+   aliases they each required."
 
 
   ([]
@@ -183,6 +183,15 @@
 
   ([basis]
 
-   (-> basis
-       (expose)
-       (pprint/pprint))))
+   (doseq [[alias
+            feedback] (expose basis)]
+     (println (format "%s -> %s"
+                      alias
+                      (feedback :maestro.git.lib.path/deps.edn)))
+     (doseq [alias-child (sort (filter (fn [alias-child]
+                                         (not= alias-child
+                                               alias))
+                                       (feedback :maestro/require)))]
+       (println " "
+                alias-child))
+     (println))))
