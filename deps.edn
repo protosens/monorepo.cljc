@@ -149,6 +149,7 @@
                                          :ext/clojure.java.classpath
                                          :ext/clojure.tools.namespace
                                          :ext/quickdoc
+                                         :module/txt
                                          {dev :tool/maestro}
                                          {test :test/maestro}]
    :maestro/root                        "module/maestro"
@@ -176,6 +177,16 @@
                      "This alias bundles it with all those optional dependencies."]
    :maestro/require [:ext/clojure.tools.build
                      :module/maestro]}
+
+  ;---
+
+  :module/txt
+
+  {:extra-paths                         ["module/txt/src/main/clj"]
+   :maestro/doc                         "Text manipulation library"
+   :maestro/root                        "module/txt"
+   :maestro.git.lib/name                protosens/txt
+   :maestro.plugin.quickdoc.path/output "module/txt/doc/API.md"}
 
 
   }}

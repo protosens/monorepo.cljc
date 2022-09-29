@@ -3,10 +3,10 @@
   "Collection of miscellaneous helpers related to documentation."
 
   (:import (java.nio.file Path))
-  (:refer-clojure :exclude [print])
   (:require [babashka.fs    :as bb.fs]
             [clojure.edn    :as edn]
-            [clojure.string :as string]))
+            [clojure.string :as string]
+            [protosens.txt  :as $.txt]))
 
 
 (set! *warn-on-reflection*
@@ -14,39 +14,6 @@
 
 
 ;;;;;;;;;; Helpers
-
-
-(defn- -realign-string
-
-  ;; Realign all lines relative to the first one by truncating leading whitespace.
-  ;; Useful for printing multi-line EDN strings.
-
-  [s]
-
-  (let [line+ (string/split-lines s)]
-    (if (= (count line+)
-           1)
-      s
-      (let [n-truncate (reduce min
-                               (map (fn [line]
-                                      (-> (take-while (fn [c]
-                                                        (= c
-                                                           \space))
-                                                      line)
-                                          (count)))
-                                    (filter (comp not
-                                                  string/blank?)
-                                            (rest line+))))]
-        (string/join (System/lineSeparator)
-                     (cons (first line+)
-                           (map (fn [^String line]
-                                  (cond->
-                                    line
-                                    (not (string/blank? line))
-                                    (.substring n-truncate
-                                                (count line))))
-                                (rest line+))))))))
-
 
 
 (defn- -target
@@ -181,7 +148,7 @@
              (println "---")
              (println))
            (println (or (some-> (task :maestro/doc)
-                                (-realign-string))
+                                ($.txt/realign))
                         "No extra documentation for this task.")))
          ;;
          ;; Task does not exist.
