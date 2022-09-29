@@ -850,10 +850,17 @@ Maestro plugin generating markdown documentation for modules using [Quickdoc](ht
 
    Works only with Babashka.
 
+   Attention, it is necessary adding the `clj-kondo` to your `bb.edn` file as a [Babashka pod](https://github.com/babashka/pods):
+
+   ```clojure
+   {:pods
+    {clj-kondo/clj-kondo {:version "2022.09.08"}}}
+   ```
 
 
 
-## <a name="protosens.maestro.plugin.quickdoc/bundle">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/plugin/quickdoc.clj#L30-L58) `bundle`</a>
+
+## <a name="protosens.maestro.plugin.quickdoc/bundle">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/plugin/quickdoc.clj#L37-L65) `bundle`</a>
 ``` clojure
 
 (bundle)
@@ -868,7 +875,7 @@ Generates a single documentation file for the given aliases.
 
    For options, see the Quickdoc documentation.
 
-## <a name="protosens.maestro.plugin.quickdoc/module+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/plugin/quickdoc.clj#L63-L96) `module+`</a>
+## <a name="protosens.maestro.plugin.quickdoc/module+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/plugin/quickdoc.clj#L70-L103) `module+`</a>
 ``` clojure
 
 (module+)

@@ -3,7 +3,7 @@
  
 
  :pods
- {clj-kondo/clj-kondo {:version "2022.02.09"}}
+ {clj-kondo/clj-kondo {:version "2022.09.08"}}
 
 
  :tasks

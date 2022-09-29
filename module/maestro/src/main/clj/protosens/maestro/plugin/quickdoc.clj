@@ -2,7 +2,14 @@
 
   "Maestro plugin generating markdown documentation for modules using [Quickdoc](https://github.com/borkdude/quickdoc)
 
-   Works only with Babashka."
+   Works only with Babashka.
+
+   Attention, it is necessary adding the `clj-kondo` to your `bb.edn` file as a [Babashka pod](https://github.com/babashka/pods):
+
+   ```clojure
+   {:pods
+    {clj-kondo/clj-kondo {:version \"2022.09.08\"}}}
+   ```"
 
   (:require [babashka.fs             :as bb.fs]
             [clojure.edn             :as edn]
