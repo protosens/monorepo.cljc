@@ -57,7 +57,7 @@
    | `:maestro.git.lib/deps.edn`      | `deps.edn` map                                  |
    | `:maestro.git.lib.path/deps.edn` | Path where the `deps.edn` map should be written |"
 
-  [basis alias]
+  [basis git-sha alias]
 
   (let [alias->data (basis :aliases)
         data        (alias->data alias)
@@ -82,8 +82,9 @@
                                   (assoc-in deps-edn-2
                                             [:deps
                                              (data-required :maestro.git.lib/name)]
-                                            {:local/root (str (bb.fs/relativize root-dir
-                                                                                (data-required :maestro/root)))})
+                                            {:deps/root (data-required :maestro/root)
+                                             :git/sha   git-sha
+                                             :git/url   (basis :maestro.git.lib/url)})
                                   (update deps-edn-2
                                           :paths
                                           into
@@ -146,12 +147,13 @@
    are the data returned from [[prepare-deps-edn]] without the `deps.edn` content."
 
 
-  ([]
+  ([git-sha]
 
-   (expose nil))
+   (expose nil
+           git-sha))
 
 
-  ([basis]
+  ([basis git-sha]
 
    (let [basis-2     (-> basis
                          ($.maestro/ensure-basis)
@@ -172,6 +174,7 @@
      (into (sorted-map)
            (map (fn [alias]
                   (let [prepared (prepare-deps-edn basis-2
+                                                   git-sha
                                                    alias)]
                     (write (prepared :maestro.git.lib.path/deps.edn)
                            (prepared :maestro.git.lib/deps.edn))
@@ -196,15 +199,19 @@
 
   ([basis]
 
-   (doseq [[alias
-            feedback] (expose basis)]
-     (println (format "%s -> %s"
-                      alias
-                      (feedback :maestro.git.lib.path/deps.edn)))
-     (doseq [alias-child (sort (filter (fn [alias-child]
-                                         (not= alias-child
-                                               alias))
-                                       (feedback :maestro/require)))]
-       (println " "
-                alias-child))
-     (println))))
+   (if-some [git-sha (or (:maestro.git.lib/sha basis)
+                         (first *command-line-args*))]
+     (doseq [[alias
+              feedback] (expose basis
+                                git-sha)]
+       (println (format "%s -> %s"
+                        alias
+                        (feedback :maestro.git.lib.path/deps.edn)))
+       (doseq [alias-child (sort (filter (fn [alias-child]
+                                           (not= alias-child
+                                                 alias))
+                                         (feedback :maestro/require)))]
+         (println " "
+                  alias-child))
+       (println))
+     (throw (Exception. "SHA git exposing Git libraries not provided")))))

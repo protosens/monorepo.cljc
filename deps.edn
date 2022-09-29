@@ -11,8 +11,9 @@
 
 
 
- ;; OPTIONS FOR MAESTRO PLUGINS
+ ;; OPTIONS FOR MAESTRO AND PLUGINS
 
+ :maestro.git.lib/url               "https://github.com/protosens/monorepo.cljc"
  :maestro.plugin.build.path/exclude ["(?i)^META-INF/license/.*"
                                      "^license/.*"]
  :maestro.plugin.kaocha/path        "private/maestro-kaocha.edn"
