@@ -157,7 +157,7 @@
    :maestro.plugin.build/type           :jar
    :maestro.plugin.build.alias/artifact :release/maestro
    :maestro.plugin.build.path/output    "private/target/maestro.jar"
-   :maestro.plugin.quickdoc.path/output "module/maestro/doc/API.md"}
+   :maestro.plugin.quickdoc.path/output "module/maestro/API.md"}
 
 
   :release/maestro
@@ -186,7 +186,7 @@
    :maestro/doc                         "Text manipulation library"
    :maestro/root                        "module/txt"
    :maestro.git.lib/name                protosens/txt
-   :maestro.plugin.quickdoc.path/output "module/txt/doc/API.md"}
+   :maestro.plugin.quickdoc.path/output "module/txt/API.md"}
 
 
   }}
