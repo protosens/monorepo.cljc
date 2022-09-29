@@ -48,8 +48,6 @@
     -  [`clojars`](#protosens.maestro.plugin.deps-deploy/clojars) - Babashka task for deploying an artifact to Clojars.
     -  [`deploy`](#protosens.maestro.plugin.deps-deploy/deploy) - Core function for using <code>deps-deploy</code> via the <code>clojure</code> tool.
     -  [`local`](#protosens.maestro.plugin.deps-deploy/local) - Installs the given alias to the local Maven repository.
--  [`protosens.maestro.plugin.kaocha`](#protosens.maestro.plugin.kaocha)  - Maestro plugin for the Kaocha test runner reliably computing source and test paths for aliases you are working with.
-    -  [`prepare`](#protosens.maestro.plugin.kaocha/prepare) - Given a <code>basis</code> that went through [[protosens.maestro/search]], produces an EDN file at containing <code>:kaocha/source-paths</code> and <code>:kaocha/test-paths</code>.
 -  [`protosens.maestro.plugin.quickdoc`](#protosens.maestro.plugin.quickdoc)  - Maestro plugin generating markdown documentation for modules using [Quickdoc](https://github.com/borkdude/quickdoc) Works only with Babashka.
     -  [`bundle`](#protosens.maestro.plugin.quickdoc/bundle) - Generates a single documentation file for the given aliases.
     -  [`module+`](#protosens.maestro.plugin.quickdoc/module+) - Generates documentation for modules automatically.
@@ -434,7 +432,7 @@ Aliases that contains a name under `:maestro.git.lib/name` can be exposed public
 
 
 
-## <a name="protosens.maestro.git.lib/expose">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L125-L167) `expose`</a>
+## <a name="protosens.maestro.git.lib/expose">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L135-L177) `expose`</a>
 ``` clojure
 
 (expose)
@@ -453,7 +451,7 @@ Generates custom `deps.edn` files for all aliases having in there data a name (s
    Returns a map where keys are aliased for which a `deps.edn` file has been generated and values
    are the data returned from [`prepare-deps-edn`](#protosens.maestro.git.lib/prepare-deps-edn) without the `deps.edn` content.
 
-## <a name="protosens.maestro.git.lib/gitlib?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L22-L28) `gitlib?`</a>
+## <a name="protosens.maestro.git.lib/gitlib?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L26-L32) `gitlib?`</a>
 ``` clojure
 
 (gitlib? alias-data)
@@ -462,7 +460,7 @@ Generates custom `deps.edn` files for all aliases having in there data a name (s
 
 Returns true if an alias (given its data) is meant to be exposed as a git library.
 
-## <a name="protosens.maestro.git.lib/prepare-deps-edn">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L32-L103) `prepare-deps-edn`</a>
+## <a name="protosens.maestro.git.lib/prepare-deps-edn">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L36-L110) `prepare-deps-edn`</a>
 ``` clojure
 
 (prepare-deps-edn basis alias)
@@ -491,7 +489,7 @@ Computes the content of the `deps.edn` file for the given `alias` meant to be ex
    | `:maestro.git.lib/deps.edn`      | `deps.edn` map                                  |
    | `:maestro.git.lib.path/deps.edn` | Path where the `deps.edn` map should be written |
 
-## <a name="protosens.maestro.git.lib/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L171-L197) `task`</a>
+## <a name="protosens.maestro.git.lib/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L181-L207) `task`</a>
 ``` clojure
 
 (task)
@@ -504,7 +502,7 @@ Uses and pretty-prints [`expose`](#protosens.maestro.git.lib/expose).
    Output prints modules that have been exposed, the path to their `deps.edn` and which
    aliases they each required.
 
-## <a name="protosens.maestro.git.lib/write-deps-edn">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L107-L119) `write-deps-edn`</a>
+## <a name="protosens.maestro.git.lib/write-deps-edn">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L114-L129) `write-deps-edn`</a>
 ``` clojure
 
 (write-deps-edn path deps-edn)
@@ -806,41 +804,6 @@ Installs the given alias to the local Maven repository.
    explicitly.
 
    See [`deploy`](#protosens.maestro.plugin.deps-deploy/deploy) about `:maestro.plugin.deps-deploy/exec-args`.
-
------
-# <a name="protosens.maestro.plugin.kaocha">protosens.maestro.plugin.kaocha</a>
-
-
-Maestro plugin for the Kaocha test runner reliably computing source and test paths for aliases you are
-   working with. No need to maintain several test suites manually.
-
-
-
-
-## <a name="protosens.maestro.plugin.kaocha/prepare">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/plugin/kaocha.clj#L14-L47) `prepare`</a>
-``` clojure
-
-(prepare basis)
-```
-
-
-Given a `basis` that went through [`protosens.maestro/search`](#protosens.maestro/search), produces an EDN file
-   at containing `:kaocha/source-paths` and `:kaocha/test-paths`.
-
-   The path for that EDN file must be provided under `:maestro.plugin.kaocha/path`. It should be
-   ignored in `.gitignore` as it is not meant to be checked out.
-
-   Your Kaocha configuration file can then refer to it:
-
-   ```clojure
-   #kaocha/v1
-   {:tests [#meta-merge [{:id                 :unit
-                          :kaocha/ns-patterns [".+"]}
-                         #include "<PATH>"]]}
-   ```
-
-   Test paths are deduced from aliases that were required by activing the `test` profile`. Source
-   paths are all the remaining paths.
 
 -----
 # <a name="protosens.maestro.plugin.quickdoc">protosens.maestro.plugin.quickdoc</a>

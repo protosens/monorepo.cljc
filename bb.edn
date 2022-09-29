@@ -1,5 +1,5 @@
 {:deps
- {protosens/maestro {:local/root "module/maestro"}}
+ {local/babashka {:local/root "module/babashka"}}
  
 
  :pods

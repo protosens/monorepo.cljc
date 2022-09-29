@@ -98,7 +98,8 @@
 
   {:maestro/doc        "Bundles necessities for testing"
    :maestro/on-require [protosens.maestro.plugin.kaocha/prepare]
-   :maestro/require    [:ext/kaocha]}
+   :maestro/require    [:ext/kaocha
+                        :module/maestro.plugin.kaocha]}
 
 
 
@@ -133,13 +134,25 @@
 
   ;; MODULES
 
+  :module/babashka
+
+  {:maestro/doc          "Hosts dependencies and tasks for Babashka.
+                          Not meant to be consumed publicly."
+   :maestro/require      [:module/maestro
+                          :module/maestro.plugin.kaocha]
+   :maestro/root         "module/babashka"
+   :maestro.git.lib/name local/babashka}
+
+  ;---
+
 
   :module/dev
 
   {:extra-paths     ["module/dev/src/main/clj"]
    :maestro/doc     "Dev utilities used in this repository"
    :maestro/root    "module/dev"
-   :maestro/require [:module/maestro]}
+   :maestro/require [:module/maestro
+                     :module/maestro.plugin.kaocha]}
 
   ;---
 
@@ -180,6 +193,18 @@
    :maestro/require [:ext/clojure.tools.build
                      :module/maestro]}
 
+  ;---
+
+  :module/maestro.plugin.kaocha
+
+  {:extra-paths                         ["module/maestro.plugin.kaocha/src/main/clj"]
+   :maestro/doc                         "Maestro plugin for the Kaocha test runner"
+   :maestro/require                     [:ext/babashka.fs
+                                         :ext/kaocha]
+   :maestro/root                        "module/maestro.plugin.kaocha"
+   :maestro.git.lib/name                Protosens/maestro.plugin.kaocha
+   :maestro.plugin.quickdoc.path/output "module/maestro.plugin.kaocha/API.md"}
+  
   ;---
 
   :module/txt
