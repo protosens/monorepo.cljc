@@ -5,13 +5,8 @@
  {babashka/fs {:mvn/version "0.1.11"},
   io.github.borkdude/quickdoc
   {:git/sha "fc5a18bb419ccac3c8769aa0761384025b27f68c"},
-  lambdaisland/kaocha {:mvn/version "1.63.998"},
   org.clojure/java.classpath {:mvn/version "1.0.0"},
   org.clojure/tools.namespace {:mvn/version "1.3.0"},
   protosens/maestro {:local/root "../maestro"},
-  protosens/maestro.plugin.clj-kondo
-  {:local/root "../maestro.plugin.clj-kondo"},
-  protosens/maestro.plugin.kaocha
-  {:local/root "../maestro.plugin.kaocha"},
   protosens/txt {:local/root "../txt"}},
- :paths []}
+ :paths ["src/main/clj"]}

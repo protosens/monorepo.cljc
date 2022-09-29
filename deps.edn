@@ -139,6 +139,7 @@
   {:maestro/doc          "Hosts dependencies and tasks for Babashka.
                           Not meant to be consumed publicly."
    :maestro/require      [:module/maestro
+                          :module/maestro.plugin.clj-kondo
                           :module/maestro.plugin.kaocha]
    :maestro/root         "module/babashka"
    :maestro.git.lib/name local/babashka}
@@ -195,6 +196,18 @@
 
   ;---
 
+  :module/maestro.plugin.clj-kondo
+
+  {:extra-paths                         ["module/maestro.plugin.clj-kondo/src/main/clj"]
+   :maestro/doc                         "Maestro plugin for Clj-kondo, the Clojure linter"
+   :maestro/require                     [:module/maestro]
+   :maestro/root                        "module/maestro.plugin.clj-kondo"
+   :maestro.git.lib/name                protosens/maestro.plugin.clj-kondo
+   :maestro.plugin.quickdoc.path/output "module/maestro.plugin.clj-kondo/API.md"}
+
+
+  ;---
+
   :module/maestro.plugin.kaocha
 
   {:extra-paths                         ["module/maestro.plugin.kaocha/src/main/clj"]
@@ -202,7 +215,7 @@
    :maestro/require                     [:ext/babashka.fs
                                          :ext/kaocha]
    :maestro/root                        "module/maestro.plugin.kaocha"
-   :maestro.git.lib/name                Protosens/maestro.plugin.kaocha
+   :maestro.git.lib/name                protosens/maestro.plugin.kaocha
    :maestro.plugin.quickdoc.path/output "module/maestro.plugin.kaocha/API.md"}
   
   ;---

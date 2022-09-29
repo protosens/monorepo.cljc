@@ -1,8 +1,10 @@
 (ns protosens.maestro.plugin.clj-kondo
 
-  "Maestro plugin for linting Clojure code via Clj-kondo.
+  "Maestro plugin for linting Clojure code via [Clj-kondo](https://github.com/clj-kondo/clj-kondo).
   
-   Assumes it is already and `clj-kondo` is available in the shell."
+   Assumes `clj-kondo` is installed and available in the shell.
+
+   Those tasks only work when executed with [Babashka](https://github.com/babashka/babashka)."
 
   (:refer-clojure :exclude [import])
   (:require [protosens.maestro           :as $.maestro]

@@ -161,8 +161,11 @@
                          (assoc :maestro/alias+
                                 (vec (keys alias->data)))
                          ($.maestro/search))
-         gitlib+     (filterv (comp gitlib?
-                                    alias->data)
+         gitlib+     (filterv (fn [alias]
+                                (if-some [data (alias->data alias)]
+                                  (gitlib? data)
+                                  (throw (Exception. (str "No data for alias: "
+                                                          alias)))))
                               (basis-3 :maestro/require))
          write       (or (:maestro.git.lib/write basis)
                          write-deps-edn)]

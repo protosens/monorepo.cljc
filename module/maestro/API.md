@@ -41,9 +41,6 @@
     -  [`task`](#protosens.maestro.plugin.build/task) - Convenient way of calling [[build]] using <code>clojure -X</code>.
     -  [`tmp-dir`](#protosens.maestro.plugin.build/tmp-dir) - Creates a temporary directory and returns its path as a string.
     -  [`uberjar`](#protosens.maestro.plugin.build/uberjar) - Implementation for the <code>:uberjar</code> type in [[by-type]].
--  [`protosens.maestro.plugin.clj-kondo`](#protosens.maestro.plugin.clj-kondo)  - Maestro plugin for linting Clojure code via Clj-kondo.
-    -  [`lint`](#protosens.maestro.plugin.clj-kondo/lint) - Lints the whole repository by extracting <code>:extra-paths</code> from aliases.
-    -  [`prepare`](#protosens.maestro.plugin.clj-kondo/prepare) - Prepares the Clj-kondo cache by linting all dependencies and copying configuration files.
 -  [`protosens.maestro.plugin.deps-deploy`](#protosens.maestro.plugin.deps-deploy)  - Maestro plugin for installing and deploying artifacts via <code>slipset/deps-deploy</code>.
     -  [`clojars`](#protosens.maestro.plugin.deps-deploy/clojars) - Babashka task for deploying an artifact to Clojars.
     -  [`deploy`](#protosens.maestro.plugin.deps-deploy/deploy) - Core function for using <code>deps-deploy</code> via the <code>clojure</code> tool.
@@ -432,7 +429,7 @@ Aliases that contains a name under `:maestro.git.lib/name` can be exposed public
 
 
 
-## <a name="protosens.maestro.git.lib/expose">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L135-L177) `expose`</a>
+## <a name="protosens.maestro.git.lib/expose">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L135-L180) `expose`</a>
 ``` clojure
 
 (expose)
@@ -489,7 +486,7 @@ Computes the content of the `deps.edn` file for the given `alias` meant to be ex
    | `:maestro.git.lib/deps.edn`      | `deps.edn` map                                  |
    | `:maestro.git.lib.path/deps.edn` | Path where the `deps.edn` map should be written |
 
-## <a name="protosens.maestro.git.lib/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L181-L207) `task`</a>
+## <a name="protosens.maestro.git.lib/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L184-L210) `task`</a>
 ``` clojure
 
 (task)
@@ -692,44 +689,6 @@ Implementation for the `:uberjar` type in [`by-type`](#protosens.maestro.plugin.
 
    JVM options passed to the Clojure compiler are deduced by concatenating `:jvm-opts` found in all aliases
    involved in the build.
-
------
-# <a name="protosens.maestro.plugin.clj-kondo">protosens.maestro.plugin.clj-kondo</a>
-
-
-Maestro plugin for linting Clojure code via Clj-kondo.
-  
-   Assumes it is already and `clj-kondo` is available in the shell.
-
-
-
-
-## <a name="protosens.maestro.plugin.clj-kondo/lint">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/plugin/clj_kondo.clj#L32-L67) `lint`</a>
-``` clojure
-
-(lint)
-(lint option+)
-```
-
-
-Lints the whole repository by extracting `:extra-paths` from aliases.
-
-   Options may be:
-
-   | Key            | Value                                                       |
-   |----------------|-------------------------------------------------------------|
-   | `:path-filter` | Predicate function deciding whether a path should be linted |
-
-## <a name="protosens.maestro.plugin.clj-kondo/prepare">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/plugin/clj_kondo.clj#L16-L28) `prepare`</a>
-``` clojure
-
-(prepare)
-```
-
-
-Prepares the Clj-kondo cache by linting all dependencies and copying configuration files.
-  
-   Should be called prior to [`lint`](#protosens.maestro.plugin.clj-kondo/lint)ing for the first time and on dependency updates.
 
 -----
 # <a name="protosens.maestro.plugin.deps-deploy">protosens.maestro.plugin.deps-deploy</a>
