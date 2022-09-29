@@ -1,5 +1,0 @@
-By generating a custom `deps.edn` file in the `:meastro/root` of aliases that
-have a `:maestro.git.lib/name`.
-
-Consumers can then require the repository as a Git dependency and point to a
-particular module using `:deps/root`.

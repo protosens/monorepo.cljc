@@ -1,2 +1,0 @@
-A list of tasks that are undocumented and a list of doc targets that do not
-correspond to available tasks. The latter happens when a task is renamed.

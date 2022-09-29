@@ -1,2 +1,0 @@
-Similar to the `doc:module` task but all the `:extra-paths` of the input aliases
-will be merged and only one markdown file will be generated under `./API.md`.

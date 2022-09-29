@@ -6,7 +6,6 @@
   (:refer-clojure :exclude [print])
   (:require [babashka.fs    :as bb.fs]
             [clojure.edn    :as edn]
-            [clojure.set    :as set]
             [clojure.string :as string]))
 
 
@@ -15,6 +14,51 @@
 
 
 ;;;;;;;;;; Helpers
+
+
+(defn- -realign-string
+
+  ;; Realign all lines relative to the first one by truncating leading whitespace.
+  ;; Useful for printing multi-line EDN strings.
+
+  [s]
+
+  (let [line+ (string/split-lines s)]
+    (if (= (count line+)
+           1)
+      s
+      (let [n-truncate (reduce min
+                               (map (fn [line]
+                                      (-> (take-while (fn [c]
+                                                        (= c
+                                                           \space))
+                                                      line)
+                                          (count)))
+                                    (filter (comp not
+                                                  string/blank?)
+                                            (rest line+))))]
+        (string/join (System/lineSeparator)
+                     (cons (first line+)
+                           (map (fn [^String line]
+                                  (cond->
+                                    line
+                                    (not (string/blank? line))
+                                    (.substring n-truncate
+                                                (count line))))
+                                (rest line+))))))))
+
+
+
+(defn- -target
+
+  ;; Retrieves target to work with.
+
+  [option+]
+
+  (or (:target option+)
+      (some-> (first *command-line-args*)
+              (symbol))))
+
 
 
 (defn- -target+
@@ -53,163 +97,126 @@
 ;;;;;;;;;; Print documentation
 
 
-(defn- -print
-
-  ;; Core implementation.
-
-  [root option+ print-body]
-
-  (let [extension (or (:extension option+)
-                      ".txt")]
-    (if-some [target (or (:target option+)
-                         (some-> (first *command-line-args*)
-                                 (symbol)))]
-      (print-body (let [path-body (str root
-                                       "/"
-                                       target
-                                       extension)]
-                    (when (bb.fs/exists? path-body)
-                      (slurp path-body)))
-                  (assoc option+
-                         :extension extension
-                         :target    target))
-      (do
-        (println "Documentation available for:")
-        (println)
-        (doseq [path (sort-by (fn [^String target]
-                                (.toLowerCase target))
-                              (-target+ root
-                                        extension))]
-          (println (str "  "
-                        path)))))))
-
-
-;;;
-
-
-(defn print
+(defn print-help
 
   "Prints a documentation file from the `root` directory.
 
    Options may be:
 
-   | Key          | Value                                          | Default      |
-   |--------------|------------------------------------------------|--------------|
-   | `:extension` | Extension of text files in the root directory  | `\".txt\"`   |
-   | `:target`    | File to print (without extension)              | CLI arg      |
+   | Key          | Value                                          | Default       |
+   |--------------|------------------------------------------------|---------------|
+   | `:extension` | Extension of text files in the root directory  | `\".txt\"`    |
+   | `:target`    | File to print (without extension)              | First CLI arg |
   
    Without any target, prints all possible targets from the root.
 
    Useful as a Babashka task, a quick way for providing help.
-   See [[print-task]]."
+   Also see [[print-task]]."
   
 
   ([root]
 
-   (print root
-          nil))
-
-
-  ([root option+]
-
-   (-print root
-           option+
-           (fn print-body [body _option+]
-             (println (or body
-                          "No documentation found for this target."))))))
-
-
-
-
-
-
-
-(defn print-task
-
-  "Like [[print]] but targets are Babashk tasks.
-
-   Does some additional nice printing.
-
-   Options may additionally contain:
-
-   | Key          | Value                                          | Default      |
-   |--------------|------------------------------------------------|--------------|
-   | `:bb`        | Path to the Babashka config file hosting tasks | `\"bb.edn\"` |"
-
-
-  ([root]
-
-   (print-task root
+   (print-help root
                nil))
 
 
   ([root option+]
 
-   (-print root
-           option+
-           (fn print-body [body option+]
-             (if-some [task-data (get (-task+ option+)
-                                      (option+ :target))]
-               ;;
-               ;; User task found, print doc.
-               (do
-                 (println)
-                 (when-some [docstring (:doc task-data)]
-                   (println docstring)
-                   (println)
-                   (println "---")
-                   (println))
-                 (println (or body
-                              "No documentation found for this task.")))
-               ;;
-               ;; Input task does not seem to exist.
-               (println "Task not found."))))))
+   (let [extension (or (:extension option+)
+                      ".txt")]
+     (if-some [target (-target option+)]
+       (let [path-body (str root
+                            "/"
+                            target
+                            extension)
+             body      (when (bb.fs/exists? path-body)
+                         (slurp path-body))]
+         (if body
+           (println (or body
+                        "No documentation found for this target."))
+           (do
+             (println "Documentation available for:")
+             (println)
+             (doseq [path (sort-by (fn [^String target]
+                                     (.toLowerCase target))
+                                   (-target+ root
+                                             extension))]
+               (println (str "  "
+                             path))))))
+       (println "No target specified.")))))
 
 
 
-(defn report-task-documentation
+(defn print-task
 
-  "Prints:
+  "Pretty-prints extra documentation for a task (if there is any).
 
-   - List of tasks that are undocumented
-   - List of documentation not corresponding to an available task
+   Options may contain:
 
-   The latter happens when a task is renamed.
-
-   Takes the same `option+` as [[print-task]]."
-
-
-  ([root]
-
-   (report-task-documentation root
-                              nil))
+   | Key          | Value                                          | Default       |
+   |--------------|------------------------------------------------|---------------|
+   | `:bb`        | Path to the Babashka config file hosting tasks | `\"bb.edn\"`  |
+   | `:target`    | Task to print (without extension)              | First CLI arg |"
 
 
-  ([root option+]
+  ([]
 
-   (let [available  (set (keys (-task+ option+)))
-         documented (set (-target+ root
-                                   (or (:extension option+)
-                                       ".txt")))
-         diff       (fn [header a b]
-                      (when-some [task+ (-> (set/difference a
-                                                            b)
-                                            (not-empty)
-                                            (some->
-                                              (sort)
-                                              (vec)))]
-                        (println header)
-                        (println)
-                        (doseq [task task+]
-                          (println (str "  "
-                                        task)))
-                        (println)
-                        true))]
-     (when-not (some identity
-                     [(diff "Missing documentation for tasks:"
-                            available
-                            documented)
-                      (diff "Documentation for inexistant tasks:"
-                            documented
-                            available)])
-       (println "All good!")))))
+   (print-task nil))
+
+
+  ([option+]
+
+   (if-some [task (get (-task+ option+)
+                       (-target option+))]
+     (do
+       (when-some [docstring (task :doc)]
+         (println docstring)
+         (println)
+         (println "---")
+         (println))
+       (println (or (some-> (task :maestro/doc)
+                            (-realign-string))
+                    "No extra documentation for this task.")))
+     (println "Task not found."))))
+
+
+
+(defn undocumented-task+
+
+  "Returns a sorted list of tasks which do not have a `:maestro/doc`.
+
+   Options may be:
+
+   | Key          | Value                                          | Default      |
+   |--------------|------------------------------------------------|--------------|
+   | `:bb`        | Path to the Babashka config file hosting tasks | `\"bb.edn\"` |"
+
+  [option+]
+
+  (sort (keep (fn [[task data]]
+                (when-not (:maestro/doc data)
+                  task))
+              (-task+ option+))))
+
+
+
+(defn report-undocumented-task+
+
+  "Pretty-prints the result of [[undocumented-task+]]."
+
+
+  ([]
+
+   (report-undocumented-task+ nil))
+
+
+  ([option+]
+
+   (if-some [undocumented (not-empty (undocumented-task+ option+))]
+     (do
+       (println "These tasks do not have extra documentation:")
+       (println)
+       (doseq [task undocumented]
+         (println (str "  "
+                       task))))
+     (println "All tasks have extra documentation."))))

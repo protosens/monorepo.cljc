@@ -1,3 +1,0 @@
-Using `clj-kondo` which must be accessible in the terminal.
-
-See the `lint:prepare` task which is necessary for initialization.

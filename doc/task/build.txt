@@ -1,2 +1,0 @@
-Based on information located in the alias data in `deps.edn`.
-See the `$.maestro.plugin.build` namespace.

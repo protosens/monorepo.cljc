@@ -1,3 +1,0 @@
-Must be called prior to using the `lint` task and ideally when dependencies are
-updated. This will lint and cache dependencies as well as copying configuration
-files.
