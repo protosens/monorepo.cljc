@@ -36,9 +36,12 @@
 (defn realign
 
   "Realign all lines in the given string.
- 
-   Relative to the first one by truncating the smallest leading whitespace in subsequent once.
    Useful for printing multi-line EDN strings.
+ 
+   More precisely:
+
+   - Leading whitespace is truncated on the first line
+   - Other lines are truncated by the smallest leading whitespace of them all
   
    Also see [[count-leading-space]]."
 
@@ -54,7 +57,7 @@
                                                   string/blank?)
                                             (rest line+))))]
         (string/join (newline)
-                     (cons (first line+)
+                     (cons (string/triml (first line+))
                            (map (fn [^String line]
                                   (cond->
                                     line

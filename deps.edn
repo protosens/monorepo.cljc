@@ -1,8 +1,10 @@
 {:maestro/mode+ {:dev           {:maestro/alias+   [:task/dev]
                                  :maestro/profile+ [dev
                                                     test]}
+
                  :test          {:maestro/alias+   [:task/test]
                                  :maestro/profile+ [^:direct? test]}
+
                  :test-upstream {:maestro/alias+   [:task/test]
                                  :maestro/profile+ [test]}}
 
@@ -184,9 +186,15 @@
 
   {:extra-paths                         ["module/txt/src/main/clj"]
    :maestro/doc                         "Text manipulation library"
+   :maestro/require                     [{test :test/txt}]
    :maestro/root                        "module/txt"
    :maestro.git.lib/name                protosens/txt
    :maestro.plugin.quickdoc.path/output "module/txt/API.md"}
+
+
+  :test/txt
+
+  {:extra-paths ["module/txt/src/test/clj"]}
 
 
   }}

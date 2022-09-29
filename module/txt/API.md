@@ -31,7 +31,7 @@ Returns the number of whitespaces in the given string.
 
 Returns the platform-dependend line separator.
 
-## <a name="protosens.txt/realign">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/txt/src/main/clj/protosens/txt.clj#L36-L64) `realign`</a>
+## <a name="protosens.txt/realign">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/txt/src/main/clj/protosens/txt.clj#L36-L67) `realign`</a>
 ``` clojure
 
 (realign s)
@@ -39,8 +39,11 @@ Returns the platform-dependend line separator.
 
 
 Realign all lines in the given string.
- 
-   Relative to the first one by truncating the smallest leading whitespace in subsequent once.
    Useful for printing multi-line EDN strings.
+ 
+   More precisely:
+
+   - Leading whitespace is truncated on the first line
+   - Other lines are truncated by the smallest leading whitespace of them all
   
    Also see [`count-leading-space`](#protosens.txt/count-leading-space).
