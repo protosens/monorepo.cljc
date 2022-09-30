@@ -1,9 +1,20 @@
 {:deps
- {local/babashka {:local/root "module/babashka"}}
- 
+ {protosens.local/task {:local/root "module/task"}}
 
+
+ ;; Required so that the `genesis` task can run on a freshly cloned repo.
+ ;;
+ :paths
+ ["module/maestro/src/main/clj"]
+
+
+ ;; Required by the `doc:module` task.
+ ;;
  :pods
  {clj-kondo/clj-kondo {:version "2022.09.08"}}
+
+
+ ;;;;;
 
 
  :tasks
@@ -89,6 +100,17 @@
                  particular module using `:deps/root`."
    :requires    ([protosens.maestro.git.lib])
    :task        (protosens.maestro.git.lib/task)}
+
+
+  genesis
+  {:doc         "Run before using any of these tasks"
+   :maestro/doc "Syncs dependencies and paths between `bb.edn` and `deps.edn`.
+                 
+                 It is important running this after cloning the repository and
+                 after modifying dependencies or source paths needed by these
+                 Babashka tasks."
+   :requires    ([protosens.maestro.uber])
+   :task        (protosens.maestro.uber/task :module/task)}
 
 
   install

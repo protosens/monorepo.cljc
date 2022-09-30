@@ -135,18 +135,6 @@
 
   ;; MODULES
 
-  :module/babashka
-
-  {:maestro/doc          "Hosts dependencies and tasks for Babashka.
-                          Not meant to be consumed publicly."
-   :maestro/require      [:module/maestro
-                          :module/maestro.plugin.clj-kondo
-                          :module/maestro.plugin.kaocha]
-   :maestro/root         "module/babashka"
-   :maestro.git.lib/name local/babashka}
-
-  ;---
-
 
   :module/dev
 
@@ -219,6 +207,17 @@
    :maestro.git.lib/name                protosens/maestro.plugin.kaocha
    :maestro.plugin.quickdoc.path/output "module/maestro.plugin.kaocha/API.md"}
   
+  ;---
+
+  :module/task
+
+  {:maestro/doc     "Merges dependencies and paths for Babashka tasks.
+                     Not meant to be consumed publicly."
+   :maestro/require [:module/maestro
+                     :module/maestro.plugin.clj-kondo
+                     :module/maestro.plugin.kaocha]
+   :maestro/root    "module/task"}
+
   ;---
 
   :module/txt

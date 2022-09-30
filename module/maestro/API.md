@@ -51,6 +51,8 @@
 -  [`protosens.maestro.profile`](#protosens.maestro.profile)  - Miscellaneous helpers centered around profiles.
     -  [`append+`](#protosens.maestro.profile/append+) - In <code>basis</code>, activates the given profiles by appending them to any existing ones.
     -  [`prepend+`](#protosens.maestro.profile/prepend+) - In <code>basis</code>, activates the given profiles by prepending them to any existing ones.
+-  [`protosens.maestro.uber`](#protosens.maestro.uber)  - Special way of merging aliases in a generated <code>deps.edn</code> file.
+    -  [`task`](#protosens.maestro.uber/task) - Generate a single <code>deps.edn</code> file by merging everything required by <code>alias</code>.
 -  [`protosens.maestro.user`](#protosens.maestro.user)  - Collection of helpers useful during development, often called in <code>user</code>.
     -  [`require-filtered`](#protosens.maestro.user/require-filtered) - Filters all namespaces found on the classpath and requires them.
 
@@ -429,11 +431,11 @@ Aliases that contains a name under `:maestro.git.lib/name` can be exposed public
 
 
 
-## <a name="protosens.maestro.git.lib/expose">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L135-L180) `expose`</a>
+## <a name="protosens.maestro.git.lib/expose">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L136-L183) `expose`</a>
 ``` clojure
 
-(expose)
-(expose basis)
+(expose git-sha)
+(expose basis git-sha)
 ```
 
 
@@ -457,10 +459,10 @@ Generates custom `deps.edn` files for all aliases having in there data a name (s
 
 Returns true if an alias (given its data) is meant to be exposed as a git library.
 
-## <a name="protosens.maestro.git.lib/prepare-deps-edn">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L36-L110) `prepare-deps-edn`</a>
+## <a name="protosens.maestro.git.lib/prepare-deps-edn">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L36-L111) `prepare-deps-edn`</a>
 ``` clojure
 
-(prepare-deps-edn basis alias)
+(prepare-deps-edn basis git-sha alias)
 ```
 
 
@@ -486,7 +488,7 @@ Computes the content of the `deps.edn` file for the given `alias` meant to be ex
    | `:maestro.git.lib/deps.edn`      | `deps.edn` map                                  |
    | `:maestro.git.lib.path/deps.edn` | Path where the `deps.edn` map should be written |
 
-## <a name="protosens.maestro.git.lib/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L184-L210) `task`</a>
+## <a name="protosens.maestro.git.lib/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L187-L217) `task`</a>
 ``` clojure
 
 (task)
@@ -499,7 +501,7 @@ Uses and pretty-prints [`expose`](#protosens.maestro.git.lib/expose).
    Output prints modules that have been exposed, the path to their `deps.edn` and which
    aliases they each required.
 
-## <a name="protosens.maestro.git.lib/write-deps-edn">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L114-L129) `write-deps-edn`</a>
+## <a name="protosens.maestro.git.lib/write-deps-edn">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L115-L130) `write-deps-edn`</a>
 ``` clojure
 
 (write-deps-edn path deps-edn)
@@ -844,6 +846,38 @@ In `basis`, activates the given profiles by appending them to any existing ones.
 
 
 In `basis`, activates the given profiles by prepending them to any existing ones.
+
+-----
+# <a name="protosens.maestro.uber">protosens.maestro.uber</a>
+
+
+Special way of merging aliases in a generated `deps.edn` file.
+
+
+
+
+## <a name="protosens.maestro.uber/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/uber.clj#L16-L109) `task`</a>
+``` clojure
+
+(task alias)
+(task alias basis)
+```
+
+
+Generate a single `deps.edn` file by merging everything required by `alias`.
+
+   This is probably only useful in a limited set of dev use cases. One notable
+   example is syncing dependencies and paths with [Babashka](https://github.com/babashka/babashka)'s
+   `bb.edn` files. One can create:
+
+   - Create an alias in `deps.edn` with a `:maestro/root`, requiring other aliases
+   - Run this task on this alias
+   - Generated `deps.edn` file in `:maestro/root` will contain all necessary `:deps` and `:paths`
+   - Hard links were created for all files found in `:paths`
+   - `bb.edn` can use `:local/root` on this
+
+   Hard links are created to allow consuming paths from anywhere in the repository.
+   This is because Clojure CLI dislikes outsider paths (e.g. `../foo`).
 
 -----
 # <a name="protosens.maestro.user">protosens.maestro.user</a>
