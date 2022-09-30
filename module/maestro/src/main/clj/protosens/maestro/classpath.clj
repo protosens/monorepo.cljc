@@ -42,5 +42,5 @@
    (run! println
          (-> (map string/trim-newline
                   (string/split raw-cp
-                                (re-pattern ":")))
+                                (re-pattern (System/getProperty "path.separator"))))
              sort))))

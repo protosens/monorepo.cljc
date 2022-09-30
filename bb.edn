@@ -2,6 +2,10 @@
  {protosens.local/task {:local/root "module/task"}}
 
 
+ :min-bb-version
+ "0.8.0"
+
+
  ;; Required so that the `genesis` task can run on a freshly cloned repo.
  ;;
  :paths
