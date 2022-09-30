@@ -153,7 +153,6 @@
    :maestro/require                     [:ext/babashka.fs
                                          :ext/clojure.java.classpath
                                          :ext/clojure.tools.namespace
-                                         :ext/quickdoc
                                          :module/txt
                                          {dev :tool/maestro}
                                          {test :test/maestro}]
@@ -205,6 +204,7 @@
    :maestro/root                        "module/maestro.plugin.deps-deploy"
    :maestro.git.lib/name                protosens/maestro.plugin.deps-deploy
    :maestro.plugin.quickdoc.path/output "module/maestro.plugin.deps-deploy/API.md"}
+
   ;---
 
   :module/maestro.plugin.kaocha
@@ -220,6 +220,19 @@
   
   ;---
 
+  :module/maestro.plugin.quickdoc
+
+  {:extra-paths                         ["module/maestro.plugin.quickdoc/src/main/clj"]
+   :maestro/doc                         "Maestro plugin for `slipset/deps-deploy`"
+   :maestro/require                     [:ext/babashka.fs
+                                         :ext/quickdoc
+                                         :module/maestro]
+   :maestro/root                        "module/maestro.plugin.quickdoc"
+   :maestro.git.lib/name                protosens/maestro.plugin.quickdoc
+   :maestro.plugin.quickdoc.path/output "module/maestro.plugin.quickdoc/API.md"}
+
+  ;---
+
   :module/task
 
   {:extra-paths     ["module/task/src/main/clj"]
@@ -228,7 +241,8 @@
    :maestro/require [:module/maestro
                      :module/maestro.plugin.clj-kondo
                      :module/maestro.plugin.deps-deploy
-                     :module/maestro.plugin.kaocha]
+                     :module/maestro.plugin.kaocha
+                     :module/maestro.plugin.quickdoc]
    :maestro/root    "module/task"}
 
   ;---

@@ -41,9 +41,6 @@
     -  [`task`](#protosens.maestro.plugin.build/task) - Convenient way of calling [[build]] using <code>clojure -X</code>.
     -  [`tmp-dir`](#protosens.maestro.plugin.build/tmp-dir) - Creates a temporary directory and returns its path as a string.
     -  [`uberjar`](#protosens.maestro.plugin.build/uberjar) - Implementation for the <code>:uberjar</code> type in [[by-type]].
--  [`protosens.maestro.plugin.quickdoc`](#protosens.maestro.plugin.quickdoc)  - Maestro plugin generating markdown documentation for modules using [Quickdoc](https://github.com/borkdude/quickdoc) Works only with Babashka.
-    -  [`bundle`](#protosens.maestro.plugin.quickdoc/bundle) - Generates a single documentation file for the given aliases.
-    -  [`module+`](#protosens.maestro.plugin.quickdoc/module+) - Generates documentation for modules automatically.
 -  [`protosens.maestro.profile`](#protosens.maestro.profile)  - Miscellaneous helpers centered around profiles.
     -  [`append+`](#protosens.maestro.profile/append+) - In <code>basis</code>, activates the given profiles by appending them to any existing ones.
     -  [`prepend+`](#protosens.maestro.profile/prepend+) - In <code>basis</code>, activates the given profiles by prepending them to any existing ones.
@@ -687,58 +684,6 @@ Implementation for the `:uberjar` type in [`by-type`](#protosens.maestro.plugin.
 
    JVM options passed to the Clojure compiler are deduced by concatenating `:jvm-opts` found in all aliases
    involved in the build.
-
------
-# <a name="protosens.maestro.plugin.quickdoc">protosens.maestro.plugin.quickdoc</a>
-
-
-Maestro plugin generating markdown documentation for modules using [Quickdoc](https://github.com/borkdude/quickdoc)
-
-   Works only with Babashka.
-
-   Attention, it is necessary adding the `clj-kondo` to your `bb.edn` file as a [Babashka pod](https://github.com/babashka/pods):
-
-   ```clojure
-   {:pods
-    {clj-kondo/clj-kondo {:version "2022.09.08"}}}
-   ```
-
-
-
-
-## <a name="protosens.maestro.plugin.quickdoc/bundle">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/plugin/quickdoc.clj#L37-L70) `bundle`</a>
-``` clojure
-
-(bundle)
-(bundle option+)
-(bundle option+ alias+)
-```
-
-
-Generates a single documentation file for the given aliases.
-
-   All `:extra-paths` of those aliases will be merged and used as source paths.
-
-   For options, see the Quickdoc documentation.
-  
-   Prints paths that have been bundled together.
-
-## <a name="protosens.maestro.plugin.quickdoc/module+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/plugin/quickdoc.clj#L74-L115) `module+`</a>
-``` clojure
-
-(module+)
-(module+ option+)
-```
-
-
-Generates documentation for modules automatically.
-
-   Selects modules that have an `:maestro.plugin.quickdoc.path/output` in their alias data specifying
-   where the markdown file should be written to. Source paths are based on `:extra-paths`.
-
-   For options, see the Quickdoc documentation.
-   
-   Prints which modules have produced documentation where.
 
 -----
 # <a name="protosens.maestro.profile">protosens.maestro.profile</a>
