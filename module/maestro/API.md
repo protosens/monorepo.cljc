@@ -856,7 +856,7 @@ Special way of merging aliases in a generated `deps.edn` file.
 
 
 
-## <a name="protosens.maestro.uber/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/uber.clj#L16-L109) `task`</a>
+## <a name="protosens.maestro.uber/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/uber.clj#L16-L127) `task`</a>
 ``` clojure
 
 (task alias)

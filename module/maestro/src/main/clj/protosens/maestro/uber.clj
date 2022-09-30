@@ -55,7 +55,9 @@
          root        (basis-3 :maestro/root)
          _           (when-not root
                        (throw (Exception. (str "Given alias does not contain `:maestro/root`"))))
-         deps-edn    (-> (reduce (fn [deps-edn alias-required]
+         ;;
+         ;;          Merges dependencies and paths.
+         deps-edn    (reduce (fn [deps-edn alias-required]
                                    (let [data-required (alias->data alias-required)]
                                      (-> deps-edn
                                          (update :deps
@@ -67,9 +69,15 @@
                                  {:deps  {}
                                   :paths #{}}
                                  required)
-                         (update :paths
-                                 (comp vec
-                                       sort)))]
+         deps-edn-2  (update deps-edn
+                             :paths
+                             (comp vec
+                                   sort))
+         ;;
+         root-uber-rel "maestro/uber"
+         root-uber-abs (str root
+                            "/"
+                            root-uber-rel)]
      ;;
      ;; Print `deps.edn` first.
      (with-open [out-deps-edn (java.io/writer (str root
@@ -89,21 +97,31 @@
          (println ";; This is probably for dev purposes only and should probably never")
          (println ";; be checkout out in version control.")
          (println ";;")
-         (pprint/pprint deps-edn)))
+         (pprint/pprint (update deps-edn-2
+                                :paths
+                                (fn [path+]
+                                  (map (partial str
+                                                root-uber-rel
+                                                "/")
+                                       path+))))))
+     ;;
+     ;; Delete previously generated hard links.
+     (when (bb.fs/exists? root-uber-abs)
+       (println "Delete previously generated hard links:"
+                root-uber-abs)
+       (bb.fs/delete-tree root-uber-abs))
      ;;
      ;; Create hard links for all files found in merged paths.
-     (doseq [path (deps-edn :paths)]
+     (doseq [path (deps-edn-2 :paths)]
        (doseq [path-child (map str
                                (file-seq (java.io/file path)))
                :when      (not (bb.fs/directory? path-child))
-               :let       [path-link (str root
+               :let       [path-link (str root-uber-abs
                                           "/"
-                                          path-child)]
-               :when      (not (bb.fs/exists? path-link))
-               :let       [dir (bb.fs/parent path-link)]]
-         (when-not (bb.fs/exists? dir)
-           (bb.fs/create-dirs dir))
-         (println "Link" path-link "->" path-child)
+                                          path-child)
+                           dir       (bb.fs/parent path-link)]]
+         (bb.fs/create-dirs dir)
+         (println "Hard link" path-link "->" path-child)
          (bb.fs/create-link path-link
                             path-child)))
      nil)))

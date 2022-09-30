@@ -30,7 +30,7 @@
   {:git/sha "fc5a18bb419ccac3c8769aa0761384025b27f68c"},
   lambdaisland/kaocha {:mvn/version "1.63.998"}},
  :paths
- ["module/maestro.plugin.clj-kondo/src/main/clj"
-  "module/maestro.plugin.kaocha/src/main/clj"
-  "module/maestro/src/main/clj"
-  "module/txt/src/main/clj"]}
+ ("maestro/uber/module/maestro.plugin.clj-kondo/src/main/clj"
+  "maestro/uber/module/maestro.plugin.kaocha/src/main/clj"
+  "maestro/uber/module/maestro/src/main/clj"
+  "maestro/uber/module/txt/src/main/clj")}

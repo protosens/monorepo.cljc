@@ -6,4 +6,4 @@
 !.clj-kondo/config.edn
 !.clj-kondo/hooks
 
-module/*/module
+**/maestro/uber
