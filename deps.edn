@@ -108,13 +108,6 @@
   ;; TASKS
 
 
-  :task/build
-
-  {:exec-fn         protosens.maestro.plugin.build/build
-   :maestro/doc     "Uses `:module/maestro` for building jars and uberjars"
-   :maestro/require [:tool/maestro]}
-
-
   :task/dev
 
   {:maestro/doc     "Provides what is commonly necessary during dev"
@@ -154,7 +147,6 @@
                                          :ext/clojure.java.classpath
                                          :ext/clojure.tools.namespace
                                          :module/txt
-                                         {dev :tool/maestro}
                                          {test :test/maestro}]
    :maestro/root                        "module/maestro"
    :maestro.git.lib/name                protosens/maestro
@@ -174,13 +166,17 @@
 
   {:extra-paths ["module/maestro/src/test/clj"]}
 
+  ;---
 
-  :tool/maestro
+  :module/maestro.plugin.build
 
-  {:maestro/doc     ["`:module/maestro` offers plugins for well-known tools and libraries without depending on them."
-                     "This alias bundles it with all those optional dependencies."]
-   :maestro/require [:ext/clojure.tools.build
-                     :module/maestro]}
+  {:extra-paths                         ["module/maestro.plugin.build/src/main/clj"]
+   :maestro/doc                         "Maestro plugin for `:ext/clojure.tools.build`"
+   :maestro/require                     [:ext/clojure.tools.build
+                                         :module/maestro]
+   :maestro/root                        "module/maestro.plugin.build"
+   :maestro.git.lib/name                protosens/maestro.plugin.build
+   :maestro.plugin.quickdoc.path/output "module/maestro.plugin.build/API.md"}
 
   ;---
 
@@ -198,7 +194,7 @@
   :module/maestro.plugin.deps-deploy
 
   {:extra-paths                         ["module/maestro.plugin.deps-deploy/src/main/clj"]
-   :maestro/doc                         "Maestro plugin for `slipset/deps-deploy`"
+   :maestro/doc                         "Maestro plugin for `:ext/deps-deploy`"
    :maestro/require                     [:ext/babashka.fs
                                          :module/maestro]
    :maestro/root                        "module/maestro.plugin.deps-deploy"
@@ -210,7 +206,7 @@
   :module/maestro.plugin.kaocha
 
   {:extra-paths                         ["module/maestro.plugin.kaocha/src/main/clj"]
-   :maestro/doc                         "Maestro plugin for the Kaocha test runner"
+   :maestro/doc                         "Maestro plugin for `:ext/kaocha`"
    :maestro/require                     [:ext/babashka.fs
                                          :ext/kaocha
                                          :module/maestro]
@@ -223,7 +219,7 @@
   :module/maestro.plugin.quickdoc
 
   {:extra-paths                         ["module/maestro.plugin.quickdoc/src/main/clj"]
-   :maestro/doc                         "Maestro plugin for `slipset/deps-deploy`"
+   :maestro/doc                         "Maestro plugin for `:ext/quickdoc`"
    :maestro/require                     [:ext/babashka.fs
                                          :ext/quickdoc
                                          :module/maestro]
@@ -239,6 +235,7 @@
    :maestro/doc     "Merges dependencies and paths for Babashka tasks.
                      Not meant to be consumed publicly."
    :maestro/require [:module/maestro
+                     :module/maestro.plugin.build
                      :module/maestro.plugin.clj-kondo
                      :module/maestro.plugin.deps-deploy
                      :module/maestro.plugin.kaocha

@@ -43,7 +43,7 @@
    :maestro/doc "Based on information located in the alias data in `deps.edn`.
                  See the `$.maestro.plugin.build` namespace."
    :requires    ([protosens.maestro.plugin.build])
-   :task        (protosens.maestro.plugin.build/task :tool/maestro)}
+   :task        (protosens.maestro.plugin.build/task :module/maestro.plugin.build)}
 
 
   dev

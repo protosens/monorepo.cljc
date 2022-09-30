@@ -431,10 +431,12 @@
 (defn task
 
   "Convenient way of calling [[build]] using `clojure -X`.
+
+   Requires the alias that brings or `:maestro/require` this plugin.
+
+   Alias to build is read as first command line argument if not provided under `:maestro.plugin.build/alias`
+   in `option+`.
  
-   Requires at least the alias under which Maestro and `tools.build` are imported. Alias to build is read
-   as first command line argument if not provided explicitly.
-  
    Useful as a Babashka task. For instance, in this repository, the jar for Maestro is built like this:
 
    ```
@@ -460,4 +462,6 @@
                               (update option+
                                       :maestro.plugin.build/alias
                                       #(or %
-                                           (edn/read-string (first *command-line-args*)))))))
+                                           (some-> (first *command-line-args*)
+                                                   (edn/read-string))
+                                           (-fail "Missing alias"))))))
