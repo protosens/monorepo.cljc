@@ -33,4 +33,5 @@
  ("maestro/uber/module/maestro.plugin.clj-kondo/src/main/clj"
   "maestro/uber/module/maestro.plugin.kaocha/src/main/clj"
   "maestro/uber/module/maestro/src/main/clj"
-  "maestro/uber/module/txt/src/main/clj")}
+  "maestro/uber/module/txt/src/main/clj"
+  "src/main/clj")}

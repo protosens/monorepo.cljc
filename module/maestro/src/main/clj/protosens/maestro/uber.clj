@@ -28,7 +28,8 @@
    - `bb.edn` can use `:local/root` on this
 
    Hard links are created to allow consuming paths from anywhere in the repository.
-   This is because Clojure CLI dislikes outsider paths (e.g. `../foo`)."
+   This is because Clojure CLI dislikes outsider paths (e.g. `../foo`). They are generated in
+   `./maestro/uber` relative to the `:maestro/root`."
 
 
   ([alias]
@@ -69,10 +70,6 @@
                                  {:deps  {}
                                   :paths #{}}
                                  required)
-         deps-edn-2  (update deps-edn
-                             :paths
-                             (comp vec
-                                   sort))
          ;;
          root-uber-rel "maestro/uber"
          root-uber-abs (str root
@@ -97,31 +94,39 @@
          (println ";; This is probably for dev purposes only and should probably never")
          (println ";; be checkout out in version control.")
          (println ";;")
-         (pprint/pprint (update deps-edn-2
+         (pprint/pprint (update deps-edn
                                 :paths
                                 (fn [path+]
-                                  (map (partial str
-                                                root-uber-rel
-                                                "/")
-                                       path+))))))
+                                  (-> (map (fn [path]
+                                             (if (bb.fs/starts-with? path
+                                                                     root)
+                                               (str (bb.fs/relativize root
+                                                                      path))
+                                               (str root-uber-rel
+                                                    "/"
+                                                    path)))
+                                           path+)
+                                      (sort)))))))
      ;;
      ;; Delete previously generated hard links.
      (when (bb.fs/exists? root-uber-abs)
-       (println "Delete previously generated hard links:"
+       (println "DELETE previously generated hard links:"
                 root-uber-abs)
        (bb.fs/delete-tree root-uber-abs))
      ;;
      ;; Create hard links for all files found in merged paths.
-     (doseq [path (deps-edn-2 :paths)]
+     (doseq [path (sort (deps-edn :paths))]
        (doseq [path-child (map str
                                (file-seq (java.io/file path)))
-               :when      (not (bb.fs/directory? path-child))
+               :when      (not (or (bb.fs/directory? path-child)
+                                   (bb.fs/starts-with? path-child
+                                                       root)))
                :let       [path-link (str root-uber-abs
                                           "/"
                                           path-child)
                            dir       (bb.fs/parent path-link)]]
          (bb.fs/create-dirs dir)
-         (println "Hard link" path-link "->" path-child)
+         (println "HARD LINK" path-link "->" path-child)
          (bb.fs/create-link path-link
                             path-child)))
      nil)))

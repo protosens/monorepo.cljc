@@ -211,7 +211,8 @@
 
   :module/task
 
-  {:maestro/doc     "Merges dependencies and paths for Babashka tasks.
+  {:extra-paths     ["module/task/src/main/clj"]
+   :maestro/doc     "Merges dependencies and paths for Babashka tasks.
                      Not meant to be consumed publicly."
    :maestro/require [:module/maestro
                      :module/maestro.plugin.clj-kondo
