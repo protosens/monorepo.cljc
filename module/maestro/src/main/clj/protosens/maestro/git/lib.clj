@@ -149,11 +149,11 @@
 
   ([git-sha]
 
-   (expose nil
-           git-sha))
+   (expose git-sha
+           nil))
 
 
-  ([basis git-sha]
+  ([git-sha basis]
 
    (let [basis-2     (-> basis
                          ($.maestro/ensure-basis)
@@ -202,8 +202,8 @@
    (if-some [git-sha (or (:maestro.git.lib/sha basis)
                          (first *command-line-args*))]
      (doseq [[alias
-              feedback] (expose basis
-                                git-sha)]
+              feedback] (expose git-sha
+                                basis)]
        (println (format "%s -> %s"
                         alias
                         (feedback :maestro.git.lib.path/deps.edn)))
