@@ -10,20 +10,24 @@
   
    <!> `tools.build` is not imported and must be brought by the user."
 
-  (:import (java.nio.file Files)
-           (java.nio.file.attribute FileAttribute))
-  (:require [clojure.edn               :as edn]
-            [clojure.tools.build.api   :as tools.build]
-            [protosens.maestro         :as $.maestro]
-            [protosens.maestro.alias   :as $.maestro.alias]
-            [protosens.maestro.profile :as $.maestro.profile]
-            [protosens.maestro.util    :as $.maestro.util]))
+  #?(:clj (:import (java.nio.file Files)
+                   (java.nio.file.attribute FileAttribute)))
+          ;;
+  #?(:bb  (:require [clojure.edn             :as edn]
+                    [protosens.maestro       :as $.maestro]
+                    [protosens.maestro.alias :as $.maestro.alias]
+                    [protosens.maestro.util  :as $.maestro.util])
+          ;;
+     :clj (:require [clojure.tools.build.api   :as tools.build]
+                    [protosens.maestro         :as $.maestro]
+                    [protosens.maestro.alias   :as $.maestro.alias]
+                    [protosens.maestro.profile :as $.maestro.profile])))
 
 
 ;;;;;;;;;; Failures
 
 
-(defn- -fail
+(defn  ^:no-doc -fail
 
   ;; Notably used when a user argument is missing.
 
@@ -35,7 +39,8 @@
 ;;;;;;;;;; Tasks
 
 
-(defn clean
+#?(:bb  nil
+   :clj (defn clean
 
   "Deletes the file under `:maestro.plugin.build.path/output`."
 
@@ -45,11 +50,12 @@
     (println "Removing any previous output:"
              path)
     (tools.build/delete {:path path}))
-  basis)
+  basis))
 
 
 
-(defn copy-src
+#?(:bb  nil
+   :clj (defn copy-src
 
   "Copies source from `:maestro.plugin.build.path/src+` to `:maestro.plugin.build.path/class`."
 
@@ -62,11 +68,12 @@
                                          path-filter
                                          (filter path-filter)))
                          :target-dir (basis :maestro.plugin.build.path/class)})
-  basis)
+  basis))
 
 
 
-(defn tmp-dir
+#?(:bb  nil
+   :clj (defn tmp-dir
 
   "Creates a temporary directory and returns its path as a string.
    A prefix for the name may be provided."
@@ -82,13 +89,14 @@
    (str (Files/createTempDirectory (or prefix
                                        "maestro-build-")
                                    (make-array FileAttribute
-                                               0)))))
+                                               0))))))
 
 
 ;;;;;;;;;;
 
 
-(defn- -jar
+#?(:bb  nil
+   :clj (defn- -jar
 
   ;; Prelude common to jarring and uberjarring.
   ;;
@@ -114,11 +122,12 @@
                 :maestro.plugin.build.path/src+   path-src+
                 :maestro.plugin.build.path/target dir-tmp})
         (clean)
-        (copy-src))))
+        (copy-src)))))
 
 
 
-(defn jar
+#?(:bb  nil
+   :clj (defn jar
 
   "Implementation for the `:jar` type in [[by-type]].
 
@@ -217,11 +226,12 @@
              path-jar)
     (tools.build/jar {:class-dir path-class
                       :jar-file  path-jar})
-    ctx))
+    ctx)))
 
 
 
-(defn uberjar
+#?(:bb  nil
+   :clj (defn uberjar
 
   "Implementation for the `:uberjar` type in [[by-type]].
   
@@ -272,13 +282,14 @@
                        :exclude   (ctx :maestro.plugin.build.path/exclude)
                        :main      (ctx :maestro.plugin.build.uberjar/main)
                        :uber-file path-uberjar})
-    ctx))
+    ctx)))
 
 
 ;;;;;;;;;; 
 
 
-(defmulti by-type
+#?(:bb  nil
+   :clj (defmulti by-type
 
   "Called by [[build]] after some initial preparation.
    Dispatches on `:maestro.build.plugin/type` to carry out the actual build steps.
@@ -290,43 +301,47 @@
    | `:jar`     | [[jar]]     |
    | `:uberjar` | [[uberjar]] |"
 
-  :maestro.plugin.build/type)
+  :maestro.plugin.build/type))
 
 
 
-(defmethod by-type
+#?(:bb  nil
+   :clj (defmethod by-type
 
   :default
 
   [_basis]
 
-  (-fail "Missing build type"))
+  (-fail "Missing build type")))
 
 
 
-(defmethod by-type
+#?(:bb  nil
+   :clj (defmethod by-type
 
   :jar
 
   [basis]
 
-  (jar basis))
+  (jar basis)))
 
 
 
-(defmethod by-type
+#?(:bb  nil
+   :clj (defmethod by-type
 
   :uberjar
 
   [basis]
 
-  (uberjar basis))
+  (uberjar basis)))
 
 
 ;;; Entry points
 
 
-(defn build
+#?(:bb  nil
+   :clj (defn build
 
   "Given a map with an alias to build under `:maestro.plugin.build/alias`, search for all required aliases
    after activating the `release` profile, using [[protosens.maestro/search]].
@@ -354,11 +369,11 @@
                        :maestro/profile+))
         (assoc :maestro/require
                (basis :maestro/require))
-        (by-type))))
+        (by-type)))))
 
 
 
-(defn task
+#?(:bb (defn task
 
   "Convenient way of calling [[build]] using `clojure -X`.
 
@@ -385,7 +400,7 @@
   ([alias-maestro option+]
 
    (@$.maestro.util/d*clojure (str "-X"
-                                   (-> (protosens.maestro/search {:maestro/alias+ [alias-maestro]})
+                                   (-> ($.maestro/search {:maestro/alias+ [alias-maestro]})
                                        (:maestro/require)
                                        ($.maestro.alias/stringify+)))
                               'protosens.maestro.plugin.build/build
@@ -394,4 +409,4 @@
                                       #(or %
                                            (some-> (first *command-line-args*)
                                                    (edn/read-string))
-                                           (-fail "Missing alias"))))))
+                                           (-fail "Missing alias")))))))
