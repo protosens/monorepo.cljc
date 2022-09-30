@@ -856,7 +856,7 @@ Special way of merging aliases in a generated `deps.edn` file.
 
 
 
-## <a name="protosens.maestro.uber/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/uber.clj#L16-L127) `task`</a>
+## <a name="protosens.maestro.uber/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/uber.clj#L95-L161) `task`</a>
 ``` clojure
 
 (task alias)
@@ -877,7 +877,8 @@ Generate a single `deps.edn` file by merging everything required by `alias`.
    - `bb.edn` can use `:local/root` on this
 
    Hard links are created to allow consuming paths from anywhere in the repository.
-   This is because Clojure CLI dislikes outsider paths (e.g. `../foo`).
+   This is because Clojure CLI dislikes outsider paths (e.g. `../foo`). They are generated in
+   `./maestro/uber` relative to the `:maestro/root`.
 
 -----
 # <a name="protosens.maestro.user">protosens.maestro.user</a>
