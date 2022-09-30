@@ -13,6 +13,7 @@
   (:import (java.nio.file Files)
            (java.nio.file.attribute FileAttribute))
   (:require [clojure.edn               :as edn]
+            [clojure.tools.build.api   :as tools.build]
             [protosens.maestro         :as $.maestro]
             [protosens.maestro.alias   :as $.maestro.alias]
             [protosens.maestro.profile :as $.maestro.profile]
@@ -31,77 +32,6 @@
   (throw (Exception. message)))
 
 
-;;;;;;;;;; Accessing `tools.build` (brought by users)
-
-
-(defn- -resolve
-
-  ;; `tools.build` being brought by users, we use that little charade below with delays and
-  ;; `requiring-resolve` so that the namespace can be analyzed by `cljdoc` even without access
-  ;; to `tools.build` (which is, in addition, a Git dependency).
-
-  [sym]
-
-  (try
-    (requiring-resolve sym)
-    (catch Exception _ex
-      (throw (Exception. "`tools.build` must be added to dependencies")))))
-
-
-;;; Access to required `tools.build` functions
-
-
-(def ^:private -d*compile-clj
-     (delay
-       (-resolve 'clojure.tools.build.api/compile-clj)))
-
-
-
-(def ^:private -d*copy-dir
-     (delay
-       (-resolve 'clojure.tools.build.api/copy-dir)))
-
-
-
-(def ^:private -d*copy-file
-     (delay
-       (-resolve 'clojure.tools.build.api/copy-file)))
-
-
-(def ^:private -d*create-basis
-     (delay
-       (-resolve 'clojure.tools.build.api/create-basis)))
-
-
-
-(def ^:private -d*delete
-     (delay
-       (-resolve 'clojure.tools.build.api/delete)))
-
-
-
-(def ^:private -d*jar
-     (delay
-       (-resolve 'clojure.tools.build.api/jar)))
-
-
-
-(def ^:private -d*pom-path
-     (delay
-       (-resolve 'clojure.tools.build.api/pom-path)))
-
-
-(def ^:private -d*uber
-     (delay
-       (-resolve 'clojure.tools.build.api/uber)))
-
-
-
-(def ^:private -d*write-pom
-     (delay
-       (-resolve 'clojure.tools.build.api/write-pom)))
-
-
 ;;;;;;;;;; Tasks
 
 
@@ -114,7 +44,7 @@
   (let [path (basis :maestro.plugin.build.path/output)]
     (println "Removing any previous output:"
              path)
-    (@-d*delete {:path path}))
+    (tools.build/delete {:path path}))
   basis)
 
 
@@ -126,12 +56,12 @@
   [basis]
 
   (println "Copying source paths")
-  (@-d*copy-dir {:src-dirs   (let [path-filter (basis :maestro.plugin.build.path/copy-filter)] 
-                               (cond->>
-                                 (basis :maestro.plugin.build.path/src+)
-                                 path-filter
-                                 (filter path-filter)))
-                 :target-dir (basis :maestro.plugin.build.path/class)})
+  (tools.build/copy-dir {:src-dirs   (let [path-filter (basis :maestro.plugin.build.path/copy-filter)] 
+                                       (cond->>
+                                         (basis :maestro.plugin.build.path/src+)
+                                         path-filter
+                                         (filter path-filter)))
+                         :target-dir (basis :maestro.plugin.build.path/class)})
   basis)
 
 
@@ -177,9 +107,9 @@
     (println "Using temporary directory for building:"
              dir-tmp)
     (-> (merge basis
-               {:maestro.plugin.build/basis       (@-d*create-basis {:aliases required-alias+
-                                                                     :project (or (basis :maestro/project)
-                                                                                  "deps.edn")})
+               {:maestro.plugin.build/basis       (tools.build/create-basis {:aliases required-alias+
+                                                                             :project (or (basis :maestro/project)
+                                                                                          "deps.edn")})
                 :maestro.plugin.build.path/class  path-class
                 :maestro.plugin.build.path/src+   path-src+
                 :maestro.plugin.build.path/target dir-tmp})
@@ -276,17 +206,17 @@
                         "pom.xml")
          :version   (version-map :mvn/version)}]
     (println "Preparing POM file")
-    (@-d*write-pom pom-config)
+    (tools.build/write-pom pom-config)
     (let [path-pom-module (str dir-root
                                "/pom.xml")]
       (println "Copying POM file to:"
                path-pom-module)
-      (@-d*copy-file {:src    (@-d*pom-path pom-config)
-                      :target path-pom-module}))
+      (tools.build/copy-file {:src    (tools.build/pom-path pom-config)
+                              :target path-pom-module}))
     (println "Assemling jar to:"
              path-jar)
-    (@-d*jar {:class-dir path-class
-              :jar-file  path-jar})
+    (tools.build/jar {:class-dir path-class
+                      :jar-file  path-jar})
     ctx))
 
 
@@ -321,27 +251,27 @@
          path-class   :maestro.plugin.build.path/class
          path-uberjar :maestro.plugin.build.path/output} (-jar basis)]
     (println "Compiling" (ctx :maestro.plugin.build/alias))
-    (@-d*compile-clj {:basis        basis
-                      :bindings     (update-keys (basis :maestro.plugin.build.uberjar/bind)
-                                                 (fn [k]
-                                                   (cond->
-                                                     k
-                                                     (symbol? k)
-                                                     (resolve))))
-                      :class-dir    path-class
-                      :compile-opts (ctx :maestro.plugin.build.uberjar/compiler)
-                      :java-opts    (into []
-                                          (comp (map (ctx :aliases))
-                                                (mapcat :jvm-opts))
-                                          (ctx :maestro/require))
-                      :src-dirs     (ctx :maestro.plugin.build.path/src+)})
+    (tools.build/compile-clj {:basis        basis
+                              :bindings     (update-keys (basis :maestro.plugin.build.uberjar/bind)
+                                                         (fn [k]
+                                                           (cond->
+                                                             k
+                                                             (symbol? k)
+                                                             (resolve))))
+                              :class-dir    path-class
+                              :compile-opts (ctx :maestro.plugin.build.uberjar/compiler)
+                              :java-opts    (into []
+                                                  (comp (map (ctx :aliases))
+                                                        (mapcat :jvm-opts))
+                                                  (ctx :maestro/require))
+                              :src-dirs     (ctx :maestro.plugin.build.path/src+)})
     (println "Assembling uberjar to:"
              path-uberjar)
-    (@-d*uber {:basis     basis
-               :class-dir path-class
-               :exclude   (ctx :maestro.plugin.build.path/exclude)
-               :main      (ctx :maestro.plugin.build.uberjar/main)
-               :uber-file path-uberjar})
+    (tools.build/uber {:basis     basis
+                       :class-dir path-class
+                       :exclude   (ctx :maestro.plugin.build.path/exclude)
+                       :main      (ctx :maestro.plugin.build.uberjar/main)
+                       :uber-file path-uberjar})
     ctx))
 
 
