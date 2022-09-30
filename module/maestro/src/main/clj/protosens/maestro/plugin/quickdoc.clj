@@ -102,7 +102,8 @@
                                            (throw (Exception. (str "Missing extra paths in alias data: "
                                                                    alias))))]))
                                   (-> basis
-                                      (:aliases)))]
+                                      (:aliases)
+                                      (sort)))]
        (let [dir (bb.fs/parent path-output)]
          (when-not (bb.fs/exists? dir)
            (bb.fs/create-dirs dir)))

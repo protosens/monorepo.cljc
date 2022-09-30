@@ -194,7 +194,17 @@
    :maestro.git.lib/name                protosens/maestro.plugin.clj-kondo
    :maestro.plugin.quickdoc.path/output "module/maestro.plugin.clj-kondo/API.md"}
 
+  ;---
 
+  :module/maestro.plugin.deps-deploy
+
+  {:extra-paths                         ["module/maestro.plugin.deps-deploy/src/main/clj"]
+   :maestro/doc                         "Maestro plugin for `slipset/deps-deploy`"
+   :maestro/require                     [:ext/babashka.fs
+                                         :module/maestro]
+   :maestro/root                        "module/maestro.plugin.deps-deploy"
+   :maestro.git.lib/name                protosens/maestro.plugin.deps-deploy
+   :maestro.plugin.quickdoc.path/output "module/maestro.plugin.deps-deploy/API.md"}
   ;---
 
   :module/maestro.plugin.kaocha
@@ -202,7 +212,8 @@
   {:extra-paths                         ["module/maestro.plugin.kaocha/src/main/clj"]
    :maestro/doc                         "Maestro plugin for the Kaocha test runner"
    :maestro/require                     [:ext/babashka.fs
-                                         :ext/kaocha]
+                                         :ext/kaocha
+                                         :module/maestro]
    :maestro/root                        "module/maestro.plugin.kaocha"
    :maestro.git.lib/name                protosens/maestro.plugin.kaocha
    :maestro.plugin.quickdoc.path/output "module/maestro.plugin.kaocha/API.md"}
@@ -216,6 +227,7 @@
                      Not meant to be consumed publicly."
    :maestro/require [:module/maestro
                      :module/maestro.plugin.clj-kondo
+                     :module/maestro.plugin.deps-deploy
                      :module/maestro.plugin.kaocha]
    :maestro/root    "module/task"}
 
