@@ -106,23 +106,17 @@
 
   (when-not (basis :maestro.plugin.build.path/output)
     (-fail "Missing output path"))
-  (let [required-alias+ (basis :maestro/require)
-        dir-tmp         (tmp-dir)
-        path-class      (str dir-tmp
-                             "/classes")
-        path-src+       ($.maestro.alias/extra-path+ basis
-                                                     required-alias+)]
+  (let [dir-tmp (tmp-dir)]
     (println "Using temporary directory for building:"
              dir-tmp)
     (-> (merge basis
-               {:maestro.plugin.build/basis       (tools.build/create-basis {:aliases required-alias+
+               {:maestro.plugin.build/basis       (tools.build/create-basis {:aliases (basis :maestro/require)
                                                                              :project (or (basis :maestro/project)
                                                                                           "deps.edn")})
-                :maestro.plugin.build.path/class  path-class
-                :maestro.plugin.build.path/src+   path-src+
+                :maestro.plugin.build.path/class  (str dir-tmp
+                                                       "/classes")
                 :maestro.plugin.build.path/target dir-tmp})
-        (clean)
-        (copy-src)))))
+        (clean)))))
 
 
 
@@ -193,27 +187,36 @@
        _ (or dir-root
              (-fail "Missing root directory"))
        ;;
-        {:as        ctx
+        {:as        basis-2
          path-class :maestro.plugin.build.path/class
          path-jar   :maestro.plugin.build.path/output}
         (-jar basis)
         ;;
         [artifact
          version-map]
-        (-> ctx
+        (-> basis-2
             (get-in [:aliases
                      alias-artifact
                      :extra-deps])
             (first))
+        
+        _ (println :arti artifact)
         ;;
         pom-config
-        {:basis     (ctx :maestro.plugin.build/basis)
+        {:basis     (basis-2 :maestro.plugin.build/basis)
          :class-dir path-class
          :lib       artifact
-         :src-dirs  (ctx :maestro.plugin.build.path/src+)
-         :src-pom   (or (ctx :maestro.plugin.build.path/pom)
+         :src-pom   (or (basis-2 :maestro.plugin.build.path/pom)
                         "pom.xml")
-         :version   (version-map :mvn/version)}]
+         :version   (version-map :mvn/version)}
+        ;;
+        path+
+        (basis :extra-paths)]
+    (when (empty? path+)
+      (-fail "Missing paths"))
+    (copy-src (assoc basis-2
+                     :maestro.plugin.build.path/src+
+                     path+))
     (println "Preparing POM file")
     (tools.build/write-pom pom-config)
     (let [path-pom-module (str dir-root
@@ -226,7 +229,7 @@
              path-jar)
     (tools.build/jar {:class-dir path-class
                       :jar-file  path-jar})
-    ctx)))
+    basis-2)))
 
 
 
@@ -256,33 +259,41 @@
 
   [basis]
 
-  (let [{:as          ctx
-         basis        :maestro.plugin.build/basis
+  (let [{:as          basis-2
+         basis-tb     :maestro.plugin.build/basis
          path-class   :maestro.plugin.build.path/class
-         path-uberjar :maestro.plugin.build.path/output} (-jar basis)]
-    (println "Compiling" (ctx :maestro.plugin.build/alias))
-    (tools.build/compile-clj {:basis        basis
-                              :bindings     (update-keys (basis :maestro.plugin.build.uberjar/bind)
+         path-uberjar :maestro.plugin.build.path/output}
+        (-jar basis)
+        ;;
+        path+
+        ($.maestro.alias/extra-path+ basis-2
+                                     (basis-2 :maestro/require))]
+    (copy-src (assoc basis-2
+                     :maestro.plugin.build.path/src+
+                     path+))
+    (println "Compiling" (basis-2 :maestro.plugin.build/alias))
+    (tools.build/compile-clj {:basis        basis-tb
+                              :bindings     (update-keys (basis-2 :maestro.plugin.build.uberjar/bind)
                                                          (fn [k]
                                                            (cond->
                                                              k
                                                              (symbol? k)
                                                              (resolve))))
                               :class-dir    path-class
-                              :compile-opts (ctx :maestro.plugin.build.uberjar/compiler)
+                              :compile-opts (basis-2 :maestro.plugin.build.uberjar/compiler)
                               :java-opts    (into []
-                                                  (comp (map (ctx :aliases))
+                                                  (comp (map (basis-2 :aliases))
                                                         (mapcat :jvm-opts))
-                                                  (ctx :maestro/require))
-                              :src-dirs     (ctx :maestro.plugin.build.path/src+)})
+                                                  (basis-2 :maestro/require))
+                              :src-dirs     path+})
     (println "Assembling uberjar to:"
              path-uberjar)
-    (tools.build/uber {:basis     basis
+    (tools.build/uber {:basis     basis-tb
                        :class-dir path-class
-                       :exclude   (ctx :maestro.plugin.build.path/exclude)
-                       :main      (ctx :maestro.plugin.build.uberjar/main)
+                       :exclude   (basis-2 :maestro.plugin.build.path/exclude)
+                       :main      (basis-2 :maestro.plugin.build.uberjar/main)
                        :uber-file path-uberjar})
-    ctx)))
+    basis-2)))
 
 
 ;;;;;;;;;; 

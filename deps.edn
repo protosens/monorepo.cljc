@@ -166,6 +166,15 @@
 
   {:extra-paths ["module/maestro/src/test/clj"]}
 
+
+  :test.uberjar/maestro
+
+  {:maestro/doc                      "Used to test uberjar building with `:module/maestro.plugin.build`"
+   :maestro/require                  [:module/maestro]
+   :maestro.plugin.build/type        :uberjar
+   :maestro.plugin.build.path/output "private/target/maestro.uber.jar"}
+
+
   ;---
 
   :module/maestro.plugin.build

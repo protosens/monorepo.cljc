@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.protosens</groupId>
+  <groupId>protosens</groupId>
   <artifactId>maestro</artifactId>
-  <version>0.0.0-alpha0</version>
+  <version/>
   <name>maestro</name>
   <description>Modfule from the Clojure/script monorepo of Protosens SRL</description>
   <url>https://github.com/protosens/monorepo.cljc</url>
@@ -45,9 +45,7 @@
       <version>1.3.0</version>
     </dependency>
   </dependencies>
-  <build>
-    <sourceDirectory>module/maestro/src/main/clj</sourceDirectory>
-  </build>
+  <build/>
   <repositories>
     <repository>
       <id>clojars</id>
