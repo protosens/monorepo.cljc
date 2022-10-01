@@ -188,7 +188,14 @@
                      bb M :test :module/maestro"
    :requires    ([protosens.maestro])
    :task        (protosens.maestro/clojure "-M"
-                                        {:maestro/mode :test})}
+                                           {:maestro/mode :test})}
+
+
+  test-upstream
+  {:doc      "Like `test` but also test required aliases"
+   :requires ([protosens.maestro])
+   :task     (protosens.maestro/clojure "-M"
+                                        {:maestro/mode :test-upstream})}
 
 
   X

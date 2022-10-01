@@ -5,9 +5,6 @@
             [protosens.txt    :as $.txt]))
 
 
-(declare last-sha)
-
-
 ;;;;;;;;;; Miscellaneous helpers
 
 
@@ -58,11 +55,6 @@
 (defn add
 
 
-  ([]
-
-   (add nil))
-
-
   ([path+]
 
    (add path+
@@ -71,10 +63,8 @@
 
   ([path+ option+]
 
-   (-> (exec (if (seq path+)
-               (cons "add"
-                     path+)
-               ["add" "."])
+   (-> (exec (cons "add"
+                    path+)
              option+)
        (:exit)
        (zero?))))
@@ -115,26 +105,6 @@
                (->> (map (fn [branch]
                            ($.txt/trunc-left branch
                                              2))))))))
-
-
-
-(defn change?
-
-  ;; Anything different in versioned files, staged or not.
-  
-  ([]
-
-   (change? nil))
-
-
-  ([option+]
-
-   (and (boolean (last-sha nil
-                           option+))
-        (-> (exec ["diff-index" "--quiet" "HEAD"]
-                  option+)
-            (:exit)
-            (pos?)))))
 
 
 
@@ -228,6 +198,28 @@
 
 
 
+(defn commit-sha
+
+
+  ([i]
+
+   (commit-sha i
+               nil))
+
+
+  ([i option+]
+
+   (let [out (-> (exec ["rev-parse" (str "HEAD~"
+                                         (or i
+                                             0))]
+                       option+)
+                 (:out)
+                 (string/trimr))]
+     (when (full-sha? out)
+       out))))
+
+
+
 (defn count-commit+
 
 
@@ -268,30 +260,23 @@
 
 
 
-(defn last-sha
+(defn modified?
 
-
+  ;; Anything different in versioned files, staged or not.
+  
   ([]
 
-   (last-sha 0))
-
-  
-  ([i]
-
-   (last-sha i
-             nil))
+   (modified? nil))
 
 
-  ([i option+]
+  ([option+]
 
-   (let [result (-> (exec ["rev-parse" (str "HEAD~"
-                                            (or i
-                                                0))]
-                          option+)
-                    (:out)
-                    (string/trimr))]
-     (when (full-sha? result)
-       result))))
+   (and (boolean (commit-sha nil
+                             option+))
+        (-> (exec ["diff-index" "--quiet" "HEAD"]
+                  option+)
+            (:exit)
+            (pos?)))))
 
 
 

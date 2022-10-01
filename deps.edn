@@ -103,6 +103,19 @@
   ;; BUNDLES
 
 
+  :bundle/module
+
+  {:maestro/doc     "All main modules"
+   :maestro/require [:module/git
+                     :module/maestro
+                     :module/maestro.plugin.build
+                     :module/maestro.plugin.clj-kondo
+                     :module/maestro.plugin.deps-deploy
+                     :module/maestro.plugin.kaocha
+                     :module/maestro.plugin.quickdoc
+                     :module/txt]}
+
+
   :bundle/test
 
   {:maestro/doc        "Bundles necessities for testing"

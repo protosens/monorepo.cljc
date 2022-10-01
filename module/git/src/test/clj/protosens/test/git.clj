@@ -38,15 +38,15 @@
     (T/is (nil? ($.git/branch+ option+))
           "No branch listed since no commit yet")
 
-    (T/is (nil? ($.git/last-sha nil
-                                option+))
+    (T/is (nil? ($.git/commit-sha 0
+                                  option+))
           "Cannot find last SHA since no commit yet")
 
     (T/is (nil? ($.git/commit-message "dfqsdfsqdfqsdf"
                                       option+))
           "No commit message for a bad ref")
 
-    (T/is (false? ($.git/change? option+))
+    (T/is (false? ($.git/modified? option+))
           "There cannot be any change since nothing happened yet.")
 
     (T/is (true? ($.git/clean? option+))
@@ -66,7 +66,7 @@
     (spit file-foo
           "Foo")
 
-    (T/is (not ($.git/change? option+))
+    (T/is (not ($.git/modified? option+))
           "No change detected since new file is not part of the index yet")
 
     (T/is (not ($.git/clean? option+))
@@ -75,11 +75,11 @@
     (T/is (not ($.git/unstaged? option+))
           "New change not unstaged since not part of the index yet")
 
-    (T/is (true? ($.git/add nil
+    (T/is (true? ($.git/add ["."]
                             option+))
           "Add all (new file)")
 
-    (T/is (false? ($.git/change? option+))
+    (T/is (false? ($.git/modified? option+))
           "Still no actual change after adding the file since it is new ")
 
     (T/is (false? ($.git/clean? option+))
@@ -95,8 +95,8 @@
     (T/is (= 1
              ($.git/count-commit+ option+)))
 
-    (let [sha-1 ($.git/last-sha nil
-                                option+)]
+    (let [sha-1 ($.git/commit-sha 0
+                                  option+)]
 
       (T/is ($.git/full-sha? sha-1)
             "SHA of first commit")
@@ -110,7 +110,7 @@
                ($.git/branch+ option+))
             "Now there is a commit, branch is listed")
 
-      (T/is (false? ($.git/change? option+))
+      (T/is (false? ($.git/modified? option+))
             "There cannot be any change after a fresh commit")
 
       (T/is (true? ($.git/clean? option+))
@@ -122,7 +122,7 @@
       (spit file-foo
             "Foo 2")
 
-      (T/is (true? ($.git/change? option+))
+      (T/is (true? ($.git/modified? option+))
             "File has been modified")
 
       (T/is (false? ($.git/clean? option+))
@@ -131,11 +131,11 @@
       (T/is (true? ($.git/unstaged? option+))
             "Modified file is currently unstaged")
 
-      (T/is (true? ($.git/add nil
+      (T/is (true? ($.git/add ["."]
                               option+))
             "Staging modified file")
 
-      (T/is (true? ($.git/change? option+))
+      (T/is (true? ($.git/modified? option+))
             "Change still detected even after staging the modified file")
 
       (T/is (false? ($.git/clean? option+))
@@ -152,8 +152,8 @@
                ($.git/count-commit+ option+))
             "Second commit persisted")
 
-      (let [sha-2 ($.git/last-sha nil
-                                  option+)]
+      (let [sha-2 ($.git/commit-sha 0
+                                    option+)]
 
         (T/is ($.git/full-sha? sha-2)
               "SHA of second commit")
@@ -173,7 +173,7 @@
         (spit file-bar
               "Bar")
 
-        (T/is (false? ($.git/change? option+))
+        (T/is (false? ($.git/modified? option+))
               "No change detected after adding a second file")
 
         (T/is (false? ($.git/clean? option+))
