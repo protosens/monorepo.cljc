@@ -26,7 +26,7 @@
 
 (defn- -fail
 
-  [message]
+  [^String message]
 
   (throw (Exception. message)))
 
@@ -202,12 +202,15 @@
    These automated steps guarantees a safe deployment:
 
    - Ensure Git tree is absolutely clean
-   - Run [[expose]], commit
-   - Run [[expose]] again, commit
+   - Run [[expose]], commit (preparation)
+   - Run [[expose]] again, commit (actual exposition)
    - Print SHA of last commit, what user can consume
 
    This double commit ensures Clojure CLI will have no trouble finding everything without any
-   clash."
+   clash.
+  
+   The commit messages can be customized by providing functions `git-sha of last commit` -> `message`
+   under `:maestro.git.lib.message/prepare` and/or `:maestro.git.lib.message/expose`."
 
 
   ([]
@@ -228,10 +231,12 @@
      (expose git-sha
              basis)
      ($.git/add ["."])
-     ($.git/commit (format "Prepare exposition
-                  
-                            Base: %s"
-                           git-sha)))
+     ($.git/commit (if-some [f (:maestro.git.lib.message/prepare basis)]
+                     (f git-sha)
+                     (format "Prepare exposition
+                    
+                              Base: %s"
+                             git-sha))))
    ;;
    ;; Expose and print feedback for all modules.
    (let [git-sha-2 ($.git/commit-sha 0)]
@@ -251,9 +256,13 @@
                   alias-child))
        (println))
      ($.git/add ["."])
-     ($.git/commit (format "Expose
+     ($.git/commit (if-some [f (:maestro.git.lib.message/expose basis)]
+                     (f git-sha-2)
+                     (format "Expose
                            
-                            Pre-exposed: %s"
-                           git-sha-2)))
+                              Pre-exposed: %s"
+                             git-sha-2))))
+   ;;
+   ;; Done!
    (println "Users can point to commit:"
             ($.git/commit-sha 0))))
