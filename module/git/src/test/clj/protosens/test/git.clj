@@ -46,6 +46,10 @@
                                       option+))
           "No commit message for a bad ref")
 
+    (T/is (nil? ($.git/resolve "fdsmqfdlsmfk"
+                               option+))
+          "Cannot resolve any ref, there is nothing anyways")
+
     (T/is (false? ($.git/modified? option+))
           "There cannot be any change since nothing happened yet.")
 
@@ -105,6 +109,11 @@
                ($.git/commit-message sha-1
                                      option+))
             "Commit message correctly persisted")
+
+      (T/is (= sha-1
+               ($.git/resolve sha-1
+                              option+))
+            "Full SHA resolves to itself")
 
       (T/is (= ["develop"]
                ($.git/branch+ option+))

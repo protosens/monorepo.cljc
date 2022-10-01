@@ -1,5 +1,6 @@
 (ns protosens.git
 
+  (:refer-clojure :exclude [resolve])
   (:require [babashka.process :as bb.process]
             [clojure.string   :as string]
             [protosens.txt    :as $.txt]))
@@ -297,6 +298,26 @@
          (string/trimr)
          (= "true"))
      false)))
+
+
+
+(defn resolve
+
+
+  ([ref]
+
+   (resolve ref
+            nil))
+
+
+  ([ref option+]
+
+   (let [out (-> (exec ["rev-parse" ref]
+                       option+)
+                 (:out)
+                 (string/trimr))]
+     (when (full-sha? out)
+       out))))
 
 
 
