@@ -35,6 +35,9 @@
     (T/is (zero? ($.git/count-commit+ option+))
           "No commit yet")
 
+    (T/is (nil? ($.git/tag+ option+))
+          "No existing tag")
+
     (T/is (nil? ($.git/branch+ option+))
           "No branch listed since no commit yet")
 
@@ -127,6 +130,19 @@
       
       (T/is (false? ($.git/unstaged? option+))
             "Nothing can be deemed unstaged after a fresh commit")
+
+      (T/is (true? ($.git/tag-add "some-tag"
+                                  option+))
+            "Add tag to latest commit")
+
+      (T/is (= sha-1
+               ($.git/resolve "some-tag"
+                              option+))
+            "Tag resolve to expected commit")
+
+      (T/is (= ["some-tag"]
+               ($.git/tag+ option+))
+            "Tag is listed")
 
       (spit file-foo
             "Foo 2")

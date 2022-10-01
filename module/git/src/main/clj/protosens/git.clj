@@ -321,6 +321,41 @@
 
 
 
+(defn tag+
+
+
+  ([]
+
+   (tag+ nil))
+
+
+  ([option+]
+
+   (-> (exec ["tag"]
+             option+)
+       (:out)
+       (some-> (string/split-lines)))))
+
+
+
+(defn tag-add
+
+
+  ([tag]
+
+   (tag-add tag
+            nil))
+
+
+  ([tag option+]
+
+   (-> (exec ["tag" tag]
+             option+)
+       (:exit)
+       (zero?))))
+
+
+
 (defn unstaged?
 
   
