@@ -133,3 +133,37 @@
            ($.txt/realign "foo
                               bar
                              baz"))))
+
+
+
+(T/deftest trunc-left
+
+  (T/testing
+
+    "Success"
+
+    (T/is (= "12345"
+             ($.txt/trunc-left "12345"
+                               0)))
+
+    (T/is (= "2345"
+             ($.txt/trunc-left "12345"
+                               1)))
+
+    (T/is (= "345"
+             ($.txt/trunc-left "12345"
+                               2))))
+
+  (T/testing
+
+     "Failure"
+
+     (T/is (thrown? Exception
+                    ($.txt/trunc-left "12345"
+                                      100))
+           "Input too small")
+
+     (T/is (thrown? Exception
+                    ($.txt/trunc-left "12345"
+                                      -1))
+           "Negative index")))

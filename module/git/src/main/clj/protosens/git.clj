@@ -97,10 +97,9 @@
              option+)
        (:out)
        (string/split-lines)
-       (->> (map (fn [^String branch]
-                   (.substring branch
-                               2
-                               (count branch))))))))
+       (->> (map (fn [branch]
+                   ($.txt/trunc-left branch
+                                     2)))))))
 
 
 

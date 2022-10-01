@@ -6,6 +6,13 @@
   (:require [clojure.string :as string]))
 
 
+(declare trunc-left)
+
+
+(set! *warn-on-reflection*
+      true)
+
+
 ;;;;;;;;;;
 
 
@@ -71,14 +78,21 @@
                                             (rest line+))))]
         (string/join (newline)
                      (cons (string/triml (first line+))
-                           (map (fn [^String line]
+                           (map (fn [line]
                                   (cond->
                                     line
                                     (not (string/blank? line))
-                                    (.substring n-truncate
-                                                (count line))))
+                                    (trunc-left n-truncate)))
                                 (rest line+))))))))
 
 
 
+(defn trunc-left
 
+  "Returns the given `s`tring without the first `n` characters."
+
+  [s n]
+
+  (cut-out s
+           n
+           (count s)))
