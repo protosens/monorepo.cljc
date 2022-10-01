@@ -185,7 +185,8 @@
    :maestro/root                        "module/maestro"
    :maestro.git.lib/name                protosens/maestro
    :maestro.plugin.build/type           :jar
-   :maestro.plugin.build.alias/artifact :release/maestro
+   :maestro.plugin.build.jar/name       protosens/maestro
+   :maestro.plugin.build.jar/version    "0.0.0"
    :maestro.plugin.build.path/output    "private/target/maestro.jar"
    :maestro.plugin.quickdoc.path/output "module/maestro/API.md"}
 

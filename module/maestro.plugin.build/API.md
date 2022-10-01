@@ -26,7 +26,7 @@ Maestro plugin for `tools.build` focused on building jars and uberjars, key info
 
 
 
-## <a name="protosens.maestro.plugin.build/build">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.build/src/main/clj/protosens/maestro/plugin/build.cljc#L344-L372) `build`</a>
+## <a name="protosens.maestro.plugin.build/build">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.build/src/main/clj/protosens/maestro/plugin/build.cljc#L295-L323) `build`</a>
 ``` clojure
 
 (build option+)
@@ -42,7 +42,7 @@ Given a map with an alias to build under `:maestro.plugin.build/alias`, search f
    In other words, options can be used to overwrite some information in the alias data of the target alias,
    like the output path of the artifact.
 
-## <a name="protosens.maestro.plugin.build/by-type">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.build/src/main/clj/protosens/maestro/plugin/build.cljc#L292-L304) `by-type`</a>
+## <a name="protosens.maestro.plugin.build/by-type">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.build/src/main/clj/protosens/maestro/plugin/build.cljc#L243-L255) `by-type`</a>
 
 Called by [`build`](#protosens.maestro.plugin.build/build) after some initial preparation.
    Dispatches on `:maestro.build.plugin/type` to carry out the actual build steps.
@@ -72,7 +72,7 @@ Deletes the file under `:maestro.plugin.build.path/output`.
 
 Copies source from `:maestro.plugin.build.path/src+` to `:maestro.plugin.build.path/class`.
 
-## <a name="protosens.maestro.plugin.build/jar">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.build/src/main/clj/protosens/maestro/plugin/build.cljc#L115-L221) `jar`</a>
+## <a name="protosens.maestro.plugin.build/jar">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.build/src/main/clj/protosens/maestro/plugin/build.cljc#L115-L172) `jar`</a>
 ``` clojure
 
 (jar basis)
@@ -83,55 +83,19 @@ Implementation for the `:jar` type in [`by-type`](#protosens.maestro.plugin.buil
 
    Alias data for the build alias must or may contain:
 
-   | Key                                    | Value                         | Mandatory? | Default       |
-   |----------------------------------------|-------------------------------|------------|---------------|
-   | `:maestro/root`                        | Root directory of the alias   | Yes        | /             |
-   | `:maestro.plugin.build.alias/artifact` | Artifact alias (see below)    | Yes        | /             |
-   | `:maestro.plugin.build.path/output`    | Output path for the jar       | Yes        | /             |
-   | `:maestro.plugin.build.path/pom`       | Path to the template POM file | No         | `"pom.xml"` |
+   | Key                                 | Value                         | Mandatory? | Default       |
+   |-------------------------------------|-------------------------------|------------|---------------|
+   | `:maestro/root`                     | Root directory of the alias   | Yes        | /             |
+   | `:maestro.plugin.build.jar/name`    | Name of the artifact          | Yes        | /             |
+   | `:maestro.plugin.build.jar/version` | Version of the artifact       | Yes        | /             |
+   | `:maestro.plugin.build.path/output` | Output path for the jar       | Yes        | /             |
+   | `:maestro.plugin.build.path/pom`    | Path to the template POM file | No         | `"pom.xml"` |
 
    A POM file will be created if necessary but it is often best starting from one that hosts key information
    that does not change from build to build like SCM, organization, etc. It will be copied to `./pom.xml` under
    `:maestro/root`.
 
-   The artifact alias is an alias representing your release in its `:extra-deps` and nothing else. This is
-   where the artifact name and version are extracted from. For instance, in this repository, `deps.edn` contains
-   this artifact alias related to `:module/maestro`:
-
-   ```clojure
-   {:release/maestro
-    {:extra-deps {com.protosens/maestro {:mvn/version "x.x.x"}}
-     ...}}
-   ```
-
-   This is useful so that other modules can require this one in 2 ways using profiles: one for local development,
-   one for their own releases. For instance:
-
-   ```clojure
-   {:module/another-module
-    {:maestro/require [{default :module/maestro
-                        release :release/maestro}]
-     ...}}
-   ``` 
-
-   To go even further, it is possible to run tests against a release installed locally or downloaded remotely.
-   This ensure that everything was built correctly beyond any doubt. For instance, in this repository, Maestro
-   is tested like this:
-
-   ```
-   clojure -M$( bb aliases:test :module/maestro )
-   ```
-
-   But the following one will run the Maestro test suite against the Maestro version from the local Maven cache
-   after downloading it from Clojars if necessary:
-
-   ```
-   clojure -M$( bb aliases:test '[release :release/maestro]' )
-   ```
-
-   Note: it is best activating the `release` alias when doing that sort of things.
-
-## <a name="protosens.maestro.plugin.build/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.build/src/main/clj/protosens/maestro/plugin/build.cljc#L376-L417) `task`</a>
+## <a name="protosens.maestro.plugin.build/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.build/src/main/clj/protosens/maestro/plugin/build.cljc#L327-L368) `task`</a>
 ``` clojure
 
 (task alias-maestro)
@@ -165,7 +129,7 @@ Convenient way of calling [`build`](#protosens.maestro.plugin.build/build) using
 Creates a temporary directory and returns its path as a string.
    A prefix for the name may be provided.
 
-## <a name="protosens.maestro.plugin.build/uberjar">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.build/src/main/clj/protosens/maestro/plugin/build.cljc#L226-L285) `uberjar`</a>
+## <a name="protosens.maestro.plugin.build/uberjar">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.build/src/main/clj/protosens/maestro/plugin/build.cljc#L177-L236) `uberjar`</a>
 ``` clojure
 
 (uberjar basis)

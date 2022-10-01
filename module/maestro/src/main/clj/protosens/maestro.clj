@@ -48,7 +48,7 @@
         (System/exit 1))
       ;;
       :throw
-      (throw (Exception. message)))))
+      (throw (Exception. message-2)))))
 
 
 

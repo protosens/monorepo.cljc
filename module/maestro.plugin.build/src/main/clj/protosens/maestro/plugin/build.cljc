@@ -118,91 +118,42 @@
 
    Alias data for the build alias must or may contain:
 
-   | Key                                    | Value                         | Mandatory? | Default       |
-   |----------------------------------------|-------------------------------|------------|---------------|
-   | `:maestro/root`                        | Root directory of the alias   | Yes        | /             |
-   | `:maestro.plugin.build.alias/artifact` | Artifact alias (see below)    | Yes        | /             |
-   | `:maestro.plugin.build.path/output`    | Output path for the jar       | Yes        | /             |
-   | `:maestro.plugin.build.path/pom`       | Path to the template POM file | No         | `\"pom.xml\"` |
+   | Key                                 | Value                         | Mandatory? | Default       |
+   |-------------------------------------|-------------------------------|------------|---------------|
+   | `:maestro/root`                     | Root directory of the alias   | Yes        | /             |
+   | `:maestro.plugin.build.jar/name`    | Name of the artifact          | Yes        | /             |
+   | `:maestro.plugin.build.jar/version` | Version of the artifact       | Yes        | /             |
+   | `:maestro.plugin.build.path/output` | Output path for the jar       | Yes        | /             |
+   | `:maestro.plugin.build.path/pom`    | Path to the template POM file | No         | `\"pom.xml\"` |
 
    A POM file will be created if necessary but it is often best starting from one that hosts key information
    that does not change from build to build like SCM, organization, etc. It will be copied to `./pom.xml` under
-   `:maestro/root`.
-
-   The artifact alias is an alias representing your release in its `:extra-deps` and nothing else. This is
-   where the artifact name and version are extracted from. For instance, in this repository, `deps.edn` contains
-   this artifact alias related to `:module/maestro`:
-
-   ```clojure
-   {:release/maestro
-    {:extra-deps {com.protosens/maestro {:mvn/version \"x.x.x\"}}
-     ...}}
-   ```
-
-   This is useful so that other modules can require this one in 2 ways using profiles: one for local development,
-   one for their own releases. For instance:
-
-   ```clojure
-   {:module/another-module
-    {:maestro/require [{default :module/maestro
-                        release :release/maestro}]
-     ...}}
-   ``` 
-
-   To go even further, it is possible to run tests against a release installed locally or downloaded remotely.
-   This ensure that everything was built correctly beyond any doubt. For instance, in this repository, Maestro
-   is tested like this:
-
-   ```
-   clojure -M$( bb aliases:test :module/maestro )
-   ```
-
-   But the following one will run the Maestro test suite against the Maestro version from the local Maven cache
-   after downloading it from Clojars if necessary:
-
-   ```
-   clojure -M$( bb aliases:test '[release :release/maestro]' )
-   ```
-
-   Note: it is best activating the `release` alias when doing that sort of things."
+   `:maestro/root`."
 
   [basis]
 
-  (let [alias-artifact
-       (basis :maestro.plugin.build.alias/artifact)
-       _  (or alias-artifact
-              ($.maestro/fail "Missing artifact alias"))
-       ;;
-       dir-root
-       (basis :maestro/root)
-       _ (or dir-root
-             ($.maestro/fail "Missing root directory"))
+  (let [dir-root
+       (or (basis :maestro/root)
+           ($.maestro/fail "Missing root directory"))
        ;;
         {:as        basis-2
          path-class :maestro.plugin.build.path/class
          path-jar   :maestro.plugin.build.path/output}
         (-jar basis)
         ;;
-        [artifact
-         version-map]
-        (-> basis-2
-            (get-in [:aliases
-                     alias-artifact
-                     :extra-deps])
-            (first))
-        ;;
         pom-config
         {:basis     (basis-2 :maestro.plugin.build/basis)
          :class-dir path-class
-         :lib       artifact
+         :lib       (or (basis-2 :maestro.plugin.build.jar/name)
+                        ($.maestro/fail "Missing artifact name"))
          :src-pom   (or (basis-2 :maestro.plugin.build.path/pom)
                         "pom.xml")
-         :version   (version-map :mvn/version)}
+         :version   (or (basis-2 :maestro.plugin.build.jar/version)
+                        ($.maestro/fail "Missing artifact version"))}
         ;;
         path+
-        (basis :extra-paths)]
-    (when (empty? path+)
-      ($.maestro/fail "Missing paths"))
+        (or (not-empty (basis :extra-paths))
+            ($.maestro/fail "Missing paths"))]
     (copy-src (assoc basis-2
                      :maestro.plugin.build.path/src+
                      path+))
