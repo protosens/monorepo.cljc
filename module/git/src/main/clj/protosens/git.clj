@@ -121,6 +121,42 @@
 
 
 
+(defn checkout
+
+
+  ([branch]
+
+   (checkout branch
+             nil))
+
+
+  ([branch option+]
+
+   (-> (exec ["checkout" branch]
+             option+)
+       (:exit)
+       (zero?))))
+
+
+
+(defn checkout-new
+
+
+  ([branch]
+
+   (checkout-new branch
+                 nil))
+
+
+  ([branch option+]
+
+   (-> (exec ["checkout" "-b" branch]
+             option+)
+       (:exit)
+       (zero?))))
+
+
+
 (defn clean?
 
 
@@ -157,6 +193,23 @@
 
 
 
+(defn init
+
+
+  ([]
+
+   (init nil))
+
+
+  ([option+]
+
+   (-> (exec ["init"]
+             option+)
+       (:exit)
+       (zero?))))
+
+
+
 (defn last-sha
 
 
@@ -179,6 +232,26 @@
              option+)
        (:out)
        (string/trimr))))
+
+
+
+(defn repo?
+
+
+  ([]
+   
+   (repo? nil))
+
+
+  ([option+]
+
+   (if-some [out (-> (exec ["rev-parse" "--is-inside-work-tree"]
+                           option+)
+                     (:out))]
+     (-> out
+         (string/trimr)
+         (= "true"))
+     false)))
 
 
 
