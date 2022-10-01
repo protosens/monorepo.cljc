@@ -77,13 +77,6 @@
    :maestro/url "https://github.com/hugoduncan/criterium"}
 
 
-  :ext/deps-deploy
-
-  {:extra-deps  {slipset/deps-deploy {:mvn/version "0.2.0"}}
-   :maestro/doc "Deploying jars locally and to Clojars"
-   :maestro/url "https://github.com/slipset/deps-deploy"}
-
-
   :ext/kaocha
 
   {:extra-deps  {lambdaisland/kaocha {:mvn/version "1.63.998"}}
@@ -110,7 +103,6 @@
                      :module/maestro
                      :module/maestro.plugin.build
                      :module/maestro.plugin.clj-kondo
-                     :module/maestro.plugin.deps-deploy
                      :module/maestro.plugin.kaocha
                      :module/maestro.plugin.quickdoc
                      :module/txt]}
@@ -239,17 +231,6 @@
    :maestro.git.lib/name                protosens/maestro.plugin.clj-kondo
    :maestro.plugin.quickdoc.path/output "module/maestro.plugin.clj-kondo/API.md"}
 
-  ;---
-
-  :module/maestro.plugin.deps-deploy
-
-  {:extra-paths                         ["module/maestro.plugin.deps-deploy/src/main/clj"]
-   :maestro/doc                         "Maestro plugin for `:ext/deps-deploy`"
-   :maestro/require                     [:ext/babashka.fs
-                                         :module/maestro]
-   :maestro/root                        "module/maestro.plugin.deps-deploy"
-   :maestro.git.lib/name                protosens/maestro.plugin.deps-deploy
-   :maestro.plugin.quickdoc.path/output "module/maestro.plugin.deps-deploy/API.md"}
 
   ;---
 
@@ -286,7 +267,6 @@
    :maestro/require [:module/maestro
                      :module/maestro.plugin.build
                      :module/maestro.plugin.clj-kondo
-                     :module/maestro.plugin.deps-deploy
                      :module/maestro.plugin.kaocha
                      :module/maestro.plugin.quickdoc]
    :maestro/root    "module/task"}

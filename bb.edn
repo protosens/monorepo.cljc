@@ -117,13 +117,6 @@
    :task        (protosens.maestro.uber/task :module/task)}
 
 
-  install
-  {:doc         "Deploy the given module to the local Maven repository"
-   :maestro/doc "Assumes the alias has been built using the `build` task."
-   :requires    ([protosens.maestro.plugin.deps-deploy])
-   :task        (protosens.maestro.plugin.deps-deploy/local :ext/deps-deploy)}
-
-
   M
   {:doc         "Executes `clojure` with `-M` and the required aliases"
    :maestro/doc "The `aliases` task prints required aliases and this is typically useful in

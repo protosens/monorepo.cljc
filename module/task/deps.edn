@@ -13,7 +13,6 @@
 ;;     :module/maestro
 ;;     :module/maestro.plugin.build
 ;;     :module/maestro.plugin.clj-kondo
-;;     :module/maestro.plugin.deps-deploy
 ;;     :module/maestro.plugin.kaocha
 ;;     :module/maestro.plugin.quickdoc
 ;;     :module/task
@@ -39,7 +38,6 @@
  ["maestro/uber/module/git/src/main/clj"
   "maestro/uber/module/maestro.plugin.build/src/main/clj"
   "maestro/uber/module/maestro.plugin.clj-kondo/src/main/clj"
-  "maestro/uber/module/maestro.plugin.deps-deploy/src/main/clj"
   "maestro/uber/module/maestro.plugin.kaocha/src/main/clj"
   "maestro/uber/module/maestro.plugin.quickdoc/src/main/clj"
   "maestro/uber/module/maestro/src/main/clj"
