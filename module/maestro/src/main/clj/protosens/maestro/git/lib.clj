@@ -217,11 +217,14 @@
 
   ([basis]
 
+   ;;
+   ;; Ensure repository is clean.
    (when-not ($.git/clean?)
      (-fail "Repository must be sparkling clean, no modified or untracked files"))
+   ;;
+   ;; Prepare exposition.
    (let [git-sha ($.git/commit-sha 0)]
-     (println "Prepare exposition"
-              git-sha)
+     (println "Prepare exposition")
      (expose git-sha
              basis)
      ($.git/add ["."])
@@ -229,11 +232,24 @@
                   
                             Base: %s"
                            git-sha)))
+   ;;
+   ;; Expose and print feedback for all modules.
    (let [git-sha-2 ($.git/commit-sha 0)]
-     (println "Expose"
-              git-sha-2)
-     (expose git-sha-2
-             basis)
+     (println "Expose")
+     (println)
+     (doseq [[alias
+              feedback] (expose git-sha-2
+                                basis)]
+       (println (format "    %s -> %s"
+                        alias
+                        (feedback :maestro.git.lib.path/deps.edn)))
+       (doseq [alias-child (sort (filter (fn [alias-child]
+                                           (not= alias-child
+                                                 alias))
+                                         (feedback :maestro/require)))]
+         (println "       "
+                  alias-child))
+       (println))
      ($.git/add ["."])
      ($.git/commit (format "Expose
                            
