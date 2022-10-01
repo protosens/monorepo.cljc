@@ -38,6 +38,14 @@
   {:extra-deps  {babashka/fs {:mvn/version "0.1.11"}}
    :maestro/doc "Library for filesystem operations"
    :maestro/url "https://github.com/babashka/fs"}
+
+
+  :ext/babashka.process
+
+  {:extra-deps  {babashka/process {:mvn/version "0.2.10"}}
+   :maestro/doc "Shelling out and spawning process.
+                 JVM and BB compatible."
+   :maestro/url "https://github.com/babashka/process"}
   
 
   :ext/clojure.java.classpath
@@ -136,6 +144,16 @@
    :maestro/root    "module/dev"
    :maestro/require [:module/maestro
                      :module/maestro.plugin.kaocha]}
+
+  ;---
+
+  :module/git
+
+  {:extra-paths     ["module/git/src/main/clj"]
+   :maestro/doc     "Collection of little Git-related utilities"
+   :maestro/require [:ext/babashka.process
+                     :module/txt]
+   :maestro/root    "module/git"}
 
   ;---
 
