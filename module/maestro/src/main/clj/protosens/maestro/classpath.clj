@@ -2,9 +2,9 @@
 
   "Simple classpath utilities."
 
-  (:require [clojure.string          :as string]
-            [protosens.maestro.alias :as $.maestro.alias]
-            [protosens.maestro.util  :as $.maestro.util]))
+  (:require [babashka.process        :as bb.process]
+            [clojure.string          :as string]
+            [protosens.maestro.alias :as $.maestro.alias]))
 
 
 ;;;;;;;;;;
@@ -12,17 +12,14 @@
 
 (defn compute
 
-  "Computes the classpath using the given aliases on `clojure`.
-  
-   Only works in Babashka."
+  "Computes the classpath using the given aliases on `clojure`."
   
   [alias+]
 
-  (-> (@$.maestro.util/d*shell {:out :string}
-                               (format "clojure -Spath -A%s"
-                                       ($.maestro.alias/stringify+ alias+)))
-      (deref)
-      (:out)))
+  (-> (bb.process/process ["clojure" "-Spath" (str "-A"
+                                                   ($.maestro.alias/stringify+ alias+))])
+      (:out)
+      (slurp)))
 
 
 

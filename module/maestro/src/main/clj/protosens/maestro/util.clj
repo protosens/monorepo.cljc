@@ -55,14 +55,3 @@
 
   (delay
     (-require-for-bb 'babashka.tasks/clojure)))
-
-
-
-(def d*shell
-
-  "Delay for `babahska.tasks/shell`.
-   
-   <!> Only works in Babashka."
-
-  (delay
-    (-require-for-bb 'babashka.tasks/shell)))

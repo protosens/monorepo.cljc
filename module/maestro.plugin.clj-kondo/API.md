@@ -16,7 +16,7 @@ Maestro plugin for linting Clojure code via [Clj-kondo](https://github.com/clj-k
 
 
 
-## <a name="protosens.maestro.plugin.clj-kondo/lint">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.clj-kondo/src/main/clj/protosens/maestro/plugin/clj_kondo.clj#L34-L69) `lint`</a>
+## <a name="protosens.maestro.plugin.clj-kondo/lint">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.clj-kondo/src/main/clj/protosens/maestro/plugin/clj_kondo.clj#L38-L77) `lint`</a>
 ``` clojure
 
 (lint)
@@ -32,7 +32,9 @@ Lints the whole repository by extracting `:extra-paths` from aliases.
    |----------------|-------------------------------------------------------------|
    | `:path-filter` | Predicate function deciding whether a path should be linted |
 
-## <a name="protosens.maestro.plugin.clj-kondo/prepare">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.clj-kondo/src/main/clj/protosens/maestro/plugin/clj_kondo.clj#L18-L30) `prepare`</a>
+   Returns `true` in case of success.
+
+## <a name="protosens.maestro.plugin.clj-kondo/prepare">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.clj-kondo/src/main/clj/protosens/maestro/plugin/clj_kondo.clj#L18-L34) `prepare`</a>
 ``` clojure
 
 (prepare)
@@ -42,3 +44,5 @@ Lints the whole repository by extracting `:extra-paths` from aliases.
 Prepares the Clj-kondo cache by linting all dependencies and copying configuration files.
   
    Should be called prior to [`lint`](#protosens.maestro.plugin.clj-kondo/lint)ing for the first time and on dependency updates.
+  
+   Returns `true` in case of success.

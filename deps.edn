@@ -176,6 +176,7 @@
   {:extra-paths                         ["module/maestro/src/main/clj"]
    :maestro/doc                         "Tools for managing a (mono)repo by leveraging `deps.edn`"
    :maestro/require                     [:ext/babashka.fs
+                                         :ext/babashka.process
                                          :ext/clojure.java.classpath
                                          :ext/clojure.tools.namespace
                                          :module/git
@@ -226,7 +227,8 @@
 
   {:extra-paths                         ["module/maestro.plugin.clj-kondo/src/main/clj"]
    :maestro/doc                         "Maestro plugin for Clj-kondo, the Clojure linter"
-   :maestro/require                     [:module/maestro]
+   :maestro/require                     [:ext/babashka.process
+                                         :module/maestro]
    :maestro/root                        "module/maestro.plugin.clj-kondo"
    :maestro.git.lib/name                protosens/maestro.plugin.clj-kondo
    :maestro.plugin.quickdoc.path/output "module/maestro.plugin.clj-kondo/API.md"}

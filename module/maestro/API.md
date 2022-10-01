@@ -343,7 +343,7 @@ Simple classpath utilities.
 
 
 
-## <a name="protosens.maestro.classpath/compute">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/classpath.clj#L13-L25) `compute`</a>
+## <a name="protosens.maestro.classpath/compute">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/classpath.clj#L13-L22) `compute`</a>
 ``` clojure
 
 (compute alias+)
@@ -351,10 +351,8 @@ Simple classpath utilities.
 
 
 Computes the classpath using the given aliases on `clojure`.
-  
-   Only works in Babashka.
 
-## <a name="protosens.maestro.classpath/pprint">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/classpath.clj#L29-L46) `pprint`</a>
+## <a name="protosens.maestro.classpath/pprint">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/classpath.clj#L26-L43) `pprint`</a>
 ``` clojure
 
 (pprint)
