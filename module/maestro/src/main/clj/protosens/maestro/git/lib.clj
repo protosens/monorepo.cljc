@@ -21,16 +21,6 @@
       true)
 
 
-;;;;;;;;;; Private
-
-
-(defn- -fail
-
-  [^String message]
-
-  (throw (Exception. message)))
-
-
 ;;;;;;;;;; Public
 
 
@@ -74,8 +64,8 @@
         data        (alias->data alias)
         root-dir    (data :maestro/root)
         _           (when-not root-dir
-                      (throw (Exception. (str "Missing root directory for alias: "
-                                              alias))))
+                      ($.maestro/fail (str "Missing root directory for alias: "
+                                           alias)))
         required    (-> basis
                         (assoc :maestro/alias+
                                [alias])
@@ -102,11 +92,17 @@
                                           (map (fn [path]
                                                  (when-not (string/starts-with? path
                                                                                 root-dir)
-                                                   (throw (ex-info "Path to add does not belong"
-                                                                   {:alias/git-lib  alias
-                                                                    :alias/required alias-required
-                                                                    :path           path
-                                                                    :root           root-dir})))
+                                                   ($.maestro/fail (format "Path to add does not belong:
+                                                                           
+                                                                                Exposed alias `%s` has root `%s`
+                                                                                Required alias %s` has path `%s`
+                                                                            
+                                                                            Probably, required alias should be exposed as well.
+                                                                            Does it have a `:maestro.git.lib/name` in its data?"
+                                                                           alias
+                                                                           root-dir
+                                                                           alias-required
+                                                                           path)))
                                                  (str (bb.fs/relativize root-dir
                                                                         path))))
                                           (data-required :extra-paths)))))
@@ -223,7 +219,7 @@
    ;;
    ;; Ensure repository is clean.
    (when-not ($.git/clean?)
-     (-fail "Repository must be sparkling clean, no modified or untracked files"))
+     ($.maestro/fail "Repository must be sparkling clean, no modified or untracked files"))
    ;;
    ;; Prepare exposition.
    (let [git-sha ($.git/commit-sha 0)]

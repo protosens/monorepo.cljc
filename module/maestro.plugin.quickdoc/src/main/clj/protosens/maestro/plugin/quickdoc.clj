@@ -99,8 +99,8 @@
                                       [alias
                                        path
                                        (or (not-empty (data :extra-paths))
-                                           (throw (Exception. (str "Missing extra paths in alias data: "
-                                                                   alias))))]))
+                                           ($.maestro/fail (str "Missing extra paths in alias data: "
+                                                                alias)))]))
                                   (-> basis
                                       (:aliases)
                                       (sort)))]

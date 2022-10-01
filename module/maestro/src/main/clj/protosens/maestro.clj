@@ -11,7 +11,75 @@
             [protosens.maestro.alias   :as $.maestro.alias]
             [protosens.maestro.aggr    :as $.maestro.aggr]
             [protosens.maestro.profile :as $.maestro.profile]
-            [protosens.maestro.util    :as $.maestro.util]))
+            [protosens.maestro.util    :as $.maestro.util]
+            [protosens.txt             :as $.txt]))
+
+
+(declare fail-mode)
+
+
+;;;;;;;;;; Handling failure
+
+
+(def -*fail-mode
+
+  ;; Decides how failure is handled.
+
+  (atom :exit))
+
+
+
+(defn fail
+
+  "Fails with the given error `message`.
+
+   Plugin authors and such should use this function to guarantee consistent behavior.
+
+   Re-aligns multiline strings.
+  
+   See [[fail-mode]]."
+
+  [message]
+
+  (let [message-2 ($.txt/realign message)]
+    (case (fail-mode)
+      :exit
+      (binding [*out* *err*]
+        (println message-2)
+        (System/exit 1))
+      ;;
+      :throw
+      (throw (Exception. message)))))
+
+
+
+(defn fail-mode
+
+  "How [[fail]] behaves.
+  
+   There are 2 modes:
+
+   - `:exit` is usually prefered on Babashka ; error message is printed and process exits with 1
+   - `:throw` might be preferred on the JVM ; an exception is thrown with the error message
+
+   Sets behavior to the given `mode`.
+   Without argument, returns the current one (default is `:exit`)."
+
+
+  ([]
+
+   (deref -*fail-mode))
+
+
+  ([mode]
+
+   (when (not (contains? #{:exit
+                           :throw}
+                         mode))
+     (fail (str "Unknown fail mode: "
+                mode)))
+   (reset! -*fail-mode
+           mode)))
 
 
 ;;;;;;;;;;
@@ -80,8 +148,8 @@
                      (cond
                        (keyword? x) :maestro/alias+
                        (symbol? x)  :maestro/profile+
-                       :else        (throw (ex-info "Not an alias nor a profile"
-                                                    {:maestro/arg x})))
+                       :else        (fail (str "Not an alias nor a profile: "
+                                               x)))
                      (fnil conj
                            [])
                      x))
@@ -196,8 +264,8 @@
                          (or (get-in basis-2
                                      [:maestro/mode+
                                       mode])
-                             (throw (Exception. (str "Maestro mode not found in basis: "
-                                                     mode)))))
+                             (fail (str "Maestro mode not found in basis: "
+                                        mode))))
         basis-3        (cond->
                          basis-2
                          mode-2

@@ -126,12 +126,12 @@
          alias->data (basis-2 :aliases)
          data        (alias->data alias)
          _           (when-not data
-                       (throw (Exception. (str "No data found for alias: "
-                                               alias))))
+                       ($.maestro/fail (str "No data found for alias: "
+                                            alias)))
          basis-3     ($.maestro/search basis-2)
          root        (data :maestro/root)
          _           (when-not root
-                       (throw (Exception. (str "Given alias does not contain `:maestro/root`"))))
+                       ($.maestro/fail (str "Given alias does not contain `:maestro/root`")))
          ;;
          ;;          Merges dependencies and paths.
          deps-edn    (reduce (fn [deps-edn alias-required]

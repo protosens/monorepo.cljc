@@ -24,18 +24,6 @@
                     [protosens.maestro.profile :as $.maestro.profile])))
 
 
-;;;;;;;;;; Failures
-
-
-(defn  ^:no-doc -fail
-
-  ;; Notably used when a user argument is missing.
-
-  [message]
-
-  (throw (Exception. message)))
-
-
 ;;;;;;;;;; Tasks
 
 
@@ -105,7 +93,7 @@
   [basis]
 
   (when-not (basis :maestro.plugin.build.path/output)
-    (-fail "Missing output path"))
+    ($.maestro/fail "Missing output path"))
   (let [dir-tmp (tmp-dir)]
     (println "Using temporary directory for building:"
              dir-tmp)
@@ -180,12 +168,12 @@
   (let [alias-artifact
        (basis :maestro.plugin.build.alias/artifact)
        _  (or alias-artifact
-              (-fail "Missing artifact alias"))
+              ($.maestro/fail "Missing artifact alias"))
        ;;
        dir-root
        (basis :maestro/root)
        _ (or dir-root
-             (-fail "Missing root directory"))
+             ($.maestro/fail "Missing root directory"))
        ;;
         {:as        basis-2
          path-class :maestro.plugin.build.path/class
@@ -213,7 +201,7 @@
         path+
         (basis :extra-paths)]
     (when (empty? path+)
-      (-fail "Missing paths"))
+      ($.maestro/fail "Missing paths"))
     (copy-src (assoc basis-2
                      :maestro.plugin.build.path/src+
                      path+))
@@ -323,7 +311,7 @@
 
   [_basis]
 
-  (-fail "Missing build type")))
+  ($.maestro/fail "Missing build type")))
 
 
 
@@ -367,7 +355,7 @@
 
   (let [alias-build (option+ :maestro.plugin.build/alias)
         _           (when-not alias-build
-                      (-fail "Missing alias to build"))
+                      ($.maestro/fail "Missing alias to build"))
         basis       ($.maestro/search (-> {:maestro/alias+   [alias-build]
                                            :maestro/profile+ ['release]}
                                           ($.maestro.profile/prepend+ (option+ :maestro/profile+))))]
@@ -420,4 +408,4 @@
                                       #(or %
                                            (some-> (first *command-line-args*)
                                                    (edn/read-string))
-                                           (-fail "Missing alias")))))))
+                                           ($.maestro/fail "Missing alias")))))))

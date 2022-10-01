@@ -35,7 +35,7 @@
 
   (let [path (basis :maestro.plugin.kaocha/path)]
     (when-not path
-      (throw (Exception. "Kaocha plugin for Maestro require a path")))
+      ($.maestro/fail "Kaocha plugin for Maestro require a path"))
     (bb.fs/create-dirs (bb.fs/parent path))
     (spit path
           {:kaocha/source-paths ($.maestro.alias/extra-path+ basis

@@ -3,7 +3,9 @@
   "Collection of helpers useful during development, often called in `user`."
 
   (:require [clojure.java.classpath       :as classpath]
-            [clojure.tools.namespace.find :as namespace.find]))
+            [clojure.tools.namespace.find :as namespace.find]
+            [protosens.maestro            :as $.maestro]
+            [protosens.txt                :as $.txt]))
 
 
 ;;;;;;;;;;
@@ -48,8 +50,8 @@
                                     (first x)
                                     ;;
                                     :else
-                                    (throw (IllegalArgumentException. (str "Cannot be passed to `require`: "
-                                                                           x)))))
+                                    ($.maestro/fail (str "Cannot be passed to `require`: "
+                                                         x))))
                                 (cond->>
                                   (namespace.find/find-namespaces (classpath/classpath))
                                   map-namespace
@@ -67,9 +69,10 @@
             (require-fail nmspace
                           ex))
           (if fail-fast?
-            (throw (ex-info (str "While requiring a namespace: "
-                                 nmspace)
-                            {:namespace nmspace}
-                            ex))
+            ($.maestro/fail (str "While requiring namespace: "
+                                 nmspace
+                                 ($.txt/newline)
+                                 ($.txt/newline)
+                                 ex))
             (println ex)))))
     nspace+))

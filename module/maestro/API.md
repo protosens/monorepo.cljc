@@ -1,9 +1,12 @@
 # Table of contents
 -  [`protosens.maestro`](#protosens.maestro)  - See README about core principles, [[search]] being the star of this namespace.
+    -  [`-*fail-mode`](#protosens.maestro/-*fail-mode)
     -  [`by-profile+`](#protosens.maestro/by-profile+) - Extracts a set of all aliases required in the context of the given collection of profiles.
     -  [`clojure`](#protosens.maestro/clojure) - Executes the <code>clojure</code> command with <code>-?</code> (-M, -X, ...) Behaves like [[task]] but instead of printing aliases, there are appended to <code>-?</code>.
     -  [`create-basis`](#protosens.maestro/create-basis) - Reads and prepares a <code>deps.edn</code> file.
     -  [`ensure-basis`](#protosens.maestro/ensure-basis) - Returns the given argument if it contains <code>:aliases</code>.
+    -  [`fail`](#protosens.maestro/fail) - Fails with the given error <code>message</code>.
+    -  [`fail-mode`](#protosens.maestro/fail-mode) - How [[fail]] behaves.
     -  [`not-by-profile+`](#protosens.maestro/not-by-profile+) - Extracts a set of all aliases NOT required in the context of the given collection of profiles.
     -  [`print`](#protosens.maestro/print) - Prints aliases from <code>:maestro/require</code> after concatenating them, the way Clojure CLI likes it.
     -  [`search`](#protosens.maestro/search) - Given input aliases and profiles, under <code>:maestro/alias+</code> and <code>:maestro/profile+</code> respectively, searches for all necessary aliases and puts the results in a vector under <code>:maestro/require</code>.
@@ -30,7 +33,7 @@
     -  [`expose`](#protosens.maestro.git.lib/expose) - Generates custom <code>deps.edn</code> files for all aliases having in there data a name (see namespace description) as well as a <code>:maestro/root</code> (path to the root directory of that alias).
     -  [`gitlib?`](#protosens.maestro.git.lib/gitlib?) - Returns true if an alias (given its data) is meant to be exposed as a git library.
     -  [`prepare-deps-edn`](#protosens.maestro.git.lib/prepare-deps-edn) - Computes the content of the <code>deps.edn</code> file for the given <code>alias</code> meant to be exposed as a git library.
-    -  [`task`](#protosens.maestro.git.lib/task) - Uses and pretty-prints [[expose]].
+    -  [`task`](#protosens.maestro.git.lib/task) - Task reliably exposing modules as Git libraries to consume externally.
     -  [`write-deps-edn`](#protosens.maestro.git.lib/write-deps-edn) - Default way of writing a <code>deps-edn</code> file by pretty-printing it to the given <code>path</code>.
 -  [`protosens.maestro.profile`](#protosens.maestro.profile)  - Miscellaneous helpers centered around profiles.
     -  [`append+`](#protosens.maestro.profile/append+) - In <code>basis</code>, activates the given profiles by appending them to any existing ones.
@@ -49,7 +52,9 @@ See README about core principles, [`search`](#protosens.maestro/search) being th
 
 
 
-## <a name="protosens.maestro/by-profile+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L237-L249) `by-profile+`</a>
+## <a name="protosens.maestro/-*fail-mode">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L24-L28) `-*fail-mode`</a>
+
+## <a name="protosens.maestro/by-profile+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L305-L317) `by-profile+`</a>
 ``` clojure
 
 (by-profile+ basis profile+)
@@ -60,7 +65,7 @@ Extracts a set of all aliases required in the context of the given collection of
 
    See [`search`](#protosens.maestro/search).
 
-## <a name="protosens.maestro/clojure">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L325-L369) `clojure`</a>
+## <a name="protosens.maestro/clojure">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L393-L437) `clojure`</a>
 ``` clojure
 
 (clojure -?)
@@ -86,7 +91,7 @@ Executes the `clojure` command with `-?` (-M, -X, ...)
 
    Works only with Babashka.
 
-## <a name="protosens.maestro/create-basis">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L20-L42) `create-basis`</a>
+## <a name="protosens.maestro/create-basis">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L88-L110) `create-basis`</a>
 ``` clojure
 
 (create-basis)
@@ -102,7 +107,7 @@ Reads and prepares a `deps.edn` file.
    |--------------------|---------------------------------------|------------------|
    | `:maestro/project` | Alternative path to a `deps.edn` file | `"./deps.edn"` |
 
-## <a name="protosens.maestro/ensure-basis">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L46-L56) `ensure-basis`</a>
+## <a name="protosens.maestro/ensure-basis">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L114-L124) `ensure-basis`</a>
 ``` clojure
 
 (ensure-basis maybe-basis)
@@ -112,7 +117,40 @@ Reads and prepares a `deps.edn` file.
 Returns the given argument if it contains `:aliases`.
    Otherwise, forwards it to [`create-basis`](#protosens.maestro/create-basis).
 
-## <a name="protosens.maestro/not-by-profile+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L252-L268) `not-by-profile+`</a>
+## <a name="protosens.maestro/fail">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L32-L52) `fail`</a>
+``` clojure
+
+(fail message)
+```
+
+
+Fails with the given error `message`.
+
+   Plugin authors and such should use this function to guarantee consistent behavior.
+
+   Re-aligns multiline strings.
+  
+   See [`fail-mode`](#protosens.maestro/fail-mode).
+
+## <a name="protosens.maestro/fail-mode">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L56-L82) `fail-mode`</a>
+``` clojure
+
+(fail-mode)
+(fail-mode mode)
+```
+
+
+How [`fail`](#protosens.maestro/fail) behaves.
+  
+   There are 2 modes:
+
+   - `:exit` is usually prefered on Babashka ; error message is printed and process exits with 1
+   - `:throw` might be preferred on the JVM ; an exception is thrown with the error message
+
+   Sets behavior to the given `mode`.
+   Without argument, returns the current one (default is `:exit`).
+
+## <a name="protosens.maestro/not-by-profile+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L320-L336) `not-by-profile+`</a>
 ``` clojure
 
 (not-by-profile+ basis profile+)
@@ -125,7 +163,7 @@ Extracts a set of all aliases NOT required in the context of the given collectio
 
    See [`search`](#protosens.maestro/search).
 
-## <a name="protosens.maestro/print">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L271-L282) `print`</a>
+## <a name="protosens.maestro/print">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L339-L350) `print`</a>
 ``` clojure
 
 (print basis)
@@ -136,7 +174,7 @@ Prints aliases from `:maestro/require` after concatenating them, the way Clojure
   
    See [`search`](#protosens.maestro/search).
 
-## <a name="protosens.maestro/search">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L169-L231) `search`</a>
+## <a name="protosens.maestro/search">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L237-L299) `search`</a>
 ``` clojure
 
 (search basis)
@@ -163,7 +201,7 @@ Given input aliases and profiles, under `:maestro/alias+` and `:maestro/profile+
    - [`protosens.maestro.alias`](#protosens.maestro.alias)
    - [`protosens.maestro.profile`](#protosens.maestro.profile)
 
-## <a name="protosens.maestro/sort-arg">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L60-L91) `sort-arg`</a>
+## <a name="protosens.maestro/sort-arg">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L128-L159) `sort-arg`</a>
 ``` clojure
 
 (sort-arg arg)
@@ -178,7 +216,7 @@ Sorts aliases and vectors into a map of `:maestro/alias+` and `:maestro/profile+
    `arg` can be a vector to sort out or a single item. Useful for parsing aliases and
    profiles provided as a CLI argument.
 
-## <a name="protosens.maestro/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L288-L319) `task`</a>
+## <a name="protosens.maestro/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L356-L387) `task`</a>
 ``` clojure
 
 (task)
@@ -415,7 +453,7 @@ Aliases that contains a name under `:maestro.git.lib/name` can be exposed public
 
 
 
-## <a name="protosens.maestro.git.lib/expose">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L136-L183) `expose`</a>
+## <a name="protosens.maestro.git.lib/expose">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L143-L190) `expose`</a>
 ``` clojure
 
 (expose git-sha)
@@ -426,7 +464,7 @@ Aliases that contains a name under `:maestro.git.lib/name` can be exposed public
 Generates custom `deps.edn` files for all aliases having in there data a name (see namespace
    description) as well as a `:maestro/root` (path to the root directory of that alias).
 
-   The algorithm is descrived in [`prepare-deps-edn`](#protosens.maestro.git.lib/prepare-deps-edn).
+   The algorithm is described in [`prepare-deps-edn`](#protosens.maestro.git.lib/prepare-deps-edn).
 
    When a `deps.edn` file has been computed, it is written to disk by [`write-deps-edn`](#protosens.maestro.git.lib/write-deps-edn). This
    can be overwritten by providing an alternative function under `:maestro.git.lib/write`.
@@ -434,7 +472,7 @@ Generates custom `deps.edn` files for all aliases having in there data a name (s
    Returns a map where keys are aliased for which a `deps.edn` file has been generated and values
    are the data returned from [`prepare-deps-edn`](#protosens.maestro.git.lib/prepare-deps-edn) without the `deps.edn` content.
 
-## <a name="protosens.maestro.git.lib/gitlib?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L26-L32) `gitlib?`</a>
+## <a name="protosens.maestro.git.lib/gitlib?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L27-L33) `gitlib?`</a>
 ``` clojure
 
 (gitlib? alias-data)
@@ -443,7 +481,7 @@ Generates custom `deps.edn` files for all aliases having in there data a name (s
 
 Returns true if an alias (given its data) is meant to be exposed as a git library.
 
-## <a name="protosens.maestro.git.lib/prepare-deps-edn">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L36-L111) `prepare-deps-edn`</a>
+## <a name="protosens.maestro.git.lib/prepare-deps-edn">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L37-L118) `prepare-deps-edn`</a>
 ``` clojure
 
 (prepare-deps-edn basis git-sha alias)
@@ -472,7 +510,7 @@ Computes the content of the `deps.edn` file for the given `alias` meant to be ex
    | `:maestro.git.lib/deps.edn`      | `deps.edn` map                                  |
    | `:maestro.git.lib.path/deps.edn` | Path where the `deps.edn` map should be written |
 
-## <a name="protosens.maestro.git.lib/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L187-L217) `task`</a>
+## <a name="protosens.maestro.git.lib/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L194-L264) `task`</a>
 ``` clojure
 
 (task)
@@ -480,12 +518,22 @@ Computes the content of the `deps.edn` file for the given `alias` meant to be ex
 ```
 
 
-Uses and pretty-prints [`expose`](#protosens.maestro.git.lib/expose).
+Task reliably exposing modules as Git libraries to consume externally.
 
-   Output prints modules that have been exposed, the path to their `deps.edn` and which
-   aliases they each required.
+   These automated steps guarantees a safe deployment:
 
-## <a name="protosens.maestro.git.lib/write-deps-edn">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L115-L130) `write-deps-edn`</a>
+   - Ensure Git tree is absolutely clean
+   - Run [`expose`](#protosens.maestro.git.lib/expose), commit (preparation)
+   - Run [`expose`](#protosens.maestro.git.lib/expose) again, commit (actual exposition)
+   - Print SHA of last commit, what user can consume
+
+   This double commit ensures Clojure CLI will have no trouble finding everything without any
+   clash.
+  
+   The commit messages can be customized by providing functions `git-sha of last commit` -> `message`
+   under `:maestro.git.lib.message/prepare` and/or `:maestro.git.lib.message/expose`.
+
+## <a name="protosens.maestro.git.lib/write-deps-edn">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L122-L137) `write-deps-edn`</a>
 ``` clojure
 
 (write-deps-edn path deps-edn)
@@ -565,7 +613,7 @@ Collection of helpers useful during development, often called in `user`.
 
 
 
-## <a name="protosens.maestro.user/require-filtered">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/user.clj#L12-L75) `require-filtered`</a>
+## <a name="protosens.maestro.user/require-filtered">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/user.clj#L14-L78) `require-filtered`</a>
 ``` clojure
 
 (require-filtered option+)

@@ -43,7 +43,7 @@
   (try
     (requiring-resolve sym)
     (catch Exception _ex
-      (throw (RuntimeException. "This currently only work in Babashka")))))
+      (throw (RuntimeException. "This currently only works in Babashka")))))
 
 
 
