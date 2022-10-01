@@ -12,6 +12,7 @@
             [clojure.java.io           :as java.io]
             [clojure.pprint            :as pprint]
             [clojure.string            :as string]
+            [protosens.git             :as $.git]
             [protosens.maestro         :as $.maestro]
             [protosens.maestro.profile :as $.maestro.profile]))
 
@@ -20,7 +21,17 @@
       true)
 
 
-;;;;;;;;;;
+;;;;;;;;;; Private
+
+
+(defn- -fail
+
+  [message]
+
+  (throw (Exception. message)))
+
+
+;;;;;;;;;; Public
 
 
 (defn gitlib?
@@ -138,7 +149,7 @@
   "Generates custom `deps.edn` files for all aliases having in there data a name (see namespace
    description) as well as a `:maestro/root` (path to the root directory of that alias).
 
-   The algorithm is descrived in [[prepare-deps-edn]].
+   The algorithm is described in [[prepare-deps-edn]].
 
    When a `deps.edn` file has been computed, it is written to disk by [[write-deps-edn]]. This
    can be overwritten by providing an alternative function under `:maestro.git.lib/write`.
@@ -186,10 +197,17 @@
 
 (defn task
 
-  "Uses and pretty-prints [[expose]].
+  "Task reliably exposing modules as Git libraries to consume externally.
 
-   Output prints modules that have been exposed, the path to their `deps.edn` and which
-   aliases they each required."
+   These automated steps guarantees a safe deployment:
+
+   - Ensure Git tree is absolutely clean
+   - Run [[expose]], commit
+   - Run [[expose]] again, commit
+   - Print SHA of last commit, what user can consume
+
+   This double commit ensures Clojure CLI will have no trouble finding everything without any
+   clash."
 
 
   ([]
@@ -199,19 +217,27 @@
 
   ([basis]
 
-   (if-some [git-sha (or (:maestro.git.lib/sha basis)
-                         (first *command-line-args*))]
-     (doseq [[alias
-              feedback] (expose git-sha
-                                basis)]
-       (println (format "%s -> %s"
-                        alias
-                        (feedback :maestro.git.lib.path/deps.edn)))
-       (doseq [alias-child (sort (filter (fn [alias-child]
-                                           (not= alias-child
-                                                 alias))
-                                         (feedback :maestro/require)))]
-         (println " "
-                  alias-child))
-       (println))
-     (throw (Exception. "SHA git exposing Git libraries not provided")))))
+   (when-not ($.git/clean?)
+     (-fail "Repository must be sparkling clean, no modified or untracked files"))
+   (let [git-sha ($.git/commit-sha 0)]
+     (println "Prepare exposition"
+              git-sha)
+     (expose git-sha
+             basis)
+     ($.git/add ["."])
+     ($.git/commit (format "Prepare exposition
+                  
+                            Base: %s"
+                           git-sha)))
+   (let [git-sha-2 ($.git/commit-sha 0)]
+     (println "Expose"
+              git-sha-2)
+     (expose git-sha-2
+             basis)
+     ($.git/add ["."])
+     ($.git/commit (format "Expose
+                           
+                            Pre-exposed: %s"
+                           git-sha-2)))
+   (println "Users can point to commit:"
+            ($.git/commit-sha 0))))

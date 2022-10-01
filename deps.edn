@@ -168,6 +168,7 @@
                                          :module/txt
                                          {test :test/git}]
    :maestro/root                        "module/git"
+   :maestro.git.lib/name                protosens/git
    :maestro.plugin.quickdoc.path/output "module/git/API.md"}
 
 
@@ -185,6 +186,7 @@
    :maestro/require                     [:ext/babashka.fs
                                          :ext/clojure.java.classpath
                                          :ext/clojure.tools.namespace
+                                         :module/git
                                          :module/txt
                                          {test :test/maestro}]
    :maestro/root                        "module/maestro"
