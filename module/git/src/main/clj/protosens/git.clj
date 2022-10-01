@@ -5,6 +5,21 @@
             [protosens.txt    :as $.txt]))
 
 
+(declare last-sha)
+
+
+;;;;;;;;;; Miscellaneous helpers
+
+
+(defn full-sha?
+
+  [x]
+
+  (and (string? x)
+       (= (count x)
+          40)))
+
+
 ;;;;;;;;;; Master command
 
 
@@ -96,10 +111,10 @@
    (-> (exec ["branch"]
              option+)
        (:out)
-       (string/split-lines)
-       (->> (map (fn [branch]
-                   ($.txt/trunc-left branch
-                                     2)))))))
+       (some-> (string/split-lines)
+               (->> (map (fn [branch]
+                           ($.txt/trunc-left branch
+                                             2))))))))
 
 
 
@@ -114,10 +129,12 @@
 
   ([option+]
 
-   (-> (exec ["diff-index" "--quiet" "HEAD"]
-             option+)
-       (:exit)
-       (pos?))))
+   (and (boolean (last-sha nil
+                           option+))
+        (-> (exec ["diff-index" "--quiet" "HEAD"]
+                  option+)
+            (:exit)
+            (pos?)))))
 
 
 
@@ -193,6 +210,47 @@
 
 
 
+(defn commit-message
+
+
+  ([sha]
+
+   (commit-message sha
+                   nil))
+
+
+  ([sha option+]
+
+   (let [result (exec ["show" "-s" "--format=%B" sha]
+                      option+)]
+     (when (zero? (result :exit))
+       (string/trimr (result :out))))))
+
+
+
+(defn count-commit+
+
+
+  ([]
+
+   (count-commit+ nil))
+
+
+  ([option+]
+
+   (if (-> (exec ["log" "-0"]
+                 option+)
+           (:exit)
+           (zero?))
+     (-> (exec ["rev-list" "--count" "HEAD"]
+               option+)
+         (:out)
+         (string/trimr)
+         (Long/parseLong))
+     0)))
+
+
+
 (defn init
 
 
@@ -226,12 +284,14 @@
 
   ([i option+]
 
-   (-> (exec ["rev-parse" (str "HEAD^"
-                               (or i
-                                   0))]
-             option+)
-       (:out)
-       (string/trimr))))
+   (let [result (-> (exec ["rev-parse" (str "HEAD~"
+                                            (or i
+                                                0))]
+                          option+)
+                    (:out)
+                    (string/trimr))]
+     (when (full-sha? result)
+       result))))
 
 
 
