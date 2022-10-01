@@ -30,6 +30,52 @@
 
 
 
+(T/deftest cut-out
+
+  (T/testing
+
+    "Success"
+
+    (T/is (= "12"
+             ($.txt/cut-out "12345"
+                            0
+                            2)))
+
+    (T/is (= "23"
+             ($.txt/cut-out "12345"
+                            1
+                            3))))
+
+  (T/testing
+
+    "Failure"
+
+    (T/is (thrown? Exception
+                   ($.txt/cut-out "12345"
+                                  2
+                                  100))
+          "End too big")
+
+    (T/is (thrown? Exception
+                   ($.txt/cut-out "12345"
+                                  3
+                                  2))
+          "Start > end")
+
+    (T/is (thrown? Exception
+                   ($.txt/cut-out "12345"
+                                  -1
+                                  2))
+          "Negative start")
+
+    (T/is (thrown? Exception
+                   ($.txt/cut-out "12345"
+                                  2
+                                  -1))
+          "Negative end")))
+
+
+
 (T/deftest newline
 
   (T/is (contains? #{"\n"

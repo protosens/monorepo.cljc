@@ -23,6 +23,19 @@
 
 
 
+(defn cut-out
+
+  "Returns the sub-string of `s` starting at `i-begin` (inclusive) and ending
+   at `i-end` (exclusive)."
+
+  [^String s i-begin i-end]
+
+  (.substring s
+              i-begin
+              i-end))
+
+
+
 (defn newline
 
   "Returns the platform-dependend line separator."
@@ -65,3 +78,7 @@
                                     (.substring n-truncate
                                                 (count line))))
                                 (rest line+))))))))
+
+
+
+
