@@ -4,14 +4,13 @@
 
   (:import (java.io PushbackReader))
   (:refer-clojure :exclude [print])
-  (:require [clojure.edn               :as edn]
+  (:require [babashka.process          :as bb.process]
+            [clojure.edn               :as edn]
             [clojure.java.io           :as java.io]
             [clojure.set               :as set]
-            [clojure.string            :as string]
             [protosens.maestro.alias   :as $.maestro.alias]
             [protosens.maestro.aggr    :as $.maestro.aggr]
             [protosens.maestro.profile :as $.maestro.profile]
-            [protosens.maestro.util    :as $.maestro.util]
             [protosens.txt             :as $.txt]))
 
 
@@ -425,13 +424,13 @@
                                          (not= arg
                                                "--"))
                                        *command-line-args*)]
-     (@$.maestro.util/d*clojure (str -?
-                                     (binding [*command-line-args* for-task]
+     (apply bb.process/shell
+            "clojure"
+            (str -?
+                  (binding [*command-line-args* for-task]
                                        (-> basis
                                            (assoc :maestro.task/finalize
                                                   (comp $.maestro.alias/stringify+
                                                         :maestro/require))
-                                           (task)))
-                                     " "
-                                     (string/join " "
-                                                  for-clojure))))))
+                                           (task))))
+            for-clojure))))

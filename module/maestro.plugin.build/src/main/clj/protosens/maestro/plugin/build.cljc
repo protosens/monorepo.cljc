@@ -13,12 +13,15 @@
   #?(:clj (:import (java.nio.file Files)
                    (java.nio.file.attribute FileAttribute)))
           ;;
-  #?(:bb  (:require [clojure.edn             :as edn]
+  #?(:bb  (:require [babashka.process        :as bb.process]
+                    [clojure.edn             :as edn]
                     [protosens.maestro       :as $.maestro]
                     [protosens.maestro.alias :as $.maestro.alias]
                     [protosens.maestro.util  :as $.maestro.util])
           ;;
-     :clj (:require [clojure.tools.build.api   :as tools.build]
+     :clj (:require [babashka.process          :as bb.process]
+                    [clojure.edn               :as edn]
+                    [clojure.tools.build.api   :as tools.build]
                     [protosens.maestro         :as $.maestro]
                     [protosens.maestro.alias   :as $.maestro.alias]
                     [protosens.maestro.profile :as $.maestro.profile])))
@@ -187,8 +190,6 @@
                      alias-artifact
                      :extra-deps])
             (first))
-        
-        _ (println :arti artifact)
         ;;
         pom-config
         {:basis     (basis-2 :maestro.plugin.build/basis)
@@ -372,7 +373,7 @@
 
 
 
-#?(:bb (defn task
+#?(:clj (defn task
 
   "Convenient way of calling [[build]] using `clojure -X`.
 
@@ -398,14 +399,19 @@
 
   ([alias-maestro option+]
 
-   (@$.maestro.util/d*clojure (str "-X"
-                                   (-> ($.maestro/search {:maestro/alias+ [alias-maestro]})
-                                       (:maestro/require)
-                                       ($.maestro.alias/stringify+)))
-                              'protosens.maestro.plugin.build/build
-                              (update option+
-                                      :maestro.plugin.build/alias
-                                      #(or %
-                                           (some-> (first *command-line-args*)
-                                                   (edn/read-string))
-                                           ($.maestro/fail "Missing alias")))))))
+   (apply bb.process/shell
+          "clojure"
+          (str "-X"
+               (-> ($.maestro/search {:maestro/alias+ [alias-maestro]})
+                                     (:maestro/require)
+                                     ($.maestro.alias/stringify+)))
+          "protosens.maestro.plugin.build/build"
+          (mapcat (fn [[k v]]
+                    [(pr-str k)
+                     (pr-str v)])
+                  (update option+
+                          :maestro.plugin.build/alias
+                          #(or %
+                               (some-> (first *command-line-args*)
+                                       (edn/read-string))
+                               ($.maestro/fail "Missing alias"))))))))

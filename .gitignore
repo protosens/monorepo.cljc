@@ -7,3 +7,6 @@
 !.clj-kondo/hooks
 
 **/maestro/uber
+
+pom.xml
+**/pom.xml

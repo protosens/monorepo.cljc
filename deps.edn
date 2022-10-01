@@ -215,7 +215,8 @@
 
   {:extra-paths                         ["module/maestro.plugin.build/src/main/clj"]
    :maestro/doc                         "Maestro plugin for `:ext/clojure.tools.build`"
-   :maestro/require                     [:ext/clojure.tools.build
+   :maestro/require                     [:ext/babashka.process
+                                         :ext/clojure.tools.build
                                          :module/maestro]
    :maestro/root                        "module/maestro.plugin.build"
    :maestro.git.lib/name                protosens/maestro.plugin.build

@@ -29,29 +29,3 @@
           (fn [x-old+]
             (into (vec x+)
                   x-old+))))
-
-
-;;;;;;;;;; Processes
-
-
-(defn- -require-for-bb
-
-  ;; For the time being, the `babashka.tasks` namespace is not available to the JVM.
-  
-  [sym]
-
-  (try
-    (requiring-resolve sym)
-    (catch Exception _ex
-      (throw (RuntimeException. "This currently only works in Babashka")))))
-
-
-
-(def d*clojure
-
-  "Delay for `babahska.tasks/clojure`.
-   
-   <!> Only works in Babashka."
-
-  (delay
-    (-require-for-bb 'babashka.tasks/clojure)))
