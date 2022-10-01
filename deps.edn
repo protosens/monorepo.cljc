@@ -162,12 +162,13 @@
 
   :module/git
 
-  {:extra-paths     ["module/git/src/main/clj"]
-   :maestro/doc     "Collection of little Git-related quick utilities"
-   :maestro/require [:ext/babashka.process
-                     :module/txt
-                     {test :test/git}]
-   :maestro/root    "module/git"}
+  {:extra-paths                         ["module/git/src/main/clj"]
+   :maestro/doc                         "Collection of little Git-related quick utilities"
+   :maestro/require                     [:ext/babashka.process
+                                         :module/txt
+                                         {test :test/git}]
+   :maestro/root                        "module/git"
+   :maestro.plugin.quickdoc.path/output "module/git/API.md"}
 
 
   :test/git

@@ -9,7 +9,7 @@
 
    All Git operations are done by shelling out. Convenience over speed.
 
-   See [[exec]]. Pretty much all functions from this namespace relies on it. It describes available options.
+   See [[exec]]. Pretty much all functions from this namespace rely on it. It describes available options.
 
    For a fully-featured Clojure JVM client for Git, see [`clj-jgit`](https://github.com/clj-jgit/clj-jgit)."
 
@@ -64,7 +64,7 @@
    | `:exit` | Exit code                  |
    | `:out`  | Content of STDOUT (string) |
 
-   Pretty much all functions of this namespace relies in this one."
+   Pretty much all functions of this namespace rely in this one."
 
 
   ([arg+]
