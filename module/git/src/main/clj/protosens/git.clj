@@ -1,5 +1,18 @@
 (ns protosens.git
 
+  "Quick Git-related utilities.
+  
+   Work both in Babashka and on the JVM.
+
+   The purpose is not to provide an exhaustive Git API. Rather, a collection of one-liners (or almost)
+   for carrying common operations, especially in the context of scripting.
+
+   All Git operations are done by shelling out. Convenience over speed.
+
+   See [[exec]]. Pretty much all functions from this namespace relies on it. It describes available options.
+
+   For a fully-featured Clojure JVM client for Git, see [`clj-jgit`](https://github.com/clj-jgit/clj-jgit)."
+
   (:refer-clojure :exclude [resolve])
   (:require [babashka.process :as bb.process]
             [clojure.string   :as string]
@@ -10,6 +23,8 @@
 
 
 (defn full-sha?
+
+  "Is `x` a full SHA?"
 
   [x]
 
@@ -22,6 +37,34 @@
 
 
 (defn exec
+
+  "Executes a Git command in the shell.
+
+   Takes a vector of arguments for the command.
+
+   For instance:
+
+   ```clojure
+   (exec [\"log\" \"-10\" \"--pretty=oneline\"])
+   ```
+
+   Options may be:
+
+   | Key         | Value                       | Default     |
+   |-------------|-----------------------------|-------------| 
+   | `:command`  | Git command                 | `\"git\"`   | 
+   | `:env`      | Map of env variables to set | /           |
+   | `:dir`      | Working directory           | Current dir |
+
+   Returns a map:
+
+   | Key     | Value                      |
+   |---------|----------------------------|
+   | `:err`  | Content of STDERR (string) |
+   | `:exit` | Exit code                  |
+   | `:out`  | Content of STDOUT (string) |
+
+   Pretty much all functions of this namespace relies in this one."
 
 
   ([arg+]
@@ -55,6 +98,8 @@
 
 (defn add
 
+  "`git add` the given paths."
+
 
   ([path+]
 
@@ -74,6 +119,10 @@
 
 (defn branch
 
+  "Returns the current branch.
+  
+   Or nil if there is no branch currently checked out."
+
 
   ([]
 
@@ -91,6 +140,7 @@
 
 (defn branch+
 
+  "Returns a vector of existing branches."
 
   ([]
 
@@ -99,17 +149,20 @@
 
   ([option+]
 
-   (-> (exec ["branch"]
-             option+)
-       (:out)
-       (some-> (string/split-lines)
-               (->> (map (fn [branch]
-                           ($.txt/trunc-left branch
-                                             2))))))))
+   (or (-> (exec ["branch"]
+                 option+)
+           (:out)
+           (some-> (string/split-lines)
+                   (->> (map (fn [branch]
+                               ($.txt/trunc-left branch
+                                                 2))))))
+       [])))
 
 
 
 (defn checkout
+
+  "`git checkout` the given `branch`."
 
 
   ([branch]
@@ -129,6 +182,8 @@
 
 (defn checkout-new
 
+  "`git checkout` a new `branch`."
+
 
   ([branch]
 
@@ -147,6 +202,9 @@
 
 (defn clean?
 
+  "Returns `true` if absolutely nothing changed since the last commit.
+
+   Meaning no untracked files and no modifications (live nor staged)."
 
 
   ([]
@@ -164,6 +222,11 @@
 
 
 (defn commit
+
+  "Commits current changes with the given `message`.
+
+   Returns `true` in case of success, `false` in case of error (e.g. no changes
+   to commit)."
 
 
   ([message]
@@ -183,16 +246,19 @@
 
 (defn commit-message
 
+  "Returns the message of the given commit (by `ref`).
+  
+   Or nil if commit not found."
 
-  ([sha]
+  ([ref]
 
-   (commit-message sha
+   (commit-message ref
                    nil))
 
 
-  ([sha option+]
+  ([ref option+]
 
-   (let [result (exec ["show" "-s" "--format=%B" sha]
+   (let [result (exec ["show" "-s" "--format=%B" ref]
                       option+)]
      (when (zero? (result :exit))
        (string/trimr (result :out))))))
@@ -200,6 +266,12 @@
 
 
 (defn commit-sha
+
+  "Returns the full SHA of the last `i`est commit.
+
+   `0` for the very last commit, `1` for the one before, etc.
+
+   Returns `nil` if `i` goes beyond the current history."
 
 
   ([i]
@@ -222,6 +294,10 @@
 
 
 (defn count-commit+
+
+  "Returns the number of commits in the current history.
+
+   Or nil if there isn't any."
 
 
   ([]
@@ -246,6 +322,10 @@
 
 (defn init
 
+  "Initializes a new Git repository.
+  
+   Returns `true` in case of success, `false` otherwise."
+
 
   ([]
 
@@ -262,6 +342,10 @@
 
 
 (defn modified?
+
+  "Returns true if a versioned file has been modified.
+  
+   Staged or live."
 
   ;; Anything different in versioned files, staged or not.
   
@@ -283,6 +367,8 @@
 
 (defn repo?
 
+  "Returns `true` if the working directory contains a Git repository."
+
 
   ([]
    
@@ -302,6 +388,10 @@
 
 
 (defn resolve
+
+  "Resolves the given `ref` (e.g. a tag) to a full SHA.
+  
+   Or returns `nil` if it does not resolve to anything."
 
 
   ([ref]
@@ -323,6 +413,8 @@
 
 (defn tag+
 
+  "Returns a vector of existing tags."
+
 
   ([]
 
@@ -331,14 +423,17 @@
 
   ([option+]
 
-   (-> (exec ["tag"]
-             option+)
-       (:out)
-       (some-> (string/split-lines)))))
+   (or (-> (exec ["tag"]
+                 option+)
+           (:out)
+           (some-> (string/split-lines)))
+       [])))
 
 
 
 (defn tag-add
+
+  "`git tag` the last commit with `tag`."
 
 
   ([tag]
@@ -358,6 +453,8 @@
 
 (defn unstaged?
 
+  "Returns `true` if some changes are unstaged."
+
   
   ([]
 
@@ -374,6 +471,8 @@
 
 
 (defn version
+
+  "Returns Git's version."
 
 
   ([]

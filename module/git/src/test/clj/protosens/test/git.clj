@@ -35,10 +35,12 @@
     (T/is (zero? ($.git/count-commit+ option+))
           "No commit yet")
 
-    (T/is (nil? ($.git/tag+ option+))
+    (T/is (= []
+             ($.git/tag+ option+))
           "No existing tag")
 
-    (T/is (nil? ($.git/branch+ option+))
+    (T/is (= []
+             ($.git/branch+ option+))
           "No branch listed since no commit yet")
 
     (T/is (nil? ($.git/commit-sha 0
