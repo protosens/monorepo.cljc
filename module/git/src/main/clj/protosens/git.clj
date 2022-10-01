@@ -85,7 +85,7 @@
    (-> (exec ["branch" "--show-current"]
              option+)
        (:out)
-       (string/trimr))))
+       (some-> (string/trimr)))))
 
 
 

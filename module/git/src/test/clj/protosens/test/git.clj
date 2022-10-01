@@ -218,7 +218,14 @@
         (T/is (= ["develop"
                   "feature"]
                  (sort ($.git/branch+ option+)))
-              "All branches with commits listed")))))
+              "All branches with commits listed")
+
+        (T/is (true? ($.git/checkout sha-1
+                                     option+))
+              "Checking out the first commit")
+
+        (T/is (nil? ($.git/branch option+))
+              "No branch since checked out to a raw commit")))))
 
 
 
