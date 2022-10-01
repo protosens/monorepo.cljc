@@ -18,8 +18,10 @@
 
 (defn count-leading-space
 
-  "Returns the number of whitespaces in the given string."
-
+  "Returns the number of whitespaces in the given string.
+  
+   More precisely, `\\space` characters."
+  
   [s]
 
   (-> (take-while (fn [c]
@@ -89,10 +91,27 @@
 
 (defn trunc-left
 
-  "Returns the given `s`tring without the first `n` characters."
+  "Truncates from the left.
+  
+   Returns the given `s`tring without the first `n` characters."
 
   [s n]
 
   (cut-out s
            n
            (count s)))
+
+
+
+(defn trunc-right
+
+  "Truncates from the right.
+  
+   Returns the given `s`tring without the last `n` characters."
+
+  [s n]
+
+  (cut-out s
+           0
+           (- (count s)
+              n)))

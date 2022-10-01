@@ -167,3 +167,37 @@
                     ($.txt/trunc-left "12345"
                                       -1))
            "Negative index")))
+
+
+
+(T/deftest trunc-right
+
+  (T/testing
+
+    "Success"
+
+    (T/is (= "12345"
+             ($.txt/trunc-right "12345"
+                                0)))
+
+    (T/is (= "1234"
+             ($.txt/trunc-right "12345"
+                                1)))
+
+    (T/is (= "123"
+             ($.txt/trunc-right "12345"
+                                2))))
+
+  (T/testing
+
+     "Failure"
+
+     (T/is (thrown? Exception
+                    ($.txt/trunc-right "12345"
+                                       100))
+           "Input too small")
+
+     (T/is (thrown? Exception
+                    ($.txt/trunc-right "12345"
+                                       -1))
+           "Negative index")))
