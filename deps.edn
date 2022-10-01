@@ -150,10 +150,17 @@
   :module/git
 
   {:extra-paths     ["module/git/src/main/clj"]
-   :maestro/doc     "Collection of little Git-related utilities"
+   :maestro/doc     "Collection of little Git-related quick utilities"
    :maestro/require [:ext/babashka.process
-                     :module/txt]
+                     :module/txt
+                     {test :test/git}]
    :maestro/root    "module/git"}
+
+
+  :test/git
+
+  {:extra-paths     ["module/git/src/test/clj"]
+   :maestro/require [:ext/babashka.fs]}
 
   ;---
 
