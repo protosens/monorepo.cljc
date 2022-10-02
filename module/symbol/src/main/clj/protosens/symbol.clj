@@ -1,5 +1,11 @@
 (ns protosens.symbol
 
+  "Collection of helpers for handling symbols.
+
+   Often similar to [`clojure.string`](https://clojuredocs.org/clojure.string).
+   Actually, those functions typically work with strings instead of input symbols but
+   providing symbols better conveys the intent."
+
   (:refer-clojure :exclude [replace])
   (:require [clojure.string :as string]))
 
@@ -12,6 +18,8 @@
 
 (defn ends-with?
 
+  "Returns `true` if the given `sym` ends with `x`."
+
   [sym x]
 
   (string/ends-with? (str sym)
@@ -21,6 +29,8 @@
 
 (defn includes?
 
+  "Returns `true` if the given `sym` include `x`."
+
   [sym x]
 
   (string/includes? (str sym)
@@ -29,6 +39,10 @@
 
 
 (defn join
+
+  "Joins the given collection of symbols.
+  
+   Default separator is `.`."
 
 
   ([segment+]
@@ -49,6 +63,8 @@
 
 (defn qualify
 
+  "Qualifies or requalifies `sym` in terms of `namespace`."
+
   [namespace sym]
 
   (symbol (str namespace)
@@ -57,6 +73,8 @@
 
 
 (defn- -replace
+
+  ;; Core implementation for `replace...` functions
 
   [f sym match replacement]
 
@@ -71,6 +89,11 @@
 
 (defn replace
 
+  "Replaces `match`es in the given `sym`.
+  
+   Like [`clojure.string/replace`](https://clojuredocs.org/clojure.string/replace)
+   but inputs can be symbols."
+
   [sym match replacement]
 
   (-replace string/replace
@@ -82,6 +105,10 @@
 
 (defn replace-first
 
+  "Replaces the first occurence of `match` in the given `sym`.
+
+   Other than that, exactly like [[replace]]."
+
   [sym match replacement]
 
   (-replace string/replace-first
@@ -92,6 +119,10 @@
 
 
 (defn split
+
+  "Splits the given `sym`.
+  
+   Default separator is `.`."
 
 
   ([sym]
@@ -111,6 +142,8 @@
 
 (defn starts-with?
 
+  "Returns `true` if the given `sym` starts with `x`."
+
   [sym x]
 
   (string/starts-with? (str sym)
@@ -119,6 +152,8 @@
 
 
 (defn stringify
+
+  "Transforms `x` into a string only if it is a symbol."
 
   [x]
 
