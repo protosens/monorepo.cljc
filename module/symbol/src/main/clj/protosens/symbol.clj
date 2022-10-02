@@ -10,6 +10,15 @@
 ;;;;;;;;;;
 
 
+(defn ends-with?
+
+  [sym x]
+
+  (string/ends-with? (str sym)
+                     (str x)))
+
+
+
 (defn includes?
 
   [sym x]
@@ -47,13 +56,27 @@
 
 
 
+(defn- -replace
+
+  [f sym match replacement]
+
+  (symbol (f (str sym)
+             (stringify match)
+             (if (fn? replacement)
+               (comp str
+                     replacement)
+               (stringify replacement)))))
+
+
+
 (defn replace
 
   [sym match replacement]
 
-  (symbol (string/replace (str sym)
-                          (stringify match)
-                          (stringify replacement))))
+  (-replace string/replace
+            sym
+            match
+            replacement))
 
 
 
@@ -61,9 +84,10 @@
 
   [sym match replacement]
 
-  (symbol (string/replace-first (str sym)
-                                (stringify match)
-                                (stringify replacement))))
+  (-replace string/replace-first
+            sym
+            match
+            replacement))
 
 
 

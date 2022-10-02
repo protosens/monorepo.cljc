@@ -267,8 +267,14 @@
   {:extra-paths                         ["module/symbol/src/main/clj"]
    :maestro/doc                         "Collections of helpers for handling symbols"
    :maestro/root                        "module/symbol"
+   :maestro/require                     [{test :test/symbol}]
    :maestro.git.lib/name                protosens/symbol
    :maestro.plugin.quickdoc.path/output "module/symbol/API.md"}
+
+
+  :test/symbol
+
+  {:extra-paths ["module/symbol/src/test/clj"]}
 
   ;---
 
