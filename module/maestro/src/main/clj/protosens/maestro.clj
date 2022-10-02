@@ -20,7 +20,7 @@
 ;;;;;;;;;; Handling failure
 
 
-(def -*fail-mode
+(def ^:private -*fail-mode
 
   ;; Decides how failure is handled.
 

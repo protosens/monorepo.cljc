@@ -7,9 +7,9 @@
    Those tasks only work when executed with [Babashka](https://github.com/babashka/babashka)."
 
   (:refer-clojure :exclude [import])
-  (:require [babashka.process            :as bb.process]
-            [protosens.maestro           :as $.maestro]
-            [protosens.maestro.classpath :as $.maestro.classpath]))
+  (:require [babashka.process    :as bb.process]
+            [protosens.maestro   :as $.maestro]
+            [protosens.classpath :as $.classpath]))
 
 
 ;;;;;;;;;;
@@ -28,7 +28,7 @@
   (let [cp (-> ($.maestro/create-basis)
                (:aliases)
                (keys)
-               ($.maestro.classpath/compute))]
+               ($.classpath/compute))]
     (-> (bb.process/shell "clj-kondo" "--parallel" "--copy-configs" "--lint" cp "--dependencies")
         (:exit)
         (zero?))))

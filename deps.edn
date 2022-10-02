@@ -99,7 +99,8 @@
   :bundle/module
 
   {:maestro/doc     "All main modules"
-   :maestro/require [:module/git
+   :maestro/require [:module/classpath
+                     :module/git
                      :module/maestro
                      :module/maestro.plugin.build
                      :module/maestro.plugin.clj-kondo
@@ -143,6 +144,15 @@
 
   ;; MODULES
 
+
+  :module/classpath
+
+  {:extra-paths                         ["module/classpath/src/main/clj"]
+   :maestro/doc                         "Little collection of classpath-related utilities"
+   :maestro/require                     [:ext/babashka.fs]
+   :maestro/root                        "module/classpath"
+   :maestro.git.lib/name                protosens/classpath
+   :maestro.plugin.quickdoc.path/output "module/classpath/API.md"}
 
   :module/dev
 
@@ -230,6 +240,7 @@
   {:extra-paths                         ["module/maestro.plugin.clj-kondo/src/main/clj"]
    :maestro/doc                         "Maestro plugin for Clj-kondo, the Clojure linter"
    :maestro/require                     [:ext/babashka.process
+                                         :module/classpath
                                          :module/maestro]
    :maestro/root                        "module/maestro.plugin.clj-kondo"
    :maestro.git.lib/name                protosens/maestro.plugin.clj-kondo
@@ -302,7 +313,8 @@
 
   {:maestro/doc     "Merges dependencies and paths for Babashka tasks.
                      Not meant to be consumed publicly."
-   :maestro/require [:module/maestro
+   :maestro/require [:module/classpath
+                     :module/maestro
                      :module/maestro.plugin.build
                      :module/maestro.plugin.clj-kondo
                      :module/maestro.plugin.kaocha

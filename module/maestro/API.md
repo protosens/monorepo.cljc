@@ -1,6 +1,5 @@
 # Table of contents
 -  [`protosens.maestro`](#protosens.maestro)  - See README about core principles, [[search]] being the star of this namespace.
-    -  [`-*fail-mode`](#protosens.maestro/-*fail-mode)
     -  [`by-profile+`](#protosens.maestro/by-profile+) - Extracts a set of all aliases required in the context of the given collection of profiles.
     -  [`clojure`](#protosens.maestro/clojure) - Executes the <code>clojure</code> command with <code>-?</code> (-M, -X, ...) Behaves like [[task]] but instead of printing aliases, there are appended to <code>-?</code>.
     -  [`create-basis`](#protosens.maestro/create-basis) - Reads and prepares a <code>deps.edn</code> file.
@@ -21,9 +20,6 @@
     -  [`extra-path+`](#protosens.maestro.alias/extra-path+) - Extracts a list of all paths provided in <code>:extra-paths</code> for the given list of aliases.
     -  [`prepend+`](#protosens.maestro.alias/prepend+) - In <code>basis</code>, add the given aliases as root aliases to resolve by prepending them to any existing ones.
     -  [`stringify+`](#protosens.maestro.alias/stringify+) - Stringifies the given collection of aliases by concatenating them, just like Clojure CLI likes it.
--  [`protosens.maestro.classpath`](#protosens.maestro.classpath)  - Simple classpath utilities.
-    -  [`compute`](#protosens.maestro.classpath/compute) - Computes the classpath using the given aliases on <code>clojure</code>.
-    -  [`pprint`](#protosens.maestro.classpath/pprint) - Pretty-prints the output from [[compute]] or <code>clojure -Spath ...</code> in alphabetical order given as argument or retrieved from STDIN.
 -  [`protosens.maestro.doc`](#protosens.maestro.doc)  - Collection of miscellaneous helpers related to documentation.
     -  [`print-help`](#protosens.maestro.doc/print-help) - Prints a documentation file from the <code>root</code> directory.
     -  [`print-task`](#protosens.maestro.doc/print-task) - Pretty-prints extra documentation for a task (if there is any).
@@ -49,8 +45,6 @@ See README about core principles, [`search`](#protosens.maestro/search) being th
 
 
 
-
-## <a name="protosens.maestro/-*fail-mode">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L23-L27) `-*fail-mode`</a>
 
 ## <a name="protosens.maestro/by-profile+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L304-L316) `by-profile+`</a>
 ``` clojure
@@ -331,35 +325,6 @@ In `basis`, add the given aliases as root aliases to resolve by prepending them 
 
 
 Stringifies the given collection of aliases by concatenating them, just like Clojure CLI likes it.
-
------
-# <a name="protosens.maestro.classpath">protosens.maestro.classpath</a>
-
-
-Simple classpath utilities.
-
-
-
-
-## <a name="protosens.maestro.classpath/compute">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/classpath.clj#L13-L22) `compute`</a>
-``` clojure
-
-(compute alias+)
-```
-
-
-Computes the classpath using the given aliases on `clojure`.
-
-## <a name="protosens.maestro.classpath/pprint">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/classpath.clj#L26-L43) `pprint`</a>
-``` clojure
-
-(pprint)
-(pprint raw-cp)
-```
-
-
-Pretty-prints the output from [`compute`](#protosens.maestro.classpath/compute) or `clojure -Spath ...` in alphabetical order given as argument
-   or retrieved from STDIN.
 
 -----
 # <a name="protosens.maestro.doc">protosens.maestro.doc</a>

@@ -160,8 +160,8 @@
                  In reality, it will pretty print any string where items are separated by `:`.
                  
                      bb aliases:dev :module/maestro | bb pprint-cp"
-   :requires    ([protosens.maestro.classpath])
-   :task        (protosens.maestro.classpath/pprint)}
+   :requires    ([protosens.classpath])
+   :task        (protosens.classpath/pprint)}
 
 
   test
