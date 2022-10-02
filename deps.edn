@@ -105,6 +105,7 @@
                      :module/maestro.plugin.clj-kondo
                      :module/maestro.plugin.kaocha
                      :module/maestro.plugin.quickdoc
+                     :module/namespace
                      :module/symbol
                      :module/txt]}
 
@@ -148,7 +149,8 @@
   {:extra-paths     ["module/dev/src/main/clj"]
    :maestro/doc     "Dev utilities used in this repository"
    :maestro/root    "module/dev"
-   :maestro/require [:module/maestro]}
+   :maestro/require [:module/namespace
+                     :module/symbol]}
 
   ;---
 
@@ -259,6 +261,24 @@
    :maestro/root                        "module/maestro.plugin.quickdoc"
    :maestro.git.lib/name                protosens/maestro.plugin.quickdoc
    :maestro.plugin.quickdoc.path/output "module/maestro.plugin.quickdoc/API.md"}
+
+  ;---
+
+  :module/namespace
+
+  {:extra-paths                         ["module/namespace/src/main/clj"]
+   :maestro/doc                         "Find accessible namespaces"
+   :maestro/root                        "module/namespace"
+   :maestro/require                     [:ext/clojure.java.classpath
+                                         :ext/clojure.tools.namespace
+                                         {test :test/namespace}]
+   :maestro.git.lib/name                protosens/namespace
+   :maestro.plugin.quickdoc.path/output "module/namespace/API.md"}
+
+
+  :test/namespace
+
+  {:extra-paths ["module/namepace/src/test/clj"]}
 
   ;---
 

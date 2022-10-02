@@ -40,8 +40,6 @@
     -  [`prepend+`](#protosens.maestro.profile/prepend+) - In <code>basis</code>, activates the given profiles by prepending them to any existing ones.
 -  [`protosens.maestro.uber`](#protosens.maestro.uber)  - Special way of merging aliases in a generated <code>deps.edn</code> file.
     -  [`task`](#protosens.maestro.uber/task) - Generate a single <code>deps.edn</code> file by merging everything required by <code>alias</code>.
--  [`protosens.maestro.user`](#protosens.maestro.user)  - Collection of helpers useful during development, often called in <code>user</code>.
-    -  [`require-filtered`](#protosens.maestro.user/require-filtered) - Filters all namespaces found on the classpath and requires them.
 
 -----
 # <a name="protosens.maestro">protosens.maestro</a>
@@ -601,42 +599,5 @@ Generate a single `deps.edn` file by merging everything required by `alias`.
    Hard links are created to allow consuming paths from anywhere in the repository.
    This is because Clojure CLI dislikes outsider paths (e.g. `../foo`). They are generated in
    `./maestro/uber` relative to the `:maestro/root`.
-
------
-# <a name="protosens.maestro.user">protosens.maestro.user</a>
-
-
-Collection of helpers useful during development, often called in `user`.
-
-
-
-
-## <a name="protosens.maestro.user/require-filtered">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/user.clj#L14-L78) `require-filtered`</a>
-``` clojure
-
-(require-filtered option+)
-```
-
-
-Filters all namespaces found on the classpath and requires them.
-
-   Useful to invoke in `user` for ensuring that all expected namespaces compiles correctly.
-
-   Actually, it is useful defining in `user` a short function that calls this one.
-   Since `user` is accessible from everywhere, it is an easy solution for quickly requiring needed
-   namespaces from anywhere at the REPL.
-
-   Options are:
-
-   | Key               | Value                                                                | Default |
-   |-------------------|----------------------------------------------------------------------|---------|
-   | `:fail-fast?`     | Stop when requiring one namespace fails?                             | `true`  |
-   | `:map-namespace`  | Function used for mapping found namespaces                           | /       |
-   | `:require.after`  | Function called with a namespace after requiring it                  | /       |
-   | `:require.before` | Function called with a namespace before requiring it                 | /       |
-   | `:require.fail`   | Function called with a namespace and an exception in case of failure | /       |
-
-   The value returned by `:map-namespace`, if any, will be passed to `require` as well as to any
-   of `:require...` functions above.
 
 -----
