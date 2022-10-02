@@ -278,7 +278,7 @@
 
   :test/namespace
 
-  {:extra-paths ["module/namepace/src/test/clj"]}
+  {:extra-paths ["module/namespace/src/test/clj"]}
 
   ;---
 
