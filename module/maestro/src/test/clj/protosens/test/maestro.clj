@@ -1,6 +1,5 @@
 (ns protosens.test.maestro
 
-  (:refer-clojure :exclude [print])
   (:require [clojure.test      :as T]
             [protosens.maestro :as $.maestro]))
 
@@ -114,11 +113,6 @@
              (basis :maestro/profile->alias+))
           "Keeps track of which profiles resulted in selecting which aliases")
 
-    (T/is (= ($.maestro/stringify-required {:maestro/require required+})
-             (with-out-str
-               ($.maestro/print basis)))
-          "Printing required aliases")
-
     (T/is (= #{"./a" "./b" "./c" "./d" "./e" "./h"}
              (set ($.maestro/extra-path+ basis
                                          ($.maestro/by-profile+ basis
@@ -213,13 +207,3 @@
                                                             :b
                                                             :c]}))
         "Several aliases"))
-
-
-
-(T/deftest print
-
-  (T/is (= ":a:b:c"
-           (with-out-str
-             ($.maestro/print {:maestro/require [:a
-                                                 :b
-                                                 :c]})))))

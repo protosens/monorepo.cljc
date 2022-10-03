@@ -3,7 +3,6 @@
   "See README about core principles, [[search]] being the star of this namespace."
 
   (:import (java.io PushbackReader))
-  (:refer-clojure :exclude [print])
   (:require [clojure.edn            :as edn]
             [clojure.java.io        :as java.io]
             [clojure.set            :as set]
@@ -338,19 +337,6 @@
   (string/join (basis :maestro/require)))
 
 
-
-(defn print
-
-  "Quick shortcut for printing required aliases.
-  
-   See [[stringify-required]]"
-
-  [basis]
-
-  (clojure.core/print (stringify-required basis))
-  basis)
-
-
 ;;;;;;;;; Meant for Babashka
 
 
@@ -431,10 +417,10 @@
 
 (defn task
 
-  "Like [[search]] but prepends aliases and profiles found using [[cli-arg]] and ends by [[print]]ing all required aliases.
+  "Like [[search]] but prepends aliases and profiles found using [[cli-arg]] and ends by printing all required aliases.
 
    Commonly used as a Babashka task. The output is especially useful in combination with Clojure CLI by leveraring shell
-   substitution (e.g. `$()`)."
+   substitution (e.g. `$()`) to insert aliases under `-M` and friends."
 
 
   ([]
@@ -448,5 +434,6 @@
        (cli-arg+)
        (search)
        ((or (:maestro.task/finalize basis)
-            print)))))
+            (comp print
+                  stringify-required))))))
 
