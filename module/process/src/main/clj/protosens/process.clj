@@ -1,7 +1,8 @@
 (ns protosens.process
 
   (:refer-clojure :exclude [await])
-  (:require [babashka.process :as bb.process]))
+  (:require [babashka.process :as bb.process]
+            [clojure.string   :as string]))
 
 
 ;;;;;;;;;; Launching processes
@@ -10,15 +11,15 @@
 (defn shell
 
 
-  ([arg+]
+  ([command]
 
-   (shell arg+
+   (shell command
           nil))
 
 
-  ([arg+ option+]
+  ([command option+]
 
-   (bb.process/process arg+
+   (bb.process/process command
                        (merge {:err      :inherit
                                :in       :inherit
                                :out      :inherit
@@ -26,7 +27,38 @@
                               option+))))
 
 
+
+(defn run
+
+
+  ([command]
+   
+   (run command
+        nil))
+
+
+  ([command option+]
+
+   (bb.process/process command
+                       (merge {:shutdown bb.process/destroy-tree}
+                              option+))))
+
+
 ;;;;;;;;;; Feedback on processes
+
+
+(defn- -slurp
+
+  ;;
+
+  [process k]
+
+  (-> (get process
+           k)
+      (slurp)
+      (string/trim)
+      (not-empty)))
+
 
 
 (defn await 
@@ -37,11 +69,29 @@
 
 
 
+(defn err
+
+  [process]
+
+  (-slurp process
+          :err))
+
+
+
 (defn exit-code
 
   [process]
 
   (:exit (await process)))
+
+
+
+(defn out
+
+  [process]
+
+  (-slurp process
+          :out))
 
 
 

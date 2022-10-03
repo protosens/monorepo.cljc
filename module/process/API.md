@@ -1,7 +1,10 @@
 # Table of contents
 -  [`protosens.process`](#protosens.process) 
     -  [`await`](#protosens.process/await)
+    -  [`err`](#protosens.process/err)
     -  [`exit-code`](#protosens.process/exit-code)
+    -  [`out`](#protosens.process/out)
+    -  [`run`](#protosens.process/run)
     -  [`shell`](#protosens.process/shell)
     -  [`success?`](#protosens.process/success?)
 
@@ -13,29 +16,51 @@
 
 
 
-## <a name="protosens.process/await">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/process/src/main/clj/protosens/process.clj#L32-L36) `await`</a>
+## <a name="protosens.process/await">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/process/src/main/clj/protosens/process.clj#L63-L67) `await`</a>
 ``` clojure
 
 (await process)
 ```
 
 
-## <a name="protosens.process/exit-code">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/process/src/main/clj/protosens/process.clj#L40-L44) `exit-code`</a>
+## <a name="protosens.process/err">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/process/src/main/clj/protosens/process.clj#L71-L76) `err`</a>
+``` clojure
+
+(err process)
+```
+
+
+## <a name="protosens.process/exit-code">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/process/src/main/clj/protosens/process.clj#L80-L84) `exit-code`</a>
 ``` clojure
 
 (exit-code process)
 ```
 
 
-## <a name="protosens.process/shell">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/process/src/main/clj/protosens/process.clj#L10-L26) `shell`</a>
+## <a name="protosens.process/out">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/process/src/main/clj/protosens/process.clj#L88-L93) `out`</a>
 ``` clojure
 
-(shell arg+)
-(shell arg+ option+)
+(out process)
 ```
 
 
-## <a name="protosens.process/success?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/process/src/main/clj/protosens/process.clj#L48-L52) `success?`</a>
+## <a name="protosens.process/run">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/process/src/main/clj/protosens/process.clj#L31-L44) `run`</a>
+``` clojure
+
+(run command)
+(run command option+)
+```
+
+
+## <a name="protosens.process/shell">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/process/src/main/clj/protosens/process.clj#L11-L27) `shell`</a>
+``` clojure
+
+(shell command)
+(shell command option+)
+```
+
+
+## <a name="protosens.process/success?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/process/src/main/clj/protosens/process.clj#L97-L101) `success?`</a>
 ``` clojure
 
 (success? process)
