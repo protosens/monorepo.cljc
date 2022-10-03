@@ -154,6 +154,8 @@
    :maestro.git.lib/name                protosens/classpath
    :maestro.plugin.quickdoc.path/output "module/classpath/API.md"}
 
+  ;---
+
   :module/dev
 
   {:extra-paths     ["module/dev/src/main/clj"]

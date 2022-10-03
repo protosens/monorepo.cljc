@@ -9,7 +9,8 @@
  ;; Required so that the `genesis` task can run on a freshly cloned repo.
  ;;
  :paths
- ["module/maestro/src/main/clj"]
+ ["module/maestro/src/main/clj"
+  "module/txt/src/main/clj"]
 
 
  ;; Required by the `doc:module` task.
