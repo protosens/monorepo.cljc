@@ -13,17 +13,14 @@
   #?(:clj (:import (java.nio.file Files)
                    (java.nio.file.attribute FileAttribute)))
           ;;
-  #?(:bb  (:require [clojure.edn             :as edn]
-                    [protosens.maestro       :as $.maestro]
-                    [protosens.maestro.alias :as $.maestro.alias]
-                    [protosens.maestro.util  :as $.maestro.util]
-                    [protosens.process         :as $.process])
+  #?(:bb  (:require [clojure.edn       :as edn]
+                    [protosens.maestro :as $.maestro]
+                    [protosens.process  :as $.process])
           ;;
-     :clj (:require [clojure.edn               :as edn]
-                    [clojure.tools.build.api   :as tools.build]
-                    [protosens.maestro         :as $.maestro]
-                    [protosens.maestro.alias   :as $.maestro.alias]
-                    [protosens.process         :as $.process])))
+     :clj (:require [clojure.edn             :as edn]
+                    [clojure.tools.build.api :as tools.build]
+                    [protosens.maestro       :as $.maestro]
+                    [protosens.process       :as $.process])))
 
 
 ;;;;;;;;;; Tasks
@@ -205,8 +202,8 @@
         (-jar basis)
         ;;
         path+
-        ($.maestro.alias/extra-path+ basis-2
-                                     (basis-2 :maestro/require))]
+        ($.maestro/extra-path+ basis-2
+                               (basis-2 :maestro/require))]
     (copy-src (assoc basis-2
                      :maestro.plugin.build.path/src+
                      path+))
@@ -352,8 +349,7 @@
    (-> ($.process/shell (concat ["clojure"
                                  (str "-X"
                                       (-> ($.maestro/search {:maestro/alias+ [alias-maestro]})
-                                                            (:maestro/require)
-                                                            ($.maestro.alias/stringify+)))
+                                          ($.maestro/stringify-required)))
                                  "protosens.maestro.plugin.build/build"]
                                 (mapcat identity
                                         (update option+

@@ -4,12 +4,12 @@
 
   (:import (java.io PushbackReader))
   (:refer-clojure :exclude [print])
-  (:require [clojure.edn             :as edn]
-            [clojure.java.io         :as java.io]
-            [clojure.set             :as set]
-            [protosens.maestro.alias :as $.maestro.alias]
-            [protosens.maestro.aggr  :as $.maestro.aggr]
-            [protosens.string        :as $.string]))
+  (:require [clojure.edn            :as edn]
+            [clojure.java.io        :as java.io]
+            [clojure.set            :as set]
+            [clojure.string         :as string]
+            [protosens.maestro.aggr :as $.maestro.aggr]
+            [protosens.string       :as $.string]))
 
 
 (declare fail-mode)
@@ -276,10 +276,33 @@
   [basis profile+]
 
   (reduce set/union
-          (-> basis
-              :maestro/profile->alias+
+          (-> (basis :maestro/profile->alias+)
               (select-keys profile+)
               (vals))))
+
+
+
+(defn extra-path+
+
+  "Extracts a list of all paths provided in `:extra-paths` for the given aliases."
+
+
+  ([basis]
+
+   (extra-path+ basis
+                nil))
+
+
+  ([basis alias+]
+
+   (let [alias->data (basis :aliases)]
+     (if (seq alias+)
+       (mapcat (comp :extra-paths
+                     alias->data)
+               alias+)
+       (mapcat :extra-paths
+               (vals alias->data))))))
+
 
 
 (defn not-by-profile+
@@ -301,17 +324,30 @@
               (vals))))
 
 
-(defn print
 
-  "Prints aliases from `:maestro/require` after concatenating them, the way Clojure CLI likes it.
-  
+(defn stringify-required
+
+  "Stringifies concatenated aliases from `:maestro/require`.
+
+   Just like Clojure CLI likes it.
+
    See [[search]]."
 
   [basis]
 
-  (-> (basis :maestro/require)
-      ($.maestro.alias/stringify+)
-      (clojure.core/print))
+  (string/join (basis :maestro/require)))
+
+
+
+(defn print
+
+  "Quick shortcut for printing required aliases.
+  
+   See [[stringify-required]]"
+
+  [basis]
+
+  (clojure.core/print (stringify-required basis))
   basis)
 
 

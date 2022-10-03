@@ -12,7 +12,7 @@ Maestro plugin for the Kaocha test runner reliably computing source and test pat
 
 
 
-## <a name="protosens.maestro.plugin.kaocha/prepare">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.kaocha/src/main/clj/protosens/maestro/plugin/kaocha.clj#L14-L47) `prepare`</a>
+## <a name="protosens.maestro.plugin.kaocha/prepare">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.kaocha/src/main/clj/protosens/maestro/plugin/kaocha.clj#L13-L46) `prepare`</a>
 ``` clojure
 
 (prepare basis)

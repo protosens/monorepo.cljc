@@ -10,10 +10,9 @@
    in some environments. The [[run]] task from this namespace can be used to
    template shell commands with required aliases and running them."
 
-  (:require [clojure.string          :as string]
-            [protosens.maestro       :as $.maestro]
-            [protosens.maestro.alias :as $.maestro.alias]
-            [protosens.process       :as $.process]))
+  (:require [clojure.string    :as string]
+            [protosens.maestro :as $.maestro]
+            [protosens.process :as $.process]))
 
 
 ;;;;;;;;;;
@@ -33,9 +32,7 @@
 
   [basis]
 
-  (let [str-alias+ (-> basis
-                       (:maestro/require)
-                       ($.maestro.alias/stringify+))
+  (let [str-alias+ ($.maestro/stringify-required basis)
         pattern    (or (basis :maestro.process/pattern)
                        "__")]
     (update basis

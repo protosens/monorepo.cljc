@@ -1,9 +1,8 @@
 (ns protosens.test.maestro
 
   (:refer-clojure :exclude [print])
-  (:require [clojure.test            :as T]
-            [protosens.maestro       :as $.maestro]
-            [protosens.maestro.alias :as $.maestro.alias]))
+  (:require [clojure.test      :as T]
+            [protosens.maestro :as $.maestro]))
 
 
 ;;;;;;;;;;
@@ -115,15 +114,15 @@
              (basis :maestro/profile->alias+))
           "Keeps track of which profiles resulted in selecting which aliases")
 
-    (T/is (= ($.maestro.alias/stringify+ required+)
+    (T/is (= ($.maestro/stringify-required {:maestro/require required+})
              (with-out-str
                ($.maestro/print basis)))
           "Printing required aliases")
 
     (T/is (= #{"./a" "./b" "./c" "./d" "./e" "./h"}
-             (set ($.maestro.alias/extra-path+ basis
-                                               ($.maestro/by-profile+ basis
-                                                                      '[default]))))
+             (set ($.maestro/extra-path+ basis
+                                         ($.maestro/by-profile+ basis
+                                                                '[default]))))
           "Retrieve paths for a desired profile")))
 
 
@@ -177,9 +176,44 @@
   (T/is (= p-1+p-2
            ($.maestro/not-by-profile+ profile->alias+
                                       '[p-3
-                                        p-4])))) 
+                                        p-4]))))
+
 
 ;;;;;;;;;;
+
+
+(T/deftest extra-paths+
+
+  (T/is (= '("./a-1"
+             "./a-2"
+             "./c-1"
+             "./c-2")
+           ($.maestro/extra-path+ {:aliases {:a {:extra-paths ["./a-1"
+                                                               "./a-2"]}
+                                             :b {:extra-paths ["./b-1"
+                                                               "./b-2"]} 
+                                             :c {:extra-paths ["./c-1"
+                                                               "./c-2"]}
+                                             :d {}}}
+                                  [:a
+                                   :c]))))
+
+(T/deftest stringify-required
+
+  (T/is (= ""
+           ($.maestro/stringify-required {:maestro/require []}))
+        "No alias")
+
+  (T/is (= ":a"
+           ($.maestro/stringify-required {:maestro/require [:a]}))
+        "One alias")
+
+  (T/is (= ":a:b:c"
+           ($.maestro/stringify-required {:maestro/require [:a
+                                                            :b
+                                                            :c]}))
+        "Several aliases"))
+
 
 
 (T/deftest print
