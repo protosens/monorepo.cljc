@@ -1,5 +1,6 @@
 (ns protosens.process
 
+  (:refer-clojure :exclude [await])
   (:require [babashka.process :as bb.process]))
 
 
@@ -28,11 +29,19 @@
 ;;;;;;;;;; Feedback on processes
 
 
+(defn await 
+
+  [process]
+
+  (deref process))
+
+
+
 (defn exit-code
 
   [process]
 
-  (:exit (deref process)))
+  (:exit (await process)))
 
 
 

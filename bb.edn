@@ -59,9 +59,9 @@
                  
                      clojure -M$( bb aliases :dev :module/maestro )"
 
-   :requires    ([protosens.maestro])
-   :task        (protosens.maestro/clojure "-M"
-                                           {:maestro/mode :dev})}
+   :requires    ([protosens.maestro.process])
+   :task        (protosens.maestro.process/run {:maestro/mode :dev
+                                                :maestro.process/command ["clj" "-M__"]})}
 
 
   doc:module
@@ -118,20 +118,25 @@
    :task        (protosens.maestro.uber/task :module/task)}
 
 
-  M
-  {:doc         "Executes `clojure` with `-M` and the required aliases"
+  mtempl 
+  {:doc         "Execute a shell command with computed required aliases"
    :maestro/doc "The `aliases` task prints required aliases and this is typically useful in
-                 combination with Clojure CLI. This task is a shortcut directly invoking Clojure
-                 CLI in `-M` mode.
-                 
-                 Input is exactly the same but users can also add `--` and them provide arguments
-                 to append.
-                 
+                 combination with Clojure CLI. For instance:
+
+                   clojure -M$( bb aliases :test :module/maestro )
+
+                 However, some shells or some environments do not understand such substitutions
+                 with `$()` (or similar). This task replaces `__` with the printed required
+                 aliases.
+                
                  For instance:
-                 
-                     bb M :some/module -- -m some.namespace 1 2 3"
-   :requires    ([protosens.maestro])
-   :task        (protosens.maestro/clojure "-M")}
+
+                   bb mtempl :test :module/maestro -- clojure -M__
+                
+                 Before `--` is what would have been provided to the `aliases`, after is the command
+                 to template."
+   :requires    ([protosens.maestro.process])
+   :task        (protosens.maestro.process/run)}
 
 
   lint
@@ -175,28 +180,17 @@
                  
                  Is equivalent to:
                  
-                     clojure -M$( bb aliases :test :module/maestro )
-                
-                 Or even this (see the `M` task):
-                
-                     bb M :test :module/maestro"
-   :requires    ([protosens.maestro])
-   :task        (protosens.maestro/clojure "-M"
-                                           {:maestro/mode :test})}
+                     clojure -M$( bb aliases :test :module/maestro )"
+   :requires    ([protosens.maestro.process])
+   :task        (protosens.maestro.process/run {:maestro/mode            :test
+                                                :maestro.process/command ["clojure" "-M__"]})}
 
 
   test-upstream
   {:doc      "Like `test` but also test required aliases"
-   :requires ([protosens.maestro])
-   :task     (protosens.maestro/clojure "-M"
-                                        {:maestro/mode :test-upstream})}
-
-
-  X
-  {:doc         "Executes `clojure` with `-X` and the required aliases"
-   :maestro/doc "Exactly like the `M` task but invoke `-X` on Clojure CLI."
-   :requires    ([protosens.maestro])
-   :task        (protosens.maestro/clojure "-X")}
+   :requires ([protosens.maestro.process])
+   :task     (protosens.maestro.process/run {:maestro/mode            :test-upstream
+                                             :maestro.process/command ["clojure" "-M__"]})}
 
 
   }}

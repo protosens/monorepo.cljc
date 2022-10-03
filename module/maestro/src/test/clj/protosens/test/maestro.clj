@@ -9,34 +9,44 @@
 ;;;;;;;;;;
 
 
+(T/deftest cli-arg+
+
+  (let [basis {:maestro/alias+   [:a]
+               :maestro/profile+ ['a]}]
+
+    (T/is (= {:maestro/alias+   [:b :a]
+              :maestro/profile+ ['a]}
+             ($.maestro/cli-arg+ basis
+                                 [":b"]))
+          "One alias")
+
+    (T/is (= {:maestro/alias+   [:a]
+              :maestro/profile+ ['b 'a]}
+             ($.maestro/cli-arg+ basis
+                                 ["b"]))
+          "One profile")
+
+    (T/is (= {:maestro/alias+   [:b :c :a]
+              :maestro/profile+ ['b 'c 'a]}
+             ($.maestro/cli-arg+ basis
+                                 ["[:b b c :c]"]))
+          "Vector of aliases and profiles")
+
+    (T/is (= {:maestro/alias+   [:b :a]
+              :maestro/mode     :m
+              :maestro/profile+ ['a]}
+             ($.maestro/cli-arg+ basis
+                                 [":m" ":b"]))
+          "Alias with a mode")))
+
+
+
 (T/deftest create-basis
 
   (T/is (map? ($.maestro/create-basis)))
 
   (T/is (= ($.maestro/create-basis)
            ($.maestro/create-basis {:maestro/project "./deps.edn"}))))
-
-
-(T/deftest sort-arg
-
-  (let [hmap ($.maestro/sort-arg {:maestro/alias+   [:first]
-                                  :maestro/profile+ ['first]}
-                                 '[:a :b c ^:direct? d])]
-    
-    (T/is (= {:maestro/alias+   [:first :a :b]
-              :maestro/profile+ '[first c d]}
-             hmap)
-          "Aliases and profiles properly parsed")
-
-    (let [[_first
-           c
-           d]     (hmap :maestro/profile+)]
-      (T/testing "Accounts for metadata on profiles"
-
-        (T/is (nil? (meta c)))
-
-        (T/is (= {:direct? true}
-                 (meta d)))))))
 
 
 ;;;;;;;;;;

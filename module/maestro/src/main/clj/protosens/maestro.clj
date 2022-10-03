@@ -4,8 +4,7 @@
 
   (:import (java.io PushbackReader))
   (:refer-clojure :exclude [print])
-  (:require [babashka.process          :as bb.process]
-            [clojure.edn               :as edn]
+  (:require [clojure.edn               :as edn]
             [clojure.java.io           :as java.io]
             [clojure.set               :as set]
             [protosens.maestro.alias   :as $.maestro.alias]
@@ -121,41 +120,6 @@
     maybe-basis
     (merge (create-basis maybe-basis)
            maybe-basis)))
-
-
-
-(defn sort-arg
-
-  "Sorts aliases and vectors into a map of `:maestro/alias+` and `:maestro/profile+`.
-
-   The map in question is often a basis (see [[create-basis]]).
-
-   `arg` can be a vector to sort out or a single item. Useful for parsing aliases and
-   profiles provided as a CLI argument."
-
-
-  ([arg]
-
-   (sort-arg nil
-             arg))
-
-
-  ([hmap arg]
-
-   (reduce (fn [hmap-2 x]
-             (update hmap-2
-                     (cond
-                       (keyword? x) :maestro/alias+
-                       (symbol? x)  :maestro/profile+
-                       :else        (fail (str "Not an alias nor a profile: "
-                                               x)))
-                     (fnil conj
-                           [])
-                     x))
-           hmap
-           (if (vector? arg)
-             arg
-             [arg]))))
 
 
 ;;;;;;;;;;
@@ -352,11 +316,83 @@
 ;;;;;;;;; Meant for Babashka
 
 
+(defn cli-arg+
+
+  "Processes CLI arguments in a commonly needed way.
+
+   [[task]] is one example of a function that requires CLI arguments to be processed like so.
+
+   Aliases and profiles are sorted and prepended to `:maestro/alias+` and `:maestro/profile+` respectively.
+   
+   The last argument can be an alias or a profile:
+
+   ```
+   :some-alias
+
+   some-profile
+   ```
+
+   Or a vector combining any number of them:
+
+   ```
+   '[profile-foo alias-a alias-b profile-bar]'
+   ```
+
+   If there are 2 arguments, the first one is interpreted as a `:maestro/mode` (see [[search]]):
+
+   ```
+   :some-mode '[profile-foo alias-a alias-b profile-bar]'
+   ```
+  
+   `arg+` defaults to `*command-line-args*`."
+
+
+  ([basis]
+
+   (cli-arg+ basis
+             nil))
+
+
+  ([basis arg+]
+
+   (let [arg-2+   (map edn/read-string
+                       (or arg+
+                           *command-line-args*))
+         n-arg    (count arg-2+)
+         arg-last (last arg-2+)
+         sorted   (reduce (fn [hmap x]
+                            (update hmap
+                                    (cond
+                                      (keyword? x) :maestro/alias+
+                                      (symbol? x)  :maestro/profile+
+                                      :else        (fail (str "Not an alias nor a profile: "
+                                                              x)))
+                                    (fnil conj
+                                          [])
+                                    x))
+                          {}
+                          (if (vector? arg-last)
+                            arg-last
+                            [arg-last]))
+         mode   (when (= n-arg
+                         2)
+                  (first arg-2+))]
+     (-> basis
+         ($.maestro.alias/prepend+ (sorted :maestro/alias+))
+         ($.maestro.profile/prepend+ (sorted :maestro/profile+))
+         (cond->
+           mode
+           (assoc :maestro/mode
+                  mode))))))
+
+
+
 (defn task
 
   "Like [[search]] but prepends aliases and profiles found using [[cli-arg]] and ends by [[print]]ing all required aliases.
 
-   Commonly used as a Babashka task."
+   Commonly used as a Babashka task. The output is especially useful in combination with Clojure CLI by leveraring shell
+   substitution (e.g. `$()`)."
 
 
   ([]
@@ -366,71 +402,9 @@
 
   ([basis]
 
-   (let [n-arg       (count *command-line-args*)
-         _           (assert (<= 1
-                                 n-arg
-                                 2))
-         basis-proto (sort-arg (edn/read-string (last *command-line-args*)))
-         mode        (when (= n-arg
-                              2)
-                       (edn/read-string (first *command-line-args*)))]
-     (-> basis
-         ($.maestro.alias/prepend+ (basis-proto :maestro/alias+))
-         ($.maestro.profile/prepend+ (basis-proto :maestro/profile+))
-         (cond->
-           mode
-           (assoc :maestro/mode
-                  mode))
-         (search)
-         ((or (:maestro.task/finalize basis)
-              print))))))
+   (-> basis
+       (cli-arg+)
+       (search)
+       ((or (:maestro.task/finalize basis)
+            print)))))
 
-
-;;;;;;;;;; Interacting directly with Clojure CLI
-
-
-(defn clojure
-
-  "Executes the `clojure` command with `-?` (-M, -X, ...)
-
-   Behaves like [[task]] but instead of printing aliases, there are appended
-   to `-?`.
-
-   CLI arguments are split in 2 if there is a `--` argument. What is before
-   it will be applied as CLI arguments for [[task]]. Anything after it will
-   be feed as additional CLI arguments for the `clojure` command.
-
-   ```clojure
-   ;; E.g. CLI args like:  :some/module -- -m some.namespace 1 2 3 
-   (clojure \"-M\")
-   ```
-
-   The `basis` argument is forwarded to [[task]].
-
-   Works only with Babashka."
-
-
-  ([-?]
-
-   (clojure -?
-            nil))
-
-
-  ([-? basis]
-
-   (let [[for-task
-          [_--
-           & for-clojure]] (split-with (fn [arg]
-                                         (not= arg
-                                               "--"))
-                                       *command-line-args*)]
-     (apply bb.process/shell
-            "clojure"
-            (str -?
-                  (binding [*command-line-args* for-task]
-                                       (-> basis
-                                           (assoc :maestro.task/finalize
-                                                  (comp $.maestro.alias/stringify+
-                                                        :maestro/require))
-                                           (task))))
-            for-clojure))))

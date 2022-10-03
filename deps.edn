@@ -193,6 +193,7 @@
    :maestro/require                     [:ext/babashka.fs
                                          :ext/babashka.process
                                          :module/git
+                                         :module/process
                                          :module/txt
                                          {test :test/maestro}]
    :maestro/root                        "module/maestro"

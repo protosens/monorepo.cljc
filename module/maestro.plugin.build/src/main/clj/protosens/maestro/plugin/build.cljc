@@ -13,18 +13,18 @@
   #?(:clj (:import (java.nio.file Files)
                    (java.nio.file.attribute FileAttribute)))
           ;;
-  #?(:bb  (:require [babashka.process        :as bb.process]
-                    [clojure.edn             :as edn]
+  #?(:bb  (:require [clojure.edn             :as edn]
                     [protosens.maestro       :as $.maestro]
                     [protosens.maestro.alias :as $.maestro.alias]
-                    [protosens.maestro.util  :as $.maestro.util])
+                    [protosens.maestro.util  :as $.maestro.util]
+                    [protosens.process         :as $.process])
           ;;
-     :clj (:require [babashka.process          :as bb.process]
-                    [clojure.edn               :as edn]
+     :clj (:require [clojure.edn               :as edn]
                     [clojure.tools.build.api   :as tools.build]
                     [protosens.maestro         :as $.maestro]
                     [protosens.maestro.alias   :as $.maestro.alias]
-                    [protosens.maestro.profile :as $.maestro.profile])))
+                    [protosens.maestro.profile :as $.maestro.profile]
+                    [protosens.process         :as $.process])))
 
 
 ;;;;;;;;;; Tasks
@@ -350,19 +350,17 @@
 
   ([alias-maestro option+]
 
-   (apply bb.process/shell
-          "clojure"
-          (str "-X"
-               (-> ($.maestro/search {:maestro/alias+ [alias-maestro]})
-                                     (:maestro/require)
-                                     ($.maestro.alias/stringify+)))
-          "protosens.maestro.plugin.build/build"
-          (mapcat (fn [[k v]]
-                    [(pr-str k)
-                     (pr-str v)])
-                  (update option+
-                          :maestro.plugin.build/alias
-                          #(or %
-                               (some-> (first *command-line-args*)
-                                       (edn/read-string))
-                               ($.maestro/fail "Missing alias"))))))))
+   (-> ($.process/shell (concat ["clojure"
+                                 (str "-X"
+                                      (-> ($.maestro/search {:maestro/alias+ [alias-maestro]})
+                                                            (:maestro/require)
+                                                            ($.maestro.alias/stringify+)))
+                                 "protosens.maestro.plugin.build/build"]
+                                (mapcat identity
+                                        (update option+
+                                                :maestro.plugin.build/alias
+                                                #(or %
+                                                     (some-> (first *command-line-args*)
+                                                             (edn/read-string))
+                                                     ($.maestro/fail "Missing alias"))))))
+       ($.process/success?)))))

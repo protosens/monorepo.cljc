@@ -16,7 +16,9 @@
 
   "Computes the classpath for the given aliases.
 
-   By running `clojure -Spath ...` in the shell."
+   By running `clojure -Spath ...` in the shell.
+  
+   Returns `nil` if something goes wrong."
   
   [alias+]
 
@@ -25,7 +27,8 @@
                            (str "-A"
                                 (string/join alias+))])
       (:out)
-      (slurp)))
+      (slurp)
+      (not-empty)))
 
 
 

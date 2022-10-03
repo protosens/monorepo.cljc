@@ -95,7 +95,7 @@ Implementation for the `:jar` type in [`by-type`](#protosens.maestro.plugin.buil
    that does not change from build to build like SCM, organization, etc. It will be copied to `./pom.xml` under
    `:maestro/root`.
 
-## <a name="protosens.maestro.plugin.build/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.build/src/main/clj/protosens/maestro/plugin/build.cljc#L327-L368) `task`</a>
+## <a name="protosens.maestro.plugin.build/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.build/src/main/clj/protosens/maestro/plugin/build.cljc#L327-L366) `task`</a>
 ``` clojure
 
 (task alias-maestro)
