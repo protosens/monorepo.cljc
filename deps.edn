@@ -107,6 +107,7 @@
                      :module/maestro.plugin.kaocha
                      :module/maestro.plugin.quickdoc
                      :module/namespace
+                     :module/process
                      :module/symbol
                      :module/txt]}
 
@@ -241,9 +242,9 @@
 
   {:extra-paths                         ["module/maestro.plugin.clj-kondo/src/main/clj"]
    :maestro/doc                         "Maestro plugin for Clj-kondo, the Clojure linter"
-   :maestro/require                     [:ext/babashka.process
-                                         :module/classpath
-                                         :module/maestro]
+   :maestro/require                     [:module/classpath
+                                         :module/maestro
+                                         :module/process]
    :maestro/root                        "module/maestro.plugin.clj-kondo"
    :maestro.git.lib/name                protosens/maestro.plugin.clj-kondo
    :maestro.plugin.quickdoc.path/output "module/maestro.plugin.clj-kondo/API.md"}
@@ -292,6 +293,16 @@
   :test/namespace
 
   {:extra-paths ["module/namespace/src/test/clj"]}
+
+  ;---
+
+  :module/process
+
+  {:extra-paths                         ["module/process/src/main/clj"]
+   :maestro/doc                         "Light wrapper over `:ext/babasha.fs`"
+   :maestro/root                        "module/process"
+   :maestro.git.lib/name                protosens/process
+   :maestro.plugin.quickdoc.path/output "module/process/API.md"}
 
   ;---
 
