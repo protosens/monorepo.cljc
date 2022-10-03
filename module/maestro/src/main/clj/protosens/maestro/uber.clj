@@ -5,9 +5,7 @@
   (:require [babashka.fs               :as bb.fs]
             [clojure.java.io           :as java.io]
             [clojure.pprint            :as pprint]
-            [protosens.maestro         :as $.maestro]
-            [protosens.maestro.alias   :as $.maestro.alias]
-            [protosens.maestro.profile :as $.maestro.profile]))
+            [protosens.maestro         :as $.maestro]))
 
 
 ;;;;;;;;;; Implementation
@@ -121,8 +119,14 @@
 
    (let [basis-2     (-> basis
                          ($.maestro/ensure-basis)
-                         ($.maestro.alias/append+ [alias])
-                         ($.maestro.profile/append+ ['release]))
+                         (update :maestro/alias+
+                                 (fnil conj
+                                       [])
+                                 alias)
+                         (update :maestro/profile+
+                                 (fnil conj
+                                       [])
+                                 'release))
          alias->data (basis-2 :aliases)
          data        (alias->data alias)
          _           (when-not data

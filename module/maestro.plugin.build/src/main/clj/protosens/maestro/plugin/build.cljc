@@ -23,7 +23,6 @@
                     [clojure.tools.build.api   :as tools.build]
                     [protosens.maestro         :as $.maestro]
                     [protosens.maestro.alias   :as $.maestro.alias]
-                    [protosens.maestro.profile :as $.maestro.profile]
                     [protosens.process         :as $.process])))
 
 
@@ -308,9 +307,9 @@
   (let [alias-build (option+ :maestro.plugin.build/alias)
         _           (when-not alias-build
                       ($.maestro/fail "Missing alias to build"))
-        basis       ($.maestro/search (-> {:maestro/alias+   [alias-build]
-                                           :maestro/profile+ ['release]}
-                                          ($.maestro.profile/prepend+ (option+ :maestro/profile+))))]
+        basis       ($.maestro/search {:maestro/alias+   [alias-build]
+                                       :maestro/profile+ (conj (vec (option+ :maestro/profile+))
+                                                               'release)})]
     (-> (merge basis
                (get-in basis
                        [:aliases

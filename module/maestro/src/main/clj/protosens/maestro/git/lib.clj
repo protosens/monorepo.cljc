@@ -8,13 +8,12 @@
    In order to do so, each such module must have its own `deps.edn` file.
    See [[expose]] and [[task]]."
 
-  (:require [babashka.fs               :as bb.fs]
-            [clojure.java.io           :as java.io]
-            [clojure.pprint            :as pprint]
-            [clojure.string            :as string]
-            [protosens.git             :as $.git]
-            [protosens.maestro         :as $.maestro]
-            [protosens.maestro.profile :as $.maestro.profile]))
+  (:require [babashka.fs       :as bb.fs]
+            [clojure.java.io   :as java.io]
+            [clojure.pprint    :as pprint]
+            [clojure.string    :as string]
+            [protosens.git     :as $.git]
+            [protosens.maestro :as $.maestro]))
 
 
 (set! *warn-on-reflection*
@@ -164,7 +163,9 @@
 
    (let [basis-2     (-> basis
                          ($.maestro/ensure-basis)
-                         ($.maestro.profile/append+ ['release]))
+                         (update :maestro/profile+
+                                 #(conj (vec %)
+                                        'release)))
          alias->data (basis-2 :aliases)
          basis-3     (-> basis-2
                          (assoc :maestro/alias+

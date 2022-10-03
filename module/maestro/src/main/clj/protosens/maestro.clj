@@ -4,13 +4,12 @@
 
   (:import (java.io PushbackReader))
   (:refer-clojure :exclude [print])
-  (:require [clojure.edn               :as edn]
-            [clojure.java.io           :as java.io]
-            [clojure.set               :as set]
-            [protosens.maestro.alias   :as $.maestro.alias]
-            [protosens.maestro.aggr    :as $.maestro.aggr]
-            [protosens.maestro.profile :as $.maestro.profile]
-            [protosens.string          :as $.string]))
+  (:require [clojure.edn             :as edn]
+            [clojure.java.io         :as java.io]
+            [clojure.set             :as set]
+            [protosens.maestro.alias :as $.maestro.alias]
+            [protosens.maestro.aggr  :as $.maestro.aggr]
+            [protosens.string        :as $.string]))
 
 
 (declare fail-mode)
@@ -216,8 +215,7 @@
    See the following namespaces for additional helpers:
 
    - [[protosens.maestro.aggr]] for expert users needing this function to do more
-   - [[protosens.maestro.alias]]
-   - [[protosens.maestro.profile]]"
+   - [[protosens.maestro.alias]]"
 
   [basis]
 
@@ -232,8 +230,12 @@
         basis-3        (cond->
                          basis-2
                          mode-2
-                         (-> ($.maestro.alias/append+ (mode-2 :maestro/alias+))
-                             ($.maestro.profile/append+ (mode-2 :maestro/profile+))))
+                         (-> (update :maestro/alias+
+                                     #(into (vec %)
+                                            (mode-2 :maestro/alias+)))
+                             (update :maestro/profile+
+                                     #(into (vec %)
+                                            (mode-2 :maestro/profile+)))))
         profile+       (-> (basis-3 :maestro/profile+)
                            (vec)
                            (conj 'default))
@@ -378,8 +380,12 @@
                          2)
                   (first arg-2+))]
      (-> basis
-         ($.maestro.alias/prepend+ (sorted :maestro/alias+))
-         ($.maestro.profile/prepend+ (sorted :maestro/profile+))
+         (update :maestro/alias+
+                 #(into (sorted :maestro/alias+)
+                        %))
+         (update :maestro/profile+
+                 #(into (sorted :maestro/profile+)
+                        %))
          (cond->
            mode
            (assoc :maestro/mode
