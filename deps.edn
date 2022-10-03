@@ -300,9 +300,15 @@
 
   {:extra-paths                         ["module/process/src/main/clj"]
    :maestro/doc                         "Light wrapper over `:ext/babasha.fs`"
+   :maestro/require                     [{test :test/process}]
    :maestro/root                        "module/process"
    :maestro.git.lib/name                protosens/process
    :maestro.plugin.quickdoc.path/output "module/process/API.md"}
+
+
+  :test/process
+
+  {:extra-paths ["module/process/src/test/clj"]}
 
   ;---
 
