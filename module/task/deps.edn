@@ -15,8 +15,8 @@
 ;;     :module/maestro.plugin.kaocha
 ;;     :module/maestro.plugin.quickdoc
 ;;     :module/process
+;;     :module/string
 ;;     :module/task
-;;     :module/txt
 ;;
 ;; All files found in those paths are hard links to follow from the
 ;; root of this repository.
@@ -41,4 +41,4 @@
   "maestro/uber/module/maestro.plugin.quickdoc/src/main/clj"
   "maestro/uber/module/maestro/src/main/clj"
   "maestro/uber/module/process/src/main/clj"
-  "maestro/uber/module/txt/src/main/clj"]}
+  "maestro/uber/module/string/src/main/clj"]}

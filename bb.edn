@@ -10,7 +10,7 @@
  ;;
  :paths
  ["module/maestro/src/main/clj"
-  "module/txt/src/main/clj"]
+  "module/string/src/main/clj"]
 
 
  ;; Required by the `doc:module` task.

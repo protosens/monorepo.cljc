@@ -10,7 +10,7 @@
             [protosens.maestro.alias   :as $.maestro.alias]
             [protosens.maestro.aggr    :as $.maestro.aggr]
             [protosens.maestro.profile :as $.maestro.profile]
-            [protosens.txt             :as $.txt]))
+            [protosens.string          :as $.string]))
 
 
 (declare fail-mode)
@@ -39,7 +39,7 @@
 
   [message]
 
-  (let [message-2 ($.txt/realign message)]
+  (let [message-2 ($.string/realign message)]
     (case (fail-mode)
       :exit
       (binding [*out* *err*]

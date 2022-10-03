@@ -16,7 +16,7 @@
   (:refer-clojure :exclude [resolve])
   (:require [clojure.string    :as string]
             [protosens.process :as $.process]
-            [protosens.txt     :as $.txt]))
+            [protosens.string  :as $.string]))
 
 
 ;;;;;;;;;; Miscellaneous helpers
@@ -137,8 +137,8 @@
            ($.process/out)
            (some-> (string/split-lines)
                    (->> (map (fn [branch]
-                               ($.txt/trunc-left branch
-                                                 2))))))
+                               ($.string/trunc-left branch
+                                                    2))))))
        [])))
 
 
@@ -218,7 +218,7 @@
 
   ([message option+]
 
-   (-> (exec ["commit" "-m" ($.txt/realign message)]
+   (-> (exec ["commit" "-m" ($.string/realign message)]
              option+)
        ($.process/success?))))
 

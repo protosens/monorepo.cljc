@@ -108,8 +108,8 @@
                      :module/maestro.plugin.quickdoc
                      :module/namespace
                      :module/process
-                     :module/symbol
-                     :module/txt]}
+                     :module/string
+                     :module/symbol]}
 
 
   :bundle/test
@@ -173,7 +173,7 @@
    :maestro/doc                         "Collection of little Git-related quick utilities"
    :maestro/require                     [:ext/babashka.process
                                          :module/process
-                                         :module/txt
+                                         :module/string
                                          {test :test/git}]
    :maestro/root                        "module/git"
    :maestro.git.lib/name                protosens/git
@@ -195,7 +195,7 @@
                                          :ext/babashka.process
                                          :module/git
                                          :module/process
-                                         :module/txt
+                                         :module/string
                                          {test :test/maestro}]
    :maestro/root                        "module/maestro"
    :maestro.git.lib/name                protosens/maestro
@@ -314,6 +314,22 @@
 
   ;---
 
+  :module/string
+
+  {:extra-paths                         ["module/string/src/main/clj"]
+   :maestro/doc                         "String manipulation library"
+   :maestro/require                     [{test :test/string}]
+   :maestro/root                        "module/string"
+   :maestro.git.lib/name                protosens/string
+   :maestro.plugin.quickdoc.path/output "module/string/API.md"}
+
+
+  :test/string
+
+  {:extra-paths ["module/string/src/test/clj"]}
+
+  ;---
+
   :module/symbol
 
   {:extra-paths                         ["module/symbol/src/main/clj"]
@@ -341,22 +357,5 @@
                      :module/maestro.plugin.kaocha
                      :module/maestro.plugin.quickdoc]
    :maestro/root    "module/task"}
-
-  ;---
-
-  :module/txt
-
-  {:extra-paths                         ["module/txt/src/main/clj"]
-   :maestro/doc                         "Text manipulation library"
-   :maestro/require                     [{test :test/txt}]
-   :maestro/root                        "module/txt"
-   :maestro.git.lib/name                protosens/txt
-   :maestro.plugin.quickdoc.path/output "module/txt/API.md"}
-
-
-  :test/txt
-
-  {:extra-paths ["module/txt/src/test/clj"]}
-
 
   }}

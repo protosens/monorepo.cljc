@@ -3,10 +3,10 @@
   "Collection of miscellaneous helpers related to documentation."
 
   (:import (java.nio.file Path))
-  (:require [babashka.fs    :as bb.fs]
-            [clojure.edn    :as edn]
-            [clojure.string :as string]
-            [protosens.txt  :as $.txt]))
+  (:require [babashka.fs      :as bb.fs]
+            [clojure.edn      :as edn]
+            [clojure.string   :as string]
+            [protosens.string :as $.string]))
 
 
 (set! *warn-on-reflection*
@@ -148,7 +148,7 @@
              (println "---")
              (println))
            (println (or (some-> (task :maestro/doc)
-                                ($.txt/realign))
+                                ($.string/realign))
                         "No extra documentation for this task.")))
          ;;
          ;; Task does not exist.

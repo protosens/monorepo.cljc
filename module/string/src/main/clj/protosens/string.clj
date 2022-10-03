@@ -1,4 +1,4 @@
-(ns protosens.txt
+(ns protosens.string
 
   "Collection of string manipulation utilities."
 
