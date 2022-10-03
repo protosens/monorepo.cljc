@@ -2,8 +2,8 @@
 
   "Simple classpath utilities."
 
-  (:require [babashka.process :as bb.process]
-            [clojure.string   :as string]))
+  (:require [clojure.string    :as string]
+            [protosens.process :as $.process]))
 
 
 (declare split)
@@ -22,13 +22,12 @@
   
   [alias+]
 
-  (-> (bb.process/process ["clojure"
-                           "-Spath"
-                           (str "-A"
-                                (string/join alias+))])
-      (:out)
-      (slurp)
-      (not-empty)))
+  (-> ($.process/run ["clojure"
+                      "-Spath"
+                      (when (seq alias+)
+                        (str "-A"
+                              (string/join alias+)))])
+      ($.process/out)))
 
 
 

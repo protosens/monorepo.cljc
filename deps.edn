@@ -150,7 +150,7 @@
 
   {:extra-paths                         ["module/classpath/src/main/clj"]
    :maestro/doc                         "Little collection of classpath-related utilities"
-   :maestro/require                     [:ext/babashka.fs]
+   :maestro/require                     [:module/process]
    :maestro/root                        "module/classpath"
    :maestro.git.lib/name                protosens/classpath
    :maestro.plugin.quickdoc.path/output "module/classpath/API.md"}
@@ -172,6 +172,7 @@
   {:extra-paths                         ["module/git/src/main/clj"]
    :maestro/doc                         "Collection of little Git-related quick utilities"
    :maestro/require                     [:ext/babashka.process
+                                         :module/process
                                          :module/txt
                                          {test :test/git}]
    :maestro/root                        "module/git"
