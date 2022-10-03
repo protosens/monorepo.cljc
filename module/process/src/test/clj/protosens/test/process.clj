@@ -30,4 +30,9 @@
 
     (T/is (zero? ($.process/exit-code process)))
 
-    (T/is ($.process/success? process))))
+    (T/is ($.process/success? process))
+
+    (T/testing
+      "Outputs already consumed"
+      (T/is (nil? ($.process/err process))
+      (T/is (nil? ($.process/out process)))))))
