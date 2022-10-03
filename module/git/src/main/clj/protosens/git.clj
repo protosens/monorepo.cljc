@@ -14,9 +14,9 @@
    For a fully-featured Clojure JVM client for Git, see [`clj-jgit`](https://github.com/clj-jgit/clj-jgit)."
 
   (:refer-clojure :exclude [resolve])
-  (:require [babashka.process :as bb.process]
-            [clojure.string   :as string]
-            [protosens.txt    :as $.txt]))
+  (:require [clojure.string    :as string]
+            [protosens.process :as $.process]
+            [protosens.txt     :as $.txt]))
 
 
 ;;;;;;;;;; Miscellaneous helpers
@@ -56,13 +56,7 @@
    | `:env`      | Map of env variables to set | /           |
    | `:dir`      | Working directory           | Current dir |
 
-   Returns a map:
-
-   | Key     | Value                      |
-   |---------|----------------------------|
-   | `:err`  | Content of STDERR (string) |
-   | `:exit` | Exit code                  |
-   | `:out`  | Content of STDOUT (string) |
+   Returns a process that can be handled with [protosens.process](https://github.com/protosens/monorepo.cljc/tree/develop/module/process).
 
    Pretty much all functions of this namespace rely in this one."
 
@@ -75,22 +69,10 @@
 
   ([arg+ option+]
 
-   (let [{:keys [err
-                 exit
-                 out]} (bb.process/sh (cons (or (:command option+)
-                                                "git")
-                                            arg+)
-                                      option+)]
-     (cond->
-       {:exit exit}
-       ;;
-       (seq err)
-       (assoc :err
-              err)
-       ;;
-       (seq out)
-       (assoc :out
-              out)))))
+   ($.process/run (cons (or (:command option+)
+                                  "git")
+                              arg+)
+                        option+)))
 
 
 ;;;;;;;;;; Quick commands
@@ -112,8 +94,7 @@
    (-> (exec (cons "add"
                     path+)
              option+)
-       (:exit)
-       (zero?))))
+       ($.process/success?))))
 
 
 
@@ -133,8 +114,7 @@
 
    (-> (exec ["branch" "--show-current"]
              option+)
-       (:out)
-       (some-> (string/trimr)))))
+       ($.process/out))))
 
 
 
@@ -149,9 +129,12 @@
 
   ([option+]
 
+   (println :got (-> (exec ["branch"]
+                 option+)
+           ($.process/out)))
    (or (-> (exec ["branch"]
                  option+)
-           (:out)
+           ($.process/out)
            (some-> (string/split-lines)
                    (->> (map (fn [branch]
                                ($.txt/trunc-left branch
@@ -175,8 +158,7 @@
 
    (-> (exec ["checkout" branch]
              option+)
-       (:exit)
-       (zero?))))
+       ($.process/success?))))
 
 
 
@@ -195,8 +177,7 @@
 
    (-> (exec ["checkout" "-b" branch]
              option+)
-       (:exit)
-       (zero?))))
+       ($.process/success?))))
 
 
 
@@ -216,8 +197,8 @@
 
    (-> (exec ["status" "--porcelain"]
              option+)
-       (:out)
-       (empty?))))
+       ($.process/out)
+       (nil?))))
 
 
 
@@ -239,8 +220,7 @@
 
    (-> (exec ["commit" "-m" ($.txt/realign message)]
              option+)
-       (:exit)
-       (zero?))))
+       ($.process/success?))))
 
 
 
@@ -258,10 +238,10 @@
 
   ([ref option+]
 
-   (let [result (exec ["show" "-s" "--format=%B" ref]
-                      option+)]
-     (when (zero? (result :exit))
-       (string/trimr (result :out))))))
+   (let [process (exec ["show" "-s" "--format=%B" ref]
+                       option+)]
+     (when ($.process/success? process)
+       ($.process/out process)))))
 
 
 
@@ -286,8 +266,7 @@
                                          (or i
                                              0))]
                        option+)
-                 (:out)
-                 (string/trimr))]
+                 ($.process/out))]
      (when (full-sha? out)
        out))))
 
@@ -309,12 +288,10 @@
 
    (if (-> (exec ["log" "-0"]
                  option+)
-           (:exit)
-           (zero?))
+           ($.process/success?))
      (-> (exec ["rev-list" "--count" "HEAD"]
                option+)
-         (:out)
-         (string/trimr)
+         ($.process/out)
          (Long/parseLong))
      0)))
 
@@ -336,8 +313,7 @@
 
    (-> (exec ["init"]
              option+)
-       (:exit)
-       (zero?))))
+       ($.process/success?))))
 
 
 
@@ -360,8 +336,8 @@
                              option+))
         (-> (exec ["diff-index" "--quiet" "HEAD"]
                   option+)
-            (:exit)
-            (pos?)))))
+            ($.process/success?)
+            (not)))))
 
 
 
@@ -377,13 +353,11 @@
 
   ([option+]
 
-   (if-some [out (-> (exec ["rev-parse" "--is-inside-work-tree"]
-                           option+)
-                     (:out))]
-     (-> out
-         (string/trimr)
-         (= "true"))
-     false)))
+   (or (-> (exec ["rev-parse" "--is-inside-work-tree"]
+                 option+)
+           ($.process/out)
+           (some-> (= "true")))
+       false)))
 
 
 
@@ -404,8 +378,7 @@
 
    (let [out (-> (exec ["rev-parse" ref]
                        option+)
-                 (:out)
-                 (string/trimr))]
+                 ($.process/out))]
      (when (full-sha? out)
        out))))
 
@@ -425,7 +398,7 @@
 
    (or (-> (exec ["tag"]
                  option+)
-           (:out)
+           ($.process/out)
            (some-> (string/split-lines)))
        [])))
 
@@ -446,8 +419,7 @@
 
    (-> (exec ["tag" tag]
              option+)
-       (:exit)
-       (zero?))))
+       ($.process/success?))))
 
 
 
@@ -465,8 +437,8 @@
 
    (-> (exec ["diff" "--quiet"]
              option+)
-       (:exit)
-       (pos?))))
+       ($.process/success?)
+       (not))))
 
 
 
@@ -484,5 +456,4 @@
 
    (-> (exec ["--version"]
              option+)
-       (:out)
-       (string/trimr))))
+       ($.process/out))))

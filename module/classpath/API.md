@@ -14,7 +14,7 @@ Simple classpath utilities.
 
 
 
-## <a name="protosens.classpath/compute">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/classpath/src/main/clj/protosens/classpath.clj#L15-L31) `compute`</a>
+## <a name="protosens.classpath/compute">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/classpath/src/main/clj/protosens/classpath.clj#L15-L30) `compute`</a>
 ``` clojure
 
 (compute alias+)
@@ -27,7 +27,7 @@ Computes the classpath for the given aliases.
   
    Returns `nil` if something goes wrong.
 
-## <a name="protosens.classpath/pprint">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/classpath/src/main/clj/protosens/classpath.clj#L35-L52) `pprint`</a>
+## <a name="protosens.classpath/pprint">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/classpath/src/main/clj/protosens/classpath.clj#L34-L51) `pprint`</a>
 ``` clojure
 
 (pprint)
@@ -41,7 +41,7 @@ Pretty-prints the given classpath.
   
    Great match for [`compute`](#protosens.classpath/compute). Classpath is [`split`](#protosens.classpath/split) and sorted paths are printed.
 
-## <a name="protosens.classpath/separator">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/classpath/src/main/clj/protosens/classpath.clj#L56-L62) `separator`</a>
+## <a name="protosens.classpath/separator">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/classpath/src/main/clj/protosens/classpath.clj#L55-L61) `separator`</a>
 ``` clojure
 
 (separator)
@@ -50,7 +50,7 @@ Pretty-prints the given classpath.
 
 Returns the platform-dependent separator used in the classpath.
 
-## <a name="protosens.classpath/split">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/classpath/src/main/clj/protosens/classpath.clj#L65-L73) `split`</a>
+## <a name="protosens.classpath/split">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/classpath/src/main/clj/protosens/classpath.clj#L64-L72) `split`</a>
 ``` clojure
 
 (split classpath)

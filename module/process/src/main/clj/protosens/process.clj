@@ -56,7 +56,7 @@
   (-> (get process
            k)
       (slurp)
-      (string/trim)
+      (string/trimr)
       (not-empty)))
 
 

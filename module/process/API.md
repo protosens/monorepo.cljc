@@ -16,28 +16,28 @@
 
 
 
-## <a name="protosens.process/await">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/process/src/main/clj/protosens/process.clj#L63-L67) `await`</a>
+## <a name="protosens.process/await">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/process/src/main/clj/protosens/process.clj#L64-L68) `await`</a>
 ``` clojure
 
 (await process)
 ```
 
 
-## <a name="protosens.process/err">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/process/src/main/clj/protosens/process.clj#L71-L76) `err`</a>
+## <a name="protosens.process/err">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/process/src/main/clj/protosens/process.clj#L72-L77) `err`</a>
 ``` clojure
 
 (err process)
 ```
 
 
-## <a name="protosens.process/exit-code">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/process/src/main/clj/protosens/process.clj#L80-L84) `exit-code`</a>
+## <a name="protosens.process/exit-code">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/process/src/main/clj/protosens/process.clj#L81-L85) `exit-code`</a>
 ``` clojure
 
 (exit-code process)
 ```
 
 
-## <a name="protosens.process/out">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/process/src/main/clj/protosens/process.clj#L88-L93) `out`</a>
+## <a name="protosens.process/out">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/process/src/main/clj/protosens/process.clj#L89-L94) `out`</a>
 ``` clojure
 
 (out process)
@@ -60,7 +60,7 @@
 ```
 
 
-## <a name="protosens.process/success?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/process/src/main/clj/protosens/process.clj#L97-L101) `success?`</a>
+## <a name="protosens.process/success?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/process/src/main/clj/protosens/process.clj#L98-L102) `success?`</a>
 ``` clojure
 
 (success? process)
