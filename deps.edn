@@ -101,6 +101,7 @@
   {:maestro/doc     "All main modules"
    :maestro/require [:module/bb.help
                      :module/classpath
+                     :module/deps.edn
                      :module/git
                      :module/maestro
                      :module/maestro.plugin.build
@@ -172,6 +173,18 @@
    :maestro/root                        "module/classpath"
    :maestro.git.lib/name                protosens/classpath
    :maestro.plugin.quickdoc.path/output "module/classpath/API.md"}
+
+  ;---
+
+  :module/deps.edn
+
+  {:extra-paths                         ["module/deps.edn/src/main/clj"]
+   :maestro/doc                         "Handling `deps.edn` files"
+   :maestro/require                     [:module/namespace
+                                         :module/process]
+   :maestro/root                        "module/deps.edn"
+   :maestro.git.lib/name                protosens/deps.edn
+   :maestro.plugin.quickdoc.path/output "module/deps.edn/API.md"}
 
   ;---
 
