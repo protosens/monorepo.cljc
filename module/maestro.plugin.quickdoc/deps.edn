@@ -8,18 +8,18 @@
   {:git/sha "fc5a18bb419ccac3c8769aa0761384025b27f68c"},
   protosens/git
   {:deps/root "module/git",
-   :git/sha "2ca02ab794ac9cc1b5c57ac4c378f8e62ad80962",
+   :git/sha "5c4b359f1822f67f0e452cb1ccff8ab8fbba7086",
    :git/url "https://github.com/protosens/monorepo.cljc"},
   protosens/maestro
   {:deps/root "module/maestro",
-   :git/sha "2ca02ab794ac9cc1b5c57ac4c378f8e62ad80962",
+   :git/sha "5c4b359f1822f67f0e452cb1ccff8ab8fbba7086",
    :git/url "https://github.com/protosens/monorepo.cljc"},
   protosens/process
   {:deps/root "module/process",
-   :git/sha "2ca02ab794ac9cc1b5c57ac4c378f8e62ad80962",
+   :git/sha "5c4b359f1822f67f0e452cb1ccff8ab8fbba7086",
    :git/url "https://github.com/protosens/monorepo.cljc"},
   protosens/string
   {:deps/root "module/string",
-   :git/sha "2ca02ab794ac9cc1b5c57ac4c378f8e62ad80962",
+   :git/sha "5c4b359f1822f67f0e452cb1ccff8ab8fbba7086",
    :git/url "https://github.com/protosens/monorepo.cljc"}},
  :paths ["src/main/clj"]}
