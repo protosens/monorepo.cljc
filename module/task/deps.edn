@@ -7,6 +7,7 @@
 ;;     :ext/clojure.tools.build
 ;;     :ext/kaocha
 ;;     :ext/quickdoc
+;;     :module/bb.help
 ;;     :module/classpath
 ;;     :module/git
 ;;     :module/maestro
@@ -33,7 +34,8 @@
   io.github.borkdude/quickdoc
   {:git/sha "fc5a18bb419ccac3c8769aa0761384025b27f68c"}},
  :paths
- ["maestro/uber/module/classpath/src/main/clj"
+ ["maestro/uber/module/bb.help/src/main/clj"
+  "maestro/uber/module/classpath/src/main/clj"
   "maestro/uber/module/git/src/main/clj"
   "maestro/uber/module/maestro.plugin.build/src/main/clj"
   "maestro/uber/module/maestro.plugin.clj-kondo/src/main/clj"

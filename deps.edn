@@ -99,7 +99,8 @@
   :bundle/module
 
   {:maestro/doc     "All main modules"
-   :maestro/require [:module/classpath
+   :maestro/require [:module/bb.help
+                     :module/classpath
                      :module/git
                      :module/maestro
                      :module/maestro.plugin.build
@@ -145,6 +146,16 @@
 
   ;; MODULES
 
+  :module/bb.help
+
+  {:extra-paths                         ["module/bb.help/src/main/clj"]
+   :maestro/doc                         "Collection of little Git-related quick utilities"
+   :maestro/require                     [:module/string]
+   :maestro/root                        "module/bb.help"
+   :maestro.git.lib/name                protosens/bb.help
+   :maestro.plugin.quickdoc.path/output "module/bb.help/API.md"}
+
+  ;---
 
   :module/classpath
 
@@ -350,7 +361,8 @@
 
   {:maestro/doc     "Merges dependencies and paths for Babashka tasks.
                      Not meant to be consumed publicly."
-   :maestro/require [:module/classpath
+   :maestro/require [:module/bb.help
+                     :module/classpath
                      :module/maestro
                      :module/maestro.plugin.build
                      :module/maestro.plugin.clj-kondo
