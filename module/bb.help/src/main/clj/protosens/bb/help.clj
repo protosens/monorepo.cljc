@@ -15,7 +15,7 @@
 ;;;;;;;;;; Private
 
 
-(defn- -task+
+(defn ^:no-doc -task+
 
   ;; Retrieves all task from a `bb.edn` file.
 

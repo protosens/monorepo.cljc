@@ -150,10 +150,17 @@
 
   {:extra-paths                         ["module/bb.help/src/main/clj"]
    :maestro/doc                         "Collection of little Git-related quick utilities"
-   :maestro/require                     [:module/string]
+   :maestro/require                     [:module/string
+                                         {test :test/bb.help}]
    :maestro/root                        "module/bb.help"
    :maestro.git.lib/name                protosens/bb.help
    :maestro.plugin.quickdoc.path/output "module/bb.help/API.md"}
+
+
+  :test/bb.help
+
+  {:extra-paths ["module/bb.help/resrc/test"
+                 "module/bb.help/src/test"]}
 
   ;---
 

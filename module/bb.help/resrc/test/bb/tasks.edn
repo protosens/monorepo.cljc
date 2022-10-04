@@ -1,0 +1,6 @@
+{:tasks {task-1 {:doc         "1-doc"
+                 :maestro/doc "1-extra"}
+         task-2 {:doc         "2-doc"
+                 :maestro/doc "2-extra"}
+         task-3 {:doc "3-doc"}
+         task-4 {}}}
