@@ -211,9 +211,16 @@
 
   {:extra-paths                         ["module/edn/src/main/clj"]
    :maestro/doc                         "Reading EDN under various circumstances"
+   :maestro/require                     [{test :test/edn}]
    :maestro/root                        "module/edn"
    :maestro.git.lib/name                protosens/edn
    :maestro.plugin.quickdoc.path/output "module/edn/API.md"}
+
+
+  :test/edn
+
+  {:extra-paths ["module/edn/resrc/test"
+                 "module/edn/src/test/clj"]}
 
   ;---
 
@@ -324,6 +331,7 @@
    :maestro/doc                         "Maestro plugin for `:ext/quickdoc`"
    :maestro/require                     [:ext/babashka.fs
                                          :ext/quickdoc
+                                         :module/edn
                                          :module/maestro]
    :maestro/root                        "module/maestro.plugin.quickdoc"
    :maestro.git.lib/name                protosens/maestro.plugin.quickdoc

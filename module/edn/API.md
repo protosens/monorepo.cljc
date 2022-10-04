@@ -18,7 +18,7 @@ Reading EDN data.
    | `:tag->reader     | Map of tagged reader functions                      | `{}`    |
 
    The default reader (if provided) is only used when there is no reader function for a given tag
-   in `:tag->reader`.
+   in `:tag->reader`. It takes 2 arguments: the tag and its associated value.
 
 
 

@@ -13,11 +13,11 @@
   #?(:clj (:import (java.nio.file Files)
                    (java.nio.file.attribute FileAttribute)))
           ;;
-  #?(:bb  (:require [clojure.edn       :as edn]
-                    [protosens.maestro :as $.maestro]
+  #?(:bb  (:require [protosens.edn.read :as $.edn.read]
+                    [protosens.maestro  :as $.maestro]
                     [protosens.process  :as $.process])
           ;;
-     :clj (:require [clojure.edn             :as edn]
+     :clj (:require [protosens.edn.read      :as $.edn.read]
                     [clojure.tools.build.api :as tools.build]
                     [protosens.maestro       :as $.maestro]
                     [protosens.process       :as $.process])))
@@ -356,6 +356,6 @@
                                                 :maestro.plugin.build/alias
                                                 #(or %
                                                      (some-> (first *command-line-args*)
-                                                             (edn/read-string))
+                                                             ($.edn.read/string))
                                                      ($.maestro/fail "Missing alias"))))))
        ($.process/success?)))))
