@@ -537,5 +537,3 @@ Generate a single `deps.edn` file by merging everything required by `alias`.
    Hard links are created to allow consuming paths from anywhere in the repository.
    This is because Clojure CLI dislikes outsider paths (e.g. `../foo`). They are generated in
    `./maestro/uber` relative to the `:maestro/root`.
-
------
