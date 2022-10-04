@@ -20,14 +20,6 @@
 ;;;;;;;;;; Tests
 
 
-(T/deftest find+
-
-  (T/is (-ns+? ($.namespace/find+)))
-
-  (T/is (-ns+? ($.namespace/find+ ["module/namespace/src"]))))
-
-
-
 (T/deftest require-found
 
   ;; Note: Kaocha does something to the classpath and only test namespaces are available.
@@ -45,3 +37,11 @@
              (string/trimr (with-out-str
                              (req))))
           "Prints what is being required")))
+
+
+
+(T/deftest search
+
+  (T/is (-ns+? ($.namespace/search)))
+
+  (T/is (-ns+? ($.namespace/search ["module/namespace/src"]))))

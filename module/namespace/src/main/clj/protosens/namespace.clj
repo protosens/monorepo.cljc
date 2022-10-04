@@ -7,19 +7,19 @@
             [clojure.tools.namespace.find :as namespace.find]))
 
 
-;;;;;;;;;;
+;;;;;;;;;; Searching for namespaces
 
 
-(defn find+
+(defn search
 
-  "Finds all namespaces available in the given paths.
+  "Searches for all namespaces available in the given paths.
 
    By default, search in the current classpath."
 
 
   ([]
 
-   (find+ nil))
+   (search nil))
 
 
   ([path+]
@@ -32,6 +32,8 @@
                                                  path+))
                                         (classpath/classpath)))))
 
+
+;;;;;;;;;; Requiring namespaces
 
 
 (defn require-found
@@ -53,7 +55,7 @@
                          (vector? x)
                          (first)))
                      (keep f
-                           (find+)))]
+                           (search)))]
     (run! (fn [x]
             (prn (list 'require
                        x))
