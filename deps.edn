@@ -102,6 +102,7 @@
    :maestro/require [:module/bb.help
                      :module/classpath
                      :module/deps.edn
+                     :module/edn
                      :module/git
                      :module/maestro
                      :module/maestro.plugin.build
@@ -151,7 +152,8 @@
 
   {:extra-paths                         ["module/bb.help/src/main/clj"]
    :maestro/doc                         "Collection of little Git-related quick utilities"
-   :maestro/require                     [:module/string
+   :maestro/require                     [:module/edn
+                                         :module/string
                                          {test :test/bb.help}]
    :maestro/root                        "module/bb.help"
    :maestro.git.lib/name                protosens/bb.help
@@ -180,7 +182,8 @@
 
   {:extra-paths                         ["module/deps.edn/src/main/clj"]
    :maestro/doc                         "Handling `deps.edn` files"
-   :maestro/require                     [:module/namespace
+   :maestro/require                     [:module/edn
+                                         :module/namespace
                                          :module/process
                                          {test :test/deps.edn}]
    :maestro/root                        "module/deps.edn"
@@ -201,6 +204,16 @@
    :maestro/root    "module/dev"
    :maestro/require [:module/namespace
                      :module/symbol]}
+
+  ;---
+
+  :module/edn
+
+  {:extra-paths                         ["module/edn/src/main/clj"]
+   :maestro/doc                         "Reading EDN under various circumstances"
+   :maestro/root                        "module/edn"
+   :maestro.git.lib/name                protosens/edn
+   :maestro.plugin.quickdoc.path/output "module/edn/API.md"}
 
   ;---
 

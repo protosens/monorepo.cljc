@@ -3,9 +3,9 @@
   "Print extra documentation for Babashka tasks."
 
   (:refer-clojure :exclude [print])
-  (:require [clojure.edn             :as edn]
-            [clojure.string          :as string]
+  (:require [clojure.string          :as string]
             [protosens.bb.help.print :as $.bb.help.print]
+            [protosens.edn.read      :as $.edn.read]
             [protosens.string        :as $.string]))
 
 
@@ -23,8 +23,7 @@
 
   (-> (or (:bb option+)
           "bb.edn")
-      (slurp)
-      (edn/read-string)
+      ($.edn.read/file)
       (:tasks)
       (not-empty)))
   

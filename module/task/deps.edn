@@ -12,6 +12,7 @@
 ;;     :module/bb.help
 ;;     :module/classpath
 ;;     :module/deps.edn
+;;     :module/edn
 ;;     :module/git
 ;;     :module/maestro
 ;;     :module/maestro.plugin.build
@@ -43,6 +44,7 @@
  ["maestro/uber/module/bb.help/src/main/clj"
   "maestro/uber/module/classpath/src/main/clj"
   "maestro/uber/module/deps.edn/src/main/clj"
+  "maestro/uber/module/edn/src/main/clj"
   "maestro/uber/module/git/src/main/clj"
   "maestro/uber/module/maestro.plugin.build/src/main/clj"
   "maestro/uber/module/maestro.plugin.clj-kondo/src/main/clj"

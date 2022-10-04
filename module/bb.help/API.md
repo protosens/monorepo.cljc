@@ -20,7 +20,7 @@ Print extra documentation for Babashka tasks.
 
 
 
-## <a name="protosens.bb.help/print">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/bb.help/src/main/clj/protosens/bb/help.clj#L114-L134) `print`</a>
+## <a name="protosens.bb.help/print">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/bb.help/src/main/clj/protosens/bb/help.clj#L113-L133) `print`</a>
 ``` clojure
 
 (print data)
@@ -36,13 +36,13 @@ Pretty-prints data maps returned from other functions.
    Uses [`printer+`](#protosens.bb.help/printer+) by default but any custom one can be provided under `:printer+`
    to be merged with those.
 
-## <a name="protosens.bb.help/printer+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/bb.help/src/main/clj/protosens/bb/help.clj#L138-L148) `printer+`</a>
+## <a name="protosens.bb.help/printer+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/bb.help/src/main/clj/protosens/bb/help.clj#L137-L147) `printer+`</a>
 
 Default printers used by [`print`](#protosens.bb.help/print).
 
    They come from the [`protosens.bb.help.print`](#protosens.bb.help.print) namespace.
 
-## <a name="protosens.bb.help/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/bb.help/src/main/clj/protosens/bb/help.clj#L35-L80) `task`</a>
+## <a name="protosens.bb.help/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/bb.help/src/main/clj/protosens/bb/help.clj#L34-L79) `task`</a>
 ``` clojure
 
 (task)
@@ -64,7 +64,7 @@ Pretty-prints extra documentation for a task (if there is any).
   
    Returns a data map that can be printed with [`print`](#protosens.bb.help/print).
 
-## <a name="protosens.bb.help/undocumented-task+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/bb.help/src/main/clj/protosens/bb/help.clj#L83-L108) `undocumented-task+`</a>
+## <a name="protosens.bb.help/undocumented-task+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/bb.help/src/main/clj/protosens/bb/help.clj#L82-L107) `undocumented-task+`</a>
 ``` clojure
 
 (undocumented-task+)

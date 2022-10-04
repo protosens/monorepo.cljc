@@ -5,13 +5,17 @@
    Most useful for tool authors."
 
   (:refer-clojure :exclude [read])
-  (:require [clojure.edn         :as edn]
-            [clojure.string      :as string]
+  (:require [clojure.string      :as string]
+            [protosens.edn.read  :as $.edn.read]
             [protosens.namespace :as $.namespace]
             [protosens.process   :as $.process]))
 
 
 (declare path+)
+
+
+(set! *warn-on-reflection*
+      true)
 
 
 ;;;;;;;;;; 
@@ -79,12 +83,12 @@
 
   ([dir]
 
-  (-> (slurp (str (or dir
-                      ".")
-                  "/deps.edn"))
-      (edn/read-string)
-      (assoc :deps/root
-             dir))))
+   (-> (str (or dir
+                ".")
+            "/deps.edn")
+       ($.edn.read/file)
+       (assoc :deps/root
+              dir))))
 
 
 

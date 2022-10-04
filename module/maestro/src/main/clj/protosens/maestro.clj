@@ -14,6 +14,10 @@
 (declare fail-mode)
 
 
+(set! *warn-on-reflection*
+      true)
+
+
 ;;;;;;;;;; Handling failure
 
 
@@ -37,7 +41,7 @@
 
   [message]
 
-  (let [message-2 ($.string/realign message)]
+  (let [^String message-2 ($.string/realign message)]
     (case (fail-mode)
       :exit
       (binding [*out* *err*]
@@ -102,11 +106,11 @@
 
   ([option+]
    
-   (-> (or (:maestro/project option+)
-           "./deps.edn")
-       (java.io/reader)
-       (PushbackReader.)
-       (edn/read))))
+   (with-open [reader (-> (or (:maestro/project option+)
+                              "./deps.edn")
+                          (java.io/reader)
+                          (PushbackReader.))]
+     (edn/read reader))))
 
 
 

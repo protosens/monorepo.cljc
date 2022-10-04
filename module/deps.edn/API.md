@@ -2,7 +2,7 @@
 -  [`protosens.deps.edn`](#protosens.deps.edn)  - Handling <code>deps.edn</code> files.
     -  [`namespace+`](#protosens.deps.edn/namespace+) - Returns namespaces found in the [[path+]] of that <code>deps-edn</code> file.
     -  [`path+`](#protosens.deps.edn/path+) - Returns all <code>:paths</code>, prepending <code>:deps/root</code>.
-    -  [`read`](#protosens.deps.edn/read) - Reads the <code>deps.edn</code> file located in <code>dir</code>.
+    -  [`read`](#protosens.deps.edn/read) - Reads the <code>deps.edn</code> file located in <code>dir</code> (defaults to <code>./</code>).
     -  [`require-project`](#protosens.deps.edn/require-project) - In a new process, requires all namespaces found with [[namespace+]].
 
 -----
@@ -16,7 +16,7 @@ Handling `deps.edn` files.
 
 
 
-## <a name="protosens.deps.edn/namespace+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/deps.edn/src/main/clj/protosens/deps/edn.clj#L18-L32) `namespace+`</a>
+## <a name="protosens.deps.edn/namespace+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/deps.edn/src/main/clj/protosens/deps/edn.clj#L24-L38) `namespace+`</a>
 ``` clojure
 
 (namespace+ deps-edn)
@@ -26,7 +26,7 @@ Handling `deps.edn` files.
 
 Returns namespaces found in the [`path+`](#protosens.deps.edn/path+) of that `deps-edn` file.
 
-## <a name="protosens.deps.edn/path+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/deps.edn/src/main/clj/protosens/deps/edn.clj#L36-L58) `path+`</a>
+## <a name="protosens.deps.edn/path+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/deps.edn/src/main/clj/protosens/deps/edn.clj#L42-L64) `path+`</a>
 ``` clojure
 
 (path+ deps-edn)
@@ -38,20 +38,21 @@ Returns all `:paths`, prepending `:deps/root`.
   
    A collection of aliases may be provided for including `:extra-paths`.
 
-## <a name="protosens.deps.edn/read">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/deps.edn/src/main/clj/protosens/deps/edn.clj#L64-L78) `read`</a>
+## <a name="protosens.deps.edn/read">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/deps.edn/src/main/clj/protosens/deps/edn.clj#L70-L91) `read`</a>
 ``` clojure
 
+(read)
 (read dir)
 ```
 
 
-Reads the `deps.edn` file located in `dir`.
+Reads the `deps.edn` file located in `dir` (defaults to `./`).
   
    Remembers the `dir`ectory under `:deps/root`.
   
    Typically, an entry point for using other functions from this namespace.
 
-## <a name="protosens.deps.edn/require-project">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/deps.edn/src/main/clj/protosens/deps/edn.clj#L82-L114) `require-project`</a>
+## <a name="protosens.deps.edn/require-project">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/deps.edn/src/main/clj/protosens/deps/edn.clj#L95-L132) `require-project`</a>
 ``` clojure
 
 (require-project deps-edn)
