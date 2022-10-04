@@ -3,16 +3,25 @@
 ;;
 {:deps
  {babashka/fs {:mvn/version "0.1.11"},
-  io.github.borkdude/quickdoc
-  {:git/sha "fc5a18bb419ccac3c8769aa0761384025b27f68c"},
-  org.clojure/java.classpath {:mvn/version "1.0.0"},
-  org.clojure/tools.namespace {:mvn/version "1.3.0"},
+  babashka/process {:mvn/version "0.2.10"},
+  protosens/classpath
+  {:deps/root "module/classpath",
+   :git/sha "2ca02ab794ac9cc1b5c57ac4c378f8e62ad80962",
+   :git/url "https://github.com/protosens/monorepo.cljc"},
+  protosens/git
+  {:deps/root "module/git",
+   :git/sha "2ca02ab794ac9cc1b5c57ac4c378f8e62ad80962",
+   :git/url "https://github.com/protosens/monorepo.cljc"},
   protosens/maestro
   {:deps/root "module/maestro",
-   :git/sha "4075be8d9364716b26c4320f890ad5b7131e22a4",
+   :git/sha "2ca02ab794ac9cc1b5c57ac4c378f8e62ad80962",
    :git/url "https://github.com/protosens/monorepo.cljc"},
-  protosens/txt
-  {:deps/root "module/txt",
-   :git/sha "4075be8d9364716b26c4320f890ad5b7131e22a4",
+  protosens/process
+  {:deps/root "module/process",
+   :git/sha "2ca02ab794ac9cc1b5c57ac4c378f8e62ad80962",
+   :git/url "https://github.com/protosens/monorepo.cljc"},
+  protosens/string
+  {:deps/root "module/string",
+   :git/sha "2ca02ab794ac9cc1b5c57ac4c378f8e62ad80962",
    :git/url "https://github.com/protosens/monorepo.cljc"}},
  :paths ["src/main/clj"]}

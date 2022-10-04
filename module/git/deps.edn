@@ -2,17 +2,7 @@
 ;; as a git dependency via `:deps/root`.
 ;;
 {:deps
- {babashka/fs {:mvn/version "0.1.11"},
-  babashka/process {:mvn/version "0.2.10"},
-  lambdaisland/kaocha {:mvn/version "1.63.998"},
-  protosens/git
-  {:deps/root "module/git",
-   :git/sha "2ca02ab794ac9cc1b5c57ac4c378f8e62ad80962",
-   :git/url "https://github.com/protosens/monorepo.cljc"},
-  protosens/maestro
-  {:deps/root "module/maestro",
-   :git/sha "2ca02ab794ac9cc1b5c57ac4c378f8e62ad80962",
-   :git/url "https://github.com/protosens/monorepo.cljc"},
+ {babashka/process {:mvn/version "0.2.10"},
   protosens/process
   {:deps/root "module/process",
    :git/sha "2ca02ab794ac9cc1b5c57ac4c378f8e62ad80962",

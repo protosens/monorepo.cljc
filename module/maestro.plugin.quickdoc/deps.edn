@@ -4,7 +4,8 @@
 {:deps
  {babashka/fs {:mvn/version "0.1.11"},
   babashka/process {:mvn/version "0.2.10"},
-  lambdaisland/kaocha {:mvn/version "1.63.998"},
+  io.github.borkdude/quickdoc
+  {:git/sha "fc5a18bb419ccac3c8769aa0761384025b27f68c"},
   protosens/git
   {:deps/root "module/git",
    :git/sha "2ca02ab794ac9cc1b5c57ac4c378f8e62ad80962",
