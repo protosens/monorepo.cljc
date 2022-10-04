@@ -56,11 +56,11 @@
 
   "When the given task has been found.
   
-   Prints its docstring and `:maestro/doc` (if any)."
+   Prints its docstring and `:protosens/doc` (if any)."
 
   [data]
 
-  (when-some [docstring (data :docstring)]
+  (when-some [docstring (data :doc)]
     (println docstring)
     (println)
     (println "---")

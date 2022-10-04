@@ -69,10 +69,10 @@
         "Task not found")
 
   (T/is (= (merge -base
-                  {:body      "1-extra" 
-                   :docstring "1-doc"
-                   :task      'task-1
-                   :type      :task})
+                  {:body "1-extra" 
+                   :doc  "1-doc"
+                   :task 'task-1
+                   :type :task})
            ($.bb.help/task {:bb   -path-task+
                             :task 'task-1}))
         "Task found"))

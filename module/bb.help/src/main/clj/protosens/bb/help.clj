@@ -36,7 +36,7 @@
 
   "Pretty-prints extra documentation for a task (if there is any).
 
-   Extra documentation may be specified in a task under `:module/maestro`.
+   Extra documentation may be specified in a task under `:protosens/doc`.
    Multi-line strings will be realigned.
 
    Options may contain:
@@ -67,10 +67,10 @@
            (if-some [data (get task+
                                task)]
              (assoc result-2
-                    :body      (some-> (data :maestro/doc)
-                                       ($.string/realign))
-                    :docstring (data :doc)
-                    :type      :task)
+                    :body  (some-> (data :protosens/doc)
+                                   ($.string/realign))
+                    :doc   (data :doc)
+                    :type  :task)
              (assoc result-2
                     :type
                     :not-found)))
@@ -82,7 +82,7 @@
 
 (defn undocumented-task+
 
-  "Returns a sorted list of tasks which do not have a `:maestro/doc`.
+  "Returns a sorted list of tasks which do not have a `:protosens/doc`.
 
    Options may be:
 
@@ -102,7 +102,7 @@
 
    {:task+ (sort-by string/lower-case
                     (keep (fn [[task data]]
-                            (when-not (:maestro/doc data)
+                            (when-not (:protosens/doc data)
                               task))
                           (-task+ option+)))
     :type  :undocumented-task+}))

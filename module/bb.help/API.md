@@ -3,7 +3,7 @@
     -  [`print`](#protosens.bb.help/print) - Pretty-prints data maps returned from other functions.
     -  [`printer+`](#protosens.bb.help/printer+) - Default printers used by [[print]].
     -  [`task`](#protosens.bb.help/task) - Pretty-prints extra documentation for a task (if there is any).
-    -  [`undocumented-task+`](#protosens.bb.help/undocumented-task+) - Returns a sorted list of tasks which do not have a <code>:maestro/doc</code>.
+    -  [`undocumented-task+`](#protosens.bb.help/undocumented-task+) - Returns a sorted list of tasks which do not have a <code>:protosens/doc</code>.
 -  [`protosens.bb.help.print`](#protosens.bb.help.print)  - Default printers used by [[protosens.bb.help/print]].
     -  [`no-task`](#protosens.bb.help.print/no-task) - When no task has been provided as input.
     -  [`no-task+`](#protosens.bb.help.print/no-task+) - When the <code>bb.edn</code> file does not have any task.
@@ -52,7 +52,7 @@ Default printers used by [`print`](#protosens.bb.help/print).
 
 Pretty-prints extra documentation for a task (if there is any).
 
-   Extra documentation may be specified in a task under `:module/maestro`.
+   Extra documentation may be specified in a task under `:protosens/doc`.
    Multi-line strings will be realigned.
 
    Options may contain:
@@ -72,7 +72,7 @@ Pretty-prints extra documentation for a task (if there is any).
 ```
 
 
-Returns a sorted list of tasks which do not have a `:maestro/doc`.
+Returns a sorted list of tasks which do not have a `:protosens/doc`.
 
    Options may be:
 
@@ -131,7 +131,7 @@ When the given task does not exist.
 
 When the given task has been found.
   
-   Prints its docstring and `:maestro/doc` (if any).
+   Prints its docstring and `:protosens/doc` (if any).
 
 ## <a name="protosens.bb.help.print/undocumented-task+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/bb.help/src/main/clj/protosens/bb/help/print.clj#L73-L86) `undocumented-task+`</a>
 ``` clojure
