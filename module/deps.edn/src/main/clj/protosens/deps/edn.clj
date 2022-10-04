@@ -6,6 +6,7 @@
 
   (:refer-clojure :exclude [read])
   (:require [clojure.edn         :as edn]
+            [clojure.string      :as string]
             [protosens.namespace :as $.namespace]
             [protosens.process   :as $.process]))
 
@@ -14,6 +15,7 @@
 
 
 ;;;;;;;;;; 
+
 
 (defn namespace+
 
@@ -63,19 +65,26 @@
 
 (defn read 
 
-  "Reads the `deps.edn` file located in `dir`.
+  "Reads the `deps.edn` file located in `dir` (defaults to `./`).
   
    Remembers the `dir`ectory under `:deps/root`.
   
    Typically, an entry point for using other functions from this namespace."
 
-  [dir]
 
-  (-> (slurp (str dir
+  ([]
+
+   (read nil))
+
+
+  ([dir]
+
+  (-> (slurp (str (or dir
+                      ".")
                   "/deps.edn"))
       (edn/read-string)
       (assoc :deps/root
-             dir)))
+             dir))))
 
 
 
@@ -99,16 +108,21 @@
 
 
   ([deps-edn option+]
-
-   (-> ($.process/shell (concat ["clojure" "-M"]
-                                (mapcat (fn [nmspace]
-                                          ["-e" (format "(println \"(require '%s)\")"
-                                                       nmspace) 
-                                           "-e" (format "(require '%s)"
-                                                        nmspace)])
-                                        (sort (namespace+ deps-edn
-                                                          (:alias+ option+)))))
-                        (-> (:protosens.process/option+ option+)
-                            (assoc :dir
-                                   (deps-edn :deps/root))))
-       ($.process/success?))))
+  
+   (let [alias+ (:alias+ option+)]
+     (-> ($.process/shell (concat ["clojure"
+                                   (cond->
+                                     "-M"
+                                     (seq alias+)
+                                     (str (string/join alias+)))]
+                                  (mapcat (fn [nmspace]
+                                            ["-e" (format "(println \"(require '%s)\")"
+                                                         nmspace) 
+                                             "-e" (format "(require '%s)"
+                                                          nmspace)])
+                                          (sort (namespace+ deps-edn
+                                                            alias+))))
+                          (-> (:protosens.process/option+ option+)
+                              (assoc :dir
+                                     (deps-edn :deps/root))))
+         ($.process/success?)))))

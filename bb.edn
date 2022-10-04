@@ -24,93 +24,92 @@
 
  :tasks
  {aliases
-  {:doc         "Print all required aliases"
-   :maestro/doc "Given an alias or a vector of aliases and profiles, prints all necessary
-                 aliases, following `:maestro/require` in `deps.edn`.
+  {:doc           "Print all required aliases"
+   :protosens/doc "Given an alias or a vector of aliases and profiles, prints all necessary
+                   aliases, following `:maestro/require` in `deps.edn`.
 
-                      bb aliases :module/maestro
-                      bb aliases '[dev :module/maestro]'
-                  
-                 Based on `protosens.maestro/task`.
-                 Also accepts a mode, see available ones in `deps.edn`:
-                  
-                      bb aliases :dev :module/maestro"
-   :requires    ([protosens.maestro])
-   :task        (protosens.maestro/task)}
+                        bb aliases :module/maestro
+                        bb aliases '[dev :module/maestro]'
+                    
+                   Based on `protosens.maestro/task`.
+                   Also accepts a mode, see available ones in `deps.edn`:
+                    
+                        bb aliases :dev :module/maestro"
+   :requires      ([protosens.maestro])
+   :task          (protosens.maestro/task)}
 
 
   api
-  {:doc         "Generate documentation for modules"
-   :maestro/doc "Generate a markdown file for each module specifying a path via
-                 `:maestro.plugin.quickdoc.path/output`.
-                 
-                 It will contain a full description of all namespaces belonging to the module,
-                 with vars and usage."
-   :requires    ([protosens.maestro.plugin.quickdoc])
-   :task        (protosens.maestro.plugin.quickdoc/module+)}
+  {:doc           "Generate documentation for modules"
+   :protosens/doc "Generate a markdown file for each module specifying a path via
+                   `:maestro.plugin.quickdoc.path/output`.
+                   
+                   It will contain a full description of all namespaces belonging to the module,
+                   with vars and usage."
+   :requires      ([protosens.maestro.plugin.quickdoc])
+   :task          (protosens.maestro.plugin.quickdoc/module+)}
 
 
   api:bundle
-  {:doc         "Bundle the given vector of aliases and generate a single documentation"
-   :maestro/doc "Similar to the `api` task but all the `:extra-paths` of the input aliases
-                 will be merged and only one markdown file will be generated under `./API.md`."
-   :requires    ([protosens.maestro.plugin.quickdoc])
-   :task        (protosens.maestro.plugin.quickdoc/bundle)}
+  {:doc           "Bundle the given vector of aliases and generate a single documentation"
+   :protosens/doc "Similar to the `api` task but all the `:extra-paths` of the input aliases
+                   will be merged and only one markdown file will be generated under `./API.md`."
+   :requires      ([protosens.maestro.plugin.quickdoc])
+   :task          (protosens.maestro.plugin.quickdoc/bundle)}
 
 
   build
-  {:doc         "Build the given module"
-   :maestro/doc "Based on information located in the alias data in `deps.edn`.
-                 See the `$.maestro.plugin.build` namespace."
-   :requires    ([protosens.maestro.plugin.build])
-   :task        (protosens.maestro.plugin.build/task :module/maestro.plugin.build)}
+  {:doc           "Build the given module"
+   :protosens/doc "Based on information located in the alias data in `deps.edn`.
+                   See the `$.maestro.plugin.build` namespace."
+   :requires      ([protosens.maestro.plugin.build])
+   :task          (protosens.maestro.plugin.build/task :module/maestro.plugin.build)}
 
 
   dev
-  {:doc         "Starts dev mode with the given module(s)"
-   :maestro/doc "Shortcut for launching dev mode given an alias or a vector of aliases and profiles.
+  {:doc           "Starts dev mode with the given module(s)"
+   :protosens/doc "Shortcut for launching dev mode given an alias or a vector of aliases and profiles.
            
-                 For instance, this:
-                 
-                     bb dev :module/maestro
-                 
-                 Is equivalent to:
-                 
-                     clojure -M$( bb aliases :dev :module/maestro )"
-
-   :requires    ([protosens.maestro.process])
-   :task        (protosens.maestro.process/run {:maestro/mode :dev
-                                                :maestro.process/command ["clj" "-M__"]})}
+                   For instance, this:
+                   
+                       bb dev :module/maestro
+                   
+                   Is equivalent to:
+                   
+                       clojure -M$( bb aliases :dev :module/maestro )"
+   :requires      ([protosens.maestro.process])
+   :task          (protosens.maestro.process/run {:maestro/mode :dev
+                                                  :maestro.process/command ["clj" "-M__"]})}
 
 
   expose
-  {:doc         "Expose modules meant to be consumed as Git libraries"
-   :maestro/doc "By generating a custom `deps.edn` file in the `:meastro/root` of aliases that
-                 have a `:maestro.git.lib/name`.
-                 
-                 Consumers can then require the repository as a Git dependency and point to a
-                 particular module using `:deps/root`."
-   :requires    ([protosens.maestro.git.lib])
-   :task        (protosens.maestro.git.lib/task)}
+  {:doc           "Expose modules meant to be consumed as Git libraries"
+   :protosens/doc "By generating a custom `deps.edn` file in the `:meastro/root` of aliases that
+                   have a `:maestro.git.lib/name`.
+                   
+                   Consumers can then require the repository as a Git dependency and point to a
+                   particular module using `:deps/root`."
+   :requires      ([protosens.maestro.git.lib])
+   :task          (protosens.maestro.git.lib/task)}
 
 
   genesis
-  {:doc         "Run before using any of these tasks"
-   :maestro/doc "Syncs dependencies and paths between `bb.edn` and `deps.edn`.
-                 
-                 It is important running this after cloning the repository and
-                 after modifying dependencies or source paths needed by these
-                 Babashka tasks."
-   :requires    ([protosens.maestro.uber])
-   :task        (protosens.maestro.uber/task :module/task)}
+  {:doc           "Run before using any of these tasks"
+   :protosens/doc "Syncs dependencies and paths between `bb.edn` and `deps.edn`.
+                   
+                   It is important running this after cloning the repository and
+                   after modifying dependencies or source paths needed by these
+                   Babashka tasks."
+   :requires      ([protosens.maestro.uber])
+   :task          (protosens.maestro.uber/task :module/task)}
 
 
   help
-  {:doc         "Print documentation for the given task"
-   :maestro/doc "If there is any."
-   :requires    ([protosens.bb.help])
-   :task        (-> (protosens.bb.help/task)
-                    (protosens.bb.help/print))}
+  {:doc           "Print documentation for the given task"
+   :protosens/doc "If there is any."
+   :requires      ([protosens.bb.help])
+   :task          (-> (protosens.bb.help/task)
+                      (protosens.bb.help/print))}
 
 
   help:missing
@@ -121,71 +120,71 @@
 
 
   mtempl 
-  {:doc         "Execute a shell command with computed required aliases"
-   :maestro/doc "The `aliases` task prints required aliases and this is typically useful in
-                 combination with Clojure CLI. For instance:
+  {:doc           "Execute a shell command with computed required aliases"
+   :protosens/doc "The `aliases` task prints required aliases and this is typically useful in
+                   combination with Clojure CLI. For instance:
 
-                   clojure -M$( bb aliases :test :module/maestro )
+                     clojure -M$( bb aliases :test :module/maestro )
 
-                 However, some shells or some environments do not understand such substitutions
-                 with `$()` (or similar). This task replaces `__` with the printed required
-                 aliases.
-                
-                 For instance:
+                   However, some shells or some environments do not understand such substitutions
+                   with `$()` (or similar). This task replaces `__` with the printed required
+                   aliases.
+                  
+                   For instance:
 
-                   bb mtempl :test :module/maestro -- clojure -M__
-                
-                 Before `--` is what would have been provided to the `aliases`, after is the command
-                 to template."
-   :requires    ([protosens.maestro.process])
-   :task        (protosens.maestro.process/run)}
+                     bb mtempl :test :module/maestro -- clojure -M__
+                  
+                   Before `--` is what would have been provided to the `aliases`, after is the command
+                   to template."
+   :requires      ([protosens.maestro.process])
+   :task          (protosens.maestro.process/run)}
 
 
   lint
-  {:doc         "Lint Clojure code throughout the whole repository"
-   :maestro/doc "Using `clj-kondo` which must be accessible in the terminal.
+  {:doc           "Lint Clojure code throughout the whole repository"
+   :protosens/doc "Using `clj-kondo` which must be accessible in the terminal.
 
-                 See the `lint:prepare` task which is necessary for initialization."
-   :requires    ([protosens.maestro.plugin.clj-kondo])
-   :task        (protosens.maestro.plugin.clj-kondo/lint)}
+                   See the `lint:prepare` task which is necessary for initialization."
+   :requires      ([protosens.maestro.plugin.clj-kondo])
+   :task          (protosens.maestro.plugin.clj-kondo/lint)}
 
 
   lint:prepare
-  {:doc         "Prepare for `lint`"
-   :maestro/doc "Must be called prior to using the `lint` task and ideally when dependencies are
-                 updated. This will lint and cache dependencies as well as copying configuration
-                 files."
-   :requires    ([protosens.maestro.plugin.clj-kondo])
-   :task        (protosens.maestro.plugin.clj-kondo/prepare)}
+  {:doc           "Prepare for `lint`"
+   :protosens/doc "Must be called prior to using the `lint` task and ideally when dependencies are
+                   updated. This will lint and cache dependencies as well as copying configuration
+                   files."
+   :requires      ([protosens.maestro.plugin.clj-kondo])
+   :task          (protosens.maestro.plugin.clj-kondo/prepare)}
 
 
   pprint-cp
-  {:doc         "Pretty-print the classpath received from STDIN"
-   :maestro/doc "Useful in combination with `-Spath`. For instance:
-               
-                     clojure -Spath -A$( bb aliases :module/maestro ) | bb pprint-cp
+  {:doc           "Pretty-print the classpath received from STDIN"
+   :protosens/doc "Useful in combination with `-Spath`. For instance:
                  
-                 In reality, it will pretty print any string where items are separated by `:`.
-                 
-                     bb aliases:dev :module/maestro | bb pprint-cp"
-   :requires    ([protosens.classpath])
-   :task        (protosens.classpath/pprint)}
+                       clojure -Spath -A$( bb aliases :module/maestro ) | bb pprint-cp
+                   
+                   In reality, it will pretty print any string where items are separated by `:`.
+                   
+                       bb aliases:dev :module/maestro | bb pprint-cp"
+   :requires      ([protosens.classpath])
+   :task          (protosens.classpath/pprint)}
 
 
   test
-  {:doc         "Tests the given module(s)"
-   :maestro/doc "Shortcut for launching tests given an alias or a vector of aliases and profiles.
+  {:doc           "Tests the given module(s)"
+   :protosens/doc "Shortcut for launching tests given an alias or a vector of aliases and profiles.
 
-                 For instance, this:
-                 
-                     bb test :module/maestro
-                 
-                 Is equivalent to:
-                 
-                     clojure -M$( bb aliases :test :module/maestro )"
-   :requires    ([protosens.maestro.process])
-   :task        (protosens.maestro.process/run {:maestro/mode            :test
-                                                :maestro.process/command ["clojure" "-M__"]})}
+                   For instance, this:
+                   
+                       bb test :module/maestro
+                   
+                   Is equivalent to:
+                   
+                       clojure -M$( bb aliases :test :module/maestro )"
+   :requires      ([protosens.maestro.process])
+   :task          (protosens.maestro.process/run {:maestro/mode            :test
+                                                  :maestro.process/command ["clojure" "-M__"]})}
 
 
   test-upstream

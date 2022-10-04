@@ -91,6 +91,9 @@
    |--------------------|---------------------------------------|------------------|
    | `:maestro/project` | Alternative path to a `deps.edn` file | `\"./deps.edn\"` |"
 
+  ;; In theory, this could use `$.deps.edn/read`.
+  ;; In practice, it breaks `bb genesis`.
+
 
   ([]
 
@@ -436,4 +439,3 @@
        ((or (:maestro.task/finalize basis)
             (comp print
                   stringify-required))))))
-

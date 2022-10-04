@@ -181,10 +181,16 @@
   {:extra-paths                         ["module/deps.edn/src/main/clj"]
    :maestro/doc                         "Handling `deps.edn` files"
    :maestro/require                     [:module/namespace
-                                         :module/process]
+                                         :module/process
+                                         {test :test/deps.edn}]
    :maestro/root                        "module/deps.edn"
    :maestro.git.lib/name                protosens/deps.edn
    :maestro.plugin.quickdoc.path/output "module/deps.edn/API.md"}
+
+
+  :test/deps.edn
+
+  {:extra-paths ["module/deps.edn/src/test/clj"]}
 
   ;---
 
@@ -224,6 +230,7 @@
    :maestro/doc                         "Tools for managing a (mono)repo by leveraging `deps.edn`"
    :maestro/require                     [:ext/babashka.fs
                                          :ext/babashka.process
+                                         :module/deps.edn
                                          :module/git
                                          :module/process
                                          :module/string

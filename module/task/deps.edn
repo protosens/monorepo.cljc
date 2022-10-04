@@ -4,17 +4,21 @@
 ;;
 ;;     :ext/babashka.fs
 ;;     :ext/babashka.process
+;;     :ext/clojure.java.classpath
 ;;     :ext/clojure.tools.build
+;;     :ext/clojure.tools.namespace
 ;;     :ext/kaocha
 ;;     :ext/quickdoc
 ;;     :module/bb.help
 ;;     :module/classpath
+;;     :module/deps.edn
 ;;     :module/git
 ;;     :module/maestro
 ;;     :module/maestro.plugin.build
 ;;     :module/maestro.plugin.clj-kondo
 ;;     :module/maestro.plugin.kaocha
 ;;     :module/maestro.plugin.quickdoc
+;;     :module/namespace
 ;;     :module/process
 ;;     :module/string
 ;;     :module/task
@@ -28,6 +32,8 @@
 {:deps
  {babashka/fs {:mvn/version "0.1.11"},
   babashka/process {:mvn/version "0.2.10"},
+  org.clojure/java.classpath {:mvn/version "1.0.0"},
+  org.clojure/tools.namespace {:mvn/version "1.3.0"},
   io.github.clojure/tools.build
   {:git/sha "0d20256", :git/tag "v0.8.3"},
   lambdaisland/kaocha {:mvn/version "1.63.998"},
@@ -36,11 +42,13 @@
  :paths
  ["maestro/uber/module/bb.help/src/main/clj"
   "maestro/uber/module/classpath/src/main/clj"
+  "maestro/uber/module/deps.edn/src/main/clj"
   "maestro/uber/module/git/src/main/clj"
   "maestro/uber/module/maestro.plugin.build/src/main/clj"
   "maestro/uber/module/maestro.plugin.clj-kondo/src/main/clj"
   "maestro/uber/module/maestro.plugin.kaocha/src/main/clj"
   "maestro/uber/module/maestro.plugin.quickdoc/src/main/clj"
   "maestro/uber/module/maestro/src/main/clj"
+  "maestro/uber/module/namespace/src/main/clj"
   "maestro/uber/module/process/src/main/clj"
   "maestro/uber/module/string/src/main/clj"]}
