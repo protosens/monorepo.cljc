@@ -16,6 +16,14 @@
 
 (defn from-filename
 
+  "Converts a `filename` to a namespace symbol.
+
+   If a `root` directory is provided, `filename` is relativized first before
+   being converted.
+
+   The extension of `filename` is remembered in the `meta`data of the produced
+   symbol under `:protosens.namespace/extension`."
+
 
   ([filename]
 
@@ -44,6 +52,10 @@
 
 (defn main-ns
 
+  "Produces form for declaring a namespace `sym`.
+  
+   It will require all namespaces provided in `require+`."
+
   [sym require+]
 
   (list 'ns
@@ -58,6 +70,11 @@
 
 
 (defn in-cp-dir+
+
+  "Uses [[in-path+]] on directories from the current classpath.
+  
+   Useful for detecting available namespaces.
+   Does not crawl JAR files."
 
 
   ([]
@@ -74,6 +91,14 @@
 
 
 (defn in-path
+
+  "Finds all namespaces available in the given directory `path`.
+
+   Options may be:
+
+   | Key           | Value                          | Default                          |
+   |---------------|--------------------------------|----------------------------------|
+   | `:extension+` | Extensions for files to handle | `[\".clj\" \".cljc\" \".cljs\"]` |"
 
 
   ([path]
@@ -103,6 +128,7 @@
 
 (defn in-path+
 
+  "Exactly like [[in-path]] but works with a collection of directories."
 
   ([path+]
 
@@ -124,14 +150,17 @@
 
 (defn require-cp-dir+
 
-  "Requires all namespace filtered out by `f`.
+  "Requires all namespaces found with [[in-cp-dir+]].
 
-   `f` takes a namespace as a simple and must:
-
+   They are filtered by `f`, a function which takes a namespace and must:
+  
    - Return `nil` if the namespace should not be required
    - Return an argument for `require` otherwise
 
-   Namespaces are required one by one and prints what is happening."
+   Namespaces are required one by one and prints what is happening.
+  
+   Useful to put in the `user` namespace for automatically requiring a set of
+   namespaces."
 
 
   ([f]
