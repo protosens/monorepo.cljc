@@ -120,6 +120,7 @@
                      :module/maestro.plugin.quickdoc
                      :module/namespace
                      :module/process
+                     :module/requirer
                      :module/string
                      :module/symbol]}
 
@@ -195,10 +196,9 @@
 
   {:extra-paths                         ["module/deps.edn/src/main/clj"]
    :maestro/doc                         "Handling `deps.edn` files"
-   :maestro/platform+                   [:jvm]
+   :maestro/platform+                   [:bb
+                                         :jvm]
    :maestro/require                     [:module/edn
-                                         :module/namespace
-                                         :module/process
                                          {test :test/deps.edn}]
    :maestro/root                        "module/deps.edn"
    :maestro.git.lib/name                protosens/deps.edn
@@ -405,6 +405,26 @@
   :test/process
 
   {:extra-paths ["module/process/src/test/clj"]}
+
+  ;---
+
+  :module/requirer
+
+  {:extra-paths                         ["module/requirer/src/main/clj"]
+   :maestro/doc                         ""
+   :maestro/platform+                   [:jvm]
+   :maestro/require                     [:module/deps.edn
+                                         :module/namespace
+                                         :module/process
+                                         {test :test/requirer}]
+   :maestro/root                        "module/requirer"
+   :maestro.git.lib/name                protosens/requirer
+   :maestro.plugin.quickdoc.path/output "module/requirer/API.md"}
+
+
+  :test/requirer
+
+  {:extra-paths ["module/requirer/src/test/clj"]}
 
   ;---
 

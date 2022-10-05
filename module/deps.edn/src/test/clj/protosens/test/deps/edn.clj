@@ -29,20 +29,6 @@
 ;;;;;;;;;; Tests
 
 
-(T/deftest namespace+
-
-  (T/is (= '(main)
-           ($.deps.edn/namespace+ @-d*deps-edn))
-        "Without aliases")
-
-  (T/is (= '(extra
-             main)
-           (sort ($.deps.edn/namespace+ @-d*deps-edn
-                                        [:extra])))
-        "With aliases"))
-
-
-
 (T/deftest path+
 
 
@@ -68,40 +54,3 @@
             :deps/root -root
             :paths     ["src/main"]}
            @-d*deps-edn)))
-
-
-
-(defn- -require-project
-
-  [f]
-
-  (T/is (true? (f @-d*deps-edn
-                  {:protosens.process/option+ {:out nil}}))
-        "Without any alias")
-
-  (T/testing
-
-    "With alias"
-
-    (T/is (true? (f @-d*deps-edn
-                    {:alias+                    [:extra]
-                     :protosens.process/option+ {:out nil}}))
-          "Good alias")
-
-    (T/is (false? (f @-d*deps-edn
-                     {:alias+                    [:fail]
-                      :protosens.process/option+ {:err nil
-                                                  :out nil}}))
-          "Bad alias")))
-
-
-
-(T/deftest require-project
-
-  (-require-project $.deps.edn/require-project))
-
-
-
-(T/deftest require-project-bb
-
-  (-require-project $.deps.edn/require-project-bb))
