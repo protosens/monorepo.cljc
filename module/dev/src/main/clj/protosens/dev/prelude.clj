@@ -15,10 +15,8 @@
 
   ($.namespace/require-found
     (fn [nmspace]
-      (when (and ($.symbol/starts-with? nmspace
-                                        'protosens.) 
-                 (not= nmspace
-                       'protosens.maestro.plugin.quickdoc))
+      (when ($.symbol/starts-with? nmspace
+                                   'protosens.)
         [nmspace
          :as
          ($.symbol/replace-first nmspace

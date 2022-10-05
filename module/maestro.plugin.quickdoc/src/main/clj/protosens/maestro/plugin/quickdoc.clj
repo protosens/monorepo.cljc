@@ -2,7 +2,7 @@
 
   "Maestro plugin generating markdown documentation for modules using [Quickdoc](https://github.com/borkdude/quickdoc)
 
-   Works only with Babashka.
+   Works with Babashka out of the box. For Clojure JVM, add the JVM flavor of Quickdoc to your dependencies.
 
    Attention, it is necessary adding the `clj-kondo` to your `bb.edn` file as a [Babashka pod](https://github.com/babashka/pods):
 

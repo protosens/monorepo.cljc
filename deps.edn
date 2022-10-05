@@ -87,7 +87,16 @@
   :ext/quickdoc
 
   {:extra-deps  {io.github.borkdude/quickdoc {:git/sha "fc5a18bb419ccac3c8769aa0761384025b27f68c"}}
-   :maestro/doc "Generating markdown documentation for Clojure namespaces"
+   :maestro/doc "Generating markdown documentation for Clojure namespaces
+                 Works only with Babashka."
+   :maestro/url "https://github.com/borkdude/quickdoc"}
+
+
+  :ext/quickdoc.jvm
+
+  {:extra-deps  {io.github.borkdude/quickdoc {:deps/root "jvm"
+                                              :git/sha   "fc5a18bb419ccac3c8769aa0761384025b27f68c"}}
+   :maestro/doc "Exactly like `:ext/quickdoc` but works on the JVM by requiring Clj-kondo"
    :maestro/url "https://github.com/borkdude/quickdoc"}
 
 
@@ -332,7 +341,8 @@
    :maestro/require                     [:ext/babashka.fs
                                          :ext/quickdoc
                                          :module/edn
-                                         :module/maestro]
+                                         :module/maestro
+                                         {dev :ext/quickdoc.jvm}]
    :maestro/root                        "module/maestro.plugin.quickdoc"
    :maestro.git.lib/name                protosens/maestro.plugin.quickdoc
    :maestro.plugin.quickdoc.path/output "module/maestro.plugin.quickdoc/API.md"}
