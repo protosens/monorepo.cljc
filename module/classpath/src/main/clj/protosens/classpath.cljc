@@ -2,7 +2,8 @@
 
   "Simple classpath utilities."
 
-  (:require [clojure.string    :as string]
+  (:require #?(:bb [babashka.classpath :as bb.classpath])
+            [clojure.string    :as string]
             [protosens.process :as $.process]))
 
 
@@ -20,14 +21,20 @@
   
    Returns `nil` if something goes wrong."
   
-  [alias+]
 
-  (-> ($.process/run ["clojure"
-                      "-Spath"
-                      (when (seq alias+)
-                        (str "-A"
-                              (string/join alias+)))])
-      ($.process/out)))
+  ([]
+
+   (compute nil))
+
+
+  ([alias+]
+
+   (-> ($.process/run ["clojure"
+                       "-Spath"
+                       (when (seq alias+)
+                         (str "-A"
+                               (string/join alias+)))])
+       ($.process/out))))
 
 
 
@@ -37,7 +44,7 @@
 
   []
 
-  #?(:bb  (babashka.classpath/get-classpath)
+  #?(:bb  (bb.classpath/get-classpath)
      :clj (System/getProperty "java.class.path")))
 
 

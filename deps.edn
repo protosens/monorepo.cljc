@@ -185,10 +185,17 @@
    :maestro/doc                         "Little collection of classpath-related utilities"
    :maestro/platform+                   [:bb
                                          :jvm]              
-   :maestro/require                     [:module/process]
+   :maestro/require                     [:module/process
+                                         {test :test/classpath}]
    :maestro/root                        "module/classpath"
    :maestro.git.lib/name                protosens/classpath
    :maestro.plugin.quickdoc.path/output "module/classpath/API.md"}
+
+
+  :test/classpath
+
+  {:extra-paths     ["module/classpath/src/test/clj"]
+   :maestro/require [:module/string]}
 
   ;---
 
@@ -376,7 +383,8 @@
    :maestro/platform+                   [:bb
                                          :jvm]              
    :maestro/root                        "module/namespace"
-   :maestro/require                     [:ext/clojure.java.classpath
+   :maestro/require                     [:ext/babashka.fs
+                                         :ext/clojure.java.classpath
                                          :ext/clojure.tools.namespace
                                          {test :test/namespace}]
    :maestro.git.lib/name                protosens/namespace
