@@ -221,45 +221,46 @@
    ;; Ensure repository is clean.
    (when-not ($.git/clean?)
      ($.maestro/fail "Repository must be sparkling clean, no modified or untracked files"))
-   ;;
-   ;; Prepare exposition.
-   (let [git-sha ($.git/commit-sha 0)]
-     (println "Prepare exposition")
-     (expose git-sha
-             basis)
-     ($.git/add ["."])
-     ($.git/commit (if-some [f (:maestro.git.lib.message/prepare basis)]
-                     (f git-sha)
-                     (format "Prepare exposition
-                    
-                              Base: %s"
-                             git-sha))))
-   ;;
-   ;; Expose and print feedback for all modules.
-   (let [git-sha-2 ($.git/commit-sha 0)]
-     (println "Expose")
-     (println)
-     (doseq [[alias
-              feedback] (expose git-sha-2
-                                basis)]
-       (println (format "    %s -> %s"
-                        alias
-                        (feedback :maestro.git.lib.path/deps.edn)))
-       (doseq [alias-child (sort (filter (fn [alias-child]
-                                           (not= alias-child
-                                                 alias))
-                                         (feedback :maestro/require)))]
-         (println "       "
-                  alias-child))
-       (println))
-     ($.git/add ["."])
-     ($.git/commit (if-some [f (:maestro.git.lib.message/expose basis)]
-                     (f git-sha-2)
-                     (format "Expose
-                           
-                              Pre-exposed: %s"
-                             git-sha-2))))
-   ;;
-   ;; Done!
-   (println "Users can point to commit:"
-            ($.git/commit-sha 0))))
+  (let [basis-2 ($.maestro/ensure-basis basis)]
+     ;;
+     ;; Prepare exposition.
+     (let [git-sha ($.git/commit-sha 0)]
+       (println "Prepare exposition")
+       (expose git-sha
+               basis-2)
+       ($.git/add ["."])
+       ($.git/commit (if-some [f (:maestro.git.lib.message/prepare basis-2)]
+                       (f git-sha)
+                       (format "Prepare exposition
+                      
+                                Base: %s"
+                               git-sha))))
+     ;;
+     ;; Expose and print feedback for all modules.
+     (let [git-sha-2 ($.git/commit-sha 0)]
+       (println "Expose")
+       (println)
+       (doseq [[alias
+                feedback] (expose git-sha-2
+                                  basis-2)]
+         (println (format "    %s -> %s"
+                          alias
+                          (feedback :maestro.git.lib.path/deps.edn)))
+         (doseq [alias-child (sort (filter (fn [alias-child]
+                                             (not= alias-child
+                                                   alias))
+                                           (feedback :maestro/require)))]
+           (println "       "
+                    alias-child))
+         (println))
+       ($.git/add ["."])
+       ($.git/commit (if-some [f (:maestro.git.lib.message/expose basis-2)]
+                       (f git-sha-2)
+                       (format "Expose
+                             
+                                Pre-exposed: %s"
+                               git-sha-2))))
+     ;;
+     ;; Done!
+     (println "Users can point to commit:"
+              ($.git/commit-sha 0)))))
