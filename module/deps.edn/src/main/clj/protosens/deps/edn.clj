@@ -5,7 +5,11 @@
    Most useful for tool authors."
 
   (:refer-clojure :exclude [read])
-  (:require [protosens.edn.read  :as $.edn.read]))
+  (:require [protosens.edn.read  :as $.edn.read]
+            [protosens.namespace :as $.namespace]))
+
+
+(declare path+)
 
 
 (set! *warn-on-reflection*
@@ -39,7 +43,33 @@
               dir))))
 
 
-;;;;;;;;;; 
+;;;;;;;;;; Extracting information from `deps.edn` files
+
+
+(defn namespace+
+
+  "Returns namespaces provided by source files in that `deps.edn`.
+  
+   Options may be:
+
+   | Key          | Value                  | Default                          |
+   |--------------|------------------------|----------------------------------|
+   | `:alias+`    | See [[path+]]          | `nil`                            |
+   | `:extension+ | Source file extensions | `[\".clj\" \".cljc\" \".cljs\"]` |"
+
+
+  ([deps-edn]
+
+   (namespace+ deps-edn
+               nil))
+
+
+  ([deps-edn option+]
+
+   (-> deps-edn
+       (path+ (:alias+ option+))
+       ($.namespace/in-path+))))
+
 
 
 (defn path+

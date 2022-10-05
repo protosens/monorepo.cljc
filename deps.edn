@@ -419,9 +419,9 @@
 
   {:extra-paths                         ["module/requirer/src/main/clj"]
    :maestro/doc                         ""
-   :maestro/platform+                   [:jvm]
+   :maestro/platform+                   [:bb
+                                         :jvm]
    :maestro/require                     [:module/deps.edn
-                                         :module/namespace
                                          :module/process
                                          {test :test/requirer}]
    :maestro/root                        "module/requirer"

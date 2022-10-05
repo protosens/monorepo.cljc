@@ -29,6 +29,19 @@
 ;;;;;;;;;; Tests
 
 
+(T/deftest namespace+
+
+  (T/is (= '(main)
+           ($.deps.edn/namespace+ @-d*deps-edn))
+        "Without aliases")
+
+  (T/is (= '(extra
+             main)
+           (sort ($.deps.edn/namespace+ @-d*deps-edn
+                                        {:alias+ [:extra]})))
+        "With aliases"))
+
+
 (T/deftest path+
 
 

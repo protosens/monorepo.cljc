@@ -1,9 +1,8 @@
 (ns protosens.requirer
 
-  (:require [clojure.string      :as string]
-            [protosens.deps.edn  :as $.deps.edn]
-            [protosens.namespace :as $.namespace]
-            [protosens.process   :as $.process]))
+  (:require [clojure.string     :as string]
+            [protosens.deps.edn :as $.deps.edn]
+            [protosens.process  :as $.process]))
 
 
 (declare namespace+)
@@ -24,8 +23,8 @@
                                                       nmspace) 
                                           "-e" (format "(require '%s)"
                                                        nmspace)])
-                                       (namespace+ deps-edn
-                                                   (:alias+ option+))))
+                                       ($.deps.edn/namespace+ deps-edn
+                                                              option+)))
                        (-> (:protosens.process/option+ option+)
                            (assoc :dir
                                   (deps-edn :deps/root))))
@@ -33,23 +32,6 @@
 
 
 ;;;;;;;;;; Public
-
-
-(defn namespace+
-
-
-  ([deps-edn]
-
-   (namespace+ deps-edn
-               nil))
-
-
-  ([deps-edn alias+]
-
-   (-> deps-edn
-       ($.deps.edn/path+ alias+)
-       ($.namespace/in-path+)
-       (sort))))
 
 
 (defn bb
@@ -81,8 +63,9 @@
 
 (defn clojure-cli
 
-  "In a new process, requires all namespaces found with [[namespace+]].
-  
+  "In a new process, requires all namespaces found with [`protosens.deps.edn/namespace+`]
+   (https://github.com/protosens/monorepo.cljc/blob/develop/module/deps.edn/API.md#protosens.deps.edn/namespace+).
+
    This is useful for ensuring that a project fully compiles for production without any
    tests dependencies and such.
 
