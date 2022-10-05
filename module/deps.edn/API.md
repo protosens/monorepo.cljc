@@ -4,6 +4,7 @@
     -  [`path+`](#protosens.deps.edn/path+) - Returns all <code>:paths</code>, prepending <code>:deps/root</code>.
     -  [`read`](#protosens.deps.edn/read) - Reads the <code>deps.edn</code> file located in <code>dir</code> (defaults to <code>./</code>).
     -  [`require-project`](#protosens.deps.edn/require-project) - In a new process, requires all namespaces found with [[namespace+]].
+    -  [`require-project-bb`](#protosens.deps.edn/require-project-bb) - Exactly like [[require-project]] but uses Babashka instead of Clojure CLI.
 
 -----
 # <a name="protosens.deps.edn">protosens.deps.edn</a>
@@ -69,3 +70,13 @@ In a new process, requires all namespaces found with [`namespace+`](#protosens.d
 
    Returns `true` if the process completed with a zero status, meaning everything has been
    required without any problem.
+
+## <a name="protosens.deps.edn/require-project-bb">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/deps.edn/src/main/clj/protosens/deps/edn.clj#L136-L169) `require-project-bb`</a>
+``` clojure
+
+(require-project-bb deps-edn)
+(require-project-bb deps-edn option+)
+```
+
+
+Exactly like [`require-project`](#protosens.deps.edn/require-project) but uses Babashka instead of Clojure CLI.

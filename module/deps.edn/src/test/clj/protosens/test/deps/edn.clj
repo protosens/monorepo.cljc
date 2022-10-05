@@ -71,23 +71,37 @@
 
 
 
-(T/deftest require-project
+(defn- -require-project
 
-  (T/is (true? ($.deps.edn/require-project @-d*deps-edn
-                                           {:protosens.process/option+ {:out nil}}))
+  [f]
+
+  (T/is (true? (f @-d*deps-edn
+                  {:protosens.process/option+ {:out nil}}))
         "Without any alias")
 
   (T/testing
 
     "With alias"
 
-    (T/is (true? ($.deps.edn/require-project @-d*deps-edn
-                                             {:alias+                    [:extra]
-                                              :protosens.process/option+ {:out nil}}))
+    (T/is (true? (f @-d*deps-edn
+                    {:alias+                    [:extra]
+                     :protosens.process/option+ {:out nil}}))
           "Good alias")
 
-    (T/is (false? ($.deps.edn/require-project @-d*deps-edn
-                                              {:alias+                    [:fail]
-                                               :protosens.process/option+ {:err nil
-                                                                           :out nil}}))
+    (T/is (false? (f @-d*deps-edn
+                     {:alias+                    [:fail]
+                      :protosens.process/option+ {:err nil
+                                                  :out nil}}))
           "Bad alias")))
+
+
+
+(T/deftest require-project
+
+  (-require-project $.deps.edn/require-project))
+
+
+
+(T/deftest require-project-bb
+
+  (-require-project $.deps.edn/require-project-bb))

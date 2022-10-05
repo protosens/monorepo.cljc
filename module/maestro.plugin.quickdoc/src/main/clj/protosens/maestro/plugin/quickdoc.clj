@@ -22,7 +22,7 @@
 
 (defn- -quickdoc-option+
 
-  ;;
+  ;; Prepares options for Quickdock.
 
   [option+ basis]
 

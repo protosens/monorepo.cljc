@@ -161,6 +161,8 @@
 
   {:extra-paths                         ["module/bb.help/src/main/clj"]
    :maestro/doc                         "Collection of little Git-related quick utilities"
+   :maestro/platform+                   [:bb
+                                         :jvm]              
    :maestro/require                     [:module/edn
                                          :module/string
                                          {test :test/bb.help}]
@@ -180,6 +182,8 @@
 
   {:extra-paths                         ["module/classpath/src/main/clj"]
    :maestro/doc                         "Little collection of classpath-related utilities"
+   :maestro/platform+                   [:bb
+                                         :jvm]              
    :maestro/require                     [:module/process]
    :maestro/root                        "module/classpath"
    :maestro.git.lib/name                protosens/classpath
@@ -371,7 +375,8 @@
 
   {:extra-paths                         ["module/process/src/main/clj"]
    :maestro/doc                         "Light wrapper over `:ext/babasha.fs`"
-   :maestro/require                     [{test :test/process}]
+   :maestro/require                     [:ext/babashka.process
+                                         {test :test/process}]
    :maestro/root                        "module/process"
    :maestro.git.lib/name                protosens/process
    :maestro.plugin.quickdoc.path/output "module/process/API.md"}

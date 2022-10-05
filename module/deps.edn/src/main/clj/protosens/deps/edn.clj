@@ -130,3 +130,40 @@
                               (assoc :dir
                                      (deps-edn :deps/root))))
          ($.process/success?)))))
+
+
+
+(defn require-project-bb
+
+  "Exactly like [[require-project]] but uses Babashka instead of Clojure CLI."
+
+
+  ([deps-edn]
+
+   (require-project-bb deps-edn
+                       nil))
+
+
+  ([deps-edn option+]
+
+   (let [alias+ (:alias+ option+)]
+     (-> ($.process/shell (concat ["bb"
+                                   "-e"
+                                   ;; Note: `./` local root does not work.
+                                   (format "(babashka.deps/add-deps '%s
+                                                                    {:aliases %s})"
+                                           deps-edn
+                                           (if (seq alias+)
+                                             (vec alias+)
+                                             "nil"))]
+                                  (mapcat (fn [nmspace]
+                                            ["-e" (format "(println \"(require '%s)\")"
+                                                         nmspace) 
+                                             "-e" (format "(require '%s)"
+                                                          nmspace)])
+                                          (sort (namespace+ deps-edn
+                                                            alias+))))
+                          (-> (:protosens.process/option+ option+)
+                              (assoc :dir
+                                     (deps-edn :deps/root))))
+         ($.process/success?)))))
