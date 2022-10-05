@@ -31,6 +31,17 @@
 
 
 
+(defn current
+
+  "Returns the current classpath."
+
+  []
+
+  #?(:bb  (babashka.classpath/get-classpath)
+     :clj (System/getProperty "java.class.path")))
+
+
+
 (defn pprint
 
   "Pretty-prints the given classpath.
@@ -40,9 +51,9 @@
    Great match for [[compute]]. Classpath is [[split]] and sorted paths are printed."
 
 
-  ([]
+  #?(:clj ([]
 
-   (pprint (slurp *in*)))
+   (pprint (slurp *in*))))
 
 
   ([classpath]
