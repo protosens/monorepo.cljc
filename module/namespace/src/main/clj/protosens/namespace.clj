@@ -38,6 +38,19 @@
        (from-filename))))
 
 
+
+(defn main-ns
+
+  [sym require+]
+
+  (list 'ns
+        sym
+        (cons :require
+              (filter (partial not=
+                               sym)
+                      require+))))
+
+
 ;;;;;;;;;; Searching for namespaces
 
 
