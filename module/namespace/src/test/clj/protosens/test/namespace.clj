@@ -5,19 +5,115 @@
             [protosens.namespace :as $.namespace]))
 
 
-;;;;;;;;;; Private helpers
-
-
-;(defn- -ns+?
-;
-;  [x]
-;
-;  (and (seq x)
-;       (every? symbol?
-;               x)))
-
-
 ;;;;;;;;;; Tests
+
+
+(T/deftest from-filename
+
+  (let [filename "foo/bar.clj"
+        test     (fn [sym]
+                   (T/is (= 'foo.bar
+                            sym))
+                   (T/is (= {:protosens.namespace/extension ".clj"}
+                            (meta sym))))]
+
+    (T/testing
+      "Without root"
+      (test ($.namespace/from-filename "foo/bar.clj")))
+
+    (T/testing
+      "With root"
+      (let [root "root/"]
+        (test ($.namespace/from-filename root
+                                         (str root
+                                              filename)))))))
+
+
+
+(T/deftest main-ns
+
+  (T/is (= '(ns foo.bar (:require a b c))
+           ($.namespace/main-ns 'foo.bar
+                                '[a b c]))))
+
+
+
+(T/deftest in-cp-dir+
+
+  (T/is (some (partial =
+                       'protosens.test.namespace)
+              ($.namespace/in-cp-dir+))))
+
+
+
+(defn- -extension-remembered+
+
+  ;; See [[-in-path]].
+
+  [extension+ ns+]
+
+  (T/is (= extension+
+           (map (comp :protosens.namespace/extension
+                      meta)
+                ns+))
+        "Extensions remembered"))
+
+
+
+(defn- -in-path
+
+  ;; Reused for [[in-path]] and [[in-path+]].
+
+  [f-in-path f-path]
+
+  (T/testing
+
+    "Default options"
+
+    (let [ns+ (sort (f-in-path (f-path "module/namespace/resrc/test")))]
+
+      (T/is (= '[a
+                 b
+                 c]
+               ns+)
+            "All namespaces found")
+
+      (-extension-remembered+ [".clj"
+                               ".cljc"
+                               ".cljs"]
+                              ns+)))
+
+  (T/testing
+
+    "With given extensions"
+
+    (let [ns+ (sort (f-in-path (f-path "module/namespace/resrc/test")
+                               {:extension+ [".cljc"
+                                             ".cljs"]}))]
+
+      (T/is (= '[b
+                 c]
+               ns+)
+            "Namespaces for extensions found")
+
+      (-extension-remembered+ [".cljc"
+                               ".cljs"]
+                              ns+))))
+
+
+
+(T/deftest in-path
+
+  (-in-path $.namespace/in-path
+            identity))
+
+
+
+(T/deftest in-path+
+
+  (-in-path $.namespace/in-path+
+            vector))
+
 
 
 (T/deftest require-cp-dir+
