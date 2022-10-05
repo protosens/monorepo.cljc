@@ -4,7 +4,6 @@
     -  [`in-cp-dir+`](#protosens.namespace/in-cp-dir+) - Uses [[in-path+]] on directories from the current classpath.
     -  [`in-path`](#protosens.namespace/in-path) - Finds all namespaces available in the given directory <code>path</code>.
     -  [`in-path+`](#protosens.namespace/in-path+) - Exactly like [[in-path]] but works with a collection of directories.
-    -  [`main-ns`](#protosens.namespace/main-ns) - Produces form for declaring a namespace <code>sym</code>.
     -  [`require-cp-dir+`](#protosens.namespace/require-cp-dir+) - Requires all namespaces found with [[in-cp-dir+]].
 
 -----
@@ -32,7 +31,7 @@ Converts a `filename` to a namespace symbol.
    The extension of `filename` is remembered in the `meta`data of the produced
    symbol under `:protosens.namespace/extension`.
 
-## <a name="protosens.namespace/in-cp-dir+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/namespace/src/main/clj/protosens/namespace.clj#L72-L89) `in-cp-dir+`</a>
+## <a name="protosens.namespace/in-cp-dir+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/namespace/src/main/clj/protosens/namespace.clj#L55-L72) `in-cp-dir+`</a>
 ``` clojure
 
 (in-cp-dir+)
@@ -45,7 +44,7 @@ Uses [`in-path+`](#protosens.namespace/in-path+) on directories from the current
    Useful for detecting available namespaces.
    Does not crawl JAR files.
 
-## <a name="protosens.namespace/in-path">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/namespace/src/main/clj/protosens/namespace.clj#L93-L124) `in-path`</a>
+## <a name="protosens.namespace/in-path">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/namespace/src/main/clj/protosens/namespace.clj#L76-L107) `in-path`</a>
 ``` clojure
 
 (in-path path)
@@ -61,7 +60,7 @@ Finds all namespaces available in the given directory `path`.
    |---------------|--------------------------------|----------------------------------|
    | `:extension+` | Extensions for files to handle | `[".clj" ".cljc" ".cljs"]` |
 
-## <a name="protosens.namespace/in-path+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/namespace/src/main/clj/protosens/namespace.clj#L129-L145) `in-path+`</a>
+## <a name="protosens.namespace/in-path+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/namespace/src/main/clj/protosens/namespace.clj#L112-L128) `in-path+`</a>
 ``` clojure
 
 (in-path+ path+)
@@ -71,18 +70,7 @@ Finds all namespaces available in the given directory `path`.
 
 Exactly like [`in-path`](#protosens.namespace/in-path) but works with a collection of directories.
 
-## <a name="protosens.namespace/main-ns">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/namespace/src/main/clj/protosens/namespace.clj#L53-L66) `main-ns`</a>
-``` clojure
-
-(main-ns sym require+)
-```
-
-
-Produces form for declaring a namespace `sym`.
-  
-   It will require all namespaces provided in `require+`.
-
-## <a name="protosens.namespace/require-cp-dir+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/namespace/src/main/clj/protosens/namespace.clj#L151-L186) `require-cp-dir+`</a>
+## <a name="protosens.namespace/require-cp-dir+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/namespace/src/main/clj/protosens/namespace.clj#L134-L169) `require-cp-dir+`</a>
 ``` clojure
 
 (require-cp-dir+ f)

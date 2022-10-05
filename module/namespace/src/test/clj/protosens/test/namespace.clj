@@ -30,14 +30,6 @@
 
 
 
-(T/deftest main-ns
-
-  (T/is (= '(ns foo.bar (:require a b c))
-           ($.namespace/main-ns 'foo.bar
-                                '[a b c]))))
-
-
-
 (T/deftest in-cp-dir+
 
   (T/is (some (partial =

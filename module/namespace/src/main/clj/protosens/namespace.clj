@@ -49,23 +49,6 @@
        (from-filename))))
 
 
-
-(defn main-ns
-
-  "Produces form for declaring a namespace `sym`.
-  
-   It will require all namespaces provided in `require+`."
-
-  [sym require+]
-
-  (list 'ns
-        sym
-        (cons :require
-              (filter (partial not=
-                               sym)
-                      require+))))
-
-
 ;;;;;;;;;; Searching for namespaces
 
 
