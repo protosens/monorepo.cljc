@@ -19,15 +19,18 @@
 
   ([filename]
 
-   (-> filename
-       (string/split #"\."
-                     2)
-       (first)
+   (let [[filename-2
+          extension] (string/split filename
+                                   #"\."
+                                   2)]
+   (-> filename-2
        (string/replace "/"
                        ".")
        (string/replace "_"
                        "-")
-       (symbol)))
+       (symbol)
+       (with-meta {:protosens.namespace/extension (str \.
+                                                       extension)}))))
 
 
   ([root filename]
