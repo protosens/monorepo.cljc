@@ -384,8 +384,7 @@
                                          :jvm]              
    :maestro/root                        "module/namespace"
    :maestro/require                     [:ext/babashka.fs
-                                         :ext/clojure.java.classpath
-                                         :ext/clojure.tools.namespace
+                                         :module/classpath
                                          {test :test/namespace}]
    :maestro.git.lib/name                protosens/namespace
    :maestro.plugin.quickdoc.path/output "module/namespace/API.md"}

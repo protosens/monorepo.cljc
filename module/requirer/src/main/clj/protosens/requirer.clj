@@ -6,6 +6,9 @@
             [protosens.process   :as $.process]))
 
 
+(declare namespace+)
+
+
 ;;;;;;;;;; Private
 
 
@@ -21,11 +24,8 @@
                                                       nmspace) 
                                           "-e" (format "(require '%s)"
                                                        nmspace)])
-                                        (-> deps-edn
-                                            ($.deps.edn/path+ (:alias+ option+))
-                                            ($.namespace/search)
-                                            (sort))))
-
+                                       (namespace+ deps-edn
+                                                   (:alias+ option+))))
                        (-> (:protosens.process/option+ option+)
                            (assoc :dir
                                   (deps-edn :deps/root))))
@@ -33,6 +33,23 @@
 
 
 ;;;;;;;;;; Public
+
+
+(defn namespace+
+
+
+  ([deps-edn]
+
+   (namespace+ deps-edn
+               nil))
+
+
+  ([deps-edn alias+]
+
+   (-> deps-edn
+       ($.deps.edn/path+ alias+)
+       ($.namespace/in-path+)
+       (sort))))
 
 
 (defn bb

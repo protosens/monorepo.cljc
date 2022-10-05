@@ -13,7 +13,7 @@
 
   []
 
-  ($.namespace/require-found
+  ($.namespace/require-cp-dir+
     (fn [nmspace]
       (when ($.symbol/starts-with? nmspace
                                    'protosens.)

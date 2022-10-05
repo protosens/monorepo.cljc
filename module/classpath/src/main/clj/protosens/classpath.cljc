@@ -76,7 +76,7 @@
 
   []
 
-  (System/getProperty "path.separator"))
+  #?(:clj (System/getProperty "path.separator")))
 
 
 (defn split
