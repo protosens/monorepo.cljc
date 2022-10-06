@@ -156,3 +156,5 @@ Implementation for the `:uberjar` type in [`by-type`](#protosens.maestro.plugin.
 
    JVM options passed to the Clojure compiler are deduced by concatenating `:jvm-opts` found in all aliases
    involved in the build.
+
+-----

@@ -84,3 +84,5 @@ Truncates from the left.
 Truncates from the right.
   
    Returns the given `s`tring without the last `n` characters.
+
+-----

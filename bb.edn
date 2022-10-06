@@ -109,8 +109,8 @@
                    It is important running this after cloning the repository and
                    after modifying dependencies or source paths needed by these
                    Babashka tasks."
-   :requires      ([protosens.maestro.uber])
-   :task          (protosens.maestro.uber/task :module/task)}
+   :requires      ([protosens.maestro.module.uber])
+   :task          (protosens.maestro.module.uber/task :module/task)}
 
 
   help

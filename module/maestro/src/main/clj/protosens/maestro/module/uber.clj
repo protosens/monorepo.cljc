@@ -1,4 +1,4 @@
-(ns protosens.maestro.uber
+(ns protosens.maestro.module.uber
 
   "Special way of merging aliases in a generated `deps.edn` file."
 

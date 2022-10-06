@@ -280,3 +280,5 @@ Returns `true` if some changes are unstaged.
 
 
 Returns Git's version.
+
+-----

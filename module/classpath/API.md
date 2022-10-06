@@ -68,3 +68,5 @@ Returns the platform-dependent separator used in the classpath.
 
 
 Splits the given `classpath` into a vector of paths.
+
+-----

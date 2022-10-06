@@ -27,11 +27,11 @@
     -  [`generate`](#protosens.maestro.module.requirer/generate) - Task generating requirer namespaces for modules.
     -  [`verify`](#protosens.maestro.module.requirer/verify) - Task verifying modules by executing their requirer namespaces.
     -  [`verify-command`](#protosens.maestro.module.requirer/verify-command) - Used by [[verify]] to create a shell command depending on the platform to verify.
+-  [`protosens.maestro.module.uber`](#protosens.maestro.module.uber)  - Special way of merging aliases in a generated <code>deps.edn</code> file.
+    -  [`task`](#protosens.maestro.module.uber/task) - Generate a single <code>deps.edn</code> file by merging everything required by <code>alias</code>.
 -  [`protosens.maestro.process`](#protosens.maestro.process)  - About running shell commands with computed required aliases.
     -  [`run`](#protosens.maestro.process/run) - Templates a shell command with required aliases and runs it.
     -  [`template-command`](#protosens.maestro.process/template-command) - Templates a command to run with required aliases.
--  [`protosens.maestro.uber`](#protosens.maestro.uber)  - Special way of merging aliases in a generated <code>deps.edn</code> file.
-    -  [`task`](#protosens.maestro.uber/task) - Generate a single <code>deps.edn</code> file by merging everything required by <code>alias</code>.
 
 -----
 # <a name="protosens.maestro">protosens.maestro</a>
@@ -222,6 +222,8 @@ Like [`search`](#protosens.maestro/search) but prepends aliases and profiles fou
 
    Commonly used as a Babashka task. The output is especially useful in combination with Clojure CLI by leveraring shell
    substitution (e.g. `$()`) to insert aliases under `-M` and friends.
+
+-----
 
 -----
 # <a name="protosens.maestro.aggr">protosens.maestro.aggr</a>
@@ -420,7 +422,7 @@ Generating "requirer" namespaces for modules.
 
 
 
-## <a name="protosens.maestro.module.requirer/alias+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/requirer.clj#L39-L77) `alias+`</a>
+## <a name="protosens.maestro.module.requirer/alias+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/requirer.clj#L39-L78) `alias+`</a>
 ``` clojure
 
 (alias+ basis)
@@ -438,7 +440,7 @@ Finds aliases to work with.
    `basis` may contain `:maestro.module.requirer/alias-filter`, a `(fn [alias data])`
    deciding whether the alias is selected.
 
-## <a name="protosens.maestro.module.requirer/generate">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/requirer.clj#L83-L155) `generate`</a>
+## <a name="protosens.maestro.module.requirer/generate">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/requirer.clj#L84-L156) `generate`</a>
 ``` clojure
 
 (generate)
@@ -463,7 +465,7 @@ Task generating requirer namespaces for modules.
  
    See [`alias+`](#protosens.maestro.module.requirer/alias+) about selecting aliases.
 
-## <a name="protosens.maestro.module.requirer/verify">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/requirer.clj#L161-L225) `verify`</a>
+## <a name="protosens.maestro.module.requirer/verify">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/requirer.clj#L162-L226) `verify`</a>
 ``` clojure
 
 (verify)
@@ -482,7 +484,7 @@ Task verifying modules by executing their requirer namespaces.
    Execution happens on all platforms indicated in alias data under `:maestro/platform+`.
    Defaults to `[:jvm]`. See [`verify-command`](#protosens.maestro.module.requirer/verify-command).
 
-## <a name="protosens.maestro.module.requirer/verify-command">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/requirer.clj#L230-L243) `verify-command`</a>
+## <a name="protosens.maestro.module.requirer/verify-command">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/requirer.clj#L231-L244) `verify-command`</a>
 
 Used by [`verify`](#protosens.maestro.module.requirer/verify) to create a shell command depending on the platform to verify.
 
@@ -493,6 +495,39 @@ Used by [`verify`](#protosens.maestro.module.requirer/verify) to create a shell 
 
    - `:bb`  (Babashka)
    - `:jvm` (Clojure JVM)
+
+-----
+# <a name="protosens.maestro.module.uber">protosens.maestro.module.uber</a>
+
+
+Special way of merging aliases in a generated `deps.edn` file.
+
+
+
+
+## <a name="protosens.maestro.module.uber/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/uber.clj#L93-L165) `task`</a>
+``` clojure
+
+(task alias)
+(task alias basis)
+```
+
+
+Generate a single `deps.edn` file by merging everything required by `alias`.
+
+   This is probably only useful in a limited set of dev use cases. One notable
+   example is syncing dependencies and paths with [Babashka](https://github.com/babashka/babashka)'s
+   `bb.edn` files. One can create:
+
+   - Create an alias in `deps.edn` with a `:maestro/root`, requiring other aliases
+   - Run this task on this alias
+   - Generated `deps.edn` file in `:maestro/root` will contain all necessary `:deps` and `:paths`
+   - Hard links were created for all files found in `:paths`
+   - `bb.edn` can use `:local/root` on this
+
+   Hard links are created to allow consuming paths from anywhere in the repository.
+   This is because Clojure CLI dislikes outsider paths (e.g. `../foo`). They are generated in
+   `./maestro/uber` relative to the `:maestro/root`.
 
 -----
 # <a name="protosens.maestro.process">protosens.maestro.process</a>
@@ -547,36 +582,3 @@ Templates a command to run with required aliases.
 
    The default pattern to replace is `__`. An alternative one may be provided under
    `:maestro.process/pattern` (but cannot be `--`).
-
------
-# <a name="protosens.maestro.uber">protosens.maestro.uber</a>
-
-
-Special way of merging aliases in a generated `deps.edn` file.
-
-
-
-
-## <a name="protosens.maestro.uber/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/uber.clj#L93-L165) `task`</a>
-``` clojure
-
-(task alias)
-(task alias basis)
-```
-
-
-Generate a single `deps.edn` file by merging everything required by `alias`.
-
-   This is probably only useful in a limited set of dev use cases. One notable
-   example is syncing dependencies and paths with [Babashka](https://github.com/babashka/babashka)'s
-   `bb.edn` files. One can create:
-
-   - Create an alias in `deps.edn` with a `:maestro/root`, requiring other aliases
-   - Run this task on this alias
-   - Generated `deps.edn` file in `:maestro/root` will contain all necessary `:deps` and `:paths`
-   - Hard links were created for all files found in `:paths`
-   - `bb.edn` can use `:local/root` on this
-
-   Hard links are created to allow consuming paths from anywhere in the repository.
-   This is because Clojure CLI dislikes outsider paths (e.g. `../foo`). They are generated in
-   `./maestro/uber` relative to the `:maestro/root`.

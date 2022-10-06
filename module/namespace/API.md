@@ -123,3 +123,5 @@ Converts a (namespace) symbol to a filename
    Opposite of [`from-filename`](#protosens.namespace/from-filename).
 
    A root directory may be provided.
+
+-----

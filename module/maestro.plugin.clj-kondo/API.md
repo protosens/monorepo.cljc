@@ -46,3 +46,5 @@ Prepares the Clj-kondo cache by linting all dependencies and copying configurati
    Should be called prior to [`lint`](#protosens.maestro.plugin.clj-kondo/lint)ing for the first time and on dependency updates.
   
    Returns `true` in case of success.
+
+-----

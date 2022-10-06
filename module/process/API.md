@@ -124,3 +124,5 @@ Exactly like [`run`](#protosens.process/run) but STDIO is set to `:inherit`.
 Returns `true` is the `process` terminated with a zero status code.
   
    Blocks until temrination if needed.
+
+-----

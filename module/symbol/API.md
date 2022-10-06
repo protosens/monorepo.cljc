@@ -114,3 +114,5 @@ Returns `true` if the given `sym` starts with `x`.
 
 
 Transforms `x` into a string only if it is a symbol.
+
+-----

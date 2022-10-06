@@ -54,3 +54,5 @@ Generates documentation for modules automatically.
    For options, see the Quickdoc documentation.
    
    Prints which modules have produced documentation where.
+
+-----
