@@ -89,8 +89,8 @@
                    
                    Consumers can then require the repository as a Git dependency and point to a
                    particular module using `:deps/root`."
-   :requires      ([protosens.maestro.git.lib])
-   :task          (protosens.maestro.git.lib/task)}
+   :requires      ([protosens.maestro.module.expose])
+   :task          (protosens.maestro.module.expose/deploy)}
 
   expose:local
   {:doc           "Like `expose` but Git URL will point to the repository directory"
@@ -98,8 +98,8 @@
                   
                    Allows testing exposition and running tasks like `req:verify` without having
                    to push commits."
-   :requires      ([protosens.maestro.git.lib])
-   :task          (protosens.maestro.git.lib/task {:maestro.git.lib/url (System/getProperty "user.dir")})}
+   :requires      ([protosens.maestro.module.expose])
+   :task          (protosens.maestro.module.expose/deploy {:maestro.module.expose/url (System/getProperty "user.dir")})}
 
 
   genesis
@@ -187,8 +187,8 @@
                   
                    It must be run prior to the `req:verify` task and refreshed when those modules
                    are changed."
-   :requires      ([protosens.maestro.module.requirer])
-   :task          (protosens.maestro.module.requirer/generate)}
+   :requires      ([protosens.maestro.module.expose])
+   :task          (protosens.maestro.module.expose/requirer+)}
 
 
   req:verify
@@ -197,9 +197,8 @@
                    Ensures that they can be consumed in production (e.g. no missing dependency).
 
                    See the `req:gen` task."
-   :requires      ([protosens.maestro.git.lib])
-   :task          (protosens.maestro.git.lib/verify)}
-
+   :requires      ([protosens.maestro.module.expose])
+   :task          (protosens.maestro.module.expose/verify)}
 
 
   test

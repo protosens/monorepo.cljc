@@ -15,13 +15,12 @@
     -  [`alias`](#protosens.maestro.aggr/alias) - In <code>basis</code>, appends <code>alias</code> under <code>:maestro/require</code>.
     -  [`default`](#protosens.maestro.aggr/default) - Default alias aggregating function for [[protosens.maestro/search]].
     -  [`env`](#protosens.maestro.aggr/env) - Merges <code>:maestro/env</code> from <code>alias-data</code> into <code>:maestro/env</code> in <code>basis</code>.
--  [`protosens.maestro.git.lib`](#protosens.maestro.git.lib)  - Aliases that contains a name under <code>:maestro.git.lib/name</code> can be exposed publicly as git libraries and consumed from Clojure CLI via <code>:deps/root</code>.
-    -  [`expose`](#protosens.maestro.git.lib/expose) - Generates custom <code>deps.edn</code> files for all aliases having in there data a name (see namespace description) as well as a <code>:maestro/root</code> (path to the root directory of that alias).
-    -  [`gitlib?`](#protosens.maestro.git.lib/gitlib?) - Returns true if an alias (given its data) is meant to be exposed as a git library.
-    -  [`prepare-deps-edn`](#protosens.maestro.git.lib/prepare-deps-edn) - Computes the content of the <code>deps.edn</code> file for the given <code>alias</code> meant to be exposed as a git library.
-    -  [`task`](#protosens.maestro.git.lib/task) - Task reliably exposing modules as Git libraries to consume externally.
-    -  [`verify`](#protosens.maestro.git.lib/verify) - Verifies exposed modules with [[protosens.maestro.module.requirer/verify]].
-    -  [`write-deps-edn`](#protosens.maestro.git.lib/write-deps-edn) - Default way of writing a <code>deps-edn</code> file by pretty-printing it to the given <code>path</code>.
+-  [`protosens.maestro.module.expose`](#protosens.maestro.module.expose)  - Modules containing a <code>:maestro.module.expose/name</code> in their alias data can be exposed publicly as git libraries and consumed from Clojure CLI (using <code>:deps/root</code> to point to the <code>:maestro/root</code> of the consumed module).
+    -  [`-prepare-deps-edn`](#protosens.maestro.module.expose/-prepare-deps-edn)
+    -  [`-write-deps-edn`](#protosens.maestro.module.expose/-write-deps-edn)
+    -  [`deploy`](#protosens.maestro.module.expose/deploy) - Exposes selected modules allowing them to be consumed by Clojure CLI as Git dependencies.
+    -  [`exposed?`](#protosens.maestro.module.expose/exposed?) - Returns true if an alias (given its data) is meant to be exposed as a Git library.
+    -  [`verify`](#protosens.maestro.module.expose/verify) - Verifies exposed modules with [[protosens.maestro.module.requirer/verify]].
 -  [`protosens.maestro.module.requirer`](#protosens.maestro.module.requirer)  - Generating "requirer" namespaces for modules.
     -  [`alias+`](#protosens.maestro.module.requirer/alias+) - Finds aliases to work with.
     -  [`generate`](#protosens.maestro.module.requirer/generate) - Task generating requirer namespaces for modules.
@@ -278,101 +277,76 @@ Merges `:maestro/env` from `alias-data` into `:maestro/env` in `basis`.
    a map of environment variables.
 
 -----
-# <a name="protosens.maestro.git.lib">protosens.maestro.git.lib</a>
+# <a name="protosens.maestro.module.expose">protosens.maestro.module.expose</a>
 
 
-Aliases that contains a name under `:maestro.git.lib/name` can be exposed publicly as
-   git libraries and consumed from Clojure CLI via `:deps/root`.
+Modules containing a `:maestro.module.expose/name` in their alias data can be exposed publicly as
+   git libraries and consumed from Clojure CLI (using `:deps/root` to point to the `:maestro/root`
+   of the consumed module).
 
    A name is a symbol `<organization>/<artifact>` such as `com.acme/some-lib`.
 
-   In order to do so, each such module must have its own `deps.edn` file.
-   See [`expose`](#protosens.maestro.git.lib/expose) and [`task`](#protosens.maestro.git.lib/task).
+   The [[expose]] task does the necessary step for exposition.
+   The [`verify`](#protosens.maestro.module.expose/verify) task may be used as a precaution.
 
 
 
 
-## <a name="protosens.maestro.git.lib/expose">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L143-L192) `expose`</a>
+## <a name="protosens.maestro.module.expose/-prepare-deps-edn">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/expose.clj#L31-L94) `-prepare-deps-edn`</a>
 ``` clojure
 
-(expose git-sha)
-(expose git-sha basis)
+(-prepare-deps-edn basis git-sha alias)
 ```
 
 
-Generates custom `deps.edn` files for all aliases having in there data a name (see namespace
-   description) as well as a `:maestro/root` (path to the root directory of that alias).
-
-   The algorithm is described in [`prepare-deps-edn`](#protosens.maestro.git.lib/prepare-deps-edn).
-
-   When a `deps.edn` file has been computed, it is written to disk by [`write-deps-edn`](#protosens.maestro.git.lib/write-deps-edn). This
-   can be overwritten by providing an alternative function under `:maestro.git.lib/write`.
-   
-   Returns a map where keys are aliased for which a `deps.edn` file has been generated and values
-   are the data returned from [`prepare-deps-edn`](#protosens.maestro.git.lib/prepare-deps-edn) without the `deps.edn` content.
-
-## <a name="protosens.maestro.git.lib/gitlib?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L27-L33) `gitlib?`</a>
+## <a name="protosens.maestro.module.expose/-write-deps-edn">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/expose.clj#L98-L115) `-write-deps-edn`</a>
 ``` clojure
 
-(gitlib? alias-data)
+(-write-deps-edn path deps-edn)
 ```
 
 
-Returns true if an alias (given its data) is meant to be exposed as a git library.
-
-## <a name="protosens.maestro.git.lib/prepare-deps-edn">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L37-L118) `prepare-deps-edn`</a>
+## <a name="protosens.maestro.module.expose/deploy">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/expose.clj#L160-L236) `deploy`</a>
 ``` clojure
 
-(prepare-deps-edn basis git-sha alias)
+(deploy)
+(deploy basis)
 ```
 
 
-Computes the content of the `deps.edn` file for the given `alias` meant to be exposed
-   as a git library.
+Exposes selected modules allowing them to be consumed by Clojure CLI as Git dependencies.
 
-   The algorithm uses [`protosens.maestro/search`](#protosens.maestro/search) starting with `basis`.
-   The `release` profile is activated by default.
-  
-   For each required alias:
-
-     - Merge `:extra-deps`
-     - If the required alias is itself exposed as a git library, require it as a `:local/root` dependency
-     - If not, merge `:extra-paths`
-
-   Fails if a path to merge is not a child of the `:maestro/root` of the alias.
-
-   Returns a map with:
-
-   | Key                              | Value                                           |
-   |----------------------------------|-------------------------------------------------|
-   | `:maestro/require`               | Vector of required aliases                      |
-   | `:maestro.git.lib/deps.edn`      | `deps.edn` map                                  |
-   | `:maestro.git.lib.path/deps.edn` | Path where the `deps.edn` map should be written |
-
-## <a name="protosens.maestro.git.lib/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L196-L267) `task`</a>
-``` clojure
-
-(task)
-(task basis)
-```
-
-
-Task reliably exposing modules as Git libraries to consume externally.
-
-   These automated steps guarantees a safe deployment:
+   High-level steps are:
 
    - Ensure Git tree is absolutely clean
-   - Run [`expose`](#protosens.maestro.git.lib/expose), commit (preparation)
-   - Run [`expose`](#protosens.maestro.git.lib/expose) again, commit (actual exposition)
-   - Print SHA of last commit, what user can consume
+   - Select modules with a `:maestro.module.expose/name` in their alias data
+   - In their `:maestro/root`, generate a `deps.edn` file
+   - Dependencies on other modules are Git dependencies with the SHA of the previous commit
+   - Commit
+   - Repeat once
 
-   This double commit ensures Clojure CLI will have no trouble finding everything without any
-   clash.
+   This produces 2 commits and the SHA of the last commit is what users can rely on when pushed.
+   
+   Either `basis` or the top `deps.edn` file must contain `:maestro.module.expose/url` pointing
+   to the URL of the repo.
+
+   For testing purposes, one can point to the absolute path of the repository. For production
+   purposes, always use the public URL of the repository.
   
-   The commit messages can be customized by providing functions `git-sha of last commit` -> `message`
-   under `:maestro.git.lib.message/prepare` and/or `:maestro.git.lib.message/expose`.
+   **Note**: the `release` profile is activated automatically when resolving `:maestro/require` for each
+   module.
 
-## <a name="protosens.maestro.git.lib/verify">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L271-L296) `verify`</a>
+## <a name="protosens.maestro.module.expose/exposed?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/expose.clj#L240-L254) `exposed?`</a>
+``` clojure
+
+(exposed? alias-data)
+(exposed? basis alias)
+```
+
+
+Returns true if an alias (given its data) is meant to be exposed as a Git library.
+
+## <a name="protosens.maestro.module.expose/verify">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/expose.clj#L260-L285) `verify`</a>
 ``` clojure
 
 (verify)
@@ -384,15 +358,6 @@ Verifies exposed modules with [`protosens.maestro.module.requirer/verify`](#prot
 
    This ensures that exposed modules can be required in their production state.
    See [`protosens.maestro.module.requirer/generate`](#protosens.maestro.module.requirer/generate) about setup.
-
-## <a name="protosens.maestro.git.lib/write-deps-edn">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L122-L137) `write-deps-edn`</a>
-``` clojure
-
-(write-deps-edn path deps-edn)
-```
-
-
-Default way of writing a `deps-edn` file by pretty-printing it to the given `path`.
 
 -----
 # <a name="protosens.maestro.module.requirer">protosens.maestro.module.requirer</a>
@@ -412,7 +377,7 @@ Generating "requirer" namespaces for modules.
 
    See [`generate`](#protosens.maestro.module.requirer/generate) about generating requirers.
 
-   In some situtation, a module has its own `deps.edn` (see [`protosens.maestro.git.lib`](#protosens.maestro.git.lib)).
+   In some situtation, a module has its own `deps.edn` (see [[protosens.maestro.git.lib]]).
    It can then be verified by executing its requirer namespace. It ensures that the whole
    module can be required in its production state, without any test dependencies and such.
    Also, verification can happen on several platforms (e.g. Clojure CLI + Babashka).

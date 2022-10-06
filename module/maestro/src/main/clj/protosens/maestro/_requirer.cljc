@@ -6,7 +6,7 @@
   (:require
     #?(:clj protosens.maestro)
     #?(:clj protosens.maestro.aggr)
-    #?(:clj protosens.maestro.git.lib)
+    #?(:clj protosens.maestro.module.expose)
     #?(:clj protosens.maestro.module.requirer)
     #?(:clj protosens.maestro.module.uber)
     #?(:clj protosens.maestro.process)
