@@ -92,6 +92,15 @@
    :requires      ([protosens.maestro.git.lib])
    :task          (protosens.maestro.git.lib/task)}
 
+  expose:local
+  {:doc           "Like `expose` but Git URL will point to the repository directory"
+   :protosens/doc "Only for testing.
+                  
+                   Allows testing exposition and running tasks like `req:verify` without having
+                   to push commits."
+   :requires      ([protosens.maestro.git.lib])
+   :task          (protosens.maestro.git.lib/task {:maestro.git.lib/url (System/getProperty "user.dir")})}
+
 
   genesis
   {:doc           "Run before using any of these tasks"
