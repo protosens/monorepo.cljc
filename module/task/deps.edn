@@ -17,6 +17,7 @@
 ;;     :module/maestro.plugin.clj-kondo
 ;;     :module/maestro.plugin.kaocha
 ;;     :module/maestro.plugin.quickdoc
+;;     :module/namespace
 ;;     :module/process
 ;;     :module/string
 ;;     :module/task
@@ -46,5 +47,6 @@
   "maestro/uber/module/maestro.plugin.kaocha/src/main/clj"
   "maestro/uber/module/maestro.plugin.quickdoc/src/main/clj"
   "maestro/uber/module/maestro/src/main/clj"
+  "maestro/uber/module/namespace/src/main/clj"
   "maestro/uber/module/process/src/main/clj"
   "maestro/uber/module/string/src/main/clj"]}

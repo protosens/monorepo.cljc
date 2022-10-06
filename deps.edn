@@ -276,12 +276,15 @@
    :maestro/platform+                   [:bb
                                          :jvm]              
    :maestro/require                     [:ext/babashka.fs
-                                         :ext/babashka.process
                                          :module/deps.edn
+                                         :module/edn
                                          :module/git
+                                         :module/namespace
                                          :module/process
                                          :module/string
                                          {test :test/maestro}]
+   :maestro/requirer                    [protosens.maestro.main
+                                         "module/maestro/src/main/clj"]
    :maestro/root                        "module/maestro"
    :maestro.git.lib/name                protosens/maestro
    :maestro.plugin.build/type           :jar

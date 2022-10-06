@@ -171,6 +171,12 @@
    :task          (protosens.classpath/pprint)}
 
 
+
+  req:gen
+  {:requires ([protosens.maestro.requirer])
+   :task     (protosens.maestro.requirer/generate)}
+
+
   test
   {:doc           "Tests the given module(s)"
    :protosens/doc "Shortcut for launching tests given an alias or a vector of aliases and profiles.

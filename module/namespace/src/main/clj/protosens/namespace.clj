@@ -18,6 +18,8 @@
 
   "Converts a `filename` to a namespace symbol.
 
+   Opposite of [[to-filename]].
+
    If a `root` directory is provided, `filename` is relativized first before
    being converted.
 
@@ -47,6 +49,35 @@
                          filename)
        (str)
        (from-filename))))
+
+
+
+(defn to-filename
+
+  "Converts a (namespace) symbol to a filename
+
+   Opposite of [[from-filename]].
+
+   A root directory may be provided."
+
+
+  ([ns-sym extension]
+
+   (str (-> ns-sym
+            (str)
+            (string/replace "."
+                            "/")
+            (string/replace "-"
+                            "_"))
+        extension))
+
+
+  ([root ns-sym extension]
+
+   (str root
+        "/"
+        (to-filename ns-sym
+                     extension))))
 
 
 ;;;;;;;;;; Searching for namespaces

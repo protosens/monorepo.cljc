@@ -125,3 +125,18 @@
              (string/trimr (with-out-str
                              (req))))
           "Prints what is being required")))
+
+
+
+(T/deftest to-filename
+
+  (T/is (= "a/b/c.clj"
+           ($.namespace/to-filename 'a.b.c
+                                    ".clj"))
+        "Without root")
+
+  (T/is (= "root/a/b/c.clj"
+           ($.namespace/to-filename "root"
+                                    'a.b.c
+                                    ".clj"))
+        "With root"))
