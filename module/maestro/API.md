@@ -20,7 +20,13 @@
     -  [`gitlib?`](#protosens.maestro.git.lib/gitlib?) - Returns true if an alias (given its data) is meant to be exposed as a git library.
     -  [`prepare-deps-edn`](#protosens.maestro.git.lib/prepare-deps-edn) - Computes the content of the <code>deps.edn</code> file for the given <code>alias</code> meant to be exposed as a git library.
     -  [`task`](#protosens.maestro.git.lib/task) - Task reliably exposing modules as Git libraries to consume externally.
+    -  [`verify`](#protosens.maestro.git.lib/verify) - Verifies exposed modules with [[protosens.maestro.module.requirer/verify]].
     -  [`write-deps-edn`](#protosens.maestro.git.lib/write-deps-edn) - Default way of writing a <code>deps-edn</code> file by pretty-printing it to the given <code>path</code>.
+-  [`protosens.maestro.module.requirer`](#protosens.maestro.module.requirer)  - Generating "requirer" namespaces for modules.
+    -  [`alias+`](#protosens.maestro.module.requirer/alias+) - Finds aliases to work with.
+    -  [`generate`](#protosens.maestro.module.requirer/generate) - Task generating requirer namespaces for modules.
+    -  [`verify`](#protosens.maestro.module.requirer/verify) - Task verifying modules by executing their requirer namespaces.
+    -  [`verify-command`](#protosens.maestro.module.requirer/verify-command) - Used by [[verify]] to create a shell command depending on the platform to verify.
 -  [`protosens.maestro.process`](#protosens.maestro.process)  - About running shell commands with computed required aliases.
     -  [`run`](#protosens.maestro.process/run) - Templates a shell command with required aliases and runs it.
     -  [`template-command`](#protosens.maestro.process/template-command) - Templates a command to run with required aliases.
@@ -284,7 +290,7 @@ Aliases that contains a name under `:maestro.git.lib/name` can be exposed public
 
 
 
-## <a name="protosens.maestro.git.lib/expose">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L142-L191) `expose`</a>
+## <a name="protosens.maestro.git.lib/expose">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L143-L192) `expose`</a>
 ``` clojure
 
 (expose git-sha)
@@ -303,7 +309,7 @@ Generates custom `deps.edn` files for all aliases having in there data a name (s
    Returns a map where keys are aliased for which a `deps.edn` file has been generated and values
    are the data returned from [`prepare-deps-edn`](#protosens.maestro.git.lib/prepare-deps-edn) without the `deps.edn` content.
 
-## <a name="protosens.maestro.git.lib/gitlib?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L26-L32) `gitlib?`</a>
+## <a name="protosens.maestro.git.lib/gitlib?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L27-L33) `gitlib?`</a>
 ``` clojure
 
 (gitlib? alias-data)
@@ -312,7 +318,7 @@ Generates custom `deps.edn` files for all aliases having in there data a name (s
 
 Returns true if an alias (given its data) is meant to be exposed as a git library.
 
-## <a name="protosens.maestro.git.lib/prepare-deps-edn">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L36-L117) `prepare-deps-edn`</a>
+## <a name="protosens.maestro.git.lib/prepare-deps-edn">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L37-L118) `prepare-deps-edn`</a>
 ``` clojure
 
 (prepare-deps-edn basis git-sha alias)
@@ -341,7 +347,7 @@ Computes the content of the `deps.edn` file for the given `alias` meant to be ex
    | `:maestro.git.lib/deps.edn`      | `deps.edn` map                                  |
    | `:maestro.git.lib.path/deps.edn` | Path where the `deps.edn` map should be written |
 
-## <a name="protosens.maestro.git.lib/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L195-L266) `task`</a>
+## <a name="protosens.maestro.git.lib/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L196-L267) `task`</a>
 ``` clojure
 
 (task)
@@ -364,7 +370,20 @@ Task reliably exposing modules as Git libraries to consume externally.
    The commit messages can be customized by providing functions `git-sha of last commit` -> `message`
    under `:maestro.git.lib.message/prepare` and/or `:maestro.git.lib.message/expose`.
 
-## <a name="protosens.maestro.git.lib/write-deps-edn">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L121-L136) `write-deps-edn`</a>
+## <a name="protosens.maestro.git.lib/verify">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L271-L296) `verify`</a>
+``` clojure
+
+(verify)
+(verify basis)
+```
+
+
+Verifies exposed modules with [`protosens.maestro.module.requirer/verify`](#protosens.maestro.module.requirer/verify).
+
+   This ensures that exposed modules can be required in their production state.
+   See [`protosens.maestro.module.requirer/generate`](#protosens.maestro.module.requirer/generate) about setup.
+
+## <a name="protosens.maestro.git.lib/write-deps-edn">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/git/lib.clj#L122-L137) `write-deps-edn`</a>
 ``` clojure
 
 (write-deps-edn path deps-edn)
@@ -372,6 +391,108 @@ Task reliably exposing modules as Git libraries to consume externally.
 
 
 Default way of writing a `deps-edn` file by pretty-printing it to the given `path`.
+
+-----
+# <a name="protosens.maestro.module.requirer">protosens.maestro.module.requirer</a>
+
+
+Generating "requirer" namespaces for modules.
+  
+   A module requirer namespace is a namespace that requires all other namespaces provided
+   by a module.
+
+   Concretely, those namespaces are found by collecting all `:extra-paths` for an alias and
+   the aliases it requires, filtering out those that do not start with `:maestro/root`.
+
+   Several use cases exists for this. For instance, an application might systematically require
+   such a requirer namespace to ensure that everything is executed (e.g. namespaces with
+   `defmethods`).
+
+   See [`generate`](#protosens.maestro.module.requirer/generate) about generating requirers.
+
+   In some situtation, a module has its own `deps.edn` (see [`protosens.maestro.git.lib`](#protosens.maestro.git.lib)).
+   It can then be verified by executing its requirer namespace. It ensures that the whole
+   module can be required in its production state, without any test dependencies and such.
+   Also, verification can happen on several platforms (e.g. Clojure CLI + Babashka).
+
+   See [`verify`](#protosens.maestro.module.requirer/verify).
+
+
+
+
+## <a name="protosens.maestro.module.requirer/alias+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/requirer.clj#L39-L77) `alias+`</a>
+``` clojure
+
+(alias+ basis)
+```
+
+
+Finds aliases to work with.
+  
+   These steps are tried successively until one succeeds:
+
+   - Fetch collection under `:maestro.module.requirer/alias+`
+   - Reads first CLI arg (a single alias or a vector of aliases)
+   - Get all existing aliases in `basis`
+  
+   `basis` may contain `:maestro.module.requirer/alias-filter`, a `(fn [alias data])`
+   deciding whether the alias is selected.
+
+## <a name="protosens.maestro.module.requirer/generate">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/requirer.clj#L83-L155) `generate`</a>
+``` clojure
+
+(generate)
+(generate basis)
+```
+
+
+Task generating requirer namespaces for modules.
+
+   For this to work, a module must have the following in its alias data:
+
+   | Key                                  | Value                                 | Mandatory? |
+   |--------------------------------------|---------------------------------------|------------|
+   | `:maestro.module.requirer/namespace` | Symbol for the requirer namespace     | Yes        |
+   | `:maestro.module.requirer/path`      | Directory where the file is generated | Yes        |
+   | `:maestro.module.requirer/exclude+   | Namespaces that must not be required  | No         |
+
+   The CLJC file will be generated in the given respecting the directory structure of
+   Clojure namespaces.
+
+   Prints feedback about what is being generated and which namespaces are being required.
+ 
+   See [`alias+`](#protosens.maestro.module.requirer/alias+) about selecting aliases.
+
+## <a name="protosens.maestro.module.requirer/verify">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/requirer.clj#L161-L225) `verify`</a>
+``` clojure
+
+(verify)
+(verify basis)
+```
+
+
+Task verifying modules by executing their requirer namespaces.
+
+   Assumes:
+  
+   - [`generate`](#protosens.maestro.module.requirer/generate) has been run first
+   - Modules have the relevant data described in [`generate`](#protosens.maestro.module.requirer/generate)
+   - Modules to verify has their own `deps.edn` under their `:maestro/root`
+
+   Execution happens on all platforms indicated in alias data under `:maestro/platform+`.
+   Defaults to `[:jvm]`. See [`verify-command`](#protosens.maestro.module.requirer/verify-command).
+
+## <a name="protosens.maestro.module.requirer/verify-command">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/requirer.clj#L230-L243) `verify-command`</a>
+
+Used by [`verify`](#protosens.maestro.module.requirer/verify) to create a shell command depending on the platform to verify.
+
+   The shell command is vector starting with the actuall shell command and the rest
+   are individual arguments.
+
+   Currently supported platforms:
+
+   - `:bb`  (Babashka)
+   - `:jvm` (Clojure JVM)
 
 -----
 # <a name="protosens.maestro.process">protosens.maestro.process</a>

@@ -2,13 +2,13 @@
 ;; Its only purpose is to require a collection of namespaces.
 ;;
 ;;
-(ns ^{:no-doc true} protosens.maestro.main
+(ns ^{:no-doc true} protosens.maestro.-requirer
   (:require
     #?(:clj protosens.maestro)
     #?(:clj protosens.maestro.aggr)
     #?(:clj protosens.maestro.git.lib)
+    #?(:clj protosens.maestro.module.requirer)
     #?(:clj protosens.maestro.process)
-    #?(:clj protosens.maestro.requirer)
     #?(:clj protosens.maestro.uber)
 ))
 
@@ -16,4 +16,4 @@
 ;;;;;;;;;;
 
 
-(defn -main [& arg+] true)
+(defn -main [& _arg+])

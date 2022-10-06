@@ -8,12 +8,13 @@
    In order to do so, each such module must have its own `deps.edn` file.
    See [[expose]] and [[task]]."
 
-  (:require [babashka.fs       :as bb.fs]
-            [clojure.java.io   :as java.io]
-            [clojure.pprint    :as pprint]
-            [clojure.string    :as string]
-            [protosens.git     :as $.git]
-            [protosens.maestro :as $.maestro]))
+  (:require [babashka.fs                       :as bb.fs]
+            [clojure.java.io                   :as java.io]
+            [clojure.pprint                    :as pprint]
+            [clojure.string                    :as string]
+            [protosens.git                     :as $.git]
+            [protosens.maestro                 :as $.maestro]
+            [protosens.maestro.module.requirer :as $.maestro.module.requirer]))
 
 
 (set! *warn-on-reflection*
@@ -264,3 +265,32 @@
      ;; Done!
      (println "Users can point to commit:"
               ($.git/commit-sha 0)))))
+
+
+
+(defn verify
+
+  "Verifies exposed modules with [[protosens.maestro.module.requirer/verify]].
+
+   This ensures that exposed modules can be required in their production state.
+   See [[protosens.maestro.module.requirer/generate]] about setup."
+
+
+  ([]
+
+   (verify nil))
+
+
+  ([basis]
+
+   ($.maestro.module.requirer/verify (update basis
+                                             :maestro.module.requirer/alias-filter
+                                             #(let [f (fn [_alias data]
+                                                        (data :maestro.git.lib/name))]
+                                                (if %
+                                                  (fn [alias data]
+                                                    (and (f alias
+                                                            data)
+                                                         (% alias
+                                                            data)))
+                                                  f))))))
