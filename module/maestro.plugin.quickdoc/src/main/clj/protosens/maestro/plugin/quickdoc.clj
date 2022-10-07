@@ -4,7 +4,7 @@
 
    Works with Babashka out of the box. For Clojure JVM, add the JVM flavor of Quickdoc to your dependencies.
 
-   Attention, it is necessary adding the `clj-kondo` to your `bb.edn` file as a [Babashka pod](https://github.com/babashka/pods):
+   Attention, it is necessary adding `clj-kondo` to your `bb.edn` file as a [Babashka pod](https://github.com/babashka/pods):
 
    ```clojure
    {:pods
@@ -18,31 +18,16 @@
             [quickdoc.api       :as quickdoc]))
 
 
-;;;;;;;;;; Private
-
-
-(defn- -quickdoc-option+
-
-  ;; Prepares options for Quickdock.
-
-  [option+ basis]
-
-  (merge (basis :maestro.plugin.quickdoc/option+)
-         option+))
-
-
 ;;;;;;;;;; Tasks
 
 
 (defn bundle
 
-  "Generates a single documentation file for the given aliases.
+  "Task generating a single documentation file for the given aliases.
 
    All `:extra-paths` of those aliases will be merged and used as source paths.
 
-   For options, see the Quickdoc documentation.
-  
-   Prints paths that have been bundled together."
+   Quickdoc options may be provided under `:maestro.plugin.quickdoc/option+`."
   
 
   ([]
@@ -50,22 +35,17 @@
    (bundle nil))
 
 
-  ([option+]
-   
-   (bundle option+
-           nil))
+  ([basis]
 
-
-  ([option+ alias+]
-
-   (let [basis ($.maestro/ensure-basis option+)
+   (let [basis ($.maestro/ensure-basis basis)
          path+ (sort ($.deps.edn/path+ basis
-                                       (or alias+
-                                           ($.edn.read/string (first *command-line-args*)))))]
-     (quickdoc/quickdoc (-> option+
-                           (-quickdoc-option+ basis)
-                           (assoc :source-paths
-                                  path+)))
+                                       (or (basis :maestro.plugin.quickdoc/alias+)
+                                           (some-> (first *command-line-args*)
+                                                   ($.edn.read/string))
+                                           (keys (basis :aliases)))))]
+     (quickdoc/quickdoc (assoc (basis :maestro.plugin.quickdoc/option+)
+                               :source-paths
+                               path+))
      (run! println
            path+))))
 
@@ -73,12 +53,12 @@
 
 (defn module+
 
-  "Generates documentation for modules automatically.
+  "Task generating documentation for modules automatically.
 
    Selects modules that have an `:maestro.plugin.quickdoc.path/output` in their alias data specifying
    where the markdown file should be written to. Source paths are based on `:extra-paths`.
 
-   For options, see the Quickdoc documentation.
+   Quickdoc options may be provided under `:maestro.plugin.quickdoc/option+`.
    
    Prints which modules have produced documentation where."
 
@@ -87,11 +67,9 @@
    (module+ nil))
 
 
-  ([option+]
+  ([basis]
 
-   (let [basis     ($.maestro/ensure-basis option+)
-         option-2+ (-quickdoc-option+ option+
-                                      basis)]
+   (let [basis ($.maestro/ensure-basis basis)]
      (doseq [[alias
               path-output
               path-source+] (keep (fn [[alias data]]
@@ -107,7 +85,7 @@
        (let [dir (bb.fs/parent path-output)]
          (when-not (bb.fs/exists? dir)
            (bb.fs/create-dirs dir)))
-       (quickdoc/quickdoc (assoc option-2+
+       (quickdoc/quickdoc (assoc (basis :maestro.plugin.quickdoc/option+)
                                  :outfile      path-output
                                  :source-paths path-source+))
        (println (format "%s -> %s"

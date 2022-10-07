@@ -78,7 +78,7 @@
                    
                        clojure -M$( bb aliases :dev :module/maestro )"
    :requires      ([protosens.maestro.process])
-   :task          (protosens.maestro.process/run {:maestro/mode :dev
+   :task          (protosens.maestro.process/run {:maestro/mode            :dev
                                                   :maestro.process/command ["clj" "-M__"]})}
 
 
