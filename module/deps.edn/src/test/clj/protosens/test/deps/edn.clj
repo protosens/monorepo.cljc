@@ -42,8 +42,10 @@
         "With aliases"))
 
 
+
 (T/deftest path+
 
+  ;; Also tests [[extra-path+]].
 
   (T/is (= [(str -root
                  "/src/main")]

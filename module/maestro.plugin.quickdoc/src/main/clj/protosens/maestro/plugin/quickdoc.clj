@@ -12,6 +12,7 @@
    ```"
 
   (:require [babashka.fs        :as bb.fs]
+            [protosens.deps.edn :as $.deps.edn]
             [protosens.edn.read :as $.edn.read]
             [protosens.maestro  :as $.maestro]
             [quickdoc.api       :as quickdoc]))
@@ -58,9 +59,9 @@
   ([option+ alias+]
 
    (let [basis ($.maestro/ensure-basis option+)
-         path+ (sort ($.maestro/extra-path+ basis
-                                            (or alias+
-                                                ($.edn.read/string (first *command-line-args*)))))]
+         path+ (sort ($.deps.edn/path+ basis
+                                       (or alias+
+                                           ($.edn.read/string (first *command-line-args*)))))]
      (quickdoc/quickdoc (-> option+
                            (-quickdoc-option+ basis)
                            (assoc :source-paths

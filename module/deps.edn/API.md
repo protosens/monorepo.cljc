@@ -1,8 +1,9 @@
 # Table of contents
 -  [`protosens.deps.edn`](#protosens.deps.edn)  - Handling <code>deps.edn</code> files.
+    -  [`extra-path+`](#protosens.deps.edn/extra-path+) - Returns all <code>:extra-paths</code> from the given aliases.
     -  [`main-ns`](#protosens.deps.edn/main-ns) - Pretty-prints to <code>*out*</code> a CLJC namespace requiring all namespaces provided by <code>deps.edn</code>.
     -  [`namespace+`](#protosens.deps.edn/namespace+) - Returns namespaces provided by source files in that <code>deps.edn</code>.
-    -  [`path+`](#protosens.deps.edn/path+) - Returns all <code>:paths</code>, prepending <code>:deps/root</code>.
+    -  [`path+`](#protosens.deps.edn/path+) - Returns all <code>:paths</code> and <code>:extra-paths</code> for the given aliases.
     -  [`read`](#protosens.deps.edn/read) - Reads the <code>deps.edn</code> file located in <code>dir</code> (defaults to <code>./</code>).
 
 -----
@@ -17,7 +18,18 @@ Handling `deps.edn` files.
 
 
 
-## <a name="protosens.deps.edn/main-ns">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/deps.edn/src/main/clj/protosens/deps/edn.clj#L104-L151) `main-ns`</a>
+## <a name="protosens.deps.edn/extra-path+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/deps.edn/src/main/clj/protosens/deps/edn.clj#L69-L80) `extra-path+`</a>
+``` clojure
+
+(extra-path+ deps-edn alias+)
+```
+
+
+Returns all `:extra-paths` from the given aliases.
+
+   Prepends them prepended with `:deps/root`.
+
+## <a name="protosens.deps.edn/main-ns">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/deps.edn/src/main/clj/protosens/deps/edn.clj#L134-L181) `main-ns`</a>
 ``` clojure
 
 (main-ns deps-edn ns-sym)
@@ -34,7 +46,7 @@ Pretty-prints to `*out*` a CLJC namespace requiring all namespaces provided by `
 
    Also see [`namespace+`](#protosens.deps.edn/namespace+).
 
-## <a name="protosens.deps.edn/namespace+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/deps.edn/src/main/clj/protosens/deps/edn.clj#L50-L72) `namespace+`</a>
+## <a name="protosens.deps.edn/namespace+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/deps.edn/src/main/clj/protosens/deps/edn.clj#L84-L106) `namespace+`</a>
 ``` clojure
 
 (namespace+ deps-edn)
@@ -51,7 +63,7 @@ Returns namespaces provided by source files in that `deps.edn`.
    | `:alias+`    | See [`path+`](#protosens.deps.edn/path+)          | `nil`                            |
    | `:extension+ | Source file extensions | `[".clj" ".cljc" ".cljs"]` |
 
-## <a name="protosens.deps.edn/path+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/deps.edn/src/main/clj/protosens/deps/edn.clj#L76-L98) `path+`</a>
+## <a name="protosens.deps.edn/path+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/deps.edn/src/main/clj/protosens/deps/edn.clj#L110-L128) `path+`</a>
 ``` clojure
 
 (path+ deps-edn)
@@ -59,9 +71,9 @@ Returns namespaces provided by source files in that `deps.edn`.
 ```
 
 
-Returns all `:paths`, prepending `:deps/root`.
-  
-   A collection of aliases may be provided for including `:extra-paths`.
+Returns all `:paths` and `:extra-paths` for the given aliases.
+
+   Prepends them prepended with `:deps/root`.
 
 ## <a name="protosens.deps.edn/read">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/deps.edn/src/main/clj/protosens/deps/edn.clj#L23-L44) `read`</a>
 ``` clojure

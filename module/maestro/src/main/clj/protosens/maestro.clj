@@ -288,29 +288,6 @@
 
 
 
-(defn extra-path+
-
-  "Extracts a list of all paths provided in `:extra-paths` for the given aliases."
-
-
-  ([basis]
-
-   (extra-path+ basis
-                nil))
-
-
-  ([basis alias+]
-
-   (let [alias->data (basis :aliases)]
-     (if (seq alias+)
-       (mapcat (comp :extra-paths
-                     alias->data)
-               alias+)
-       (mapcat :extra-paths
-               (vals alias->data))))))
-
-
-
 (defn not-by-profile+
   
   "Extracts a set of all aliases NOT required in the context of the given collection of profiles.

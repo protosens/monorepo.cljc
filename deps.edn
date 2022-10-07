@@ -334,6 +334,7 @@
                                          :jvm]              
    :maestro/require                     [:ext/babashka.process
                                          :ext/clojure.tools.build
+                                         :module/deps.edn
                                          :module/maestro]
    :maestro/root                        "module/maestro.plugin.build"
    :maestro.module.expose/name          protosens/maestro.plugin.build
@@ -369,6 +370,7 @@
                                          :jvm]              
    :maestro/require                     [:ext/babashka.fs
                                          :ext/kaocha
+                                         :module/deps.edn
                                          :module/maestro]
    :maestro/root                        "module/maestro.plugin.kaocha"
    :maestro.module.expose/name          protosens/maestro.plugin.kaocha
@@ -386,6 +388,7 @@
    :maestro/platform+                   [:bb]
    :maestro/require                     [:ext/babashka.fs
                                          :ext/quickdoc
+                                         :module/deps.edn
                                          :module/edn
                                          :module/maestro
                                          {dev :ext/quickdoc.jvm}]

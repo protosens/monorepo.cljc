@@ -24,6 +24,7 @@
   (:require [babashka.fs         :as bb.fs]
             [clojure.java.io     :as java.io]
             [clojure.string      :as string]
+            [protosens.deps.edn  :as $.deps.edn]
             [protosens.edn.read  :as $.edn.read]
             [protosens.maestro   :as $.maestro]
             [protosens.namespace :as $.namespace]
@@ -128,8 +129,8 @@
                                        ($.namespace/in-path+ (filter (fn [path]
                                                                        (string/starts-with? path
                                                                                             root))
-                                                                     ($.maestro/extra-path+ basis-3
-                                                                                            (basis-3 :maestro/require)))))]
+                                                                     ($.deps.edn/extra-path+ basis-3
+                                                                                             (basis-3 :maestro/require)))))]
                  (println alias)
                  (println)
                  (println (format "  %s -> %s"

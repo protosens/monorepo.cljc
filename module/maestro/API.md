@@ -4,7 +4,6 @@
     -  [`cli-arg+`](#protosens.maestro/cli-arg+) - Processes CLI arguments in a commonly needed way.
     -  [`create-basis`](#protosens.maestro/create-basis) - Reads and prepares a <code>deps.edn</code> file.
     -  [`ensure-basis`](#protosens.maestro/ensure-basis) - Returns the given argument if it contains <code>:aliases</code>.
-    -  [`extra-path+`](#protosens.maestro/extra-path+) - Extracts a list of all paths provided in <code>:extra-paths</code> for the given aliases.
     -  [`fail`](#protosens.maestro/fail) - Fails with the given error <code>message</code>.
     -  [`fail-mode`](#protosens.maestro/fail-mode) - How [[fail]] behaves.
     -  [`not-by-profile+`](#protosens.maestro/not-by-profile+) - Extracts a set of all aliases NOT required in the context of the given collection of profiles.
@@ -52,7 +51,7 @@ Extracts a set of all aliases required in the context of the given collection of
 
    See [`search`](#protosens.maestro/search).
 
-## <a name="protosens.maestro/cli-arg+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L350-L421) `cli-arg+`</a>
+## <a name="protosens.maestro/cli-arg+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L327-L398) `cli-arg+`</a>
 ``` clojure
 
 (cli-arg+ basis)
@@ -114,16 +113,6 @@ Reads and prepares a `deps.edn` file.
 Returns the given argument if it contains `:aliases`.
    Otherwise, forwards it to [`create-basis`](#protosens.maestro/create-basis).
 
-## <a name="protosens.maestro/extra-path+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L291-L310) `extra-path+`</a>
-``` clojure
-
-(extra-path+ basis)
-(extra-path+ basis alias+)
-```
-
-
-Extracts a list of all paths provided in `:extra-paths` for the given aliases.
-
 ## <a name="protosens.maestro/fail">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L32-L52) `fail`</a>
 ``` clojure
 
@@ -157,7 +146,7 @@ How [`fail`](#protosens.maestro/fail) behaves.
    Sets behavior to the given `mode`.
    Without argument, returns the current one (default is `:exit`).
 
-## <a name="protosens.maestro/not-by-profile+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L314-L330) `not-by-profile+`</a>
+## <a name="protosens.maestro/not-by-profile+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L291-L307) `not-by-profile+`</a>
 ``` clojure
 
 (not-by-profile+ basis profile+)
@@ -196,7 +185,7 @@ Given input aliases and profiles, under `:maestro/alias+` and `:maestro/profile+
    - [`protosens.maestro.aggr`](#protosens.maestro.aggr) for expert users needing this function to do more
    - [[protosens.maestro.alias]]
 
-## <a name="protosens.maestro/stringify-required">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L334-L344) `stringify-required`</a>
+## <a name="protosens.maestro/stringify-required">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L311-L321) `stringify-required`</a>
 ``` clojure
 
 (stringify-required basis)
@@ -209,7 +198,7 @@ Stringifies concatenated aliases from `:maestro/require`.
 
    See [`search`](#protosens.maestro/search).
 
-## <a name="protosens.maestro/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L425-L445) `task`</a>
+## <a name="protosens.maestro/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L402-L422) `task`</a>
 ``` clojure
 
 (task)
@@ -405,7 +394,7 @@ Generating "requirer" namespaces for modules.
 
 
 
-## <a name="protosens.maestro.module.requirer/alias+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/requirer.clj#L39-L78) `alias+`</a>
+## <a name="protosens.maestro.module.requirer/alias+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/requirer.clj#L40-L79) `alias+`</a>
 ``` clojure
 
 (alias+ basis)
@@ -423,7 +412,7 @@ Finds aliases to work with.
    `basis` may contain `:maestro.module.requirer/alias-filter`, a `(fn [alias data])`
    deciding whether the alias is selected.
 
-## <a name="protosens.maestro.module.requirer/generate">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/requirer.clj#L84-L156) `generate`</a>
+## <a name="protosens.maestro.module.requirer/generate">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/requirer.clj#L85-L157) `generate`</a>
 ``` clojure
 
 (generate)
@@ -448,7 +437,7 @@ Task generating requirer namespaces for modules.
  
    See [`alias+`](#protosens.maestro.module.requirer/alias+) about selecting aliases.
 
-## <a name="protosens.maestro.module.requirer/verify">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/requirer.clj#L162-L226) `verify`</a>
+## <a name="protosens.maestro.module.requirer/verify">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/requirer.clj#L163-L227) `verify`</a>
 ``` clojure
 
 (verify)
@@ -467,7 +456,7 @@ Task verifying modules by executing their requirer namespaces.
    Execution happens on all platforms indicated in alias data under `:maestro/platform+`.
    Defaults to `[:jvm]`. See [`verify-command`](#protosens.maestro.module.requirer/verify-command).
 
-## <a name="protosens.maestro.module.requirer/verify-command">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/requirer.clj#L231-L244) `verify-command`</a>
+## <a name="protosens.maestro.module.requirer/verify-command">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/requirer.clj#L232-L245) `verify-command`</a>
 
 Used by [`verify`](#protosens.maestro.module.requirer/verify) to create a shell command depending on the platform to verify.
 

@@ -3,8 +3,9 @@
   "Maestro plugin for the Kaocha test runner reliably computing source and test paths for aliases you are
    working with. No need to maintain several test suites manually."
 
-  (:require [babashka.fs       :as bb.fs]
-            [protosens.maestro :as $.maestro]))
+  (:require [babashka.fs        :as bb.fs]
+            [protosens.deps.edn :as $.deps.edn]
+            [protosens.maestro  :as $.maestro]))
 
 
 ;;;;;;;;;;
@@ -37,10 +38,10 @@
       ($.maestro/fail "Kaocha plugin for Maestro require a path"))
     (bb.fs/create-dirs (bb.fs/parent path))
     (spit path
-          {:kaocha/source-paths ($.maestro/extra-path+ basis
-                                                       ($.maestro/not-by-profile+ basis
-                                                                                  '[test]))
-           :kaocha/test-paths   ($.maestro/extra-path+ basis
-                                                       ($.maestro/by-profile+ basis
+          {:kaocha/source-paths ($.deps.edn/path+ basis
+                                                  ($.maestro/not-by-profile+ basis
+                                                                             '[test]))
+           :kaocha/test-paths   ($.deps.edn/extra-path+ basis
+                                                        ($.maestro/by-profile+ basis
                                                                                '[test]))})
     basis))

@@ -13,11 +13,13 @@
   #?(:clj (:import (java.nio.file Files)
                    (java.nio.file.attribute FileAttribute)))
           ;;
-  #?(:bb  (:require [protosens.edn.read :as $.edn.read]
+  #?(:bb  (:require [protosens.deps.edn :as $.deps.edn]
+                    [protosens.edn.read :as $.edn.read]
                     [protosens.maestro  :as $.maestro]
                     [protosens.process  :as $.process])
           ;;
-     :clj (:require [protosens.edn.read      :as $.edn.read]
+     :clj (:require [protosens.deps.edn      :as $.deps.edn]
+                    [protosens.edn.read      :as $.edn.read]
                     [clojure.tools.build.api :as tools.build]
                     [protosens.maestro       :as $.maestro]
                     [protosens.process       :as $.process])))
@@ -202,8 +204,8 @@
         (-jar basis)
         ;;
         path+
-        ($.maestro/extra-path+ basis-2
-                               (basis-2 :maestro/require))]
+        ($.deps.edn/path+ basis-2
+                          (basis-2 :maestro/require))]
     (copy-src (assoc basis-2
                      :maestro.plugin.build.path/src+
                      path+))

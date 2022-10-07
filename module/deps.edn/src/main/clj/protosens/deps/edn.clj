@@ -44,7 +44,41 @@
               dir))))
 
 
+;;;;;;;;;; Private
+
+
+(defn- -prepend-root
+
+  ;; Prepends `:deps/root` to paths.
+
+  [deps-edn path+]
+
+  (let [root (deps-edn :deps/root)]
+    (cond->>
+      path+
+      root
+      (map (fn [path]
+             (str root
+                  "/"
+                  path))))))
+
+
 ;;;;;;;;;; Extracting information from `deps.edn` files
+
+
+(defn extra-path+
+
+  "Returns all `:extra-paths` from the given aliases.
+
+   Prepends them prepended with `:deps/root`."
+
+  [deps-edn alias+]
+
+  (-prepend-root deps-edn
+                 (mapcat (comp :extra-paths
+                               (deps-edn :aliases))
+                         alias+)))
+
 
 
 (defn namespace+
@@ -75,9 +109,10 @@
 
 (defn path+
 
-  "Returns all `:paths`, prepending `:deps/root`.
-  
-   A collection of aliases may be provided for including `:extra-paths`."
+  "Returns all `:paths` and `:extra-paths` for the given aliases.
+
+   Prepends them prepended with `:deps/root`."
+
 
   ([deps-edn]
 
@@ -87,15 +122,10 @@
 
   ([deps-edn alias+]
 
-   (map (let [root (deps-edn :deps/root)]
-          (fn [path]
-            (str root
-                 "/"
-                 path)))
-        (concat (deps-edn :paths)
-                (mapcat (comp :extra-paths
-                              (deps-edn :aliases))
-                        alias+)))))
+   (concat (-prepend-root deps-edn
+                          (deps-edn :paths))
+           (extra-path+ deps-edn
+                        alias+))))
 
 
 ;;;;;;;;;; High-level tooling

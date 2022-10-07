@@ -1,7 +1,8 @@
 (ns protosens.test.maestro
 
-  (:require [clojure.test      :as T]
-            [protosens.maestro :as $.maestro]))
+  (:require [clojure.test       :as T]
+            [protosens.deps.edn :as $.deps.edn]
+            [protosens.maestro  :as $.maestro]))
 
 
 ;;;;;;;;;;
@@ -114,9 +115,9 @@
           "Keeps track of which profiles resulted in selecting which aliases")
 
     (T/is (= #{"./a" "./b" "./c" "./d" "./e" "./h"}
-             (set ($.maestro/extra-path+ basis
-                                         ($.maestro/by-profile+ basis
-                                                                '[default]))))
+             (set ($.deps.edn/extra-path+ basis
+                                          ($.maestro/by-profile+ basis
+                                                                 '[default]))))
           "Retrieve paths for a desired profile")))
 
 
@@ -175,22 +176,6 @@
 
 ;;;;;;;;;;
 
-
-(T/deftest extra-paths+
-
-  (T/is (= '("./a-1"
-             "./a-2"
-             "./c-1"
-             "./c-2")
-           ($.maestro/extra-path+ {:aliases {:a {:extra-paths ["./a-1"
-                                                               "./a-2"]}
-                                             :b {:extra-paths ["./b-1"
-                                                               "./b-2"]} 
-                                             :c {:extra-paths ["./c-1"
-                                                               "./c-2"]}
-                                             :d {}}}
-                                  [:a
-                                   :c]))))
 
 (T/deftest stringify-required
 
