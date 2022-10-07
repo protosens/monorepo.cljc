@@ -99,7 +99,7 @@
                    Allows testing exposition and running tasks like `req:verify` without having
                    to push commits."
    :requires      ([protosens.maestro.module.expose])
-   :task          (protosens.maestro.module.expose/deploy {:maestro.module.expose/url (System/getProperty "user.dir")})}
+   :task          (protosens.maestro.module.expose/deploy-local)}
 
 
   genesis

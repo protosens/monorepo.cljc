@@ -16,9 +16,8 @@
     -  [`default`](#protosens.maestro.aggr/default) - Default alias aggregating function for [[protosens.maestro/search]].
     -  [`env`](#protosens.maestro.aggr/env) - Merges <code>:maestro/env</code> from <code>alias-data</code> into <code>:maestro/env</code> in <code>basis</code>.
 -  [`protosens.maestro.module.expose`](#protosens.maestro.module.expose)  - Modules containing a <code>:maestro.module.expose/name</code> in their alias data can be exposed publicly as git libraries and consumed from Clojure CLI (using <code>:deps/root</code> to point to the <code>:maestro/root</code> of the consumed module).
-    -  [`-prepare-deps-edn`](#protosens.maestro.module.expose/-prepare-deps-edn)
-    -  [`-write-deps-edn`](#protosens.maestro.module.expose/-write-deps-edn)
     -  [`deploy`](#protosens.maestro.module.expose/deploy) - Task exposesing selected modules for consumption by Clojure CLI as Git dependencies.
+    -  [`deploy-local`](#protosens.maestro.module.expose/deploy-local) - Exactly like [[deploy]] but sets the repository URL to the current directory.
     -  [`exposed?`](#protosens.maestro.module.expose/exposed?) - Returns true if an alias (given its data) is meant to be exposed as a Git library.
     -  [`requirer+`](#protosens.maestro.module.expose/requirer+) - Task generating requirer namespaces for all exposed modules.
     -  [`verify`](#protosens.maestro.module.expose/verify) - Task verifying exposed modules with [[protosens.maestro.module.requirer/verify]].
@@ -293,20 +292,6 @@ Modules containing a `:maestro.module.expose/name` in their alias data can be ex
 
 
 
-## <a name="protosens.maestro.module.expose/-prepare-deps-edn">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/expose.clj#L31-L94) `-prepare-deps-edn`</a>
-``` clojure
-
-(-prepare-deps-edn basis git-sha alias)
-```
-
-
-## <a name="protosens.maestro.module.expose/-write-deps-edn">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/expose.clj#L98-L115) `-write-deps-edn`</a>
-``` clojure
-
-(-write-deps-edn path deps-edn)
-```
-
-
 ## <a name="protosens.maestro.module.expose/deploy">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/expose.clj#L160-L236) `deploy`</a>
 ``` clojure
 
@@ -337,7 +322,22 @@ Task exposesing selected modules for consumption by Clojure CLI as Git dependenc
    **Note**: the `release` profile is activated automatically when resolving `:maestro/require` for each
    module.
 
-## <a name="protosens.maestro.module.expose/exposed?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/expose.clj#L240-L254) `exposed?`</a>
+## <a name="protosens.maestro.module.expose/deploy-local">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/expose.clj#L240-L259) `deploy-local`</a>
+``` clojure
+
+(deploy-local)
+(deploy-local basis)
+```
+
+
+Exactly like [`deploy`](#protosens.maestro.module.expose/deploy) but sets the repository URL to the current directory.
+
+   Which must be the root directory of the repository.
+
+   This is for testing purposes. For instance, it allows testing exposition and running
+   the [`verify`](#protosens.maestro.module.expose/verify) task without having to push anything.
+
+## <a name="protosens.maestro.module.expose/exposed?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/expose.clj#L263-L277) `exposed?`</a>
 ``` clojure
 
 (exposed? alias-data)
@@ -347,7 +347,7 @@ Task exposesing selected modules for consumption by Clojure CLI as Git dependenc
 
 Returns true if an alias (given its data) is meant to be exposed as a Git library.
 
-## <a name="protosens.maestro.module.expose/requirer+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/expose.clj#L280-L299) `requirer+`</a>
+## <a name="protosens.maestro.module.expose/requirer+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/expose.clj#L303-L322) `requirer+`</a>
 ``` clojure
 
 (requirer+)
@@ -364,7 +364,7 @@ Task generating requirer namespaces for all exposed modules.
    The main benefit about generating those is being able to call the [`verify`](#protosens.maestro.module.expose/verify)
    task.
 
-## <a name="protosens.maestro.module.expose/verify">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/expose.clj#L305-L320) `verify`</a>
+## <a name="protosens.maestro.module.expose/verify">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/expose.clj#L328-L343) `verify`</a>
 ``` clojure
 
 (verify)

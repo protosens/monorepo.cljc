@@ -28,7 +28,7 @@
 ;;;;;;;;;; Generating `deps.edn` files
 
 
-(defn -prepare-deps-edn
+(defn- -prepare-deps-edn
 
   ;; Computes the content of the `deps.edn` file for a module.
   ;;
@@ -95,7 +95,7 @@
 
 
 
-(defn -write-deps-edn
+(defn- -write-deps-edn
 
   ;; Default way of writing a `deps-edn` file by pretty-printing it to the given `path`."
 
@@ -234,6 +234,29 @@
       ;; Done!
       (println "Users can point to commit:"
                ($.git/commit-sha 0)))))
+
+
+
+(defn deploy-local
+
+  "Exactly like [[deploy]] but sets the repository URL to the current directory.
+
+   Which must be the root directory of the repository.
+
+   This is for testing purposes. For instance, it allows testing exposition and running
+   the [[verify]] task without having to push anything."
+
+
+  ([]
+
+   (deploy-local nil))
+
+
+  ([basis]
+
+   (deploy (assoc basis
+                  :maestro.module.expose/url
+                  (System/getProperty "user.dir")))))
 
 
 
