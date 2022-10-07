@@ -159,7 +159,7 @@
 
 (defn deploy
 
-  "Exposes selected modules allowing them to be consumed by Clojure CLI as Git dependencies.
+  "Task exposesing selected modules for consumption by Clojure CLI as Git dependencies.
 
    High-level steps are:
 
@@ -259,6 +259,8 @@
 
 (defn- -req-alias-filter
 
+  ;; Used to seled only exposed modules when interacting with [[$.maestro.module.requirer]].
+
   [basis]
 
   (let [f (fn [_alias data]
@@ -277,6 +279,15 @@
 
 (defn requirer+
 
+  "Task generating requirer namespaces for all exposed modules.
+  
+   See the [[protosens.maestro.module.requirer]] about requirer namespaces and
+   especially [[protosens.maestro.module.requirer/generate]] about the required
+   setup.
+
+   The main benefit about generating those is being able to call the [[verify]]
+   task."
+
 
   ([]
 
@@ -293,10 +304,10 @@
 
 (defn verify
 
-  "Verifies exposed modules with [[protosens.maestro.module.requirer/verify]].
+  "Task verifying exposed modules with [[protosens.maestro.module.requirer/verify]].
 
    This ensures that exposed modules can be required in their production state.
-   See [[protosens.maestro.module.requirer/generate]] about setup."
+   see [[requirer+]]."
 
 
   ([]

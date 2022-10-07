@@ -18,9 +18,10 @@
 -  [`protosens.maestro.module.expose`](#protosens.maestro.module.expose)  - Modules containing a <code>:maestro.module.expose/name</code> in their alias data can be exposed publicly as git libraries and consumed from Clojure CLI (using <code>:deps/root</code> to point to the <code>:maestro/root</code> of the consumed module).
     -  [`-prepare-deps-edn`](#protosens.maestro.module.expose/-prepare-deps-edn)
     -  [`-write-deps-edn`](#protosens.maestro.module.expose/-write-deps-edn)
-    -  [`deploy`](#protosens.maestro.module.expose/deploy) - Exposes selected modules allowing them to be consumed by Clojure CLI as Git dependencies.
+    -  [`deploy`](#protosens.maestro.module.expose/deploy) - Task exposesing selected modules for consumption by Clojure CLI as Git dependencies.
     -  [`exposed?`](#protosens.maestro.module.expose/exposed?) - Returns true if an alias (given its data) is meant to be exposed as a Git library.
-    -  [`verify`](#protosens.maestro.module.expose/verify) - Verifies exposed modules with [[protosens.maestro.module.requirer/verify]].
+    -  [`requirer+`](#protosens.maestro.module.expose/requirer+) - Task generating requirer namespaces for all exposed modules.
+    -  [`verify`](#protosens.maestro.module.expose/verify) - Task verifying exposed modules with [[protosens.maestro.module.requirer/verify]].
 -  [`protosens.maestro.module.requirer`](#protosens.maestro.module.requirer)  - Generating "requirer" namespaces for modules.
     -  [`alias+`](#protosens.maestro.module.requirer/alias+) - Finds aliases to work with.
     -  [`generate`](#protosens.maestro.module.requirer/generate) - Task generating requirer namespaces for modules.
@@ -286,7 +287,7 @@ Modules containing a `:maestro.module.expose/name` in their alias data can be ex
 
    A name is a symbol `<organization>/<artifact>` such as `com.acme/some-lib`.
 
-   The [[expose]] task does the necessary step for exposition.
+   The [`deploy`](#protosens.maestro.module.expose/deploy) task does the necessary step for exposition.
    The [`verify`](#protosens.maestro.module.expose/verify) task may be used as a precaution.
 
 
@@ -314,7 +315,7 @@ Modules containing a `:maestro.module.expose/name` in their alias data can be ex
 ```
 
 
-Exposes selected modules allowing them to be consumed by Clojure CLI as Git dependencies.
+Task exposesing selected modules for consumption by Clojure CLI as Git dependencies.
 
    High-level steps are:
 
@@ -346,7 +347,24 @@ Exposes selected modules allowing them to be consumed by Clojure CLI as Git depe
 
 Returns true if an alias (given its data) is meant to be exposed as a Git library.
 
-## <a name="protosens.maestro.module.expose/verify">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/expose.clj#L260-L285) `verify`</a>
+## <a name="protosens.maestro.module.expose/requirer+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/expose.clj#L280-L299) `requirer+`</a>
+``` clojure
+
+(requirer+)
+(requirer+ basis)
+```
+
+
+Task generating requirer namespaces for all exposed modules.
+  
+   See the [`protosens.maestro.module.requirer`](#protosens.maestro.module.requirer) about requirer namespaces and
+   especially [`protosens.maestro.module.requirer/generate`](#protosens.maestro.module.requirer/generate) about the required
+   setup.
+
+   The main benefit about generating those is being able to call the [`verify`](#protosens.maestro.module.expose/verify)
+   task.
+
+## <a name="protosens.maestro.module.expose/verify">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/expose.clj#L305-L320) `verify`</a>
 ``` clojure
 
 (verify)
@@ -354,10 +372,10 @@ Returns true if an alias (given its data) is meant to be exposed as a Git librar
 ```
 
 
-Verifies exposed modules with [`protosens.maestro.module.requirer/verify`](#protosens.maestro.module.requirer/verify).
+Task verifying exposed modules with [`protosens.maestro.module.requirer/verify`](#protosens.maestro.module.requirer/verify).
 
    This ensures that exposed modules can be required in their production state.
-   See [`protosens.maestro.module.requirer/generate`](#protosens.maestro.module.requirer/generate) about setup.
+   see [`requirer+`](#protosens.maestro.module.expose/requirer+).
 
 -----
 # <a name="protosens.maestro.module.requirer">protosens.maestro.module.requirer</a>
