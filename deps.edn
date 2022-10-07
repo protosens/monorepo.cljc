@@ -120,7 +120,6 @@
                      :module/maestro.plugin.quickdoc
                      :module/namespace
                      :module/process
-                     :module/requirer
                      :module/string
                      :module/symbol]}
 
@@ -438,26 +437,6 @@
   :test/process
 
   {:extra-paths ["module/process/src/test/clj"]}
-
-  ;---
-
-  :module/requirer
-
-  {:extra-paths                         ["module/requirer/src/main/clj"]
-   :maestro/doc                         ""
-   :maestro/platform+                   [:bb
-                                         :jvm]
-   :maestro/require                     [:module/deps.edn
-                                         :module/process
-                                         {test :test/requirer}]
-   :maestro/root                        "module/requirer"
-   :maestro.module.expose/name          protosens/requirer
-   :maestro.plugin.quickdoc.path/output "module/requirer/API.md"}
-
-
-  :test/requirer
-
-  {:extra-paths ["module/requirer/src/test/clj"]}
 
   ;---
 

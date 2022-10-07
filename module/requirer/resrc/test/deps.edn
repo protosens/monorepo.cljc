@@ -1,6 +1,0 @@
-{:aliases
- {:extra {:extra-paths ["src/extra"]}
-  :fail  {:extra-paths ["src/fail"]}}
-
- :paths
- ["src/main"]}
