@@ -57,6 +57,9 @@
    `basis` may contain a `:maestro.process/command` that will be prepended before
    templating.
 
+   Extra environment variable maps provided in `:maestro/env` of required aliases,
+   if any, are merged and set when executing the command.
+
    Eventually, the command is run and this function returns `true` if the process
    exits with a non-zero status."
 
@@ -76,16 +79,20 @@
            & command]] (split-with (fn [arg]
                                      (not= arg
                                            "--"))
-                                   *command-line-args*)]
-     (-> ($.process/shell (-> basis
-                             (cond->
-                               (seq for-maestro)
-                               ($.maestro/cli-arg+ for-maestro))
-                             ($.maestro/search)
-                             (update :maestro.process/command
-                                     #(concat %
-                                              command))
-                             (template-command)
-                             (:maestro.process/command))
-                          (:maestro.process/option+ basis))
+                                   *command-line-args*)
+         basis-2       (-> basis
+                           (cond->
+                             (seq for-maestro)
+                             ($.maestro/cli-arg+ for-maestro))
+                           ($.maestro/search))]
+     (-> ($.process/shell (-> basis-2
+                              (update :maestro.process/command
+                                      #(concat %
+                                               command))
+                              (template-command)
+                              (:maestro.process/command))
+                          (update (basis-2 :maestro.process/option+)
+                                  :extra-env
+                                  (partial merge
+                                           (basis-2 :maestro/env))))
          ($.process/success?)))))

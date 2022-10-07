@@ -11,7 +11,7 @@ Maestro plugin generating markdown documentation for modules using [Quickdoc](ht
 
    Works with Babashka out of the box. For Clojure JVM, add the JVM flavor of Quickdoc to your dependencies.
 
-   Attention, it is necessary adding the `clj-kondo` to your `bb.edn` file as a [Babashka pod](https://github.com/babashka/pods):
+   Attention, it is necessary adding `clj-kondo` to your `bb.edn` file as a [Babashka pod](https://github.com/babashka/pods):
 
    ```clojure
    {:pods
@@ -21,7 +21,7 @@ Maestro plugin generating markdown documentation for modules using [Quickdoc](ht
 
 
 
-## <a name="protosens.maestro.plugin.quickdoc/bundle">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.quickdoc/src/main/clj/protosens/maestro/plugin/quickdoc.clj#L37-L64) `bundle`</a>
+## <a name="protosens.maestro.plugin.quickdoc/bundle">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.quickdoc/src/main/clj/protosens/maestro/plugin/quickdoc.clj#L24-L50) `bundle`</a>
 ``` clojure
 
 (bundle)
@@ -33,11 +33,9 @@ Task generating a single documentation file for the given aliases.
 
    All `:extra-paths` of those aliases will be merged and used as source paths.
 
-   For options, see the Quickdoc documentation.
-  
-   Prints paths that have been bundled together.
+   Quickdoc options may be provided under `:maestro.plugin.quickdoc/option+`.
 
-## <a name="protosens.maestro.plugin.quickdoc/module+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.quickdoc/src/main/clj/protosens/maestro/plugin/quickdoc.clj#L68-L107) `module+`</a>
+## <a name="protosens.maestro.plugin.quickdoc/module+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.quickdoc/src/main/clj/protosens/maestro/plugin/quickdoc.clj#L54-L93) `module+`</a>
 ``` clojure
 
 (module+)
@@ -50,7 +48,7 @@ Task generating documentation for modules automatically.
    Selects modules that have an `:maestro.plugin.quickdoc.path/output` in their alias data specifying
    where the markdown file should be written to. Source paths are based on `:extra-paths`.
 
-   For options, see the Quickdoc documentation.
+   Quickdoc options may be provided under `:maestro.plugin.quickdoc/option+`.
    
    Prints which modules have produced documentation where.
 

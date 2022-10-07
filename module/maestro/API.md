@@ -518,7 +518,7 @@ About running shell commands with computed required aliases.
 
 
 
-## <a name="protosens.maestro.process/run">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/process.clj#L49-L91) `run`</a>
+## <a name="protosens.maestro.process/run">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/process.clj#L49-L98) `run`</a>
 ``` clojure
 
 (run)
@@ -534,6 +534,9 @@ Templates a shell command with required aliases and runs it.
 
    `basis` may contain a `:maestro.process/command` that will be prepended before
    templating.
+
+   Extra environment variable maps provided in `:maestro/env` of required aliases,
+   if any, are merged and set when executing the command.
 
    Eventually, the command is run and this function returns `true` if the process
    exits with a non-zero status.

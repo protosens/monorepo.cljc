@@ -44,14 +44,15 @@
 
    Supported options are:
 
-   | Key         | Value                       | Default                |
-   |-------------|-----------------------------|------------------------|
-   | `:dir`      | Working directory           | Current directory      |
-   | `:env`      | Environment variables map   | `nil`                  |
-   | `:err`      | STDERR                      | A Java `OutputStream`  |
-   | `:in`       | STDIN                       | A Java `InputStream`   |
-   | `:out`      | STDOUT                      | A Java `OutputStream`  |
-   | `:shutdown` | Shutdown hook               | [[destroy]]            |
+   | Key          | Value                               | Default                |
+   |--------------|-------------------------------------|------------------------|
+   | `:dir`       | Working directory                   | Current directory      |
+   | `:env`       | Map of environment variables        | `nil`                  |
+   | `:err`       | STDERR                              | A Java `OutputStream`  |
+   | `:extra-env` | Map of environment variables to add | `nil`                  |
+   | `:in`        | STDIN                               | A Java `InputStream`   |
+   | `:out`       | STDOUT                              | A Java `OutputStream`  |
+   | `:shutdown`  | Shutdown hook                       | [[destroy]]            |
 
    STDIO arguments must be compatible with `clojure.java.io/copy` or be set to `:inherit`
    (meaning they will be inherited from the current process).
