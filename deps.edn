@@ -121,7 +121,8 @@
                      :module/namespace
                      :module/process
                      :module/string
-                     :module/symbol]}
+                     :module/symbol
+                     :module/task]}
 
 
   :bundle/test
@@ -160,7 +161,7 @@
   :module/bb.help
 
   {:extra-paths                         ["module/bb.help/src/main/clj"]
-   :maestro/doc                         "Collection of little Git-related quick utilities"
+   :maestro/doc                         "Printing extra documentation for Babashka tasks"
    :maestro/platform+                   [:bb
                                          :jvm]              
    :maestro/require                     [:module/edn
@@ -183,7 +184,7 @@
   :module/classpath
 
   {:extra-paths                         ["module/classpath/src/main/clj"]
-   :maestro/doc                         "Little collection of classpath-related utilities"
+   :maestro/doc                         "Classpath-related utilities"
    :maestro/platform+                   [:bb
                                          :jvm]              
    :maestro/require                     [:module/process
@@ -237,7 +238,7 @@
   :module/edn
 
   {:extra-paths                         ["module/edn/src/main/clj"]
-   :maestro/doc                         "Reading EDN under various circumstances"
+   :maestro/doc                         "One-liners for reading EDN"
    :maestro/platform+                   [:bb
                                          :jvm]              
    :maestro/require                     [{test :test/edn}]
@@ -258,7 +259,7 @@
   :module/git
 
   {:extra-paths                         ["module/git/src/main/clj"]
-   :maestro/doc                         "Collection of little Git-related quick utilities"
+   :maestro/doc                         "One-liners (or almost) for common Git operations"
    :maestro/platform+                   [:bb
                                          :jvm]              
    :maestro/require                     [:ext/babashka.process
@@ -282,7 +283,7 @@
   :module/maestro
 
   {:extra-paths                         ["module/maestro/src/main/clj"]
-   :maestro/doc                         "Tools for managing a (mono)repo by leveraging `deps.edn`"
+   :maestro/doc                         "Managing a modern Clojure (mono)repo"
    :maestro/platform+                   [:bb
                                          :jvm]              
    :maestro/require                     [:ext/babashka.fs
@@ -317,7 +318,7 @@
 
   :test.uberjar/maestro
 
-  {:maestro/doc                      "Used to test uberjar building with `:module/maestro.plugin.build`"
+  {:maestro/doc                      "Used to test uberjar building with `:module/maestro.plugin.build`."
    :maestro/require                  [:module/maestro]
    :maestro.plugin.build/type        :uberjar
    :maestro.plugin.build.path/output "private/target/maestro.uber.jar"}
@@ -328,7 +329,7 @@
   :module/maestro.plugin.build
 
   {:extra-paths                         ["module/maestro.plugin.build/src/main/clj"]
-   :maestro/doc                         "Maestro plugin for `:ext/clojure.tools.build`.
+   :maestro/doc                         "Maestro plugin for [`tools.build`](https://github.com/clojure/tools.build).
                                          The building utilities only work with Clojure JVM."
    :maestro/platform+                   [:bb
                                          :jvm]              
@@ -347,7 +348,7 @@
   :module/maestro.plugin.clj-kondo
 
   {:extra-paths                         ["module/maestro.plugin.clj-kondo/src/main/clj"]
-   :maestro/doc                         "Maestro plugin for Clj-kondo, the Clojure linter"
+   :maestro/doc                         "Maestro plugin for [Clj-kondo](https://github.com/clj-kondo/clj-kondo), the Clojure linter."
    :maestro/platform+                   [:bb
                                          :jvm]              
    :maestro/require                     [:module/classpath
@@ -365,7 +366,7 @@
   :module/maestro.plugin.kaocha
 
   {:extra-paths                         ["module/maestro.plugin.kaocha/src/main/clj"]
-   :maestro/doc                         "Maestro plugin for `:ext/kaocha`"
+   :maestro/doc                         "Maestro plugin for the [Kaocha](https://github.com/lambdaisland/kaocha) test runner."
    :maestro/platform+                   [:bb
                                          :jvm]              
    :maestro/require                     [:ext/babashka.fs
@@ -383,7 +384,7 @@
   :module/maestro.plugin.quickdoc
 
   {:extra-paths                         ["module/maestro.plugin.quickdoc/src/main/clj"]
-   :maestro/doc                         "Maestro plugin for `:ext/quickdoc`
+   :maestro/doc                         "Maestro plugin for [Quickdock](https://github.com/borkdude/quickdoc), the Markdown API generator.
                                          Works on the JVM is the JVM flavor of Quickdoc is required by the user."
    :maestro/platform+                   [:bb]
    :maestro/require                     [:ext/babashka.fs
@@ -403,7 +404,7 @@
   :module/namespace
 
   {:extra-paths                         ["module/namespace/src/main/clj"]
-   :maestro/doc                         "Find accessible namespaces"
+   :maestro/doc                         "Mainly about finding available namespaces"
    :maestro/platform+                   [:bb
                                          :jvm]              
    :maestro/root                        "module/namespace"
@@ -425,7 +426,7 @@
   :module/process
 
   {:extra-paths                         ["module/process/src/main/clj"]
-   :maestro/doc                         "Light wrapper over `:ext/babasha.fs`"
+   :maestro/doc                         "Light wrapper over [`babashka/process`](https://github.com/babashka/process)."
    :maestro/platform+                   [:bb
                                          :jvm]              
    :maestro/require                     [:ext/babashka.process
@@ -446,7 +447,7 @@
   :module/string
 
   {:extra-paths                         ["module/string/src/main/clj"]
-   :maestro/doc                         "String manipulation library"
+   :maestro/doc                         "String manipulation library complementing [`clojure.string`](https://clojuredocs.org/clojure.string)."
    :maestro/platform+                   [:bb
                                          :jvm]              
    :maestro/require                     [{test :test/string}]
@@ -466,7 +467,7 @@
   :module/symbol
 
   {:extra-paths                         ["module/symbol/src/main/clj"]
-   :maestro/doc                         "Collections of helpers for handling symbols"
+   :maestro/doc                         "Handling symbols"
    :maestro/platform+                   [:bb
                                          :jvm]              
    :maestro/root                        "module/symbol"
@@ -485,15 +486,18 @@
 
   :module/task
 
-  {:maestro/doc     "Merges dependencies and paths for Babashka tasks.
+  {:extra-paths     ["module/task/src/main/clj"]
+   :maestro/doc     "Merges dependencies and paths for Babashka tasks.
                      Not meant to be consumed publicly."
-   :maestro/require [:module/bb.help
+   :maestro/require [:module/babashka.fs
+                     :module/bb.help
                      :module/classpath
                      :module/maestro
                      :module/maestro.plugin.build
                      :module/maestro.plugin.clj-kondo
                      :module/maestro.plugin.kaocha
-                     :module/maestro.plugin.quickdoc]
+                     :module/maestro.plugin.quickdoc
+                     :module/string]
    :maestro/root    "module/task"}
 
   }}

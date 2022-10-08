@@ -1,7 +1,4 @@
-# `:module/maestro`
-
-[![Clojars](https://img.shields.io/clojars/v/com.protosens/maestro.svg)](https://clojars.org/com.protosens/maestro)
-[![Cljdoc](https://cljdoc.org/badge/com.protosens/maestro)](https://cljdoc.org/d/com.protosens/maestro/CURRENT)
+# `module/maestro` - [API](./API.md)
 
 Maestro, calmely orchestrating your Clojure repositories.
 
@@ -14,7 +11,7 @@ Main benefits are:
 - One single `deps.edn` where the whole repository is clearly described
 - Organized around aliases combined at will
 - Easy dependency pinning
-- Freedom, no strict framework
+- Freedom, more of a paradigm than a strict framework
 - Plugins for common tooling ([clj-kondo](https://github.com/clj-kondo/clj-kondo), [kaocha](https://github.com/lambdaisland/kaocha), ...)
 - [Babashka](https://github.com/babashka/babashka)-friendly for efficient scripting
 

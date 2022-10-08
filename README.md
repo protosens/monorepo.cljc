@@ -12,6 +12,6 @@ Publicly released:
 
 ## License
 
-Copyright © 2022 Protosens SRL and Contributors
+Copyright © 2022 Protosens SRL
 
 Licensed under the Mozilla Public License, Version 2.0 (see LICENSE)

@@ -7,6 +7,7 @@
 ;;     :ext/clojure.tools.build
 ;;     :ext/kaocha
 ;;     :ext/quickdoc
+;;     :module/babashka.fs
 ;;     :module/bb.help
 ;;     :module/classpath
 ;;     :module/deps.edn
@@ -49,4 +50,5 @@
   "maestro/uber/module/maestro/src/main/clj"
   "maestro/uber/module/namespace/src/main/clj"
   "maestro/uber/module/process/src/main/clj"
-  "maestro/uber/module/string/src/main/clj"]}
+  "maestro/uber/module/string/src/main/clj"
+  "src/main/clj"]}
