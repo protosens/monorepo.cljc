@@ -1,6 +1,10 @@
 (ns protosens.maestro
 
-  "See README about core principles, [[search]] being the star of this namespace."
+  "See README about core principles.
+ 
+   [[search]] is the star of this namespace and exemplifies the Maestro philosophy.
+  
+   To understand the notion of a \"basis\", see [[create-basis]] and [[ensure-basis]]."
 
   (:import (java.io PushbackReader))
   (:require [clojure.edn            :as edn]
@@ -55,11 +59,13 @@
 
 (defn fail-mode
 
-  "How [[fail]] behaves.
+  "How failure is handled.
+
+   See [[fail]].
   
    There are 2 modes:
 
-   - `:exit` is usually prefered on Babashka ; error message is printed and process exits with 1
+   - `:exit` is usually prefered on Babashka ; error message is printed and process exits with code 1
    - `:throw` might be preferred on the JVM ; an exception is thrown with the error message
 
    Sets behavior to the given `mode`.
@@ -82,14 +88,16 @@
            mode)))
 
 
-;;;;;;;;;;
+;;;;;;;;;; Basis
 
 
 (defn create-basis
 
   "Reads and prepares a `deps.edn` file.
+  
+   The result is called a `basis` for consistency with other Clojure libraries.
 
-   Takes a nilable map of options such as:
+   Options may be:
 
    | Key                | Value                                 | Default          |
    |--------------------|---------------------------------------|------------------|
@@ -116,30 +124,40 @@
 
 (defn ensure-basis
 
-  "Returns the given argument if it contains `:aliases`.
-   Otherwise, forwards it to [[create-basis]]."
+  "Reads the basis from disk if necessary and merge everything.
 
-  [maybe-basis]
+   The term \"proto-basis\" denotes that it may already be a proper basis or that it may
+   contain key-values to merge to basis to read from disk.
 
-  (if (:aliases maybe-basis)
-    maybe-basis
-    (merge (create-basis maybe-basis)
-           maybe-basis)))
+   It is commonly used by many Maestro-related utilities as a convenience for users.
+
+   In practice, [[create-basis]] is called if `:aliases` are missing."
+
+  [proto-basis]
+
+  (if (:aliases proto-basis)
+    proto-basis
+    (merge (create-basis proto-basis)
+           proto-basis)))
 
 
-;;;;;;;;;;
+;;;;;;;;;; Searching
 
 
 (defn- -on-require
 
-  ;; Called by [[search]] at the for executing `:maestro/on-require` hooks.
+  ;; Called by [[search]] when executing `:maestro/on-require` hooks after the search.
 
   [basis]
 
   (transduce (comp (map (basis :aliases))
                    (mapcat :maestro/on-require))
-             (completing (fn [basis-2 sym]
-                           ((requiring-resolve sym) basis-2)))
+             (completing (fn [basis-2 hook]
+                           ((cond->
+                              hook
+                              (not (fn? hook))
+                              (requiring-resolve))
+                            basis-2)))
              basis
              (basis :maestro/require)))
 
@@ -204,37 +222,37 @@
 
 (defn search
 
-  "Given input aliases and profiles, under `:maestro/alias+` and `:maestro/profile+` respectively, searches
-   for all necessary aliases and puts the results in a vector under `:maestro/require`.
+  "Searches for all required aliases.
 
-   Input will go through [[ensure-basis]] first.
+   Namely, the full chain of aliases required by the aliases provided unde `:maestro/alias+` while activating
+   profiles provided under `:maestro/profile+`.
 
-   Then, will apply the mode found under `:maestro/mode` if any. Modes are described in the basis under
-   `:maestro/mode+`, a map of where keys are modes (typically keywords) and values can contain optional
-   `:maestro/alias+` and `:maestro/profile+` to append before starting the search.
+   High-level steps are:
 
-   Also remembers which profiles resulted in which aliases being selected under `:maestro/profile->alias+`.
+   - Pass `proto-basis` through [[ensure-basis]]
+   - Apply `:maestro/mode` (if any)
+   - Search for all required aliases, put vector result under `:maestro/require`
+   - Under `:maestro/profile->alias+`, remember which profiles result in which aliases being selected
+   - Execute hooks provided in `:maestro/on-require` of required aliase
+   - Return the whole basis with everything
 
-   Alias data in `deps.edn` can also contain a vector of qualified symbols under `:maestro/on-require`. Those
-   are resolved to functions and executed with the results at the very end if required.
-
-   See the following namespaces for additional helpers:
+   Also see:
 
    - [[protosens.maestro.aggr]] for expert users needing this function to do more
-   - [[protosens.maestro.alias]]"
+   - [[task]] for doing a search conveniently as a task (perfect for Babashka)"
 
-  [basis]
+  [proto-basis]
 
-  (let [mode           (:maestro/mode basis)
-        basis-2        (ensure-basis basis)
+  (let [mode           (:maestro/mode proto-basis)
+        basis          (ensure-basis proto-basis)
         mode-2         (when mode
-                         (or (get-in basis-2
+                         (or (get-in basis
                                      [:maestro/mode+
                                       mode])
                              (fail (str "Maestro mode not found in basis: "
                                         mode))))
-        basis-3        (cond->
-                         basis-2
+        basis-2        (cond->
+                         basis
                          mode-2
                          (-> (update :maestro/alias+
                                      #(into (vec %)
@@ -242,11 +260,11 @@
                              (update :maestro/profile+
                                      #(into (vec %)
                                             (mode-2 :maestro/profile+)))))
-        profile+       (-> (basis-3 :maestro/profile+)
+        profile+       (-> (basis-2 :maestro/profile+)
                            (vec)
                            (conj 'default))
         alias-request+ (set (:maestro/alias+ basis))]
-    (-> basis-3
+    (-> basis-2
         (assoc :maestro/profile+
                profile+)
         (update :maestro/require
@@ -254,9 +272,9 @@
                      []))
         (-search nil
                  0
-                 (or (basis-3 :maestro/aggr)
+                 (or (basis-2 :maestro/aggr)
                      $.maestro.aggr/default)
-                 (basis-3 :maestro/alias+)
+                 (basis-2 :maestro/alias+)
                  profile+
                  (fn [_basis alias-parent depth profile]
                    (or (<= depth
@@ -275,9 +293,9 @@
 
 (defn by-profile+
 
-  "Extracts a set of all aliases required in the context of the given collection of profiles.
+  "Extracts a set of all required aliases selected by the given profiles.
 
-   See [[search]]."
+   Call only after [[search]]."
   
   [basis profile+]
 
@@ -290,11 +308,11 @@
 
 (defn not-by-profile+
   
-  "Extracts a set of all aliases NOT required in the context of the given collection of profiles.
+  "Extracts a set of all required aliases NOT selected by the given profiles.
 
    Opposite of [[by-profile+]].
 
-   See [[search]]."
+   Call only after [[search]]."
 
   [basis profile+]
 
@@ -321,7 +339,7 @@
   (string/join (basis :maestro/require)))
 
 
-;;;;;;;;; Meant for Babashka
+;;;;;;;;; Task
 
 
 (defn cli-arg+
@@ -355,13 +373,13 @@
    `arg+` defaults to `*command-line-args*`."
 
 
-  ([basis]
+  ([proto-basis]
 
-   (cli-arg+ basis
+   (cli-arg+ proto-basis
              nil))
 
 
-  ([basis arg+]
+  ([proto-basis arg+]
 
    (let [arg-2+   (map edn/read-string
                        (or arg+
@@ -385,7 +403,7 @@
          mode   (when (= n-arg
                          2)
                   (first arg-2+))]
-     (-> basis
+     (-> proto-basis
          (update :maestro/alias+
                  #(into (sorted :maestro/alias+)
                         %))
@@ -401,10 +419,16 @@
 
 (defn task
 
-  "Like [[search]] but prepends aliases and profiles found using [[cli-arg]] and ends by printing all required aliases.
+  "Task searching and printing all required aliases.
+  
+   High level steps:
+  
+   - Handle CLI arguments with [[cli-arg+]]
+   - Call [[search]]
+   - Print required aliases (or pass result to function under `:maestro.task/finalize` if present)
 
-   Commonly used as a Babashka task. The output is especially useful in combination with Clojure CLI by leveraring shell
-   substitution (e.g. `$()`) to insert aliases under `-M` and friends."
+   Commonly used as a Babashka task. The output is especially useful in combination with Clojure CLI by
+   leveraring shell substitution (e.g. `$()`) to insert aliases under `-M` and friends."
 
 
   ([]
@@ -412,11 +436,11 @@
    (task nil))
 
 
-  ([basis]
+  ([proto-basis]
 
-   (-> basis
+   (-> proto-basis
        (cli-arg+)
        (search)
-       ((or (:maestro.task/finalize basis)
+       ((or (:maestro.task/finalize proto-basis)
             (comp print
                   stringify-required))))))
