@@ -1,13 +1,17 @@
-# Public Clojure monorepo
+# `Monorepo.cljc`
 
-Nascent public monorepo hosting libraries and tooling for the Clojure/script
+Nascent public monorepo hosting libraries and tools for the Clojure/script
 ecosystem.
 
-Publicly released:
+Created, used, and maintained by Protosens SRL.
 
-| Module                                | Description                                     |
-|---------------------------------------|-------------------------------------------------|
-| [`:module/maestro`](./module/maestro) | Tooling for managing Clojure (mono)repositories |
+
+## Public work
+
+Modules exposed publicly are listed in [`./module`](./module) and can be
+consumed as [Git
+dependencies](https://clojure.org/guides/deps_and_cli#_using_git_libraries) by
+[Clojure CLI](https://clojure.org/guides/deps_and_cli).
 
 
 ## License
