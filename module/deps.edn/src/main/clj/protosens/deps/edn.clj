@@ -1,9 +1,9 @@
 (ns protosens.deps.edn
 
-  "Handling `deps.edn` files.
+  "Specialized functions for handling `deps.edn` files.
   
    Most useful for tool authors. [[read]] fetches a `deps.edn` file and other functions
-   are used to handle it."
+   are used for extracting informations."
 
   (:refer-clojure :exclude [read])
   (:require [protosens.edn.read  :as $.edn.read]
@@ -22,7 +22,9 @@
 
 (defn read 
 
-  "Reads the `deps.edn` file located in `dir` (defaults to `./`).
+  "Reads the `deps.edn` file located in `dir`.
+  
+   Defaults to `./`.
   
    Remembers the `dir`ectory under `:deps/root`.
   
@@ -87,10 +89,10 @@
   
    Options may be:
 
-   | Key          | Value                  | Default                          |
-   |--------------|------------------------|----------------------------------|
-   | `:alias+`    | See [[path+]]          | `nil`                            |
-   | `:extension+ | Source file extensions | `[\".clj\" \".cljc\" \".cljs\"]` |"
+   | Key           | Value                  | Default                          |
+   |---------------|------------------------|----------------------------------|
+   | `:alias+`     | See [[path+]]          | `nil`                            |
+   | `:extension+` | Source file extensions | `[\".clj\" \".cljc\" \".cljs\"]` |"
 
 
   ([deps-edn]

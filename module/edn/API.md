@@ -17,15 +17,18 @@ Reading EDN data.
    |-------------------|-----------------------------------------------------|---------|
    | `:default-reader` | Used when `:tag->reader` falls short                | `nil`   |
    | `:end`            | Value returned when the end of the input is reached | Throws  |
-   | `:tag->reader     | Map of tagged reader functions                      | `{}`    |
+   | `:tag->reader`    | Map of tagged reader functions                      | `{}`    |
 
    The default reader (if provided) is only used when there is no reader function for a given tag
    in `:tag->reader`. It takes 2 arguments: the tag and its associated value.
+  
+   This namespace mainly exists to avoid duplication in other modules which often handle
+   EDN in similar ways.
 
 
 
 
-## <a name="protosens.edn.read/file">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/edn/src/main/clj/protosens/edn/read.clj#L46-L63) `file`</a>
+## <a name="protosens.edn.read/file">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/edn/src/main/clj/protosens/edn/read.clj#L49-L66) `file`</a>
 ``` clojure
 
 (file path)
@@ -35,7 +38,7 @@ Reading EDN data.
 
 Reads the first object from the file at the given `path`.
 
-## <a name="protosens.edn.read/string">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/edn/src/main/clj/protosens/edn/read.clj#L67-L81) `string`</a>
+## <a name="protosens.edn.read/string">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/edn/src/main/clj/protosens/edn/read.clj#L70-L84) `string`</a>
 ``` clojure
 
 (string s)

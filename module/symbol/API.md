@@ -17,7 +17,7 @@
 Collection of helpers for handling symbols.
 
    Often similar to [`clojure.string`](https://clojuredocs.org/clojure.string).
-   Actually, those functions typically work with strings instead of input symbols but
+   Actually, functions from this namesapce typically work with strings instead of input symbols but
    providing symbols better conveys the intent.
 
 

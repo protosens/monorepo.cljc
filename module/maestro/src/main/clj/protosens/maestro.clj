@@ -1,6 +1,6 @@
 (ns protosens.maestro
 
-  "See README about core principles.
+  "See [README](./) about core principles.
  
    [[search]] is the star of this namespace and exemplifies the Maestro philosophy.
   

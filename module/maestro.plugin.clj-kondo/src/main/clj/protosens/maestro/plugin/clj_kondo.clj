@@ -2,9 +2,7 @@
 
   "Maestro plugin for linting Clojure code via [Clj-kondo](https://github.com/clj-kondo/clj-kondo).
   
-   Assumes `clj-kondo` is installed and available in the shell.
-
-   Those tasks only work when executed with [Babashka](https://github.com/babashka/babashka)."
+   Assumes `clj-kondo` is installed and available in the shell."
 
   (:require [protosens.maestro   :as $.maestro]
             [protosens.classpath :as $.classpath]

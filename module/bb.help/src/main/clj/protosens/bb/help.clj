@@ -1,6 +1,11 @@
 (ns protosens.bb.help
 
-  "Print extra documentation for Babashka tasks."
+  "Printing extra information about Babashka tasks.
+
+   While [Babashka](https://github.com/babashka/babashka) tasks can hold a docstring under `:doc`
+   that get displayed with `bb tasks`, it is usually not enough for providing details.
+
+   See [[task]] about printing extra-documentation"
 
   (:refer-clojure :exclude [print])
   (:require [clojure.string          :as string]
@@ -33,7 +38,7 @@
 
 (defn task
 
-  "Pretty-prints extra documentation for a task (if there is any).
+  "Prepares task extra documentation.
 
    Extra documentation may be specified in a task under `:protosens/doc`.
    Multi-line strings will be realigned.
@@ -45,7 +50,7 @@
    | `:bb`   | Path to the Babashka config file hosting tasks | `\"bb.edn\"`  |
    | `:task` | Task to print (without extension)              | First CLI arg |
   
-   Returns a data map that can be printed with [[print]]."
+   Returns a data map that can be pretty-printed with [[print]]."
 
   
   ([]
@@ -89,7 +94,7 @@
    |-------|------------------------------------------------|--------------|
    | `:bb` | Path to the Babashka config file hosting tasks | `\"bb.edn\"` |
   
-   The return value is a data map that can be printed with [[print]]."
+   The return value is a data map that can be pretty-printed with [[print]]."
 
 
   ([]
@@ -136,7 +141,9 @@
 
 (def printer+
 
-  "Default printers used by [[print]].
+  "Default printers.
+  
+   Used by [[print]].
 
    They come from the [[protosens.bb.help.print]] namespace."
   

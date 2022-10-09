@@ -161,7 +161,7 @@
   :module/bb.help
 
   {:extra-paths                         ["module/bb.help/src/main/clj"]
-   :maestro/doc                         "Printing extra documentation for Babashka tasks"
+   :maestro/doc                         "Printing extra documentation for Babashka tasks."
    :maestro/platform+                   [:bb
                                          :jvm]              
    :maestro/require                     [:module/edn
@@ -184,7 +184,7 @@
   :module/classpath
 
   {:extra-paths                         ["module/classpath/src/main/clj"]
-   :maestro/doc                         "Classpath-related utilities"
+   :maestro/doc                         "Classpath-related utilities."
    :maestro/platform+                   [:bb
                                          :jvm]              
    :maestro/require                     [:module/process
@@ -206,7 +206,7 @@
   :module/deps.edn
 
   {:extra-paths                         ["module/deps.edn/src/main/clj"]
-   :maestro/doc                         "Handling `deps.edn` files"
+   :maestro/doc                         "Handling `deps.edn` files."
    :maestro/platform+                   [:bb
                                          :jvm]
    :maestro/require                     [:module/edn
@@ -228,7 +228,8 @@
   :module/dev
 
   {:extra-paths     ["module/dev/src/main/clj"]
-   :maestro/doc     "Dev utilities used in this repository"
+   :maestro/doc     "Dev utilities used in this repository.
+                     Not meant for public use."
    :maestro/root    "module/dev"
    :maestro/require [:module/namespace
                      :module/symbol]}
@@ -238,7 +239,7 @@
   :module/edn
 
   {:extra-paths                         ["module/edn/src/main/clj"]
-   :maestro/doc                         "One-liners for reading EDN"
+   :maestro/doc                         "One-liners for reading EDN."
    :maestro/platform+                   [:bb
                                          :jvm]              
    :maestro/require                     [{test :test/edn}]
@@ -259,7 +260,7 @@
   :module/git
 
   {:extra-paths                         ["module/git/src/main/clj"]
-   :maestro/doc                         "One-liners (or almost) for common Git operations"
+   :maestro/doc                         "One-liners (or almost) for common Git operations."
    :maestro/platform+                   [:bb
                                          :jvm]              
    :maestro/require                     [:ext/babashka.process
@@ -283,7 +284,7 @@
   :module/maestro
 
   {:extra-paths                         ["module/maestro/src/main/clj"]
-   :maestro/doc                         "Managing a modern Clojure (mono)repo"
+   :maestro/doc                         "Maestro, calmely orchestrating your Clojure (mono)repo."
    :maestro/platform+                   [:bb
                                          :jvm]              
    :maestro/require                     [:ext/babashka.fs
@@ -329,7 +330,7 @@
   :module/maestro.plugin.build
 
   {:extra-paths                         ["module/maestro.plugin.build/src/main/clj"]
-   :maestro/doc                         "Maestro plugin for [`tools.build`](https://github.com/clojure/tools.build).
+   :maestro/doc                         "Maestro plugin for [`tools.build`](https://github.com/clojure/tools.build).  
                                          The building utilities only work with Clojure JVM."
    :maestro/platform+                   [:bb
                                          :jvm]              
@@ -384,7 +385,7 @@
   :module/maestro.plugin.quickdoc
 
   {:extra-paths                         ["module/maestro.plugin.quickdoc/src/main/clj"]
-   :maestro/doc                         "Maestro plugin for [Quickdock](https://github.com/borkdude/quickdoc), the Markdown API generator.
+   :maestro/doc                         "Maestro plugin for [Quickdock](https://github.com/borkdude/quickdoc), the Markdown API generator.  
                                          Works on the JVM is the JVM flavor of Quickdoc is required by the user."
    :maestro/platform+                   [:bb]
    :maestro/require                     [:ext/babashka.fs
@@ -404,7 +405,7 @@
   :module/namespace
 
   {:extra-paths                         ["module/namespace/src/main/clj"]
-   :maestro/doc                         "Mainly about finding available namespaces"
+   :maestro/doc                         "Mainly about finding available namespaces."
    :maestro/platform+                   [:bb
                                          :jvm]              
    :maestro/root                        "module/namespace"
@@ -467,7 +468,7 @@
   :module/symbol
 
   {:extra-paths                         ["module/symbol/src/main/clj"]
-   :maestro/doc                         "Handling symbols"
+   :maestro/doc                         "Handling symbols."
    :maestro/platform+                   [:bb
                                          :jvm]              
    :maestro/root                        "module/symbol"
@@ -488,8 +489,8 @@
 
   {:extra-paths     ["module/task/src/main/clj"]
    :maestro/doc     "Merges dependencies and paths for Babashka tasks.
-                     Not meant to be consumed publicly."
-   :maestro/require [:module/babashka.fs
+                     Not meant for public use."
+   :maestro/require [:ext/babashka.fs
                      :module/bb.help
                      :module/classpath
                      :module/maestro

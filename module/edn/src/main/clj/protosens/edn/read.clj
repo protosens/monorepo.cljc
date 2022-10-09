@@ -8,10 +8,13 @@
    |-------------------|-----------------------------------------------------|---------|
    | `:default-reader` | Used when `:tag->reader` falls short                | `nil`   |
    | `:end`            | Value returned when the end of the input is reached | Throws  |
-   | `:tag->reader     | Map of tagged reader functions                      | `{}`    |
+   | `:tag->reader`    | Map of tagged reader functions                      | `{}`    |
 
    The default reader (if provided) is only used when there is no reader function for a given tag
-   in `:tag->reader`. It takes 2 arguments: the tag and its associated value."
+   in `:tag->reader`. It takes 2 arguments: the tag and its associated value.
+  
+   This namespace mainly exists to avoid duplication in other modules which often handle
+   EDN in similar ways."
 
   (:import (java.io PushbackReader))
   (:require [clojure.edn     :as edn]

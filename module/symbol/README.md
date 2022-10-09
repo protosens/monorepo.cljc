@@ -1,6 +1,6 @@
 # `module/symbol` - [API](API.md)
 
-Handling symbols
+Handling symbols.
 
 ```clojure
 ;; Add to dependencies in `deps.edn`:

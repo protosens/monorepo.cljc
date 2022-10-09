@@ -1,6 +1,6 @@
 # `module/maestro` - [API](API.md)
 
-Managing a modern Clojure (mono)repo
+Maestro, calmely orchestrating your Clojure (mono)repo.
 
 ```clojure
 ;; Add to dependencies in `deps.edn`:
@@ -14,8 +14,6 @@ protosens/maestro
 
 
 ---
-
-Maestro, calmely orchestrating your Clojure repositories.
 
 This collection of principles started as a tool for expressing dependencies
 between [`deps.edn`] aliases. This simple idea kept evolving and

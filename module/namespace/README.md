@@ -1,6 +1,6 @@
 # `module/namespace` - [API](API.md)
 
-Mainly about finding available namespaces
+Mainly about finding available namespaces.
 
 ```clojure
 ;; Add to dependencies in `deps.edn`:

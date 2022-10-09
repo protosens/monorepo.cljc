@@ -107,16 +107,16 @@
    (generate nil))
 
 
-  ([basis]
+  ([proto-basis]
 
-   (let [basis-2 ($.maestro/ensure-basis basis)]
+   (let [basis ($.maestro/ensure-basis proto-basis)]
      (reduce (fn [acc [alias data]]
                (let [main-ns  (data :maestro.module.requirer/namespace)
                      filename (-> (data :maestro.module.requirer/path)
                                   ($.namespace/to-filename main-ns
                                                            ".cljc"))
                      root     (data :maestro/root)
-                     basis-3  ($.maestro/search (-> basis-2
+                     basis-2  ($.maestro/search (-> basis
                                                     (update :maestro/alias+
                                                             #(conj (vec %)
                                                                    alias))
@@ -129,8 +129,8 @@
                                        ($.namespace/in-path+ (filter (fn [path]
                                                                        (string/starts-with? path
                                                                                             root))
-                                                                     ($.deps.edn/extra-path+ basis-3
-                                                                                             (basis-3 :maestro/require)))))]
+                                                                     ($.deps.edn/extra-path+ basis-2
+                                                                                             (basis-2 :maestro/require)))))]
                  (println alias)
                  (println)
                  (println (format "  %s -> %s"
@@ -154,7 +154,7 @@
                          :namespace main-ns
                          :require+  ns+})))
              {}
-             (alias+ basis-2)))))
+             (alias+ basis)))))
 
 
 ;;;;;;;;;; Verification
@@ -179,9 +179,9 @@
    (verify nil))
 
 
-  ([basis]
+  ([proto-basis]
 
-   (let [basis-2 ($.maestro/ensure-basis basis)]
+   (let [basis ($.maestro/ensure-basis proto-basis)]
      (reduce (fn [acc [alias data]]
                (println alias)
                (let [root (data :maestro/root)]
@@ -224,14 +224,16 @@
                          (or (not-empty (sort (set (data :maestro/platform+))))
                              [:jvm]))))
              {}
-             (alias+ basis-2)))))
+             (alias+ basis)))))
 
 ;;;
 
 
 (defmulti verify-command
 
-  "Used by [[verify]] to create a shell command depending on the platform to verify.
+  "Creates a shell command for the verification process depending on the platform to test.
+  
+   Used by [[verify]].
 
    The shell command is vector starting with the actuall shell command and the rest
    are individual arguments.

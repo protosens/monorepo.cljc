@@ -1,6 +1,6 @@
 (ns protosens.maestro.plugin.quickdoc
 
-  "Maestro plugin generating markdown documentation for modules using [Quickdoc](https://github.com/borkdude/quickdoc)
+  "Maestro plugin generating Markdown documentation for modules using [Quickdoc](https://github.com/borkdude/quickdoc).
 
    Works with Babashka out of the box. For Clojure JVM, add the JVM flavor of Quickdoc to your dependencies.
 
@@ -35,9 +35,9 @@
    (bundle nil))
 
 
-  ([basis]
+  ([proto-basis]
 
-   (let [basis ($.maestro/ensure-basis basis)
+   (let [basis ($.maestro/ensure-basis proto-basis)
          path+ (sort ($.deps.edn/path+ basis
                                        (or (basis :maestro.plugin.quickdoc/alias+)
                                            (some-> (first *command-line-args*)
@@ -67,9 +67,9 @@
    (module+ nil))
 
 
-  ([basis]
+  ([proto-basis]
 
-   (let [basis ($.maestro/ensure-basis basis)]
+   (let [basis ($.maestro/ensure-basis proto-basis)]
      (doseq [[alias
               path-output
               path-source+] (keep (fn [[alias data]]

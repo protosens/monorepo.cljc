@@ -1,8 +1,6 @@
 (ns protosens.git
 
   "Quick Git-related utilities.
-  
-   Work both in Babashka and on the JVM.
 
    The purpose is not to provide an exhaustive Git API. Rather, a collection of one-liners (or almost)
    for carrying common operations, especially in the context of scripting.

@@ -54,7 +54,7 @@
    to [[protosens.maestro/task]] to compute required aliases. Everything after
    is a command to template (see [[template-command]]).
 
-   `basis` may contain a `:maestro.process/command` that will be prepended before
+   `proto-basis` may contain a `:maestro.process/command` that will be prepended before
    templating.
 
    Extra environment variable maps provided in `:maestro/env` of required aliases,
@@ -72,7 +72,7 @@
    (run nil))
 
 
-  ([basis]
+  ([proto-basis]
 
    (let [[for-maestro
           [_--
@@ -80,7 +80,7 @@
                                      (not= arg
                                            "--"))
                                    *command-line-args*)
-         basis-2       (-> basis
+         basis-2       (-> proto-basis
                            (cond->
                              (seq for-maestro)
                              ($.maestro/cli-arg+ for-maestro))

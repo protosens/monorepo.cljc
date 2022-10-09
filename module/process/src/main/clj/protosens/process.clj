@@ -3,7 +3,7 @@
   "Spawning processes from Babahska or Clojure JVM.
 
    This is a light wrapper over [`babashka.process`](https://github.com/babashka/process).
-   The main purpose is to maintain a collection utilities commonly needed by the rest
+   The main purpose is to maintain a collection of utilities commonly needed by the rest
    of the repository.
   
    See [[run]]."

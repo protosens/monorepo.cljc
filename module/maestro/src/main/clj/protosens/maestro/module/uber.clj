@@ -115,9 +115,9 @@
          nil))
 
 
-  ([alias basis]
+  ([alias proto-basis]
 
-   (let [basis-2     (-> basis
+   (let [basis       (-> proto-basis
                          ($.maestro/ensure-basis)
                          (update :maestro/alias+
                                  (fnil conj
@@ -127,12 +127,12 @@
                                  (fnil conj
                                        [])
                                  'release))
-         alias->data (basis-2 :aliases)
+         alias->data (basis :aliases)
          data        (alias->data alias)
          _           (when-not data
                        ($.maestro/fail (str "No data found for alias: "
                                             alias)))
-         basis-3     ($.maestro/search basis-2)
+         basis-2     ($.maestro/search basis)
          root        (data :maestro/root)
          _           (when-not root
                        ($.maestro/fail (str "Given alias does not contain `:maestro/root`")))
@@ -149,13 +149,13 @@
                                              (:extra-paths data-required)))))
                              {:deps  {}
                               :paths #{}}
-                             (basis-3 :maestro/require))
+                             (basis-2 :maestro/require))
          ;;
          root-uber-rel "maestro/uber"
          root-uber-abs (str root
                             "/"
                             root-uber-rel)]
-     (-write-deps-edn basis-3
+     (-write-deps-edn basis-2
                       root
                       root-uber-rel
                       deps-edn)

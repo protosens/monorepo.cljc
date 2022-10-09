@@ -1,5 +1,5 @@
 # Table of contents
--  [`protosens.maestro.plugin.quickdoc`](#protosens.maestro.plugin.quickdoc)  - Maestro plugin generating markdown documentation for modules using [Quickdoc](https://github.com/borkdude/quickdoc) Works with Babashka out of the box.
+-  [`protosens.maestro.plugin.quickdoc`](#protosens.maestro.plugin.quickdoc)  - Maestro plugin generating Markdown documentation for modules using [Quickdoc](https://github.com/borkdude/quickdoc).
     -  [`bundle`](#protosens.maestro.plugin.quickdoc/bundle) - Task generating a single documentation file for the given aliases.
     -  [`module+`](#protosens.maestro.plugin.quickdoc/module+) - Task generating documentation for modules automatically.
 
@@ -7,7 +7,7 @@
 # <a name="protosens.maestro.plugin.quickdoc">protosens.maestro.plugin.quickdoc</a>
 
 
-Maestro plugin generating markdown documentation for modules using [Quickdoc](https://github.com/borkdude/quickdoc)
+Maestro plugin generating Markdown documentation for modules using [Quickdoc](https://github.com/borkdude/quickdoc).
 
    Works with Babashka out of the box. For Clojure JVM, add the JVM flavor of Quickdoc to your dependencies.
 
@@ -25,7 +25,7 @@ Maestro plugin generating markdown documentation for modules using [Quickdoc](ht
 ``` clojure
 
 (bundle)
-(bundle basis)
+(bundle proto-basis)
 ```
 
 
@@ -39,7 +39,7 @@ Task generating a single documentation file for the given aliases.
 ``` clojure
 
 (module+)
-(module+ basis)
+(module+ proto-basis)
 ```
 
 

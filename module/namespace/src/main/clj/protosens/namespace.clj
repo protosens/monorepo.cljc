@@ -1,6 +1,6 @@
 (ns protosens.namespace
 
-  "Finding and requiring namespaces automatically."
+  "Mainly about inding available namespaces."
 
   (:require [babashka.fs         :as bb.fs]
             [clojure.java.io     :as java.io]
@@ -208,9 +208,7 @@
    Namespace is named after `ns-sym`.
    Pure CLJ or pure CLJS required namespaces are guarded by reader conditionals.
 
-   Aliases to activate may be provided in `option+` under `:alias+`.
-
-   Also see [[namespace+]]."
+   Aliases to activate may be provided in `option+` under `:alias+`."
 
   [ns-sym ns-require+]
 

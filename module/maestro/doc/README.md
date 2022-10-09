@@ -1,5 +1,3 @@
-Maestro, calmely orchestrating your Clojure repositories.
-
 This collection of principles started as a tool for expressing dependencies
 between [`deps.edn`] aliases. This simple idea kept evolving and
 eventually led to a somewhat new paradigm in repository organization providing

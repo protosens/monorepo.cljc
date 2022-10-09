@@ -1,5 +1,5 @@
 # Table of contents
--  [`protosens.maestro`](#protosens.maestro)  - See README about core principles.
+-  [`protosens.maestro`](#protosens.maestro)  - See [README](./) about core principles.
     -  [`by-profile+`](#protosens.maestro/by-profile+) - Extracts a set of all required aliases selected by the given profiles.
     -  [`cli-arg+`](#protosens.maestro/cli-arg+) - Processes CLI arguments in a commonly needed way.
     -  [`create-basis`](#protosens.maestro/create-basis) - Reads and prepares a <code>deps.edn</code> file.
@@ -10,21 +10,21 @@
     -  [`search`](#protosens.maestro/search) - Searches for all required aliases.
     -  [`stringify-required`](#protosens.maestro/stringify-required) - Stringifies concatenated aliases from <code>:maestro/require</code>.
     -  [`task`](#protosens.maestro/task) - Task searching and printing all required aliases.
--  [`protosens.maestro.aggr`](#protosens.maestro.aggr)  - When running [[protosens.maestro/search]], <code>basis</code> can contain an extra key <code>:maestro/aggr</code> pointing to a function such as <code>(fn [basis alias alias-data] basis-2)</code>.
+-  [`protosens.maestro.aggr`](#protosens.maestro.aggr)  - Altering what is collected when searching for required aliases.
     -  [`alias`](#protosens.maestro.aggr/alias) - In <code>basis</code>, appends <code>alias</code> under <code>:maestro/require</code>.
-    -  [`default`](#protosens.maestro.aggr/default) - Default alias aggregating function for [[protosens.maestro/search]].
+    -  [`default`](#protosens.maestro.aggr/default) - Default alias aggregating function.
     -  [`env`](#protosens.maestro.aggr/env) - Merges <code>:maestro/env</code> from <code>alias-data</code> into <code>:maestro/env</code> in <code>basis</code>.
--  [`protosens.maestro.module.expose`](#protosens.maestro.module.expose)  - Modules containing a <code>:maestro.module.expose/name</code> in their alias data can be exposed publicly as git libraries and consumed from Clojure CLI (using <code>:deps/root</code> to point to the <code>:maestro/root</code> of the consumed module).
-    -  [`deploy`](#protosens.maestro.module.expose/deploy) - Task exposesing selected modules for consumption by Clojure CLI as Git dependencies.
-    -  [`deploy-local`](#protosens.maestro.module.expose/deploy-local) - Exactly like [[deploy]] but sets the repository URL to the current directory.
+-  [`protosens.maestro.module.expose`](#protosens.maestro.module.expose)  - Exposing modules to be consumed publicly.
+    -  [`deploy`](#protosens.maestro.module.expose/deploy) - Task exposing selected modules for consumption by Clojure CLI as Git dependencies.
+    -  [`deploy-local`](#protosens.maestro.module.expose/deploy-local) - Local exposition for testing purporses.
     -  [`exposed?`](#protosens.maestro.module.expose/exposed?) - Returns true if an alias (given its data) is meant to be exposed as a Git library.
     -  [`requirer+`](#protosens.maestro.module.expose/requirer+) - Task generating requirer namespaces for all exposed modules.
-    -  [`verify`](#protosens.maestro.module.expose/verify) - Task verifying exposed modules with [[protosens.maestro.module.requirer/verify]].
+    -  [`verify`](#protosens.maestro.module.expose/verify) - Task verifying exposed modules, checking if namespaces compile.
 -  [`protosens.maestro.module.requirer`](#protosens.maestro.module.requirer)  - Generating "requirer" namespaces for modules.
     -  [`alias+`](#protosens.maestro.module.requirer/alias+) - Finds aliases to work with.
     -  [`generate`](#protosens.maestro.module.requirer/generate) - Task generating requirer namespaces for modules.
     -  [`verify`](#protosens.maestro.module.requirer/verify) - Task verifying modules by executing their requirer namespaces.
-    -  [`verify-command`](#protosens.maestro.module.requirer/verify-command) - Used by [[verify]] to create a shell command depending on the platform to verify.
+    -  [`verify-command`](#protosens.maestro.module.requirer/verify-command) - Creates a shell command for the verification process depending on the platform to test.
 -  [`protosens.maestro.module.uber`](#protosens.maestro.module.uber)  - Special way of merging aliases in a generated <code>deps.edn</code> file.
     -  [`task`](#protosens.maestro.module.uber/task) - Generate a single <code>deps.edn</code> file by merging everything required by <code>alias</code>.
 -  [`protosens.maestro.process`](#protosens.maestro.process)  - About running shell commands with computed required aliases.
@@ -35,7 +35,7 @@
 # <a name="protosens.maestro">protosens.maestro</a>
 
 
-See README about core principles.
+See [README](./) about core principles.
  
    [`search`](#protosens.maestro/search) is the star of this namespace and exemplifies the Maestro philosophy.
   
@@ -237,7 +237,9 @@ Task searching and printing all required aliases.
 # <a name="protosens.maestro.aggr">protosens.maestro.aggr</a>
 
 
-When running [`protosens.maestro/search`](#protosens.maestro/search), `basis` can contain an extra key `:maestro/aggr`
+Altering what is collected when searching for required aliases.
+  
+   When running [`protosens.maestro/search`](#protosens.maestro/search), `basis` can contain an extra key `:maestro/aggr`
    pointing to a function such as `(fn [basis alias alias-data] basis-2)`.
   
    By default, this function is [`default`](#protosens.maestro.aggr/default). Technically, power users can provided an alternative implementation
@@ -246,7 +248,7 @@ When running [`protosens.maestro/search`](#protosens.maestro/search), `basis` ca
 
 
 
-## <a name="protosens.maestro.aggr/alias">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/aggr.clj#L15-L31) `alias`</a>
+## <a name="protosens.maestro.aggr/alias">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/aggr.clj#L17-L33) `alias`</a>
 ``` clojure
 
 (alias basis alias)
@@ -256,7 +258,7 @@ When running [`protosens.maestro/search`](#protosens.maestro/search), `basis` ca
 
 In `basis`, appends `alias` under `:maestro/require`.
 
-## <a name="protosens.maestro.aggr/default">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/aggr.clj#L61-L84) `default`</a>
+## <a name="protosens.maestro.aggr/default">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/aggr.clj#L63-L88) `default`</a>
 ``` clojure
 
 (default basis alias)
@@ -264,14 +266,16 @@ In `basis`, appends `alias` under `:maestro/require`.
 ```
 
 
-Default alias aggregating function for [`protosens.maestro/search`](#protosens.maestro/search).
+Default alias aggregating function.
+  
+   As used by [`protosens.maestro/search`](#protosens.maestro/search) unless overwritten by the user.
 
    Uses:
 
    - [`alias`](#protosens.maestro.aggr/alias)
    - [`env`](#protosens.maestro.aggr/env)
 
-## <a name="protosens.maestro.aggr/env">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/aggr.clj#L35-L55) `env`</a>
+## <a name="protosens.maestro.aggr/env">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/aggr.clj#L37-L57) `env`</a>
 ``` clojure
 
 (env basis alias-data)
@@ -289,11 +293,15 @@ Merges `:maestro/env` from `alias-data` into `:maestro/env` in `basis`.
 # <a name="protosens.maestro.module.expose">protosens.maestro.module.expose</a>
 
 
-Modules containing a `:maestro.module.expose/name` in their alias data can be exposed publicly as
-   git libraries and consumed from Clojure CLI (using `:deps/root` to point to the `:maestro/root`
-   of the consumed module).
+Exposing modules to be consumed publicly.
+ 
+   Modules containing a `:maestro.module.expose/name` in their alias data can be exposed publicly as
+   [Git dependencies](https://clojure.org/guides/deps_and_cli#_using_git_libraries) and consumed from
+   [Clojure CLI](https://clojure.org/guides/deps_and_cli). Naturally, users must rely on `:deps/root`
+   to point to individual modules.
 
-   A name is a symbol `<organization>/<artifact>` such as `com.acme/some-lib`.
+   Modules meant for exposition must have a `:maestro.module.expose/name`. A name is a symbol
+   `<organization>/<artifact>` such as `com.acme/some-lib`.
 
    The [`deploy`](#protosens.maestro.module.expose/deploy) task does the necessary step for exposition.
    The [`verify`](#protosens.maestro.module.expose/verify) task may be used as a precaution.
@@ -301,15 +309,15 @@ Modules containing a `:maestro.module.expose/name` in their alias data can be ex
 
 
 
-## <a name="protosens.maestro.module.expose/deploy">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/expose.clj#L160-L236) `deploy`</a>
+## <a name="protosens.maestro.module.expose/deploy">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/expose.clj#L164-L240) `deploy`</a>
 ``` clojure
 
 (deploy)
-(deploy basis)
+(deploy proto-basis)
 ```
 
 
-Task exposesing selected modules for consumption by Clojure CLI as Git dependencies.
+Task exposing selected modules for consumption by Clojure CLI as Git dependencies.
 
    High-level steps are:
 
@@ -322,7 +330,7 @@ Task exposesing selected modules for consumption by Clojure CLI as Git dependenc
 
    This produces 2 commits and the SHA of the last commit is what users can rely on when pushed.
    
-   Either `basis` or the top `deps.edn` file must contain `:maestro.module.expose/url` pointing
+   Either `proto-basis` or the top `deps.edn` file must contain `:maestro.module.expose/url` pointing
    to the URL of the repo.
 
    For testing purposes, one can point to the absolute path of the repository. For production
@@ -331,7 +339,7 @@ Task exposesing selected modules for consumption by Clojure CLI as Git dependenc
    **Note**: the `release` profile is activated automatically when resolving `:maestro/require` for each
    module.
 
-## <a name="protosens.maestro.module.expose/deploy-local">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/expose.clj#L240-L259) `deploy-local`</a>
+## <a name="protosens.maestro.module.expose/deploy-local">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/expose.clj#L244-L264) `deploy-local`</a>
 ``` clojure
 
 (deploy-local)
@@ -339,14 +347,15 @@ Task exposesing selected modules for consumption by Clojure CLI as Git dependenc
 ```
 
 
-Exactly like [`deploy`](#protosens.maestro.module.expose/deploy) but sets the repository URL to the current directory.
+Local exposition for testing purporses.
+
+   Exactly like [`deploy`](#protosens.maestro.module.expose/deploy) but sets the repository URL to the current directory.
 
    Which must be the root directory of the repository.
 
-   This is for testing purposes. For instance, it allows testing exposition and running
-   the [`verify`](#protosens.maestro.module.expose/verify) task without having to push anything.
+   For instance, it allows testing exposition and running the [`verify`](#protosens.maestro.module.expose/verify) task without having to push anything.
 
-## <a name="protosens.maestro.module.expose/exposed?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/expose.clj#L263-L277) `exposed?`</a>
+## <a name="protosens.maestro.module.expose/exposed?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/expose.clj#L268-L282) `exposed?`</a>
 ``` clojure
 
 (exposed? alias-data)
@@ -356,7 +365,7 @@ Exactly like [`deploy`](#protosens.maestro.module.expose/deploy) but sets the re
 
 Returns true if an alias (given its data) is meant to be exposed as a Git library.
 
-## <a name="protosens.maestro.module.expose/requirer+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/expose.clj#L303-L322) `requirer+`</a>
+## <a name="protosens.maestro.module.expose/requirer+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/expose.clj#L308-L327) `requirer+`</a>
 ``` clojure
 
 (requirer+)
@@ -373,7 +382,7 @@ Task generating requirer namespaces for all exposed modules.
    The main benefit about generating those is being able to call the [`verify`](#protosens.maestro.module.expose/verify)
    task.
 
-## <a name="protosens.maestro.module.expose/verify">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/expose.clj#L328-L343) `verify`</a>
+## <a name="protosens.maestro.module.expose/verify">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/expose.clj#L333-L350) `verify`</a>
 ``` clojure
 
 (verify)
@@ -381,10 +390,12 @@ Task generating requirer namespaces for all exposed modules.
 ```
 
 
-Task verifying exposed modules with [`protosens.maestro.module.requirer/verify`](#protosens.maestro.module.requirer/verify).
+Task verifying exposed modules, checking if namespaces compile.
+ 
+   This is done via [`protosens.maestro.module.requirer/verify`](#protosens.maestro.module.requirer/verify) and ensure that
+   modules can be required in their production state.
 
-   This ensures that exposed modules can be required in their production state.
-   see [`requirer+`](#protosens.maestro.module.expose/requirer+).
+   See [`requirer+`](#protosens.maestro.module.expose/requirer+).
 
 -----
 # <a name="protosens.maestro.module.requirer">protosens.maestro.module.requirer</a>
@@ -436,7 +447,7 @@ Finds aliases to work with.
 ``` clojure
 
 (generate)
-(generate basis)
+(generate proto-basis)
 ```
 
 
@@ -461,7 +472,7 @@ Task generating requirer namespaces for modules.
 ``` clojure
 
 (verify)
-(verify basis)
+(verify proto-basis)
 ```
 
 
@@ -476,9 +487,11 @@ Task verifying modules by executing their requirer namespaces.
    Execution happens on all platforms indicated in alias data under `:maestro/platform+`.
    Defaults to `[:jvm]`. See [`verify-command`](#protosens.maestro.module.requirer/verify-command).
 
-## <a name="protosens.maestro.module.requirer/verify-command">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/requirer.clj#L232-L245) `verify-command`</a>
+## <a name="protosens.maestro.module.requirer/verify-command">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/requirer.clj#L232-L247) `verify-command`</a>
 
-Used by [`verify`](#protosens.maestro.module.requirer/verify) to create a shell command depending on the platform to verify.
+Creates a shell command for the verification process depending on the platform to test.
+  
+   Used by [`verify`](#protosens.maestro.module.requirer/verify).
 
    The shell command is vector starting with the actuall shell command and the rest
    are individual arguments.
@@ -501,7 +514,7 @@ Special way of merging aliases in a generated `deps.edn` file.
 ``` clojure
 
 (task alias)
-(task alias basis)
+(task alias proto-basis)
 ```
 
 
@@ -542,7 +555,7 @@ About running shell commands with computed required aliases.
 ``` clojure
 
 (run)
-(run basis)
+(run proto-basis)
 ```
 
 
@@ -552,7 +565,7 @@ Templates a shell command with required aliases and runs it.
    to [`protosens.maestro/task`](#protosens.maestro/task) to compute required aliases. Everything after
    is a command to template (see [`template-command`](#protosens.maestro.process/template-command)).
 
-   `basis` may contain a `:maestro.process/command` that will be prepended before
+   `proto-basis` may contain a `:maestro.process/command` that will be prepended before
    templating.
 
    Extra environment variable maps provided in `:maestro/env` of required aliases,

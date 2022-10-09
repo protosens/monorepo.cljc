@@ -1,6 +1,6 @@
 (ns protosens.classpath
 
-  "Simple classpath utilities."
+  "Simple classpath utilities that happens to be handy once in a while."
 
   (:require #?(:bb [babashka.classpath :as bb.classpath])
             [clojure.string    :as string]
@@ -55,7 +55,8 @@
   
    Reads input from STDIN by default.
   
-   Great match for [[compute]]. Classpath is [[split]] and sorted paths are printed."
+   Great match for [[compute]]. Classpath is [[split]] and sorted paths are printed
+   line by line."
 
 
   #?(:clj ([]

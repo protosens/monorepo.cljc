@@ -1,6 +1,6 @@
 # `module/maestro.plugin.quickdoc` - [API](API.md)
 
-Maestro plugin for [Quickdock](https://github.com/borkdude/quickdoc), the Markdown API generator.
+Maestro plugin for [Quickdock](https://github.com/borkdude/quickdoc), the Markdown API generator.  
 Works on the JVM is the JVM flavor of Quickdoc is required by the user.
 
 ```clojure

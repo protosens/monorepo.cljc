@@ -1,6 +1,6 @@
 # `module/git` - [API](API.md)
 
-One-liners (or almost) for common Git operations
+One-liners (or almost) for common Git operations.
 
 ```clojure
 ;; Add to dependencies in `deps.edn`:

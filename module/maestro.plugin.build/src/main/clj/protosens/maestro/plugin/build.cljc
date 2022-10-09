@@ -1,14 +1,14 @@
 (ns protosens.maestro.plugin.build
 
-  "Maestro plugin for `tools.build` focused on building jars and uberjars, key information being located
-   right in aliases.
-
-   Aims to provide enough flexibility so that it would cover a majority of use cases. Also extensible by
-   implementing methods for [[by-type]].
-
-   Main entry point is [[build]] and [[task]] offers a fast way of getting into it using Babashka.
+  "Maestro plugin for `tools.build` focused on building jars and uberjars.
   
-   <!> `tools.build` is not imported and must be brought by the user."
+   Meant to declarative by reading key information from alias data. The premise of `tools.build` is that
+   build are programs. Hence, this approach strives to offer a solution fit for common Clojure projects,
+   a convenience often sufficient but not always.
+
+   However, this approach is somewhat extensible via the [[by-type]] multimethod.
+
+   Main entry point is [[build]] and [[task]] is a quick wrapper over it suited for Babashka."
 
   #?(:clj (:import (java.nio.file Files)
                    (java.nio.file.attribute FileAttribute)))
@@ -46,7 +46,9 @@
 #?(:bb  nil
    :clj (defn copy-src
 
-  "Copies source from `:maestro.plugin.build.path/src+` to `:maestro.plugin.build.path/class`."
+  "Copies source files.
+
+   From `:maestro.plugin.build.path/src+` to `:maestro.plugin.build.path/class`."
 
   [basis]
 
@@ -112,7 +114,9 @@
 #?(:bb  nil
    :clj (defn jar
 
-  "Implementation for the `:jar` type in [[by-type]].
+  "Implementation for the `:jar` build type.
+  
+   See [[by-type]].
 
    Alias data for the build alias must or may contain:
 
@@ -174,7 +178,9 @@
 #?(:bb  nil
    :clj (defn uberjar
 
-  "Implementation for the `:uberjar` type in [[by-type]].
+  "Implementation for the `:uberjar` build type.
+
+   See [[by-type]].
   
    Alias data for the build alias must or contain:
 
@@ -240,7 +246,10 @@
 #?(:bb  nil
    :clj (defmulti by-type
 
-  "Called by [[build]] after some initial preparation.
+  "Carries out specific build steps depending on the target type.
+  
+   Called by [[build]] after some initial preparation.
+
    Dispatches on `:maestro.build.plugin/type` to carry out the actual build steps.
 
    Supported types are:
@@ -292,10 +301,12 @@
 #?(:bb  nil
    :clj (defn build
 
-  "Given a map with an alias to build under `:maestro.plugin.build/alias`, search for all required aliases
-   after activating the `release` profile, using [[protosens.maestro/search]].
+  "Builds the module requested under `:maestro.plugin.build/alias`.
 
-   Merges the result with the alias data of the alias to build and the given option map, prior to being
+   Uses [[protosens.maestro/search]] to query all required aliases.
+   Activates the `release` profile by default.
+  
+   Merges the result with the alias data of the target alias and the given option map, prior to being
    passed to [[by-type]].
 
    In other words, options can be used to overwrite some information in the alias data of the target alias,
@@ -324,9 +335,9 @@
 
 #?(:clj (defn task
 
-  "Convenient way of calling [[build]] using `clojure -X`.
-
-   Requires the alias that brings or `:maestro/require` this plugin.
+  "Higher-level task for building a module.
+  
+   Convenient way of calling [[build]] using `clojure -X`.
 
    Alias to build is read as first command line argument if not provided under `:maestro.plugin.build/alias`
    in `option+`.
@@ -340,17 +351,17 @@
    Options will be passed to [[build]]."
 
 
-  ([alias-maestro]
+  ([alias-plugin]
 
-   (task alias-maestro
+   (task alias-plugin
          nil))
 
 
-  ([alias-maestro option+]
+  ([alias-plugin option+]
 
    (-> ($.process/shell (concat ["clojure"
                                  (str "-X"
-                                      (-> ($.maestro/search {:maestro/alias+ [alias-maestro]})
+                                      (-> ($.maestro/search {:maestro/alias+ [alias-plugin]})
                                           ($.maestro/stringify-required)))
                                  "protosens.maestro.plugin.build/build"]
                                 (mapcat identity

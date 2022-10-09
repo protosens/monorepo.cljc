@@ -1,6 +1,6 @@
 # `module/edn` - [API](API.md)
 
-One-liners for reading EDN
+One-liners for reading EDN.
 
 ```clojure
 ;; Add to dependencies in `deps.edn`:

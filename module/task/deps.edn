@@ -7,7 +7,6 @@
 ;;     :ext/clojure.tools.build
 ;;     :ext/kaocha
 ;;     :ext/quickdoc
-;;     :module/babashka.fs
 ;;     :module/bb.help
 ;;     :module/classpath
 ;;     :module/deps.edn
@@ -30,8 +29,8 @@
 ;; be checkout out in version control.
 ;;
 {:deps
- {babashka/process {:mvn/version "0.2.10"},
-  babashka/fs {:mvn/version "0.1.11"},
+ {babashka/fs {:mvn/version "0.1.11"},
+  babashka/process {:mvn/version "0.2.10"},
   io.github.clojure/tools.build
   {:git/sha "0d20256", :git/tag "v0.8.3"},
   lambdaisland/kaocha {:mvn/version "1.63.998"},

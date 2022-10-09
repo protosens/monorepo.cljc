@@ -1,10 +1,14 @@
 (ns protosens.maestro.module.expose
 
-  "Modules containing a `:maestro.module.expose/name` in their alias data can be exposed publicly as
-   git libraries and consumed from Clojure CLI (using `:deps/root` to point to the `:maestro/root`
-   of the consumed module).
+  "Exposing modules to be consumed publicly.
+ 
+   Modules containing a `:maestro.module.expose/name` in their alias data can be exposed publicly as
+   [Git dependencies](https://clojure.org/guides/deps_and_cli#_using_git_libraries) and consumed from
+   [Clojure CLI](https://clojure.org/guides/deps_and_cli). Naturally, users must rely on `:deps/root`
+   to point to individual modules.
 
-   A name is a symbol `<organization>/<artifact>` such as `com.acme/some-lib`.
+   Modules meant for exposition must have a `:maestro.module.expose/name`. A name is a symbol
+   `<organization>/<artifact>` such as `com.acme/some-lib`.
 
    The [[deploy]] task does the necessary step for exposition.
    The [[verify]] task may be used as a precaution."
@@ -159,7 +163,7 @@
 
 (defn deploy
 
-  "Task exposesing selected modules for consumption by Clojure CLI as Git dependencies.
+  "Task exposing selected modules for consumption by Clojure CLI as Git dependencies.
 
    High-level steps are:
 
@@ -172,7 +176,7 @@
 
    This produces 2 commits and the SHA of the last commit is what users can rely on when pushed.
    
-   Either `basis` or the top `deps.edn` file must contain `:maestro.module.expose/url` pointing
+   Either `proto-basis` or the top `deps.edn` file must contain `:maestro.module.expose/url` pointing
    to the URL of the repo.
 
    For testing purposes, one can point to the absolute path of the repository. For production
@@ -187,21 +191,21 @@
    (deploy nil))
 
 
-  ([basis]
+  ([proto-basis]
 
    ;;
    ;; Ensure repository is clean.
    (when-not ($.git/clean?)
      ($.maestro/fail "Repository must be sparkling clean, no modified or untracked files"))
-   (let [basis-2 ($.maestro/ensure-basis basis)]
-     (when-not (basis-2 :maestro.module.expose/url)
+   (let [basis ($.maestro/ensure-basis proto-basis)]
+     (when-not (basis :maestro.module.expose/url)
        ($.maestro/fail "Missing Git URL"))
       ;;
       ;; Prepare exposition.
       (let [git-sha ($.git/commit-sha 0)]
         (println "Prepare module exposition")
         (-expose git-sha
-                 basis-2)
+                 basis)
         ($.git/add ["."])
         ($.git/commit (format "Prepare module exposition
                        
@@ -214,7 +218,7 @@
         (println)
         (doseq [[alias
                  feedback] (-expose git-sha-2
-                                    basis-2)]
+                                    basis)]
           (println (format "    %s -> %s"
                            alias
                            (feedback ::deps.edn.path)))
@@ -239,12 +243,13 @@
 
 (defn deploy-local
 
-  "Exactly like [[deploy]] but sets the repository URL to the current directory.
+  "Local exposition for testing purporses.
+
+   Exactly like [[deploy]] but sets the repository URL to the current directory.
 
    Which must be the root directory of the repository.
 
-   This is for testing purposes. For instance, it allows testing exposition and running
-   the [[verify]] task without having to push anything."
+   For instance, it allows testing exposition and running the [[verify]] task without having to push anything."
 
 
   ([]
@@ -327,10 +332,12 @@
 
 (defn verify
 
-  "Task verifying exposed modules with [[protosens.maestro.module.requirer/verify]].
+  "Task verifying exposed modules, checking if namespaces compile.
+ 
+   This is done via [[protosens.maestro.module.requirer/verify]] and ensure that
+   modules can be required in their production state.
 
-   This ensures that exposed modules can be required in their production state.
-   see [[requirer+]]."
+   See [[requirer+]]."
 
 
   ([]

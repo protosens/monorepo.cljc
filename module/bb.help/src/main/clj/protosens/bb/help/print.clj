@@ -1,6 +1,8 @@
 (ns protosens.bb.help.print
 
-  "Default printers used by [[protosens.bb.help/print]]."
+  "Default printers.
+  
+   Used by [[protosens.bb.help/print]] unless overwritten by the user."
 
   (:require [clojure.string :as string]))
 

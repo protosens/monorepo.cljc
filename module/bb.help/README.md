@@ -1,6 +1,6 @@
 # `module/bb.help` - [API](API.md)
 
-Printing extra documentation for Babashka tasks
+Printing extra documentation for Babashka tasks.
 
 ```clojure
 ;; Add to dependencies in `deps.edn`:

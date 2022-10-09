@@ -1,5 +1,5 @@
 # Table of contents
--  [`protosens.namespace`](#protosens.namespace)  - Finding and requiring namespaces automatically.
+-  [`protosens.namespace`](#protosens.namespace)  - Mainly about inding available namespaces.
     -  [`from-filename`](#protosens.namespace/from-filename) - Converts a <code>filename</code> to a namespace symbol.
     -  [`in-cp-dir+`](#protosens.namespace/in-cp-dir+) - Uses [[in-path+]] on directories from the current classpath.
     -  [`in-path`](#protosens.namespace/in-path) - Finds all namespaces available in the given directory <code>path</code>.
@@ -12,7 +12,7 @@
 # <a name="protosens.namespace">protosens.namespace</a>
 
 
-Finding and requiring namespaces automatically.
+Mainly about inding available namespaces.
 
 
 
@@ -74,7 +74,7 @@ Finds all namespaces available in the given directory `path`.
 
 Exactly like [`in-path`](#protosens.namespace/in-path) but works with a collection of directories.
 
-## <a name="protosens.namespace/main-ns">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/namespace/src/main/clj/protosens/namespace.clj#L204-L240) `main-ns`</a>
+## <a name="protosens.namespace/main-ns">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/namespace/src/main/clj/protosens/namespace.clj#L204-L238) `main-ns`</a>
 ``` clojure
 
 (main-ns ns-sym ns-require+)
@@ -87,8 +87,6 @@ Pretty-prints to `*out*` a CLJC namespace requiring all namespaces provided by `
    Pure CLJ or pure CLJS required namespaces are guarded by reader conditionals.
 
    Aliases to activate may be provided in `option+` under `:alias+`.
-
-   Also see [[namespace+]].
 
 ## <a name="protosens.namespace/require-cp-dir+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/namespace/src/main/clj/protosens/namespace.clj#L165-L200) `require-cp-dir+`</a>
 ``` clojure

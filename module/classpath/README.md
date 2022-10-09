@@ -1,6 +1,6 @@
 # `module/classpath` - [API](API.md)
 
-Classpath-related utilities
+Classpath-related utilities.
 
 ```clojure
 ;; Add to dependencies in `deps.edn`:
