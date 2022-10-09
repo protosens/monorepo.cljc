@@ -1,5 +1,14 @@
-# `module/process` - [API](./API.md)
+# `module/process` - [API](API.md)
 
-Spawning processes.
+Light wrapper over [`babashka/process`](https://github.com/babashka/process).
 
-Compatible with Babashka and Clojure JVM.
+```clojure
+;; Add to dependencies in `deps.edn`:
+;;
+protosens/process
+{:deps/root "module/process"
+ :git/sha   "..."
+ :git/tag   "..."
+ :git/url   "https://github.com/protosens/monorepo.cljc"}
+```
+

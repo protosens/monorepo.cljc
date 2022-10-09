@@ -1,3 +1,14 @@
-# `module/classpath` - [API](./API.md)
+# `module/classpath` - [API](API.md)
 
-Little collection of classpath-related helpers.
+Classpath-related utilities
+
+```clojure
+;; Add to dependencies in `deps.edn`:
+;;
+protosens/classpath
+{:deps/root "module/classpath"
+ :git/sha   "..."
+ :git/tag   "..."
+ :git/url   "https://github.com/protosens/monorepo.cljc"}
+```
+

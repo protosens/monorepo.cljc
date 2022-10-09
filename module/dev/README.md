@@ -1,3 +1,4 @@
-# `:module/dev`
+# `module/dev`
 
-Dev utilities used in this repository.
+Dev utilities used in this repository
+

@@ -1,20 +1,3 @@
-# `module/maestro` - [API](API.md)
-
-Managing a modern Clojure (mono)repo
-
-```clojure
-;; Add to dependencies in `deps.edn`:
-;;
-protosens/maestro
-{:deps/root "module/maestro"
- :git/sha   "..."
- :git/tag   "..."
- :git/url   "https://github.com/protosens/monorepo.cljc"}
-```
-
-
----
-
 Maestro, calmely orchestrating your Clojure repositories.
 
 This collection of principles started as a tool for expressing dependencies
@@ -427,4 +410,3 @@ And start with trying out `bb aliases`.
 [Clj-kondo]:        https://github.com/clj-kondo/clj-kondo
 [Git dependencies]: https://clojure.org/guides/deps_and_cli#_using_git_libraries
 [Kaocha]:           https://github.com/lambdaisland/kaocha
-

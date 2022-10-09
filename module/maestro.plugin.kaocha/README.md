@@ -1,5 +1,14 @@
-# `module/maestro.plugin.kaocha` - [API](./API.md)
+# `module/maestro.plugin.kaocha` - [API](API.md)
 
-[Maestro](../maestro) plugin for the
-[Kaocha](https://github.com/lambdaisland/kaocha) test runner able to deduce
-automatically source paths and test paths.
+Maestro plugin for the [Kaocha](https://github.com/lambdaisland/kaocha) test runner.
+
+```clojure
+;; Add to dependencies in `deps.edn`:
+;;
+protosens/maestro.plugin.kaocha
+{:deps/root "module/maestro.plugin.kaocha"
+ :git/sha   "..."
+ :git/tag   "..."
+ :git/url   "https://github.com/protosens/monorepo.cljc"}
+```
+

@@ -1,4 +1,15 @@
-# `module/maestro.plugin.quickdoc` - [API](./API.md)
+# `module/maestro.plugin.quickdoc` - [API](API.md)
 
-Easily generate markdown documentation for modules with
-[Quickdoc](https://github.com/borkdude/quickdoc).
+Maestro plugin for [Quickdock](https://github.com/borkdude/quickdoc), the Markdown API generator.
+Works on the JVM is the JVM flavor of Quickdoc is required by the user.
+
+```clojure
+;; Add to dependencies in `deps.edn`:
+;;
+protosens/maestro.plugin.quickdoc
+{:deps/root "module/maestro.plugin.quickdoc"
+ :git/sha   "..."
+ :git/tag   "..."
+ :git/url   "https://github.com/protosens/monorepo.cljc"}
+```
+

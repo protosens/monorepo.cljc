@@ -1,6 +1,14 @@
-# `module/maestro.plugin.clj-kondo` - [API](./API.md)
+# `module/maestro.plugin.clj-kondo` - [API](API.md)
 
-[Maestro](../maestro) plugin for using
-[Clj-kondo](https://github.com/clj-kondo/clj-kondo), the Clojure linter that
-brings joy. It provides a simple way of linting the whole repository or parts in
-a one-liner.
+Maestro plugin for [Clj-kondo](https://github.com/clj-kondo/clj-kondo), the Clojure linter.
+
+```clojure
+;; Add to dependencies in `deps.edn`:
+;;
+protosens/maestro.plugin.clj-kondo
+{:deps/root "module/maestro.plugin.clj-kondo"
+ :git/sha   "..."
+ :git/tag   "..."
+ :git/url   "https://github.com/protosens/monorepo.cljc"}
+```
+

@@ -184,7 +184,17 @@
   {:doc           "Generate `./module/README.md`"
    :protosens/doc "Lists all exposed modules."
    :requires      ([protosens.task.doc])
-   :task          (protosens.task.doc.module+)}
+   :task          (protosens.task.doc/module)}
+
+
+  readme:module+
+  {:doc      "Generate READMEs for all modules"
+   :protosens/doc "For each module, writes a header composed of the root and relevant information (link to
+                   API, Git dependency info, etc).
+
+                   If `./doc/README.md` exists relative to the root, its content is appended."
+   :requires       ([protosens.task.doc])
+   :task           (protosens.task.doc/readme+)}
 
 
   req:gen
