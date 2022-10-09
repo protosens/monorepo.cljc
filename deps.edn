@@ -305,7 +305,7 @@
    :maestro.plugin.quickdoc.path/output "module/maestro/API.md"}
 
 
-  :release/maestro
+  :test.release/maestro
 
   {:extra-deps      {protosens/maestro {:local/root "module/maestro"}}
    :maestro/require [{test :test/maestro}]}
