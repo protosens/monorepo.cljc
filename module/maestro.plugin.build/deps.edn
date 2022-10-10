@@ -10,34 +10,34 @@
   {:git/sha "0d20256", :git/tag "v0.8.3"},
   protosens/classpath
   {:deps/root "module/classpath",
-   :git/sha "30fa7fc405bb12bfacb1ce3948712aa7fa7d2b1a",
+   :git/sha "1791adc24538ae4d00dc0441cc495775bf1b905a",
    :git/url "https://github.com/protosens/monorepo.cljc"},
   protosens/deps.edn
   {:deps/root "module/deps.edn",
-   :git/sha "30fa7fc405bb12bfacb1ce3948712aa7fa7d2b1a",
+   :git/sha "1791adc24538ae4d00dc0441cc495775bf1b905a",
    :git/url "https://github.com/protosens/monorepo.cljc"},
   protosens/edn
   {:deps/root "module/edn",
-   :git/sha "30fa7fc405bb12bfacb1ce3948712aa7fa7d2b1a",
+   :git/sha "1791adc24538ae4d00dc0441cc495775bf1b905a",
    :git/url "https://github.com/protosens/monorepo.cljc"},
   protosens/git
   {:deps/root "module/git",
-   :git/sha "30fa7fc405bb12bfacb1ce3948712aa7fa7d2b1a",
+   :git/sha "1791adc24538ae4d00dc0441cc495775bf1b905a",
    :git/url "https://github.com/protosens/monorepo.cljc"},
   protosens/maestro
   {:deps/root "module/maestro",
-   :git/sha "30fa7fc405bb12bfacb1ce3948712aa7fa7d2b1a",
+   :git/sha "1791adc24538ae4d00dc0441cc495775bf1b905a",
    :git/url "https://github.com/protosens/monorepo.cljc"},
   protosens/namespace
   {:deps/root "module/namespace",
-   :git/sha "30fa7fc405bb12bfacb1ce3948712aa7fa7d2b1a",
+   :git/sha "1791adc24538ae4d00dc0441cc495775bf1b905a",
    :git/url "https://github.com/protosens/monorepo.cljc"},
   protosens/process
   {:deps/root "module/process",
-   :git/sha "30fa7fc405bb12bfacb1ce3948712aa7fa7d2b1a",
+   :git/sha "1791adc24538ae4d00dc0441cc495775bf1b905a",
    :git/url "https://github.com/protosens/monorepo.cljc"},
   protosens/string
   {:deps/root "module/string",
-   :git/sha "30fa7fc405bb12bfacb1ce3948712aa7fa7d2b1a",
+   :git/sha "1791adc24538ae4d00dc0441cc495775bf1b905a",
    :git/url "https://github.com/protosens/monorepo.cljc"}},
  :paths ["src/main/clj"]}

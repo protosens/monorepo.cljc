@@ -8,10 +8,10 @@
   babashka/process {:mvn/version "0.2.10"},
   protosens/classpath
   {:deps/root "module/classpath",
-   :git/sha "30fa7fc405bb12bfacb1ce3948712aa7fa7d2b1a",
+   :git/sha "1791adc24538ae4d00dc0441cc495775bf1b905a",
    :git/url "https://github.com/protosens/monorepo.cljc"},
   protosens/process
   {:deps/root "module/process",
-   :git/sha "30fa7fc405bb12bfacb1ce3948712aa7fa7d2b1a",
+   :git/sha "1791adc24538ae4d00dc0441cc495775bf1b905a",
    :git/url "https://github.com/protosens/monorepo.cljc"}},
  :paths ["src/main/clj"]}
