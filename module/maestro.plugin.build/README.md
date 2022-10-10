@@ -1,4 +1,4 @@
-# `module/maestro.plugin.build` - [API](API.md)
+# `module/maestro.plugin.build` - [API](doc/API.md)
 
 Maestro plugin for [`tools.build`](https://github.com/clojure/tools.build).  
 The building utilities only work with Clojure JVM.

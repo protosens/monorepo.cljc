@@ -1,4 +1,4 @@
-# `module/namespace` - [API](API.md)
+# `module/namespace` - [API](doc/API.md)
 
 Mainly about finding available namespaces.
 

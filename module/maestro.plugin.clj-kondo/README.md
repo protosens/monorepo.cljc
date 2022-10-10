@@ -1,4 +1,4 @@
-# `module/maestro.plugin.clj-kondo` - [API](API.md)
+# `module/maestro.plugin.clj-kondo` - [API](doc/API.md)
 
 Maestro plugin for [Clj-kondo](https://github.com/clj-kondo/clj-kondo), the Clojure linter.
 

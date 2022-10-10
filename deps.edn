@@ -171,7 +171,7 @@
    :maestro.module.expose/name          protosens/bb.help
    :maestro.module.requirer/namespace   protosens.bb.help.-requirer
    :maestro.module.requirer/path        "module/bb.help/src/main/clj"
-   :maestro.plugin.quickdoc.path/output "module/bb.help/API.md"}
+   :maestro.plugin.quickdoc.path/output "module/bb.help/doc/API.md"}
 
 
   :test/bb.help
@@ -193,7 +193,7 @@
    :maestro.module.expose/name          protosens/classpath
    :maestro.module.requirer/namespace   protosens.classpath.-requirer
    :maestro.module.requirer/path        "module/classpath/src/main/clj"
-   :maestro.plugin.quickdoc.path/output "module/classpath/API.md"}
+   :maestro.plugin.quickdoc.path/output "module/classpath/doc/API.md"}
 
 
   :test/classpath
@@ -216,7 +216,7 @@
    :maestro.module.expose/name          protosens/deps.edn
    :maestro.module.requirer/namespace   protosens.deps.edn.-requirer
    :maestro.module.requirer/path        "module/deps.edn/src/main/clj"
-   :maestro.plugin.quickdoc.path/output "module/deps.edn/API.md"}
+   :maestro.plugin.quickdoc.path/output "module/deps.edn/doc/API.md"}
 
 
   :test/deps.edn
@@ -247,7 +247,7 @@
    :maestro.module.expose/name          protosens/edn
    :maestro.module.requirer/namespace   protosens.edn.-requirer
    :maestro.module.requirer/path        "module/edn/src/main/clj"
-   :maestro.plugin.quickdoc.path/output "module/edn/API.md"}
+   :maestro.plugin.quickdoc.path/output "module/edn/doc/API.md"}
 
 
   :test/edn
@@ -271,7 +271,7 @@
    :maestro.module.expose/name          protosens/git
    :maestro.module.requirer/namespace   protosens.git.-requirer
    :maestro.module.requirer/path        "module/git/src/main/clj"
-   :maestro.plugin.quickdoc.path/output "module/git/API.md"}
+   :maestro.plugin.quickdoc.path/output "module/git/doc/API.md"}
 
 
   :test/git
@@ -303,7 +303,7 @@
    :maestro.plugin.build.jar/name       protosens/maestro
    :maestro.plugin.build.jar/version    "0.0.0"
    :maestro.plugin.build.path/output    "private/target/maestro.jar"
-   :maestro.plugin.quickdoc.path/output "module/maestro/API.md"}
+   :maestro.plugin.quickdoc.path/output "module/maestro/doc/API.md"}
 
 
   :test.release/maestro
@@ -342,7 +342,7 @@
    :maestro.module.expose/name          protosens/maestro.plugin.build
    :maestro.module.requirer/namespace   protosens.maestro.plugin.build.-requirer
    :maestro.module.requirer/path        "module/maestro.plugin.build/src/main/clj"
-   :maestro.plugin.quickdoc.path/output "module/maestro.plugin.build/API.md"}
+   :maestro.plugin.quickdoc.path/output "module/maestro.plugin.build/doc/API.md"}
 
   ;---
 
@@ -359,7 +359,7 @@
    :maestro.module.expose/name          protosens/maestro.plugin.clj-kondo
    :maestro.module.requirer/namespace   protosens.maestro.plugin.clj-kondo.-requirer
    :maestro.module.requirer/path        "module/maestro.plugin.clj-kondo/src/main/clj"
-   :maestro.plugin.quickdoc.path/output "module/maestro.plugin.clj-kondo/API.md"}
+   :maestro.plugin.quickdoc.path/output "module/maestro.plugin.clj-kondo/doc/API.md"}
 
 
   ;---
@@ -378,7 +378,7 @@
    :maestro.module.expose/name          protosens/maestro.plugin.kaocha
    :maestro.module.requirer/namespace   protosens.maestro.plugin.kaocha.-requirer
    :maestro.module.requirer/path        "module/maestro.plugin.kaocha/src/main/clj"
-   :maestro.plugin.quickdoc.path/output "module/maestro.plugin.kaocha/API.md"}
+   :maestro.plugin.quickdoc.path/output "module/maestro.plugin.kaocha/doc/API.md"}
 
   ;---
 
@@ -398,7 +398,7 @@
    :maestro.module.expose/name          protosens/maestro.plugin.quickdoc
    :maestro.module.requirer/namespace   protosens.maestro.plugin.quickdoc.-requirer
    :maestro.module.requirer/path        "module/maestro.plugin.quickdoc/src/main/clj"
-   :maestro.plugin.quickdoc.path/output "module/maestro.plugin.quickdoc/API.md"}
+   :maestro.plugin.quickdoc.path/output "module/maestro.plugin.quickdoc/doc/API.md"}
 
   ;---
 
@@ -415,7 +415,7 @@
    :maestro.module.expose/name          protosens/namespace
    :maestro.module.requirer/namespace   protosens.namespace.-requirer
    :maestro.module.requirer/path        "module/namespace/src/main/clj"
-   :maestro.plugin.quickdoc.path/output "module/namespace/API.md"}
+   :maestro.plugin.quickdoc.path/output "module/namespace/doc/API.md"}
 
 
   :test/namespace
@@ -436,7 +436,7 @@
    :maestro.module.expose/name          protosens/process
    :maestro.module.requirer/namespace   protosens.process.-requirer
    :maestro.module.requirer/path        "module/process/src/main/clj"
-   :maestro.plugin.quickdoc.path/output "module/process/API.md"}
+   :maestro.plugin.quickdoc.path/output "module/process/doc/API.md"}
 
 
   :test/process
@@ -456,7 +456,7 @@
    :maestro.module.expose/name          protosens/string
    :maestro.module.requirer/namespace   protosens.string.-requirer
    :maestro.module.requirer/path        "module/string/src/main/clj"
-   :maestro.plugin.quickdoc.path/output "module/string/API.md"}
+   :maestro.plugin.quickdoc.path/output "module/string/doc/API.md"}
 
 
   :test/string
@@ -476,7 +476,7 @@
    :maestro.module.expose/name          protosens/symbol
    :maestro.module.requirer/namespace   protosens.symbol.-requirer
    :maestro.module.requirer/path        "module/symbol/src/main/clj"
-   :maestro.plugin.quickdoc.path/output "module/symbol/API.md"}
+   :maestro.plugin.quickdoc.path/output "module/symbol/doc/API.md"}
 
 
   :test/symbol

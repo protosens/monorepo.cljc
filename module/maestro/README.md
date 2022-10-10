@@ -1,4 +1,4 @@
-# `module/maestro` - [API](API.md)
+# `module/maestro` - [API](doc/API.md)
 
 Maestro, calmely orchestrating your Clojure (mono)repo.
 

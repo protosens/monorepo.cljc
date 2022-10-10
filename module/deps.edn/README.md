@@ -1,4 +1,4 @@
-# `module/deps.edn` - [API](API.md)
+# `module/deps.edn` - [API](doc/API.md)
 
 Handling `deps.edn` files.
 

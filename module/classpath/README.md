@@ -1,4 +1,4 @@
-# `module/classpath` - [API](API.md)
+# `module/classpath` - [API](doc/API.md)
 
 Classpath-related utilities.
 

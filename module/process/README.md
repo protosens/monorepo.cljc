@@ -1,4 +1,4 @@
-# `module/process` - [API](API.md)
+# `module/process` - [API](doc/API.md)
 
 Light wrapper over [`babashka/process`](https://github.com/babashka/process).
 

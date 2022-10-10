@@ -1,4 +1,4 @@
-# `module/bb.help` - [API](API.md)
+# `module/bb.help` - [API](doc/API.md)
 
 Printing extra documentation for Babashka tasks.
 

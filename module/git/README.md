@@ -1,4 +1,4 @@
-# `module/git` - [API](API.md)
+# `module/git` - [API](doc/API.md)
 
 One-liners (or almost) for common Git operations.
 
