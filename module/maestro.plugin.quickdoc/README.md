@@ -8,8 +8,8 @@ Works on the JVM is the JVM flavor of Quickdoc is required by the user.
 ;;
 protosens/maestro.plugin.quickdoc
 {:deps/root "module/maestro.plugin.quickdoc"
- :git/sha   "..."
- :git/tag   "..."
+ :git/sha   "98f817a"
+ :git/tag   "stable/2022-10-10"
  :git/url   "https://github.com/protosens/monorepo.cljc"}
 ```
 

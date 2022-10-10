@@ -7,8 +7,8 @@ One-liners (or almost) for common Git operations.
 ;;
 protosens/git
 {:deps/root "module/git"
- :git/sha   "..."
- :git/tag   "..."
+ :git/sha   "98f817a"
+ :git/tag   "stable/2022-10-10"
  :git/url   "https://github.com/protosens/monorepo.cljc"}
 ```
 

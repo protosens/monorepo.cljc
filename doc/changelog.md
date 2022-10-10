@@ -10,7 +10,7 @@ provided.
 ---
 
 
-## {{ next-release }}
+## `2022-10-10`
 
 Inception.
 

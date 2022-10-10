@@ -8,8 +8,8 @@ The building utilities only work with Clojure JVM.
 ;;
 protosens/maestro.plugin.build
 {:deps/root "module/maestro.plugin.build"
- :git/sha   "..."
- :git/tag   "..."
+ :git/sha   "98f817a"
+ :git/tag   "stable/2022-10-10"
  :git/url   "https://github.com/protosens/monorepo.cljc"}
 ```
 

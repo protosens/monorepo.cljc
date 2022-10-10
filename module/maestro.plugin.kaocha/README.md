@@ -7,8 +7,8 @@ Maestro plugin for the [Kaocha](https://github.com/lambdaisland/kaocha) test run
 ;;
 protosens/maestro.plugin.kaocha
 {:deps/root "module/maestro.plugin.kaocha"
- :git/sha   "..."
- :git/tag   "..."
+ :git/sha   "98f817a"
+ :git/tag   "stable/2022-10-10"
  :git/url   "https://github.com/protosens/monorepo.cljc"}
 ```
 

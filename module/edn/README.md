@@ -7,8 +7,8 @@ One-liners for reading EDN.
 ;;
 protosens/edn
 {:deps/root "module/edn"
- :git/sha   "..."
- :git/tag   "..."
+ :git/sha   "98f817a"
+ :git/tag   "stable/2022-10-10"
  :git/url   "https://github.com/protosens/monorepo.cljc"}
 ```
 
