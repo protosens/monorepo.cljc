@@ -100,6 +100,13 @@
    :maestro/url "https://github.com/borkdude/quickdoc"}
 
 
+  :ext/selmer
+
+  {:extra-deps  {selmer/selmer {:mvn/version "1.12.55"}}
+   :maestro/doc "A fast, Django inspired template system"
+   :maestro/url "https://github.com/yogthos/selmer"}
+
+
 
 
   ;; BUNDLES
@@ -491,6 +498,7 @@
    :maestro/doc     "Merges dependencies and paths for Babashka tasks.
                      Not meant for public use."
    :maestro/require [:ext/babashka.fs
+                     :ext/selmer
                      :module/bb.help
                      :module/classpath
                      :module/git

@@ -7,6 +7,7 @@
 ;;     :ext/clojure.tools.build
 ;;     :ext/kaocha
 ;;     :ext/quickdoc
+;;     :ext/selmer
 ;;     :module/bb.help
 ;;     :module/classpath
 ;;     :module/deps.edn
@@ -30,6 +31,7 @@
 ;;
 {:deps
  {babashka/fs {:mvn/version "0.1.11"},
+  selmer/selmer {:mvn/version "1.12.55"},
   babashka/process {:mvn/version "0.2.10"},
   io.github.clojure/tools.build
   {:git/sha "0d20256", :git/tag "v0.8.3"},

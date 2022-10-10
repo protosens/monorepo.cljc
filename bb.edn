@@ -66,6 +66,16 @@
    :task          (protosens.maestro.plugin.build/task :module/maestro.plugin.build)}
 
 
+  changelog+
+  {:doc           "Template all changelogs with a stable tag"
+   :protosens/doc "Takes that tag as argument.
+   
+                   Changelogs use `{{ next-release }}` as a placeholder for the next
+                   stable tag."
+   :requires      ([protosens.task.doc])
+   :task          (protosens.task.doc/changelog+)}
+
+
   dev
   {:doc           "Starts dev mode with the given module(s)"
    :protosens/doc "Shortcut for launching dev mode given an alias or a vector of aliases and profiles.

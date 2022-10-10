@@ -7,10 +7,50 @@
             [clojure.string    :as string]
             [protosens.maestro :as $.maestro]
             [protosens.git     :as $.git]
-            [protosens.string  :as $.string]))
+            [protosens.string  :as $.string]
+            [selmer.parser     :as selmer.parser]))
 
 
-;;;;;;;;;;
+;;;;;;;;;; Helpers
+
+
+(defn read-stable-tag
+
+  []
+
+  (not-empty (slurp "meta/stable/tag.txt")))
+
+
+;;;;;;;;;; Tasks
+
+
+(defn changelog+
+
+  []
+
+  (let [dir        (System/getProperty "user.dir")
+        stable-tag (or (some->> (first *command-line-args*)
+                                (format "`%s`"))
+                       ($.maestro/fail "Missing stable tag as argument"))
+        templ      (fn [path]
+                     (spit path
+                           (selmer.parser/render-file path
+                                                      {:next-release stable-tag}
+                                                      {:custom-resource-path dir})))]
+    (templ "doc/changelog.md")
+    (doseq [[alias
+             data] (sort-by first
+                            (:aliases ($.maestro/create-basis)))
+            :let   [root (data :maestro/root)]
+            :when  root
+            :let   [path-changelog (str root
+                                        "/doc/changelog.md")]]
+      (when (bb.fs/exists? path-changelog)
+        (println (format "%s -> %s"
+                         alias
+                         path-changelog))
+        (templ path-changelog)))))
+
 
 
 (defn module
@@ -55,8 +95,12 @@
 
   (let [basis      ($.maestro/create-basis)
         git-url    (basis :maestro.module.expose/url)
-        stable-sha (not-empty (slurp "meta/stable/sha.txt"))
-        stable-tag (not-empty (slurp "meta/stable/tag.txt"))]
+        stable-tag (read-stable-tag)
+        stable-sha ($.git/resolve stable-tag)]
+    (when (and stable-tag
+               stable-sha)
+      ($.maestro/fail (str "Unable to resolve tag to a SHA: "
+                           stable-tag)))
     (doseq [[alias
              data] (sort-by first
                             (basis :aliases))
@@ -74,12 +118,17 @@
       (with-open [writer (java.io/writer (str root
                                               "/README.md"))]
         (binding [*out* writer]
-          (println (format "# `%s`%s"
+          (println (format "# `%s`%s %s"
                            root
                            (if path-quickdoc
                              (format " - [API](%s)"
                                      (bb.fs/relativize root
                                                        path-quickdoc))
+                             "")
+                           (if (bb.fs/exists? (str root
+                                                   "/doc/changelog.md"))
+                             (format " - [CHANGES](%s)"
+                                     "doc/changelog.md")
                              "")))
           (println)
           (println ($.string/realign doc))

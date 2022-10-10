@@ -1,4 +1,4 @@
-# `Monorepo.cljc`
+# `Monorepo.cljc` - [CHANGES](./doc/changelog.md)
 
 Nascent public monorepo hosting libraries and tools for the Clojure/script
 ecosystem.
