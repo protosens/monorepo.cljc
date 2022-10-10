@@ -15,9 +15,16 @@
 
 (defn compute
 
-  "Computes the classpath for the given aliases.
+  "Computes the classpath.
 
    By running `clojure -Spath ...` in the shell.
+
+   Options may be:
+
+   | Key          | Value                                   | Default |
+   |--------------|-----------------------------------------|---------|
+   | `:alias+`    | Collection of aliases to activate       | `nil`   |
+   | `:deps/root` | Path to directory containing `deps.edn` | `./`    |
   
    Returns `nil` if something goes wrong."
   
@@ -27,13 +34,14 @@
    (compute nil))
 
 
-  ([alias+]
+  ([option+]
 
    (-> ($.process/run ["clojure"
                        "-Spath"
-                       (when (seq alias+)
+                       (when-some [alias+ (seq (:alias+ option+))]
                          (str "-A"
-                               (string/join alias+)))])
+                               (string/join alias+)))]
+                      {:dir (:deps/root option+)})
        ($.process/out))))
 
 
