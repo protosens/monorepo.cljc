@@ -1,7 +1,6 @@
 # Table of contents
 -  [`protosens.deps.edn`](#protosens.deps.edn)  - Specialized functions for handling <code>deps.edn</code> files.
     -  [`extra-path+`](#protosens.deps.edn/extra-path+) - Returns all <code>:extra-paths</code> from the given aliases.
-    -  [`main-ns`](#protosens.deps.edn/main-ns) - Pretty-prints to <code>*out*</code> a CLJC namespace requiring all namespaces provided by <code>deps.edn</code>.
     -  [`namespace+`](#protosens.deps.edn/namespace+) - Returns namespaces provided by source files in that <code>deps.edn</code>.
     -  [`path+`](#protosens.deps.edn/path+) - Returns all <code>:paths</code> and <code>:extra-paths</code> for the given aliases.
     -  [`read`](#protosens.deps.edn/read) - Reads the <code>deps.edn</code> file located in <code>dir</code>.
@@ -28,23 +27,6 @@ Specialized functions for handling `deps.edn` files.
 Returns all `:extra-paths` from the given aliases.
 
    Prepends them prepended with `:deps/root`.
-
-## <a name="protosens.deps.edn/main-ns">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/deps.edn/src/main/clj/protosens/deps/edn.clj#L136-L183) `main-ns`</a>
-``` clojure
-
-(main-ns deps-edn ns-sym)
-(main-ns deps-edn ns-sym option+)
-```
-
-
-Pretty-prints to `*out*` a CLJC namespace requiring all namespaces provided by `deps.edn`.
-
-   Namespace is named after `ns-sym`.
-   Pure CLJ or pure CLJS required namespaces are guarded by reader conditionals.
-
-   Aliases to activate may be provided in `option+` under `:alias+`.
-
-   Also see [`namespace+`](#protosens.deps.edn/namespace+).
 
 ## <a name="protosens.deps.edn/namespace+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/deps.edn/src/main/clj/protosens/deps/edn.clj#L86-L108) `namespace+`</a>
 ``` clojure
