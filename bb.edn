@@ -110,7 +110,7 @@
                    after modifying dependencies or source paths needed by these
                    Babashka tasks."
    :requires      ([protosens.maestro.module.uber])
-   :task          (protosens.maestro.module.uber/task :module/task)}
+   :task          (protosens.maestro.module.uber/generate :module/task)}
 
 
   help

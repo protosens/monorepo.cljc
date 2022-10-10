@@ -26,7 +26,7 @@
     -  [`verify`](#protosens.maestro.module.requirer/verify) - Task verifying modules by executing their requirer namespaces.
     -  [`verify-command`](#protosens.maestro.module.requirer/verify-command) - Creates a shell command for the verification process depending on the platform to test.
 -  [`protosens.maestro.module.uber`](#protosens.maestro.module.uber)  - Special way of merging aliases in a generated <code>deps.edn</code> file.
-    -  [`task`](#protosens.maestro.module.uber/task) - Generate a single <code>deps.edn</code> file by merging everything required by <code>alias</code>.
+    -  [`generate`](#protosens.maestro.module.uber/generate) - Generate a single <code>deps.edn</code> file by merging everything required by <code>alias</code>.
 -  [`protosens.maestro.process`](#protosens.maestro.process)  - About running shell commands with computed required aliases.
     -  [`run`](#protosens.maestro.process/run) - Templates a shell command with required aliases and runs it.
     -  [`template-command`](#protosens.maestro.process/template-command) - Templates a command to run with required aliases.
@@ -510,11 +510,11 @@ Special way of merging aliases in a generated `deps.edn` file.
 
 
 
-## <a name="protosens.maestro.module.uber/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/uber.clj#L93-L165) `task`</a>
+## <a name="protosens.maestro.module.uber/generate">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro/module/uber.clj#L93-L165) `generate`</a>
 ``` clojure
 
-(task alias)
-(task alias proto-basis)
+(generate alias)
+(generate alias proto-basis)
 ```
 
 

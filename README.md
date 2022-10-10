@@ -16,6 +16,10 @@ consumed as [Git
 dependencies](https://clojure.org/guides/deps_and_cli#_using_git_libraries) by
 [Clojure CLI](https://clojure.org/guides/deps_and_cli).
 
+This repository uses [calver](https://calver.org) and follows best effort
+towards avoiding known breaking changes in publicly exposed modules. All
+consumed modules must be required with the same `stable/YYYY-0M-0D` tag.
+
 
 ---
 

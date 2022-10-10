@@ -90,7 +90,7 @@
 ;;;;;;;;;; Public
 
 
-(defn task
+(defn generate
 
   "Generate a single `deps.edn` file by merging everything required by `alias`.
 
@@ -111,8 +111,8 @@
 
   ([alias]
 
-   (task alias 
-         nil))
+   (generate alias 
+             nil))
 
 
   ([alias proto-basis]
