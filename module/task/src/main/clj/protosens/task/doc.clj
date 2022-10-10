@@ -14,11 +14,19 @@
 ;;;;;;;;;; Helpers
 
 
-(defn read-stable-tag
+(defn latest-stable-tag
 
   []
 
-  (not-empty (slurp "meta/stable/tag.txt")))
+  (some->> (not-empty (filter (fn [tag]
+                                (string/starts-with? tag
+                                                     "stable/"))
+                              ($.git/tag+)))
+           (reduce (fn [acc tag]
+                     (if (pos? (compare tag
+                                        acc))
+                       tag
+                       acc)))))
 
 
 ;;;;;;;;;; Tasks
@@ -95,10 +103,10 @@
 
   (let [basis      ($.maestro/create-basis)
         git-url    (basis :maestro.module.expose/url)
-        stable-tag (read-stable-tag)
+        stable-tag (latest-stable-tag)
         stable-sha ($.git/resolve stable-tag)]
     (when (and stable-tag
-               stable-sha)
+               (not stable-sha))
       ($.maestro/fail (str "Unable to resolve tag to a SHA: "
                            stable-tag)))
     (doseq [[alias

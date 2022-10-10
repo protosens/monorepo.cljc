@@ -138,9 +138,6 @@
 
   ([option+]
 
-   (println :got (-> (exec ["branch"]
-                 option+)
-           ($.process/out)))
    (or (-> (exec ["branch"]
                  option+)
            ($.process/out)
