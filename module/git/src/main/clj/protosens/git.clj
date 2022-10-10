@@ -31,6 +31,17 @@
           40)))
 
 
+
+(defn shorten-sha
+
+  "Returns a short SHA of the given `full-sha`."
+
+  [full-sha]
+
+  ($.string/n-first full-sha
+                    7))
+
+
 ;;;;;;;;;; Master command
 
 

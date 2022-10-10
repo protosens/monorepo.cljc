@@ -16,6 +16,7 @@
     -  [`modified?`](#protosens.git/modified?) - Returns true if a versioned file has been modified.
     -  [`repo?`](#protosens.git/repo?) - Returns <code>true</code> if the working directory contains a Git repository.
     -  [`resolve`](#protosens.git/resolve) - Resolves the given <code>ref</code> (e.g.
+    -  [`shorten-sha`](#protosens.git/shorten-sha) - Returns a short SHA of the given <code>full-sha</code>.
     -  [`tag+`](#protosens.git/tag+) - Returns a vector of existing tags.
     -  [`tag-add`](#protosens.git/tag-add) - <code>git tag</code> the last commit with <code>tag</code>.
     -  [`unstaged?`](#protosens.git/unstaged?) - Returns <code>true</code> if some changes are unstaged.
@@ -39,7 +40,7 @@ Quick Git-related utilities.
 
 
 
-## <a name="protosens.git/add">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L79-L95) `add`</a>
+## <a name="protosens.git/add">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L90-L106) `add`</a>
 ``` clojure
 
 (add path+)
@@ -49,7 +50,7 @@ Quick Git-related utilities.
 
 `git add` the given paths.
 
-## <a name="protosens.git/branch">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L99-L115) `branch`</a>
+## <a name="protosens.git/branch">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L110-L126) `branch`</a>
 ``` clojure
 
 (branch)
@@ -61,7 +62,7 @@ Returns the current branch.
   
    Or nil if there is no branch currently checked out.
 
-## <a name="protosens.git/branch+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L119-L140) `branch+`</a>
+## <a name="protosens.git/branch+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L130-L151) `branch+`</a>
 ``` clojure
 
 (branch+)
@@ -71,7 +72,7 @@ Returns the current branch.
 
 Returns a vector of existing branches.
 
-## <a name="protosens.git/checkout">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L144-L159) `checkout`</a>
+## <a name="protosens.git/checkout">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L155-L170) `checkout`</a>
 ``` clojure
 
 (checkout branch)
@@ -81,7 +82,7 @@ Returns a vector of existing branches.
 
 `git checkout` the given `branch`.
 
-## <a name="protosens.git/checkout-new">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L163-L178) `checkout-new`</a>
+## <a name="protosens.git/checkout-new">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L174-L189) `checkout-new`</a>
 ``` clojure
 
 (checkout-new branch)
@@ -91,7 +92,7 @@ Returns a vector of existing branches.
 
 `git checkout` a new `branch`.
 
-## <a name="protosens.git/clean?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L182-L199) `clean?`</a>
+## <a name="protosens.git/clean?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L193-L210) `clean?`</a>
 ``` clojure
 
 (clean?)
@@ -103,7 +104,7 @@ Returns `true` if absolutely nothing changed since the last commit.
 
    Meaning no untracked files and no modifications (live nor staged).
 
-## <a name="protosens.git/commit">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L203-L221) `commit`</a>
+## <a name="protosens.git/commit">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L214-L232) `commit`</a>
 ``` clojure
 
 (commit message)
@@ -116,7 +117,7 @@ Commits current changes with the given `message`.
    Returns `true` in case of success, `false` in case of error (e.g. no changes
    to commit).
 
-## <a name="protosens.git/commit-message">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L225-L242) `commit-message`</a>
+## <a name="protosens.git/commit-message">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L236-L253) `commit-message`</a>
 ``` clojure
 
 (commit-message ref)
@@ -128,7 +129,7 @@ Returns the message of the given commit (by `ref`).
   
    Or nil if commit not found.
 
-## <a name="protosens.git/commit-sha">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L246-L269) `commit-sha`</a>
+## <a name="protosens.git/commit-sha">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L257-L280) `commit-sha`</a>
 ``` clojure
 
 (commit-sha i)
@@ -142,7 +143,7 @@ Returns the full SHA of the last `i`est commit.
 
    Returns `nil` if `i` goes beyond the current history.
 
-## <a name="protosens.git/count-commit+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L273-L294) `count-commit+`</a>
+## <a name="protosens.git/count-commit+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L284-L305) `count-commit+`</a>
 ``` clojure
 
 (count-commit+)
@@ -154,7 +155,7 @@ Returns the number of commits in the current history.
 
    Or nil if there isn't any.
 
-## <a name="protosens.git/exec">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L37-L73) `exec`</a>
+## <a name="protosens.git/exec">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L48-L84) `exec`</a>
 ``` clojure
 
 (exec arg+)
@@ -193,7 +194,7 @@ Executes a Git command in the shell.
 
 Is `x` a full SHA?
 
-## <a name="protosens.git/init">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L298-L314) `init`</a>
+## <a name="protosens.git/init">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L309-L325) `init`</a>
 ``` clojure
 
 (init)
@@ -205,7 +206,7 @@ Initializes a new Git repository.
   
    Returns `true` in case of success, `false` otherwise.
 
-## <a name="protosens.git/modified?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L318-L338) `modified?`</a>
+## <a name="protosens.git/modified?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L329-L349) `modified?`</a>
 ``` clojure
 
 (modified?)
@@ -217,7 +218,7 @@ Returns true if a versioned file has been modified.
   
    Staged or live.
 
-## <a name="protosens.git/repo?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L342-L358) `repo?`</a>
+## <a name="protosens.git/repo?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L353-L369) `repo?`</a>
 ``` clojure
 
 (repo?)
@@ -227,7 +228,7 @@ Returns true if a versioned file has been modified.
 
 Returns `true` if the working directory contains a Git repository.
 
-## <a name="protosens.git/resolve">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L362-L381) `resolve`</a>
+## <a name="protosens.git/resolve">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L373-L392) `resolve`</a>
 ``` clojure
 
 (resolve ref)
@@ -239,7 +240,16 @@ Resolves the given `ref` (e.g. a tag) to a full SHA.
   
    Or returns `nil` if it does not resolve to anything.
 
-## <a name="protosens.git/tag+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L385-L401) `tag+`</a>
+## <a name="protosens.git/shorten-sha">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L35-L42) `shorten-sha`</a>
+``` clojure
+
+(shorten-sha full-sha)
+```
+
+
+Returns a short SHA of the given `full-sha`.
+
+## <a name="protosens.git/tag+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L396-L412) `tag+`</a>
 ``` clojure
 
 (tag+)
@@ -249,7 +259,7 @@ Resolves the given `ref` (e.g. a tag) to a full SHA.
 
 Returns a vector of existing tags.
 
-## <a name="protosens.git/tag-add">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L405-L420) `tag-add`</a>
+## <a name="protosens.git/tag-add">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L416-L431) `tag-add`</a>
 ``` clojure
 
 (tag-add tag)
@@ -259,7 +269,7 @@ Returns a vector of existing tags.
 
 `git tag` the last commit with `tag`.
 
-## <a name="protosens.git/unstaged?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L424-L439) `unstaged?`</a>
+## <a name="protosens.git/unstaged?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L435-L450) `unstaged?`</a>
 ``` clojure
 
 (unstaged?)
@@ -269,7 +279,7 @@ Returns a vector of existing tags.
 
 Returns `true` if some changes are unstaged.
 
-## <a name="protosens.git/version">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L443-L457) `version`</a>
+## <a name="protosens.git/version">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/git/src/main/clj/protosens/git.clj#L454-L468) `version`</a>
 ``` clojure
 
 (version)

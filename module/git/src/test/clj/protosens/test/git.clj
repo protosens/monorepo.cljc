@@ -231,6 +231,13 @@
 
 
 
+(T/deftest shorten-sha
+
+  (T/is (= "1234567"
+           ($.git/shorten-sha "12345678901234567890"))))
+
+
+
 (T/deftest version
 
   (let [version ($.git/version)]

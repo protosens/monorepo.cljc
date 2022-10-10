@@ -493,6 +493,7 @@
    :maestro/require [:ext/babashka.fs
                      :module/bb.help
                      :module/classpath
+                     :module/git
                      :module/maestro
                      :module/maestro.plugin.build
                      :module/maestro.plugin.clj-kondo

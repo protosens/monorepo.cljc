@@ -6,6 +6,7 @@
             [clojure.java.io   :as java.io]
             [clojure.string    :as string]
             [protosens.maestro :as $.maestro]
+            [protosens.git     :as $.git]
             [protosens.string  :as $.string]))
 
 
@@ -84,8 +85,7 @@
             (println artifact)
             (println (format "{:deps/root \"%s\""  root))
             (println (format " :git/sha   \"%s\""  (or (some-> stable-sha
-                                                               ($.string/cut-out 0
-                                                                                 7))
+                                                               ($.git/shorten-sha))
                                                        "...")))
             (println (format " :git/tag   \"%s\""  (or stable-tag
                                                        "...")))
