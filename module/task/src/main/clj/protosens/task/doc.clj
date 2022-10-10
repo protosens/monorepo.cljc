@@ -57,14 +57,19 @@
         git-url    (basis :maestro.module.expose/url)
         stable-sha (not-empty (slurp "meta/stable/sha.txt"))
         stable-tag (not-empty (slurp "meta/stable/tag.txt"))]
-    (doseq [data  (vals (basis :aliases))
-            :let  [root (data :maestro/root)]
-            :when root
-            :let  [artifact      (data :maestro.module.expose/name)
-                   doc           (data :maestro/doc)
-                   path-quickdoc (data :maestro.plugin.quickdoc.path/output)
-                   path-readme   (str root
-                                      "/doc/README.md")]]
+    (doseq [[alias
+             data] (sort-by first
+                            (basis :aliases))
+            :let   [root (data :maestro/root)]
+            :when  root
+            :let   [artifact      (data :maestro.module.expose/name)
+                    doc           (data :maestro/doc)
+                    path-quickdoc (data :maestro.plugin.quickdoc.path/output)
+                    path-readme   (str root
+                                       "/doc/README.md")]]
+      (println (format "%s -> %s"
+                       alias
+                       path-readme))
       (with-open [writer (java.io/writer (str root
                                               "/README.md"))]
         (binding [*out* writer]
