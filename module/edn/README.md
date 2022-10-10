@@ -1,4 +1,4 @@
-# `module/edn` - [API](doc/API.md)
+# `module/edn` - [API](doc/API.md)  - [CHANGES](doc/changelog.md)
 
 One-liners for reading EDN.
 

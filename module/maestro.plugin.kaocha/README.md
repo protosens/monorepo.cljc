@@ -1,4 +1,4 @@
-# `module/maestro.plugin.kaocha` - [API](doc/API.md)
+# `module/maestro.plugin.kaocha` - [API](doc/API.md)  - [CHANGES](doc/changelog.md)
 
 Maestro plugin for the [Kaocha](https://github.com/lambdaisland/kaocha) test runner.
 

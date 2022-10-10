@@ -1,4 +1,4 @@
-# `module/symbol` - [API](doc/API.md)
+# `module/symbol` - [API](doc/API.md)  - [CHANGES](doc/changelog.md)
 
 Handling symbols.
 

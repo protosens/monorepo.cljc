@@ -1,4 +1,4 @@
-# `module/string` - [API](doc/API.md)
+# `module/string` - [API](doc/API.md)  - [CHANGES](doc/changelog.md)
 
 String manipulation library complementing [`clojure.string`](https://clojuredocs.org/clojure.string).
 
