@@ -111,36 +111,36 @@
 
    (let [basis ($.maestro/ensure-basis proto-basis)]
      (reduce (fn [acc [alias data]]
-               (let [main-ns  (data :maestro.module.requirer/namespace)
-                     filename (-> (data :maestro.module.requirer/path)
-                                  ($.namespace/to-filename main-ns
-                                                           ".cljc"))
-                     root     (data :maestro/root)
-                     basis-2  ($.maestro/search (-> basis
-                                                    (update :maestro/alias+
-                                                            #(conj (vec %)
-                                                                   alias))
-                                                    (update :maestro/profile+
-                                                            #(conj (vec %)
-                                                                   'release))))
-                     ns+      (filterv (comp not
-                                             (into #{main-ns}
-                                                   (data :maestro.module.requirer/exclude+)))
-                                       ($.namespace/in-path+ (filter (fn [path]
-                                                                       (string/starts-with? path
-                                                                                            root))
-                                                                     ($.deps.edn/extra-path+ basis-2
-                                                                                             (basis-2 :maestro/require)))))]
+               (let [requirer-ns (data :maestro.module.requirer/namespace)
+                     filename    (-> (data :maestro.module.requirer/path)
+                                     ($.namespace/to-filename requirer-ns
+                                                              ".cljc"))
+                     root        (data :maestro/root)
+                     basis-2     ($.maestro/search (-> basis
+                                                       (update :maestro/alias+
+                                                               #(conj (vec %)
+                                                                      alias))
+                                                       (update :maestro/profile+
+                                                               #(conj (vec %)
+                                                                      'release))))
+                     ns+         (filterv (comp not
+                                                (into #{requirer-ns}
+                                                      (data :maestro.module.requirer/exclude+)))
+                                          ($.namespace/in-path+ (filter (fn [path]
+                                                                          (string/starts-with? path
+                                                                                               root))
+                                                                        ($.deps.edn/extra-path+ basis-2
+                                                                                                (basis-2 :maestro/require)))))]
                  (println alias)
                  (println)
                  (println (format "  %s -> %s"
-                                  main-ns
+                                  requirer-ns
                                   filename))
                  (bb.fs/create-dirs (bb.fs/parent filename))
                  (with-open [writer (java.io/writer filename)]
                    (binding [*out* writer]
-                     ($.namespace/main-ns main-ns
-                                          ns+)))
+                     ($.namespace/requirer-ns requirer-ns
+                                              ns+)))
                  (println)
                  (println "  Require")
                  (doseq [ns (sort ns+)]
@@ -150,8 +150,8 @@
                  (println)
                  (assoc acc
                         alias
-                        {:filename filename
-                         :namespace main-ns
+                        {:filename  filename
+                         :namespace requirer-ns
                          :require+  ns+})))
              {}
              (alias+ basis)))))

@@ -201,7 +201,7 @@
 
 
 
-(defn main-ns
+(defn requirer-ns
 
   "Pretty-prints to `*out*` a CLJC namespace requiring all namespaces provided by `deps.edn`.
 
