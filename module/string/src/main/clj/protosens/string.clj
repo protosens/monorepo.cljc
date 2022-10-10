@@ -45,6 +45,32 @@
 
 
 
+(defn n-first
+
+  "Returns a sub-string of `s` composed of the N first characters."
+
+  [s n-char]
+
+  (cut-out s
+           0
+           n-char))
+
+
+
+(defn n-last
+
+  "Returns a sub-string of `s` composed of the N last characters."
+
+  [s n-char]
+
+  (let [total (count s)]
+    (cut-out s
+             (- total
+                n-char)
+             total)))
+
+
+
 (defn newline
 
   "Returns the platform-dependend line separator."

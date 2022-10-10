@@ -76,6 +76,62 @@
 
 
 
+(T/deftest n-first
+
+  (T/testing
+
+    "Success"
+
+    (T/is (= "te"
+             ($.string/n-first "test"
+                               2)))
+
+    (T/is (= ""
+             ($.string/n-first "test"
+                               0))))
+
+  (T/testing
+
+    "Failure"
+
+    (T/is (thrown? Exception
+                   ($.string/n-first "test"
+                                     100)))
+
+    (T/is (thrown? Exception
+                   ($.string/n-first "test"
+                                     -1)))))
+
+
+
+(T/deftest n-last
+
+  (T/testing
+
+    "Success"
+
+    (T/is (= "st"
+             ($.string/n-last "test"
+                              2)))
+
+    (T/is (= ""
+             ($.string/n-last "test"
+                              0))))
+
+  (T/testing
+
+    "Failure"
+
+    (T/is (thrown? Exception
+                   ($.string/n-last "test"
+                                    100)))
+
+    (T/is (thrown? Exception
+                   ($.string/n-last "test"
+                                    -1)))))
+
+
+
 (T/deftest newline
 
   (T/is (contains? #{"\n"
