@@ -12,3 +12,9 @@ protosens/maestro.plugin.kaocha
  :git/url   "https://github.com/protosens/monorepo.cljc"}
 ```
 
+```clojure
+;; Supported platforms:
+;;
+[:bb :jvm]
+```
+

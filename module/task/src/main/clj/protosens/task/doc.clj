@@ -66,7 +66,8 @@
                     doc           (data :maestro/doc)
                     path-quickdoc (data :maestro.plugin.quickdoc.path/output)
                     path-readme   (str root
-                                       "/doc/README.md")]]
+                                       "/doc/README.md")
+                    platform+     (not-empty (data :maestro/platform+))]]
       (println (format "%s -> %s"
                        alias
                        path-readme))
@@ -95,6 +96,13 @@
             (println (format " :git/tag   \"%s\""  (or stable-tag
                                                        "...")))
             (println (format " :git/url   \"%s\"}" git-url))
+            (println "```"))
+          (when platform+
+            (println)
+            (println "```clojure")
+            (println ";; Supported platforms:")
+            (println ";;")
+            (println (vec (sort platform+)))
             (println "```"))
           (println)
           (when (bb.fs/exists? path-readme)

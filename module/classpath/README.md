@@ -12,3 +12,9 @@ protosens/classpath
  :git/url   "https://github.com/protosens/monorepo.cljc"}
 ```
 
+```clojure
+;; Supported platforms:
+;;
+[:bb :jvm]
+```
+

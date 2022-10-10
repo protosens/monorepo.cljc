@@ -12,3 +12,9 @@ protosens/maestro.plugin.clj-kondo
  :git/url   "https://github.com/protosens/monorepo.cljc"}
 ```
 
+```clojure
+;; Supported platforms:
+;;
+[:bb :jvm]
+```
+
