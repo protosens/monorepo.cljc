@@ -203,8 +203,8 @@
                    API, Git dependency info, etc).
 
                    If `./doc/README.md` exists relative to the root, its content is appended."
-   :requires       ([protosens.task.doc])
-   :task           (protosens.task.doc/readme+)}
+   :requires       ([protosens.maestro.idiom.readme])
+   :task           (protosens.maestro.idiom.readme/main)}
 
 
   req:gen
