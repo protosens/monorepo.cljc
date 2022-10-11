@@ -228,6 +228,12 @@
    :task          (protosens.maestro.module.expose/verify)}
 
 
+  stable:tag
+  {:doc      "Tag the last commit as a stable release"
+   :requires ([protosens.maestro.idiom.stable])
+   :task     (protosens.maestro.idiom.stable/tag)}
+
+
   test
   {:doc           "Tests the given module(s)"
    :protosens/doc "Shortcut for launching tests given an alias or a vector of aliases and profiles.

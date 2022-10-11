@@ -20,3 +20,5 @@ Modules from this repository:
 - [`process`](../process)
 - [`string`](../string)
 - [`symbol`](../symbol)
+
+See the [API](./doc/API.md) about new tooling.

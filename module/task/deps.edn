@@ -14,6 +14,7 @@
 ;;     :module/edn
 ;;     :module/git
 ;;     :module/maestro
+;;     :module/maestro.idiom
 ;;     :module/maestro.plugin.build
 ;;     :module/maestro.plugin.clj-kondo
 ;;     :module/maestro.plugin.kaocha
@@ -21,6 +22,7 @@
 ;;     :module/namespace
 ;;     :module/process
 ;;     :module/string
+;;     :module/symbol
 ;;     :module/task
 ;;
 ;; All files found in those paths are hard links to follow from the
@@ -44,6 +46,7 @@
   "maestro/uber/module/deps.edn/src/main/clj"
   "maestro/uber/module/edn/src/main/clj"
   "maestro/uber/module/git/src/main/clj"
+  "maestro/uber/module/maestro.idiom/src/main/clj"
   "maestro/uber/module/maestro.plugin.build/src/main/clj"
   "maestro/uber/module/maestro.plugin.clj-kondo/src/main/clj"
   "maestro/uber/module/maestro.plugin.kaocha/src/main/clj"
@@ -52,4 +55,5 @@
   "maestro/uber/module/namespace/src/main/clj"
   "maestro/uber/module/process/src/main/clj"
   "maestro/uber/module/string/src/main/clj"
+  "maestro/uber/module/symbol/src/main/clj"
   "src/main/clj"]}

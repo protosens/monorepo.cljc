@@ -322,26 +322,28 @@
 
   :module/maestro.idiom
 
-  {:maestro/doc                "Bundle of modules for idiomatic use of [Maestro](../maestro) and well as more opinionated tooling."
-   :maestro/platform+          [:bb
-                                :jvm]
-   :maestro/require            [:ext/babashka.fs
-                                :ext/selmer
-                                :module/bb.help
-                                :module/classpath
-                                :module/edn
-                                :module/git
-                                :module/maestro
-                                :module/maestro.plugin.build
-                                :module/maestro.plugin.clj-kondo
-                                :module/maestro.plugin.kaocha
-                                :module/maestro.plugin.quickdoc
-                                :module/namespace
-                                :module/process
-                                :module/string
-                                :module/symbol]
-   :maestro/root               "module/maestro.idiom"
-   :maestro.module.expose/name protosens/maestro.idiom}
+  {:extra-paths                         ["module/maestro.idiom/src/main/clj"]
+   :maestro/doc                         "Bundle of modules for idiomatic use of [Maestro](../maestro) and well as more opinionated tooling."
+   :maestro/platform+                   [:bb
+                                         :jvm]
+   :maestro/require                     [:ext/babashka.fs
+                                         :ext/selmer
+                                         :module/bb.help
+                                         :module/classpath
+                                         :module/edn
+                                         :module/git
+                                         :module/maestro
+                                         :module/maestro.plugin.build
+                                         :module/maestro.plugin.clj-kondo
+                                         :module/maestro.plugin.kaocha
+                                         :module/maestro.plugin.quickdoc
+                                         :module/namespace
+                                         :module/process
+                                         :module/string
+                                         :module/symbol]
+   :maestro/root                        "module/maestro.idiom"
+   :maestro.module.expose/name          protosens/maestro.idiom
+   :maestro.plugin.quickdoc.path/output "module/maestro.idiom/doc/API.md"}
 
   ;---
 
@@ -508,17 +510,7 @@
   {:extra-paths     ["module/task/src/main/clj"]
    :maestro/doc     "Merges dependencies and paths for Babashka tasks.
                      Not meant for public use."
-   :maestro/require [:ext/babashka.fs
-                     :ext/selmer
-                     :module/bb.help
-                     :module/classpath
-                     :module/git
-                     :module/maestro
-                     :module/maestro.plugin.build
-                     :module/maestro.plugin.clj-kondo
-                     :module/maestro.plugin.kaocha
-                     :module/maestro.plugin.quickdoc
-                     :module/string]
+   :maestro/require [:module/maestro.idiom]
    :maestro/root    "module/task"}
 
   }}

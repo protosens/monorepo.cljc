@@ -30,6 +30,8 @@ Inception.
             - [`process`]
             - [`string`]
             - [`symbol`]
+    - Tooling
+        - `$.maestro.idiom.stable` about [calver](https://calver.org) tags for stable releases
 
 
 

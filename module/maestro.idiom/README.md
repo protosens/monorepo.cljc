@@ -1,4 +1,4 @@
-# `module/maestro.idiom`  - [CHANGES](doc/changelog.md)
+# `module/maestro.idiom` - [API](doc/API.md)  - [CHANGES](doc/changelog.md)
 
 Bundle of modules for idiomatic use of [Maestro](../maestro) and well as more opinionated tooling.
 
@@ -43,4 +43,6 @@ Modules from this repository:
 - [`process`](../process)
 - [`string`](../string)
 - [`symbol`](../symbol)
+
+See the [API](./doc/API.md) about new tooling.
 
