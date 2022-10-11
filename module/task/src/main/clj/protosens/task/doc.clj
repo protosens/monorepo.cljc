@@ -2,13 +2,14 @@
 
   "Generates documentation and READMEs."
 
-  (:require [babashka.fs       :as bb.fs]
-            [clojure.java.io   :as java.io]
-            [clojure.string    :as string]
-            [protosens.maestro :as $.maestro]
-            [protosens.git     :as $.git]
-            [protosens.string  :as $.string]
-            [selmer.parser     :as selmer.parser]))
+  (:require [babashka.fs                       :as bb.fs]
+            [clojure.java.io                   :as java.io]
+            [clojure.string                    :as string]
+            [protosens.maestro                 :as $.maestro]
+            [protosens.maestro.idiom.changelog :as $.maestro.idiom.changelog]
+            [protosens.maestro.idiom.stable    :as $.maestro.idiom.stable]
+            [protosens.git                     :as $.git]
+            [protosens.string                  :as $.string]))
 
 
 ;;;;;;;;;; Helpers
@@ -36,28 +37,9 @@
 
   []
 
-  (let [dir        (System/getProperty "user.dir")
-        stable-tag (or (some->> (first *command-line-args*)
-                                (format "`%s`"))
-                       ($.maestro/fail "Missing stable tag as argument"))
-        templ      (fn [path]
-                     (spit path
-                           (selmer.parser/render-file path
-                                                      {:next-release stable-tag}
-                                                      {:custom-resource-path dir})))]
-    (templ "doc/changelog.md")
-    (doseq [[alias
-             data] (sort-by first
-                            (:aliases ($.maestro/create-basis)))
-            :let   [root (data :maestro/root)]
-            :when  root
-            :let   [path-changelog (str root
-                                        "/doc/changelog.md")]]
-      (when (bb.fs/exists? path-changelog)
-        (println (format "%s -> %s"
-                         alias
-                         path-changelog))
-        (templ path-changelog)))))
+  ($.maestro.idiom.changelog/main {:maestro.idiom.changelog/ctx
+                                   (constantly {:next-release (-> ($.maestro.idiom.stable/latest)
+                                                                  ($.maestro.idiom.stable/tag->date))})}))
 
 
 
