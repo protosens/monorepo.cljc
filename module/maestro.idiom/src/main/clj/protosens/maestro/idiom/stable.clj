@@ -24,12 +24,18 @@
 
 (defn all
 
-  []
 
-  (filter (fn [tag]
-            (string/starts-with? tag
-                                 "stable/"))
-          ($.git/tag+)))
+  ([]
+
+   (all nil))
+
+
+  ([option+]
+
+   (filter (fn [tag]
+             (string/starts-with? tag
+                                  "stable/"))
+           ($.git/tag+ option+))))
 
 
 
@@ -53,13 +59,29 @@
 
 
 
-(defn tag
+(defn tag?
 
-  []
+  [tag]
 
-  (let [t (today)]
-    ($.git/tag-add t)
-    t))
+  (string/starts-with? tag
+                       "stable/"))
+
+
+
+(defn tag-add
+
+
+  ([]
+
+   (tag-add nil))
+
+
+  ([option+]
+
+   (let [t (today option+)]
+     ($.git/tag-add t
+                    option+)
+     t)))
 
 
 
@@ -67,25 +89,34 @@
 
   [tag]
 
-  (second (string/split tag
-                        #"/"
-                        2)))
+  (when (tag? tag)
+    (second (string/split tag
+                          #"/"
+                          2))))
 
 
 
 (defn today
 
-  []
 
-  (let [tag (str "stable/"
-                 (.format -dtf
-                          (LocalDateTime/now)))]
-    (if ($.git/resolve tag)
-      (loop [i 2]
-        (let [tag-2 (format "%s_%02d"
-                            tag
-                            i)]
-          (if ($.git/resolve tag-2)
-            (recur (inc i))
-            tag-2)))
-      tag)))
+  ([]
+
+   (today nil))
+
+
+  ([option+]
+
+   (let [tag (str "stable/"
+                  (.format -dtf
+                           (LocalDateTime/now)))]
+     (if ($.git/resolve tag
+                        option+)
+       (loop [i 2]
+         (let [tag-2 (format "%s_%02d"
+                             tag
+                             i)]
+           (if ($.git/resolve tag-2
+                              option+)
+             (recur (inc i))
+             tag-2)))
+       tag))))

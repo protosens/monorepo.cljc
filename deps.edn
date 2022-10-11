@@ -340,10 +340,17 @@
                                          :module/namespace
                                          :module/process
                                          :module/string
-                                         :module/symbol]
+                                         :module/symbol
+                                         {test :test/maestro.idiom}]
    :maestro/root                        "module/maestro.idiom"
    :maestro.module.expose/name          protosens/maestro.idiom
    :maestro.plugin.quickdoc.path/output "module/maestro.idiom/doc/API.md"}
+
+
+  :test/maestro.idiom
+
+  {:extra-paths     ["module/maestro.idiom/src/test/clj"]
+   :maestro/require [:ext/babashka.fs]}
 
   ;---
 

@@ -231,7 +231,7 @@
   stable:tag
   {:doc      "Tag the last commit as a stable release"
    :requires ([protosens.maestro.idiom.stable])
-   :task     (protosens.maestro.idiom.stable/tag)}
+   :task     (protosens.maestro.idiom.stable/tag-add)}
 
 
   test
