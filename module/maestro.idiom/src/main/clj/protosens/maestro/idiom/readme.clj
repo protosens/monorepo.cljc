@@ -1,5 +1,17 @@
 (ns protosens.maestro.idiom.readme
 
+  "Generating READMEs for modules.
+  
+   This is what the Protosens monorepo uses for generating module READMEs that contain
+   much needed information: how to use them as Git dependencies, which platforms they
+   support, etc.
+
+   These functions are opinionated and not meant for any situation. However, the general
+   idea of general of printing these READMEs is somewhat flexible should anyone need to
+   print anything else.
+
+   See [[main]]."
+
   (:require [babashka.fs                    :as bb.fs]
             [clojure.java.io                :as java.io]
             [protosens.maestro              :as $.maestro]
@@ -12,6 +24,14 @@
 
 
 (defn body
+
+  "Prints a body of text.
+
+   Some READMEs require only the generic information printed by other functions.
+   Others require examples and explanations carefully written by a human.
+  
+   This function prints the file under `./doc/body.md` relative to the `maestro/root`
+   of the alias if it exists."
 
   [alias-data]
 
@@ -27,6 +47,10 @@
 
 (defn doc
 
+  "Prints `:maestro/doc`.
+  
+   After realigning it."
+
   [alias-data]
 
   (println ($.string/realign (alias-data :maestro/doc))))
@@ -34,6 +58,16 @@
 
 
 (defn git-dependency
+
+  "Prints how to consume the alias as a Git dependency in `deps.edn.`.
+  
+   This leverages a preparation step donc in [[main]]. It merges into the input
+   a delay under `:maestro.module/d*expose`. This delay resolves to a map
+   containing what is necessary for specifying a full Git dependency:
+
+   - `:maestro.module.expose/sha`
+   - `:maestro.module.expose/tag`
+   - `:maestro.module.expose/url`"
 
   [alias-data]
 
@@ -53,6 +87,15 @@
 
 
 (defn header
+
+  "Prints the first line of the README.
+  
+   A main title mentioning the `:maestro/root` with a link to the module API
+   (see the `maestro.plugin.quickdoc` plugin) and a link to the changelog.
+
+   Changelog is presumed to be under `./doc/changelog.md` by default. The basis
+   or indiviual alias data can contain `:maestro.idiom.changelog.path/module`
+   specifying an alternative path."
 
   [alias-data]
 
@@ -78,6 +121,10 @@
 
 (defn platform+
 
+  "Prints `:maestro/platform+`.
+  
+   Informing users which platforms this alias supports."
+
   [alias-data]
 
   (when-some [platform+ (not-empty (alias-data :maestro/platform+))]
@@ -94,6 +141,18 @@
 
 (defn default
 
+  "Default README printer.
+  
+   Used by [[main]] unless overwritten.
+
+   Successively calls:
+
+   - [[header]]
+   - [[doc]]
+   - [[git-dependency]]
+   - [[platform+]]
+   - [[body]]"
+
   [alias-data]
 
   (header alias-data)
@@ -107,6 +166,16 @@
 
 
 (defn main
+
+  "Generates READMEs for all modules.
+  
+   More precisely, all aliases that have a `:maestro/root` (where their README will be
+   printed).
+
+   READMEs are printed using [[default]] by default. An alternative printer function can
+   be provided under `:maestro.idiom.readme/print`. It is called for each alias after
+   binding `*out*` to the relevant file writer, taking only one argument: the basis merged
+   with the alias date of the currently handled alias."
 
 
   ([]

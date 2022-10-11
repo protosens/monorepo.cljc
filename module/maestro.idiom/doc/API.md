@@ -3,15 +3,15 @@
     -  [`main`](#protosens.maestro.idiom.changelog/main) - Templates all changelogs.
     -  [`module+`](#protosens.maestro.idiom.changelog/module+) - Templates module changelogs.
     -  [`top`](#protosens.maestro.idiom.changelog/top) - Templates the top changelog.
--  [`protosens.maestro.idiom.readme`](#protosens.maestro.idiom.readme) 
-    -  [`body`](#protosens.maestro.idiom.readme/body)
-    -  [`default`](#protosens.maestro.idiom.readme/default)
-    -  [`doc`](#protosens.maestro.idiom.readme/doc)
-    -  [`git-dependency`](#protosens.maestro.idiom.readme/git-dependency)
-    -  [`header`](#protosens.maestro.idiom.readme/header)
-    -  [`main`](#protosens.maestro.idiom.readme/main)
-    -  [`platform+`](#protosens.maestro.idiom.readme/platform+)
--  [`protosens.maestro.idiom.stable`](#protosens.maestro.idiom.stable)  - Tagging stable releases following [calver](https://calver.org) See [[today]] about tag format.
+-  [`protosens.maestro.idiom.readme`](#protosens.maestro.idiom.readme)  - Generating READMEs for modules.
+    -  [`body`](#protosens.maestro.idiom.readme/body) - Prints a body of text.
+    -  [`default`](#protosens.maestro.idiom.readme/default) - Default README printer.
+    -  [`doc`](#protosens.maestro.idiom.readme/doc) - Prints <code>:maestro/doc</code>.
+    -  [`git-dependency`](#protosens.maestro.idiom.readme/git-dependency) - Prints how to consume the alias as a Git dependency in <code>deps.edn.</code>.
+    -  [`header`](#protosens.maestro.idiom.readme/header) - Prints the first line of the README.
+    -  [`main`](#protosens.maestro.idiom.readme/main) - Generates READMEs for all modules.
+    -  [`platform+`](#protosens.maestro.idiom.readme/platform+) - Prints <code>:maestro/platform+</code>.
+-  [`protosens.maestro.idiom.stable`](#protosens.maestro.idiom.stable)  - Tagging stable releases following [calver](https://calver.org).
     -  [`all`](#protosens.maestro.idiom.stable/all) - Returns a list of stable tags in the repository.
     -  [`latest`](#protosens.maestro.idiom.stable/latest) - Returns the latest stable tag.
     -  [`tag->date`](#protosens.maestro.idiom.stable/tag->date) - Returns the date portion of the given stable tag.
@@ -95,46 +95,100 @@ Templates the top changelog.
 # <a name="protosens.maestro.idiom.readme">protosens.maestro.idiom.readme</a>
 
 
+Generating READMEs for modules.
+  
+   This is what the Protosens monorepo uses for generating module READMEs that contain
+   much needed information: how to use them as Git dependencies, which platforms they
+   support, etc.
+
+   These functions are opinionated and not meant for any situation. However, the general
+   idea of general of printing these READMEs is somewhat flexible should anyone need to
+   print anything else.
+
+   See [`main`](#protosens.maestro.idiom.readme/main).
 
 
 
 
-## <a name="protosens.maestro.idiom.readme/body">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L14-L24) `body`</a>
+## <a name="protosens.maestro.idiom.readme/body">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L26-L44) `body`</a>
 ``` clojure
 
 (body alias-data)
 ```
 
 
-## <a name="protosens.maestro.idiom.readme/default">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L94-L104) `default`</a>
+Prints a body of text.
+
+   Some READMEs require only the generic information printed by other functions.
+   Others require examples and explanations carefully written by a human.
+  
+   This function prints the file under `./doc/body.md` relative to the `maestro/root`
+   of the alias if it exists.
+
+## <a name="protosens.maestro.idiom.readme/default">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L142-L164) `default`</a>
 ``` clojure
 
 (default alias-data)
 ```
 
 
-## <a name="protosens.maestro.idiom.readme/doc">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L28-L32) `doc`</a>
+Default README printer.
+  
+   Used by [`main`](#protosens.maestro.idiom.readme/main) unless overwritten.
+
+   Successively calls:
+
+   - [`header`](#protosens.maestro.idiom.readme/header)
+   - [`doc`](#protosens.maestro.idiom.readme/doc)
+   - [`git-dependency`](#protosens.maestro.idiom.readme/git-dependency)
+   - [`platform+`](#protosens.maestro.idiom.readme/platform+)
+   - [`body`](#protosens.maestro.idiom.readme/body)
+
+## <a name="protosens.maestro.idiom.readme/doc">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L48-L56) `doc`</a>
 ``` clojure
 
 (doc alias-data)
 ```
 
 
-## <a name="protosens.maestro.idiom.readme/git-dependency">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L36-L51) `git-dependency`</a>
+Prints `:maestro/doc`.
+  
+   After realigning it.
+
+## <a name="protosens.maestro.idiom.readme/git-dependency">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L60-L85) `git-dependency`</a>
 ``` clojure
 
 (git-dependency alias-data)
 ```
 
 
-## <a name="protosens.maestro.idiom.readme/header">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L55-L74) `header`</a>
+Prints how to consume the alias as a Git dependency in `deps.edn.`.
+  
+   This leverages a preparation step donc in [`main`](#protosens.maestro.idiom.readme/main). It merges into the input
+   a delay under `:maestro.module/d*expose`. This delay resolves to a map
+   containing what is necessary for specifying a full Git dependency:
+
+   - `:maestro.module.expose/sha`
+   - `:maestro.module.expose/tag`
+   - `:maestro.module.expose/url`
+
+## <a name="protosens.maestro.idiom.readme/header">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L89-L118) `header`</a>
 ``` clojure
 
 (header alias-data)
 ```
 
 
-## <a name="protosens.maestro.idiom.readme/main">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L108-L149) `main`</a>
+Prints the first line of the README.
+  
+   A main title mentioning the `:maestro/root` with a link to the module API
+   (see the `maestro.plugin.quickdoc` plugin) and a link to the changelog.
+
+   Changelog is presumed to be under `./doc/changelog.md` by default. The basis
+   or indiviual alias data can contain `:maestro.idiom.changelog.path/module`
+   specifying an alternative path.
+
+## <a name="protosens.maestro.idiom.readme/main">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L168-L220) `main`</a>
 ``` clojure
 
 (main)
@@ -142,18 +196,32 @@ Templates the top changelog.
 ```
 
 
-## <a name="protosens.maestro.idiom.readme/platform+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L78-L88) `platform+`</a>
+Generates READMEs for all modules.
+  
+   More precisely, all aliases that have a `:maestro/root` (where their README will be
+   printed).
+
+   READMEs are printed using [`default`](#protosens.maestro.idiom.readme/default) by default. An alternative printer function can
+   be provided under `:maestro.idiom.readme/print`. It is called for each alias after
+   binding `*out*` to the relevant file writer, taking only one argument: the basis merged
+   with the alias date of the currently handled alias.
+
+## <a name="protosens.maestro.idiom.readme/platform+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L122-L136) `platform+`</a>
 ``` clojure
 
 (platform+ alias-data)
 ```
 
 
+Prints `:maestro/platform+`.
+  
+   Informing users which platforms this alias supports.
+
 -----
 # <a name="protosens.maestro.idiom.stable">protosens.maestro.idiom.stable</a>
 
 
-Tagging stable releases following [calver](https://calver.org)
+Tagging stable releases following [calver](https://calver.org).
 
    See [`today`](#protosens.maestro.idiom.stable/today) about tag format.
 

@@ -1,6 +1,6 @@
 (ns protosens.maestro.idiom.stable
 
-  "Tagging stable releases following [calver](https://calver.org)
+  "Tagging stable releases following [calver](https://calver.org).
 
    See [[today]] about tag format.
 
