@@ -1,5 +1,18 @@
 (ns protosens.maestro.idiom.stable
 
+  "Tagging stable releases following [calver](https://calver.org)
+
+   See [[today]] about tag format.
+
+   These are the utilities used by the Protosens monorepo but there is no
+   obligation following all that.
+
+   Some functions accept the following options:
+
+   | Key    | Value                                     | Default           |
+   |--------|-------------------------------------------|-------------------|
+   | `:dir` | Directory used for Git-related operations | Current directory |"
+
   (:import (java.time LocalDateTime)
            (java.time.format DateTimeFormatter))
   (:require [clojure.string :as string]
@@ -14,7 +27,7 @@
 
 (def ^:private ^DateTimeFormatter -dtf
 
-  ;;
+  ;; Date time formatter used in [[today]].
 
   (DateTimeFormatter/ofPattern "yyyy-MM-dd"))
 
@@ -23,6 +36,8 @@
 
 
 (defn all
+
+  "Returns a list of stable tags in the repository."
 
 
   ([]
@@ -41,6 +56,7 @@
 
 (defn latest
 
+  "Returns the latest stable tag"
 
   ([]
 
@@ -61,6 +77,8 @@
 
 (defn tag?
 
+  "Is the given `tag` a stable tag?"
+
   [tag]
 
   (string/starts-with? tag
@@ -69,6 +87,10 @@
 
 
 (defn tag-add
+
+  "Tags the last commit as a stable release.
+  
+   See [[today]]."
 
 
   ([]
@@ -87,6 +109,8 @@
 
 (defn tag->date
 
+  "Returns the date portion of the given stable tag."
+
   [tag]
 
   (when (tag? tag)
@@ -97,6 +121,15 @@
 
 
 (defn today
+
+  "Returns a stable tag for a release done today.
+  
+   Format is `stable/YYYY-0M-0D`.
+
+   If the tag already exists, appends an iterating `_%02d` portion.
+
+   Hence, this format is suitable for a daily stable release at most, providing
+   a bit of room for emergencies."
 
 
   ([]
