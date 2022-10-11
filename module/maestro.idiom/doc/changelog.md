@@ -31,6 +31,7 @@ Inception.
             - [`string`]
             - [`symbol`]
     - Tooling
+        - `$.maestro.idiom.changelog` about templating changelogs
         - `$.maestro.idiom.stable` about [calver](https://calver.org) tags for stable releases
 
 
