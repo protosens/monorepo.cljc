@@ -10,6 +10,7 @@ Publicly available as [Git dependencies](https://clojure.org/guides/deps_and_cli
 | [`edn`](./edn) | One-liners for reading EDN |
 | [`git`](./git) | One-liners (or almost) for common Git operations |
 | [`maestro`](./maestro) | Maestro, calmely orchestrating your Clojure (mono)repo |
+| [`maestro.idiom`](./maestro.idiom) | Bundle of modules for idiomatic use of [Maestro](../maestro) and well as more opinionated tooling |
 | [`maestro.plugin.build`](./maestro.plugin.build) | Maestro plugin for [`tools.build`](https://github.com/clojure/tools.build).   |
 | [`maestro.plugin.clj-kondo`](./maestro.plugin.clj-kondo) | Maestro plugin for [Clj-kondo](https://github.com/clj-kondo/clj-kondo), the Clojure linter |
 | [`maestro.plugin.kaocha`](./maestro.plugin.kaocha) | Maestro plugin for the [Kaocha](https://github.com/lambdaisland/kaocha) test runner |
