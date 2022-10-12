@@ -1,4 +1,4 @@
-# `module/bench` - [API](doc/API.md) 
+# `module/bench` - [API](doc/API.md)  - [CHANGES](doc/changelog.md)
 
 Higher-level helpers for [Criterium](https://github.com/hugoduncan/criterium).
 

@@ -1,5 +1,7 @@
 (ns protosens.bench.report
 
+  "Printers for reporting results in humanized form."
+
   (:require [criterium.core         :as       criterium]
             [protosens.bench        :as-alias $.bench]
             [protosens.bench.report :as-alias $.bench.report]))
@@ -9,6 +11,8 @@
 
 
 (defn- -report
+
+  ;; Leverages Criterium reporting.
 
   [result option+]
 
@@ -22,6 +26,8 @@
 
 (defn run
 
+  "Default reporter for [[protosens.bench/run]]."
+
   [run]
 
   (-report (run ::$.bench/result)
@@ -31,6 +37,10 @@
 
 
 (defn run+
+
+  "Default reporter for [[protosens.bench/run+]].
+  
+   Prints individual results as well as comparisons."
 
   [run+]
 
