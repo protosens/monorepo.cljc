@@ -26,7 +26,9 @@
 
 (defn run
 
-  "Default reporter for [[protosens.bench/run]]."
+  "Default reporter for single runs.
+  
+   See [[protosens.bench/run]]."
 
   [run]
 
@@ -38,7 +40,9 @@
 
 (defn run+
 
-  "Default reporter for [[protosens.bench/run+]].
+  "Default reporter for multi-runs.
+  
+   See [[protosens.bench/run+]].
   
    Prints individual results as well as comparisons."
 

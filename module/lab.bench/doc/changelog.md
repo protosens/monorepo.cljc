@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes for [`module/bench`](../) between stable versions of the
+All notable changes for [`module/lab.bench`](../) between stable versions of the
 repository.
 
 

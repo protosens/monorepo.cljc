@@ -1,4 +1,4 @@
-# `Monorepo.cljc` - [CHANGES](./doc/changelog.md)
+# `Monorepo.cljc` - [CHANGES](./doc/changelog.md) - [MODULES](./module)
 
 Nascent public monorepo hosting libraries and tools for the Clojure/script
 ecosystem.
@@ -17,8 +17,11 @@ dependencies](https://clojure.org/guides/deps_and_cli#_using_git_libraries) by
 [Clojure CLI](https://clojure.org/guides/deps_and_cli).
 
 This repository uses [calver](https://calver.org) and follows best effort
-towards avoiding known breaking changes in publicly exposed modules. All
-consumed modules must be required with the same `stable/YYYY-0M-0D` tag.
+towards avoiding known breaking changes in publicly exposed modules. Excepts
+towards experimental module starting with `lab.` which may be subject to
+breaking changes or removal.
+
+All consumed modules must be required with the same `stable/YYYY-0M-0D` tag.
 
 
 ---

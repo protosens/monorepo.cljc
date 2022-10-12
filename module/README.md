@@ -5,11 +5,11 @@ Publicly available as [Git dependencies](https://clojure.org/guides/deps_and_cli
 | Module | Description |
 |---|---|
 | [`bb.help`](./bb.help) | Printing extra documentation for Babashka tasks |
-| [`bench`](./bench) | Higher-level helpers for [Criterium](https://github.com/hugoduncan/criterium) |
 | [`classpath`](./classpath) | Classpath-related utilities |
 | [`deps.edn`](./deps.edn) | Handling `deps.edn` files |
 | [`edn`](./edn) | One-liners for reading EDN |
 | [`git`](./git) | One-liners (or almost) for common Git operations |
+| [`lab.bench`](./lab.bench) | Higher-level helpers for [Criterium](https://github.com/hugoduncan/criterium) |
 | [`maestro`](./maestro) | Maestro, calmely orchestrating your Clojure (mono)repo |
 | [`maestro.idiom`](./maestro.idiom) | Bundle of modules for idiomatic use of [Maestro](../maestro) and well as more opinionated tooling |
 | [`maestro.plugin.build`](./maestro.plugin.build) | Maestro plugin for [`tools.build`](https://github.com/clojure/tools.build).   |
