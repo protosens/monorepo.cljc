@@ -159,6 +159,23 @@
                  (protosens.bb.help/print))}
 
 
+  module:listing
+  {:doc           "Generate `./module/README.md`"
+   :protosens/doc "Lists all exposed and private modules."
+   :requires      ([protosens.maestro.idiom.listing])
+   :task          (protosens.maestro.idiom.listing/main "module/README.md")}
+
+
+  module:readme
+  {:doc           "Generate READMEs for all modules"
+   :protosens/doc "For each module, writes a header composed of the root and relevant information (link to
+                   API, Git dependency info, etc).
+
+                   If `./doc/README.md` exists relative to the root, its content is appended."
+   :requires       ([protosens.maestro.idiom.readme])
+   :task           (protosens.maestro.idiom.readme/main)}
+
+
   mtempl 
   {:doc           "Execute a shell command with computed required aliases"
    :protosens/doc "The `aliases` task prints required aliases and this is typically useful in
@@ -209,23 +226,6 @@
                        bb aliases:dev :module/maestro | bb pprint-cp"
    :requires      ([protosens.classpath])
    :task          (protosens.classpath/pprint)}
-
-
-  module:listing
-  {:doc           "Generate `./module/README.md`"
-   :protosens/doc "Lists all exposed and private modules."
-   :requires      ([protosens.maestro.idiom.listing])
-   :task          (protosens.maestro.idiom.listing/main "module/README.md")}
-
-
-  module:readme
-  {:doc           "Generate READMEs for all modules"
-   :protosens/doc "For each module, writes a header composed of the root and relevant information (link to
-                   API, Git dependency info, etc).
-
-                   If `./doc/README.md` exists relative to the root, its content is appended."
-   :requires       ([protosens.maestro.idiom.readme])
-   :task           (protosens.maestro.idiom.readme/main)}
 
 
   stable:tag

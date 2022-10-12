@@ -4,8 +4,9 @@
     -  [`module+`](#protosens.maestro.idiom.changelog/module+) - Templates module changelogs.
     -  [`top`](#protosens.maestro.idiom.changelog/top) - Templates the top changelog.
 -  [`protosens.maestro.idiom.listing`](#protosens.maestro.idiom.listing)  - Geneting a Markdown files listing existing modules.
-    -  [`main`](#protosens.maestro.idiom.listing/main) - Generates a Markdown file under <code>path-list</code> listing exposed and private modules.
-    -  [`module+`](#protosens.maestro.idiom.listing/module+) - Returns modules exposed modules and private ones.
+    -  [`create-list+`](#protosens.maestro.idiom.listing/create-list+) - Creates lists of modules.
+    -  [`default-list+`](#protosens.maestro.idiom.listing/default-list+) - Default predicates for creating lists of modules.
+    -  [`main`](#protosens.maestro.idiom.listing/main) - Prints a Markdown file under <code>path-list</code> listing modules.
     -  [`table`](#protosens.maestro.idiom.listing/table) - Prints a Markdown table for the prepared modules.
 -  [`protosens.maestro.idiom.readme`](#protosens.maestro.idiom.readme)  - Generating READMEs for modules.
     -  [`body`](#protosens.maestro.idiom.readme/body) - Prints a body of text.
@@ -109,35 +110,22 @@ Geneting a Markdown files listing existing modules.
 
 
 
-## <a name="protosens.maestro.idiom.listing/main">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/listing.clj#L113-L153) `main`</a>
+## <a name="protosens.maestro.idiom.listing/create-list+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/listing.clj#L41-L110) `create-list+`</a>
 ``` clojure
 
-(main path-list)
-(main proto-basis path-list)
+(create-list+ path-list)
+(create-list+ proto-basis path-list)
 ```
 
 
-Generates a Markdown file under `path-list` listing exposed and private modules.
+Creates lists of modules.
   
-   This function is opinionated. For a more custom behavior, see [`module+`](#protosens.maestro.idiom.listing/module+) and possibly [`table`](#protosens.maestro.idiom.listing/table).
+   Follows a vector of predicates used for building lists. See [`default-list+`](#protosens.maestro.idiom.listing/default-list+), the default value
+   that can be overwritten under `:maestro.idiom.listing/list+` in `proto-basis`.
 
-   `path-list` is typically the path to the `README.md` file in a directory hosting all those modules.
-
-## <a name="protosens.maestro.idiom.listing/module+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/listing.clj#L17-L72) `module+`</a>
-``` clojure
-
-(module+ path-list)
-(module+ proto-basis path-list)
-```
-
-
-Returns modules exposed modules and private ones.
-  
-   More precisely, adds to the basis `:maestro.idiom.listing/public` pointing to modules having a
-   `:maestro.module.expose/name` and `:maestro.idiom.listing/private` pointing to the rest.
-
+   Modules are added to each list for which they pass the predicate, under `:module+`.
    Reminder: modules are aliases with a `:maestro/root`.
-
+ 
    Alias data is also prepared:
 
    - `:maestro/doc` is truncated to its first line
@@ -145,7 +133,37 @@ Returns modules exposed modules and private ones.
 
    `path-list` illustrates the file where those modules will be listed.
 
-## <a name="protosens.maestro.idiom.listing/table">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/listing.clj#L76-L107) `table`</a>
+## <a name="protosens.maestro.idiom.listing/default-list+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/listing.clj#L18-L37) `default-list+`</a>
+
+Default predicates for creating lists of modules.
+
+   More precisely, a vector where items are maps such as:
+
+   | Key     | Value                                |
+   |---------|--------------------------------------|
+   | `:pred` | `(fn [alias alias-data] include?)`   |
+   | `:txt`  | Text preceding the list when printed |
+  
+   See [`create-list+`](#protosens.maestro.idiom.listing/create-list+).
+
+## <a name="protosens.maestro.idiom.listing/main">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/listing.clj#L150-L186) `main`</a>
+``` clojure
+
+(main path-list)
+(main proto-basis path-list)
+```
+
+
+Prints a Markdown file under `path-list` listing modules.
+
+   Lists are created with [`create-list+`](#protosens.maestro.idiom.listing/create-list+).
+
+   Tables of modules are printed with [`table`](#protosens.maestro.idiom.listing/table) by default. This can be overwritten with an
+   alternative function under `:maestro.idiom.listing/table`.
+
+   `path-list` is typically the path to the `README.md` file in a directory hosting all those modules.
+
+## <a name="protosens.maestro.idiom.listing/table">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/listing.clj#L114-L144) `table`</a>
 ``` clojure
 
 (table prepared-module+)
@@ -155,7 +173,7 @@ Returns modules exposed modules and private ones.
 
 Prints a Markdown table for the prepared modules.
 
-   Either private or public modules from [`module+`](#protosens.maestro.idiom.listing/module+).
+   More precisely, the vector of `[alias alias-data]` prepared for each list in [`create-list+`](#protosens.maestro.idiom.listing/create-list+).
 
    Options may contain:
 
