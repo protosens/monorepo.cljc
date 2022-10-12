@@ -76,6 +76,22 @@
 
 
 
+(T/deftest first-line
+
+  (T/is (= ""
+           ($.string/first-line "")))
+
+  (T/is (= "foo"
+           ($.string/first-line "foo")))
+
+  (T/is (= "foo"
+           ($.string/first-line "foo\n")))
+
+  (T/is (= "foo"
+           ($.string/first-line "foo\nbar"))))
+
+
+
 (T/deftest line+
 
   (T/is (= [""]

@@ -10,6 +10,7 @@ repository.
 ## {{ next-release }}
 
 - Add
+    - `$.string/first-line`
     - `$.string/line+`
 
 

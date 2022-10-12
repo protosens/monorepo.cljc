@@ -6,7 +6,8 @@
   (:require [clojure.string :as string]))
 
 
-(declare trunc-left)
+(declare line+
+         trunc-left)
 
 
 (set! *warn-on-reflection*
@@ -42,6 +43,17 @@
   (.substring s
               i-begin
               i-end))
+
+
+
+(defn first-line
+
+  "Returns the first line found in `s`."
+
+  [s]
+
+  (first (line+ s
+                1)))
 
 
 
