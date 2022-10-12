@@ -76,6 +76,46 @@
 
 
 
+(T/deftest line+
+
+  (T/is (= [""]
+           ($.string/line+ "")))
+
+  (T/is (= ["foo"]
+           ($.string/line+ "foo")))
+
+  (T/is (= ["foo" ""]
+           ($.string/line+ "foo\n")))
+
+  (T/is (= ["foo" "bar"]
+           ($.string/line+ "foo\nbar")))
+
+  (T/is (= ["foo\nbar"]
+           ($.string/line+ "foo\nbar"
+                           0)))
+
+  (T/is (= ["foo" "bar\nbaz\n"]
+           ($.string/line+ "foo\nbar\nbaz\n"
+                           1)))
+
+  (T/is (= ["foo" "bar" "baz\n"]
+           ($.string/line+ "foo\nbar\nbaz\n"
+                           2)))
+
+  (T/is (= ["foo" "bar" "baz" ""]
+           ($.string/line+ "foo\nbar\nbaz\n"
+                           3)))
+
+  (T/is (= ["foo" "bar" "baz" ""]
+           ($.string/line+ "foo\nbar\nbaz\n"
+                           4)))
+
+  (T/is (= ["foo" "bar" "baz" ""]
+           ($.string/line+ "foo\nbar\nbaz\n"
+                           5))))
+
+
+
 (T/deftest n-first
 
   (T/testing

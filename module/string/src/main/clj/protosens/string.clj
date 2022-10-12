@@ -45,6 +45,31 @@
 
 
 
+(defn line+
+
+  "Returns a vector of the `n` first lines in `s`.
+
+   Default value for `n` is 1 million.
+
+   Size of returned vector is at most `(+ n 1)` where the last item is the rest
+   of the string (if any)."
+
+
+  ([s]
+
+   (line+ s
+          nil))
+
+
+  ([s n]
+
+   (string/split s
+                 #"\r?\n"
+                 (inc (or n
+                          1000000)))))
+
+
+
 (defn n-first
 
   "Returns a sub-string of `s` composed of the N first characters."
