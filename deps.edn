@@ -284,7 +284,7 @@
    :maestro/platform+                   [:jvm]
    :maestro/require                     [:ext/criterium]
    :maestro/root                        "module/lab.bench"
-   :maestro.module.expose/name          protosens/bench
+   :maestro.module.expose/name          protosens/lab.bench
    :maestro.module.requirer/namespace   protosens.bench.-requirer
    :maestro.module.requirer/path        "module/lab.bench/src/main/clj"
    :maestro.plugin.quickdoc.path/output "module/lab.bench/doc/API.md"}

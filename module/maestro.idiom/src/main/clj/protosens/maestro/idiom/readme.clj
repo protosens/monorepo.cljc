@@ -17,7 +17,8 @@
             [protosens.maestro              :as $.maestro]
             [protosens.maestro.idiom.stable :as $.maestro.idiom.stable]
             [protosens.git                  :as $.git]
-            [protosens.string               :as $.string]))
+            [protosens.string               :as $.string]
+            [protosens.symbol               :as $.symbol]))
 
 
 ;;;;;;;;;;
@@ -134,6 +135,18 @@
     (println ";;")
     (println (vec (sort platform+)))
     (println "```")))
+
+
+
+(defn warn-lab
+
+  [alias-data]
+  
+  (when (some-> (alias-data :maestro.module.expose/name)
+                (-> (name)
+                    ($.symbol/starts-with? 'lab.)))
+    (println "**Attention, this is an experimental module subject to breaking changes and removal.**")
+    (println)))
     
 
 ;;;
@@ -148,6 +161,7 @@
    Successively calls:
 
    - [[header]]
+   - [[warn-lab]]
    - [[doc]]
    - [[git-dependency]]
    - [[platform+]]
@@ -157,6 +171,7 @@
 
   (header alias-data)
   (println)
+  (warn-lab alias-data)
   (doc alias-data)
   (git-dependency alias-data)
   (platform+ alias-data)
