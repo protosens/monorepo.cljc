@@ -3,6 +3,10 @@
     -  [`main`](#protosens.maestro.idiom.changelog/main) - Templates all changelogs.
     -  [`module+`](#protosens.maestro.idiom.changelog/module+) - Templates module changelogs.
     -  [`top`](#protosens.maestro.idiom.changelog/top) - Templates the top changelog.
+-  [`protosens.maestro.idiom.listing`](#protosens.maestro.idiom.listing) 
+    -  [`main`](#protosens.maestro.idiom.listing/main)
+    -  [`module+`](#protosens.maestro.idiom.listing/module+)
+    -  [`table`](#protosens.maestro.idiom.listing/table)
 -  [`protosens.maestro.idiom.readme`](#protosens.maestro.idiom.readme)  - Generating READMEs for modules.
     -  [`body`](#protosens.maestro.idiom.readme/body) - Prints a body of text.
     -  [`default`](#protosens.maestro.idiom.readme/default) - Default README printer.
@@ -90,6 +94,38 @@ Templates the top changelog.
    Modules should maintain their own changelogs containing details (see [`module+`](#protosens.maestro.idiom.changelog/module+)).
 
    See [`main`](#protosens.maestro.idiom.changelog/main) about options.
+
+-----
+# <a name="protosens.maestro.idiom.listing">protosens.maestro.idiom.listing</a>
+
+
+
+
+
+
+## <a name="protosens.maestro.idiom.listing/main">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/listing.clj#L85-L119) `main`</a>
+``` clojure
+
+(main path-list)
+(main proto-basis path-list)
+```
+
+
+## <a name="protosens.maestro.idiom.listing/module+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/listing.clj#L13-L54) `module+`</a>
+``` clojure
+
+(module+ path-list)
+(module+ proto-basis path-list)
+```
+
+
+## <a name="protosens.maestro.idiom.listing/table">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/listing.clj#L58-L79) `table`</a>
+``` clojure
+
+(table prepared-alias+)
+(table prepared-alias+ option+)
+```
+
 
 -----
 # <a name="protosens.maestro.idiom.readme">protosens.maestro.idiom.readme</a>

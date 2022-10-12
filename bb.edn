@@ -193,12 +193,12 @@
   readme:module
   {:doc           "Generate `./module/README.md`"
    :protosens/doc "Lists all exposed modules."
-   :requires      ([protosens.task.doc])
-   :task          (protosens.task.doc/module)}
+   :requires      ([protosens.maestro.idiom.listing])
+   :task          (protosens.maestro.idiom.listing/main "module/README.md")}
 
 
   readme:module+
-  {:doc      "Generate READMEs for all modules"
+  {:doc           "Generate READMEs for all modules"
    :protosens/doc "For each module, writes a header composed of the root and relevant information (link to
                    API, Git dependency info, etc).
 

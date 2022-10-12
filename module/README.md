@@ -19,3 +19,10 @@ Publicly available as [Git dependencies](https://clojure.org/guides/deps_and_cli
 | [`process`](./process) | Light wrapper over [`babashka/process`](https://github.com/babashka/process) |
 | [`string`](./string) | String manipulation library complementing [`clojure.string`](https://clojuredocs.org/clojure.string) |
 | [`symbol`](./symbol) | Handling symbols |
+
+Private, not meant for public use:
+
+| Module | Description |
+|---|---|
+| [`dev`](./dev) | Dev utilities used in this repository |
+| [`task`](./task) | Merges dependencies and paths for Babashka tasks |
