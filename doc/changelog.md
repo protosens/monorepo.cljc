@@ -10,6 +10,16 @@ provided.
 ---
 
 
+## {{ next-release }}
+
+- Add
+    - [`module/maestro.idiom`]
+- Impacted
+    - [`module/string`]
+
+---
+
+
 ## `2022-10-10`
 
 Inception.
@@ -42,6 +52,7 @@ Inception.
 [`module/edn`]:                      ../module/edn/doc/changelog.md
 [`module/git`]:                      ../module/git/doc/changelog.md
 [`module/maestro`]:                  ../module/maestro/doc/changelog.md
+[`module/maestro.idiom`]:            ../module/maestro.idiom/doc/changelog.md
 [`module/maestro.plugin.build`]:     ../module/maestro.plugin.build/doc/changelog.md
 [`module/maestro.plugin.clj-kondo`]: ../module/maestro.plugin.clj-kondo/doc/changelog.md
 [`module/maestro.plugin.kaocha`]:    ../module/maestro.plugin.kaocha/doc/changelog.md
