@@ -344,6 +344,8 @@
                                          {test :test/maestro.idiom}]
    :maestro/root                        "module/maestro.idiom"
    :maestro.module.expose/name          protosens/maestro.idiom
+   :maestro.module.requirer/namespace   protosens.maestro.idiom.-requirer
+   :maestro.module.requirer/path        "module/maestro.idiom/src/main/clj"
    :maestro.plugin.quickdoc.path/output "module/maestro.idiom/doc/API.md"}
 
 
