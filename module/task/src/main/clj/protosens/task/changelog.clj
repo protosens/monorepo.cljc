@@ -1,4 +1,4 @@
-(ns protosens.task.doc
+(ns protosens.task.changelog
 
   "Generates documentation and READMEs."
 
@@ -6,10 +6,10 @@
             [protosens.maestro.idiom.stable    :as $.maestro.idiom.stable]))
 
 
-;;;;;;;;;; Tasks
+;;;;;;;;;;
 
 
-(defn changelog+
+(defn main
 
   []
 
