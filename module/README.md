@@ -5,6 +5,7 @@ Publicly available as [Git dependencies](https://clojure.org/guides/deps_and_cli
 | Module | Description |
 |---|---|
 | [`bb.help`](./bb.help) | Printing extra documentation for Babashka tasks |
+| [`bench`](./bench) | Higher-level helpers for [Criterium](https://github.com/hugoduncan/criterium) |
 | [`classpath`](./classpath) | Classpath-related utilities |
 | [`deps.edn`](./deps.edn) | Handling `deps.edn` files |
 | [`edn`](./edn) | One-liners for reading EDN |

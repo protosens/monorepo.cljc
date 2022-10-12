@@ -101,7 +101,8 @@
   :bundle/module
 
   {:maestro/doc     "All main modules"
-   :maestro/require [:module/bb.help
+   :maestro/require [:module/bench
+                     :module/bb.help
                      :module/classpath
                      :module/deps.edn
                      :module/edn
@@ -151,6 +152,20 @@
 
 
   ;; MODULES
+
+  :module/bench
+
+  {:extra-paths                         ["module/bench/src/main/clj"]
+   :maestro/doc                         "Higher-level helpers for [Criterium](https://github.com/hugoduncan/criterium)."
+   :maestro/platform+                   [:jvm]
+   :maestro/require                     [:ext/criterium]
+   :maestro/root                        "module/bench"
+   :maestro.module.expose/name          protosens/bench
+   :maestro.module.requirer/namespace   protosens.bench.-requirer
+   :maestro.module.requirer/path        "module/bench/src/main/clj"
+   :maestro.plugin.quickdoc.path/output "module/bench/doc/API.md"}
+
+  ;---
 
   :module/bb.help
 

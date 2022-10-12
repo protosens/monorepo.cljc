@@ -13,6 +13,7 @@ provided.
 ## {{ next-release }}
 
 - Add
+    - [`module/bench`]
     - [`module/maestro.idiom`]
 - Impacted
     - [`module/string`]
@@ -47,6 +48,7 @@ Inception.
 
 
 [`module/bb.help`]:                  ../module/bb.help/doc/changelog.md
+[`module/bench`]:                    ../module/bench/doc/changelog.md
 [`module/classpath`]:                ../module/classpath/doc/changelog.md
 [`module/deps.edn`]:                 ../module/deps.edn/doc/changelog.md
 [`module/edn`]:                      ../module/edn/doc/changelog.md
