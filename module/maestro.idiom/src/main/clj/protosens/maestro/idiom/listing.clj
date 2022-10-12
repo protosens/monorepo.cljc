@@ -1,5 +1,9 @@
 (ns protosens.maestro.idiom.listing
 
+  "Geneting a Markdown files listing existing modules.
+  
+   See [[main]]."
+
   (:require [babashka.fs       :as bb.fs]
             [clojure.java.io   :as java.io]
             [clojure.string    :as string]
@@ -11,6 +15,20 @@
 
 
 (defn module+
+
+  "Returns modules exposed modules and private ones.
+  
+   More precisely, adds to the basis `:maestro.idiom.listing/public` pointing to modules having a
+   `:maestro.module.expose/name` and `:maestro.idiom.listing/private` pointing to the rest.
+
+   Reminder: modules are aliases with a `:maestro/root`.
+
+   Alias data is also prepared:
+
+   - `:maestro/doc` is truncated to its first line
+   - `:maestro/root` is relativized to the parent directory of `path-list`
+
+   `path-list` illustrates the file where those modules will be listed."
 
 
   ([path-list]
@@ -57,14 +75,24 @@
 
 (defn table
 
+  "Prints a Markdown table for the prepared modules.
 
-  ([prepared-alias+]
+   Either private or public modules from [[module+]].
 
-   (table prepared-alias+
+   Options may contain:
+
+   | Key                           | Value                              | Default |
+   |-------------------------------|------------------------------------|---------|
+   | `:maestro.idiom.listing/name` | `(fn [alias-keyword] listed-name)` | `name`  |"
+
+
+  ([prepared-module+]
+
+   (table prepared-module+
           nil))
 
 
-  ([prepared-alias+ option+]
+  ([prepared-module+ option+]
 
    (let [f-name (or (:maestro.idiom.listing/name option+)
                     name)]
@@ -72,7 +100,7 @@
      (println "|---|---|")
      (doseq [[alias
               alias-data] (sort-by first
-                                   prepared-alias+)]
+                                   prepared-module+)]
        (println (format "| [`%s`](./%s) | %s |"
                         (f-name alias)
                         (alias-data :maestro/root)
@@ -83,6 +111,12 @@
 
 
 (defn main
+
+  "Generates a Markdown file under `path-list` listing exposed and private modules.
+  
+   This function is opinionated. For a more custom behavior, see [[module+]] and possibly [[table]].
+
+   `path-list` is typically the path to the `README.md` file in a directory hosting all those modules."
 
 
   ([path-list]
