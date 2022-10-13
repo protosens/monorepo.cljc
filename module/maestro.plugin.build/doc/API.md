@@ -5,7 +5,7 @@
     -  [`clean`](#protosens.maestro.plugin.build/clean) - Deletes the file under <code>:maestro.plugin.build.path/output</code>.
     -  [`copy-src`](#protosens.maestro.plugin.build/copy-src) - Copies source files.
     -  [`jar`](#protosens.maestro.plugin.build/jar) - Implementation for the <code>:jar</code> build type.
-    -  [`task`](#protosens.maestro.plugin.build/task) - Higher-level task for building a module.
+    -  [`main`](#protosens.maestro.plugin.build/main) - Higher-level task for building a module.
     -  [`tmp-dir`](#protosens.maestro.plugin.build/tmp-dir) - Creates a temporary directory and returns its path as a string.
     -  [`uberjar`](#protosens.maestro.plugin.build/uberjar) - Implementation for the <code>:uberjar</code> build type.
 
@@ -21,7 +21,7 @@ Maestro plugin for `tools.build` focused on building jars and uberjars.
 
    However, this approach is somewhat extensible via the [`by-type`](#protosens.maestro.plugin.build/by-type) multimethod.
 
-   Main entry point is [`build`](#protosens.maestro.plugin.build/build) and [`task`](#protosens.maestro.plugin.build/task) is a quick wrapper over it suited for Babashka.
+   Main entry point is [`build`](#protosens.maestro.plugin.build/build) and [[task]] is a quick wrapper over it suited for Babashka.
 
 
 
@@ -104,11 +104,11 @@ Implementation for the `:jar` build type.
    that does not change from build to build like SCM, organization, etc. It will be copied to `./pom.xml` under
    `:maestro/root`.
 
-## <a name="protosens.maestro.plugin.build/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.build/src/main/clj/protosens/maestro/plugin/build.cljc#L336-L374) `task`</a>
+## <a name="protosens.maestro.plugin.build/main">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.build/src/main/clj/protosens/maestro/plugin/build.cljc#L336-L374) `main`</a>
 ``` clojure
 
-(task alias-plugin)
-(task alias-plugin option+)
+(main alias-plugin)
+(main alias-plugin option+)
 ```
 
 

@@ -36,7 +36,7 @@
                     
                         bb aliases :dev :module/maestro"
    :requires      ([protosens.maestro])
-   :task          (protosens.maestro/task)}
+   :task          (protosens.maestro/main)}
 
 
   api
@@ -63,7 +63,7 @@
    :protosens/doc "Based on information located in the alias data in `deps.edn`.
                    See the `$.maestro.plugin.build` namespace."
    :requires      ([protosens.maestro.plugin.build])
-   :task          (protosens.maestro.plugin.build/task :module/maestro.plugin.build)}
+   :task          (protosens.maestro.plugin.build/main :module/maestro.plugin.build)}
 
 
   changelog+

@@ -18,7 +18,7 @@ dependencies](https://clojure.org/guides/deps_and_cli#_using_git_libraries) by
 
 This repository uses [calver](https://calver.org) and follows best effort
 towards avoiding known breaking changes in publicly exposed modules. Excepts
-towards experimental module starting with `lab.` which may be subject to
+regarding experimental module starting with `lab.` which may be subject to
 breaking changes or removal.
 
 All consumed modules must be required with the same `stable/YYYY-0M-0D` tag.
@@ -44,8 +44,17 @@ novel paradigm
 ---
 
 
+## Notes
+
+- [Conventions](./doc/conventions.md)
+- [Fork this repository](./doc/fork_this_repository.md)
+
+
+---
+
+
 ## License
 
 Copyright © 2022 Protosens SRL
 
-Licensed under the Mozilla Public License, Version 2.0 (see LICENSE)
+Licensed under the Mozilla Public License, Version 2.0 (see [LICENSE](./LICENSE))

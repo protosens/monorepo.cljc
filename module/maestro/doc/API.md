@@ -6,10 +6,10 @@
     -  [`ensure-basis`](#protosens.maestro/ensure-basis) - Reads the basis from disk if necessary and merge everything.
     -  [`fail`](#protosens.maestro/fail) - Fails with the given error <code>message</code>.
     -  [`fail-mode`](#protosens.maestro/fail-mode) - How failure is handled.
+    -  [`main`](#protosens.maestro/main) - Task searching and printing all required aliases.
     -  [`not-by-profile+`](#protosens.maestro/not-by-profile+) - Extracts a set of all required aliases NOT selected by the given profiles.
     -  [`search`](#protosens.maestro/search) - Searches for all required aliases.
     -  [`stringify-required`](#protosens.maestro/stringify-required) - Stringifies concatenated aliases from <code>:maestro/require</code>.
-    -  [`task`](#protosens.maestro/task) - Task searching and printing all required aliases.
 -  [`protosens.maestro.aggr`](#protosens.maestro.aggr)  - Altering what is collected when searching for required aliases.
     -  [`alias`](#protosens.maestro.aggr/alias) - In <code>basis</code>, appends <code>alias</code> under <code>:maestro/require</code>.
     -  [`default`](#protosens.maestro.aggr/default) - Default alias aggregating function.
@@ -65,7 +65,7 @@ Extracts a set of all required aliases selected by the given profiles.
 
 Processes CLI arguments in a commonly needed way.
 
-   [`task`](#protosens.maestro/task) is one example of a function that requires CLI arguments to be processed like so.
+   [[task]] is one example of a function that requires CLI arguments to be processed like so.
 
    Aliases and profiles are sorted and prepended to `:maestro/alias+` and `:maestro/profile+` respectively.
    
@@ -160,6 +160,25 @@ How failure is handled.
    Sets behavior to the given `mode`.
    Without argument, returns the current one (default is `:exit`).
 
+## <a name="protosens.maestro/main">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L420-L446) `main`</a>
+``` clojure
+
+(main)
+(main proto-basis)
+```
+
+
+Task searching and printing all required aliases.
+  
+   High level steps:
+  
+   - Handle CLI arguments with [`cli-arg+`](#protosens.maestro/cli-arg+)
+   - Call [`search`](#protosens.maestro/search)
+   - Print required aliases (or pass result to function under `:maestro.task/finalize` if present)
+
+   Commonly used as a Babashka task. The output is especially useful in combination with Clojure CLI by
+   leveraring shell substitution (e.g. `$()`) to insert aliases under `-M` and friends.
+
 ## <a name="protosens.maestro/not-by-profile+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L309-L325) `not-by-profile+`</a>
 ``` clojure
 
@@ -197,7 +216,7 @@ Searches for all required aliases.
    Also see:
 
    - [`protosens.maestro.aggr`](#protosens.maestro.aggr) for expert users needing this function to do more
-   - [`task`](#protosens.maestro/task) for doing a search conveniently as a task (perfect for Babashka)
+   - [[task]] for doing a search conveniently as a task (perfect for Babashka)
 
 ## <a name="protosens.maestro/stringify-required">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L329-L339) `stringify-required`</a>
 ``` clojure
@@ -211,25 +230,6 @@ Stringifies concatenated aliases from `:maestro/require`.
    Just like Clojure CLI likes it.
 
    See [`search`](#protosens.maestro/search).
-
-## <a name="protosens.maestro/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L420-L446) `task`</a>
-``` clojure
-
-(task)
-(task proto-basis)
-```
-
-
-Task searching and printing all required aliases.
-  
-   High level steps:
-  
-   - Handle CLI arguments with [`cli-arg+`](#protosens.maestro/cli-arg+)
-   - Call [`search`](#protosens.maestro/search)
-   - Print required aliases (or pass result to function under `:maestro.task/finalize` if present)
-
-   Commonly used as a Babashka task. The output is especially useful in combination with Clojure CLI by
-   leveraring shell substitution (e.g. `$()`) to insert aliases under `-M` and friends.
 
 -----
 
@@ -540,7 +540,7 @@ Generate a single `deps.edn` file by merging everything required by `alias`.
 
 About running shell commands with computed required aliases.
   
-   [`protosens.maestro/task`](#protosens.maestro/task) prints required aliases and this is often
+   [[protosens.maestro/task]] prints required aliases and this is often
    useful in combination with Clojure CLI, by leveraging shell substitution
    like `$()`.
 
@@ -562,7 +562,7 @@ About running shell commands with computed required aliases.
 Templates a shell command with required aliases and runs it.
 
    Command-line arguments are split in two at `--`. Everything before is fed
-   to [`protosens.maestro/task`](#protosens.maestro/task) to compute required aliases. Everything after
+   to [[protosens.maestro/task]] to compute required aliases. Everything after
    is a command to template (see [`template-command`](#protosens.maestro.process/template-command)).
 
    `proto-basis` may contain a `:maestro.process/command` that will be prepended before

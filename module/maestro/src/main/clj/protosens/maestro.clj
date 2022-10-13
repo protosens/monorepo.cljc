@@ -417,7 +417,7 @@
 
 
 
-(defn task
+(defn main
 
   "Task searching and printing all required aliases.
   
@@ -433,7 +433,7 @@
 
   ([]
 
-   (task nil))
+   (main nil))
 
 
   ([proto-basis]

@@ -333,7 +333,7 @@
 
 
 
-#?(:clj (defn task
+#?(:clj (defn main
 
   "Higher-level task for building a module.
   
@@ -353,7 +353,7 @@
 
   ([alias-plugin]
 
-   (task alias-plugin
+   (main alias-plugin
          nil))
 
 
