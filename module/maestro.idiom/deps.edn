@@ -6,6 +6,15 @@
 {:deps
  {babashka/fs {:mvn/version "0.1.11"},
   babashka/process {:mvn/version "0.2.10"},
+  io.github.borkdude/quickdoc
+  {:git/sha "fc5a18bb419ccac3c8769aa0761384025b27f68c"},
+  io.github.clojure/tools.build
+  {:git/sha "0d20256", :git/tag "v0.8.3"},
+  lambdaisland/kaocha {:mvn/version "1.63.998"},
+  protosens/bb.help
+  {:deps/root "module/bb.help",
+   :git/sha "5d3ec3037483f09336a79e9e38eb4f64e4b30232",
+   :git/url "https://github.com/protosens/monorepo.cljc"},
   protosens/classpath
   {:deps/root "module/classpath",
    :git/sha "5d3ec3037483f09336a79e9e38eb4f64e4b30232",
@@ -26,6 +35,22 @@
   {:deps/root "module/maestro",
    :git/sha "5d3ec3037483f09336a79e9e38eb4f64e4b30232",
    :git/url "https://github.com/protosens/monorepo.cljc"},
+  protosens/maestro.plugin.build
+  {:deps/root "module/maestro.plugin.build",
+   :git/sha "5d3ec3037483f09336a79e9e38eb4f64e4b30232",
+   :git/url "https://github.com/protosens/monorepo.cljc"},
+  protosens/maestro.plugin.clj-kondo
+  {:deps/root "module/maestro.plugin.clj-kondo",
+   :git/sha "5d3ec3037483f09336a79e9e38eb4f64e4b30232",
+   :git/url "https://github.com/protosens/monorepo.cljc"},
+  protosens/maestro.plugin.kaocha
+  {:deps/root "module/maestro.plugin.kaocha",
+   :git/sha "5d3ec3037483f09336a79e9e38eb4f64e4b30232",
+   :git/url "https://github.com/protosens/monorepo.cljc"},
+  protosens/maestro.plugin.quickdoc
+  {:deps/root "module/maestro.plugin.quickdoc",
+   :git/sha "5d3ec3037483f09336a79e9e38eb4f64e4b30232",
+   :git/url "https://github.com/protosens/monorepo.cljc"},
   protosens/namespace
   {:deps/root "module/namespace",
    :git/sha "5d3ec3037483f09336a79e9e38eb4f64e4b30232",
@@ -37,5 +62,10 @@
   protosens/string
   {:deps/root "module/string",
    :git/sha "5d3ec3037483f09336a79e9e38eb4f64e4b30232",
-   :git/url "https://github.com/protosens/monorepo.cljc"}},
+   :git/url "https://github.com/protosens/monorepo.cljc"},
+  protosens/symbol
+  {:deps/root "module/symbol",
+   :git/sha "5d3ec3037483f09336a79e9e38eb4f64e4b30232",
+   :git/url "https://github.com/protosens/monorepo.cljc"},
+  selmer/selmer {:mvn/version "1.12.55"}},
  :paths ["src/main/clj"]}

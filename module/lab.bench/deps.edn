@@ -3,10 +3,5 @@
 ;;
 ;; It is accessible as a Git dependency with `:deps/root` pointing to this directory.
 ;;
-{:deps
- {babashka/process {:mvn/version "0.2.10"},
-  protosens/process
-  {:deps/root "module/process",
-   :git/sha "5d3ec3037483f09336a79e9e38eb4f64e4b30232",
-   :git/url "https://github.com/protosens/monorepo.cljc"}},
+{:deps {criterium/criterium {:mvn/version "0.4.6"}},
  :paths ["src/main/clj"]}

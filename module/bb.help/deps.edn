@@ -6,10 +6,10 @@
 {:deps
  {protosens/edn
   {:deps/root "module/edn",
-   :git/sha "1791adc24538ae4d00dc0441cc495775bf1b905a",
+   :git/sha "5d3ec3037483f09336a79e9e38eb4f64e4b30232",
    :git/url "https://github.com/protosens/monorepo.cljc"},
   protosens/string
   {:deps/root "module/string",
-   :git/sha "1791adc24538ae4d00dc0441cc495775bf1b905a",
+   :git/sha "5d3ec3037483f09336a79e9e38eb4f64e4b30232",
    :git/url "https://github.com/protosens/monorepo.cljc"}},
  :paths ["src/main/clj"]}
