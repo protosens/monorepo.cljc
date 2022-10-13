@@ -7,8 +7,8 @@ Bundle of modules for idiomatic use of [Maestro](../maestro) and well as more op
 ;;
 protosens/maestro.idiom
 {:deps/root "module/maestro.idiom"
- :git/sha   "98f817a"
- :git/tag   "stable/2022-10-10"
+ :git/sha   "2d41c8a"
+ :git/tag   "stable/2022-10-13"
  :git/url   "https://github.com/protosens/monorepo.cljc"}
 ```
 

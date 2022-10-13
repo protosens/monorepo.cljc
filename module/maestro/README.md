@@ -7,8 +7,8 @@ Maestro, calmely orchestrating your Clojure (mono)repo.
 ;;
 protosens/maestro
 {:deps/root "module/maestro"
- :git/sha   "98f817a"
- :git/tag   "stable/2022-10-10"
+ :git/sha   "2d41c8a"
+ :git/tag   "stable/2022-10-13"
  :git/url   "https://github.com/protosens/monorepo.cljc"}
 ```
 

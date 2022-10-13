@@ -7,8 +7,8 @@ Handling `deps.edn` files.
 ;;
 protosens/deps.edn
 {:deps/root "module/deps.edn"
- :git/sha   "98f817a"
- :git/tag   "stable/2022-10-10"
+ :git/sha   "2d41c8a"
+ :git/tag   "stable/2022-10-13"
  :git/url   "https://github.com/protosens/monorepo.cljc"}
 ```
 
