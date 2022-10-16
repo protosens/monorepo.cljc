@@ -16,7 +16,7 @@
     -  [`header`](#protosens.maestro.idiom.readme/header) - Prints the first line of the README.
     -  [`main`](#protosens.maestro.idiom.readme/main) - Generates READMEs for all modules.
     -  [`platform+`](#protosens.maestro.idiom.readme/platform+) - Prints <code>:maestro/platform+</code>.
-    -  [`warn-lab`](#protosens.maestro.idiom.readme/warn-lab)
+    -  [`warn-lab`](#protosens.maestro.idiom.readme/warn-lab) - Prints a warning if this module is experimental.
 -  [`protosens.maestro.idiom.stable`](#protosens.maestro.idiom.stable)  - Tagging stable releases following [calver](https://calver.org).
     -  [`all`](#protosens.maestro.idiom.stable/all) - Returns a list of stable tags in the repository.
     -  [`latest`](#protosens.maestro.idiom.stable/latest) - Returns the latest stable tag.
@@ -215,7 +215,7 @@ Prints a body of text.
    This function prints the file under `./doc/body.md` relative to the `maestro/root`
    of the alias if it exists.
 
-## <a name="protosens.maestro.idiom.readme/default">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L155-L179) `default`</a>
+## <a name="protosens.maestro.idiom.readme/default">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L160-L184) `default`</a>
 ``` clojure
 
 (default alias-data)
@@ -279,7 +279,7 @@ Prints the first line of the README.
    or indiviual alias data can contain `:maestro.idiom.changelog.path/module`
    specifying an alternative path.
 
-## <a name="protosens.maestro.idiom.readme/main">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L183-L235) `main`</a>
+## <a name="protosens.maestro.idiom.readme/main">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L188-L240) `main`</a>
 ``` clojure
 
 (main)
@@ -308,12 +308,17 @@ Prints `:maestro/platform+`.
   
    Informing users which platforms this alias supports.
 
-## <a name="protosens.maestro.idiom.readme/warn-lab">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L141-L149) `warn-lab`</a>
+## <a name="protosens.maestro.idiom.readme/warn-lab">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L141-L154) `warn-lab`</a>
 ``` clojure
 
 (warn-lab alias-data)
 ```
 
+
+Prints a warning if this module is experimental.
+  
+   An experimental module has a `:maestro.module.expose/name` such that its `name` starts
+   wich `lab.`
 
 -----
 # <a name="protosens.maestro.idiom.stable">protosens.maestro.idiom.stable</a>

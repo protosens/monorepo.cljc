@@ -138,7 +138,10 @@
 
   "Runs benchmarks for several functions and compares results.
 
-   Takes a map of `id` -> `function` (scenarios to compare).
+   Takes a map of `id` -> `{:f f}`.
+   Scenarios to compare, identified uniquely, pointing to map containing at least the function
+   to benchmark under `:f`.
+
    See [[run]] about supported Criterium options."
 
 
@@ -158,8 +161,7 @@
                              scenario+
                              (partition 2
                                         (interleave (keys scenario+)
-                                                    (criterium/benchmark-round-robin* (map second
-                                                                                           scenario+)
+                                                    (criterium/benchmark-round-robin* (vals scenario+)
                                                                                       (merge -option+
                                                                                              option+)))))
          id->ratio+  (-ratio+ scenario-2+

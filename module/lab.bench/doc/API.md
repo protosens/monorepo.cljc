@@ -26,7 +26,7 @@ High-level helpers for [Criterium](https://github.com/hugoduncan/criterium).
 
 
 
-## <a name="protosens.bench/report">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/lab.bench/src/main/clj/protosens/bench.clj#L188-L199) `report`</a>
+## <a name="protosens.bench/report">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/lab.bench/src/main/clj/protosens/bench.clj#L190-L201) `report`</a>
 ``` clojure
 
 (report x)
@@ -74,7 +74,7 @@ Benchmarks a single function.
 
    Result can be humanized with [`report`](#protosens.bench/report).
 
-## <a name="protosens.bench/run+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/lab.bench/src/main/clj/protosens/bench.clj#L137-L170) `run+`</a>
+## <a name="protosens.bench/run+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/lab.bench/src/main/clj/protosens/bench.clj#L137-L172) `run+`</a>
 ``` clojure
 
 (run+ scenario+)
@@ -84,10 +84,13 @@ Benchmarks a single function.
 
 Runs benchmarks for several functions and compares results.
 
-   Takes a map of `id` -> `function` (scenarios to compare).
+   Takes a map of `id` -> `{:f f}`.
+   Scenarios to compare, identified uniquely, pointing to map containing at least the function
+   to benchmark under `:f`.
+
    See [`run`](#protosens.bench/run) about supported Criterium options.
 
-## <a name="protosens.bench/type->reporter">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/lab.bench/src/main/clj/protosens/bench.clj#L176-L183) `type->reporter`</a>
+## <a name="protosens.bench/type->reporter">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/lab.bench/src/main/clj/protosens/bench.clj#L178-L185) `type->reporter`</a>
 
 Reporters used for printing results in humanized form by type.
 

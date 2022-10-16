@@ -140,8 +140,13 @@
 
 (defn warn-lab
 
-  [alias-data]
+  "Prints a warning if this module is experimental.
   
+   An experimental module has a `:maestro.module.expose/name` such that its `name` starts
+   wich `lab.`"
+
+  [alias-data]
+
   (when (some-> (alias-data :maestro.module.expose/name)
                 (-> (name)
                     ($.symbol/starts-with? 'lab.)))
