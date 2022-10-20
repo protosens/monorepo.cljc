@@ -239,7 +239,7 @@
    Also see:
 
    - [[protosens.maestro.aggr]] for expert users needing this function to do more
-   - [[task]] for doing a search conveniently as a task (perfect for Babashka)"
+   - [[main]] for doing a search conveniently as a task (perfect for Babashka)"
 
   [proto-basis]
 
@@ -346,7 +346,7 @@
 
   "Processes CLI arguments in a commonly needed way.
 
-   [[task]] is one example of a function that requires CLI arguments to be processed like so.
+   [[main]] is one example of a function that requires CLI arguments to be processed like so.
 
    Aliases and profiles are sorted and prepended to `:maestro/alias+` and `:maestro/profile+` respectively.
    

@@ -2,7 +2,7 @@
 
   "About running shell commands with computed required aliases.
   
-   [[protosens.maestro/task]] prints required aliases and this is often
+   [[protosens.maestro/main]] prints required aliases and this is often
    useful in combination with Clojure CLI, by leveraging shell substitution
    like `$()`.
 
@@ -51,7 +51,7 @@
   "Templates a shell command with required aliases and runs it.
 
    Command-line arguments are split in two at `--`. Everything before is fed
-   to [[protosens.maestro/task]] to compute required aliases. Everything after
+   to [[protosens.maestro/main]] to compute required aliases. Everything after
    is a command to template (see [[template-command]]).
 
    `proto-basis` may contain a `:maestro.process/command` that will be prepended before
@@ -63,7 +63,7 @@
    Eventually, the command is run and this function returns `true` if the process
    exits with a non-zero status."
 
-  ;; Nothing is actually fed to [[protosens.maestro/task]] but it is the right
+  ;; Nothing is actually fed to [[protosens.maestro/main]] but it is the right
   ;; mental model.
 
 

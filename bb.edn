@@ -67,10 +67,8 @@
 
 
   changelog+
-  {:doc           "Template all changelogs with a stable tag"
-   :protosens/doc "Takes that tag as argument.
-   
-                   Changelogs use `{{ next-release }}` as a placeholder for the next
+  {:doc           "Template all changelogs with the last stable tag"
+   :protosens/doc "Changelogs use `{{ next-release }}` as a placeholder for the next
                    stable tag."
    :requires      ([protosens.task.changelog])
    :task          (protosens.task.changelog/main)}
@@ -101,6 +99,7 @@
                    particular module using `:deps/root`."
    :requires      ([protosens.maestro.module.expose])
    :task          (protosens.maestro.module.expose/deploy)}
+
 
   expose:local
   {:doc           "Like `expose` but Git URL will point to the repository directory"
@@ -223,7 +222,7 @@
                    
                    In reality, it will pretty print any string where items are separated by `:`.
                    
-                       bb aliases:dev :module/maestro | bb pprint-cp"
+                       bb aliases :module/maestro | bb pprint-cp"
    :requires      ([protosens.classpath])
    :task          (protosens.classpath/pprint)}
 

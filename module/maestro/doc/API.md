@@ -65,7 +65,7 @@ Extracts a set of all required aliases selected by the given profiles.
 
 Processes CLI arguments in a commonly needed way.
 
-   [[task]] is one example of a function that requires CLI arguments to be processed like so.
+   [`main`](#protosens.maestro/main) is one example of a function that requires CLI arguments to be processed like so.
 
    Aliases and profiles are sorted and prepended to `:maestro/alias+` and `:maestro/profile+` respectively.
    
@@ -216,7 +216,7 @@ Searches for all required aliases.
    Also see:
 
    - [`protosens.maestro.aggr`](#protosens.maestro.aggr) for expert users needing this function to do more
-   - [[task]] for doing a search conveniently as a task (perfect for Babashka)
+   - [`main`](#protosens.maestro/main) for doing a search conveniently as a task (perfect for Babashka)
 
 ## <a name="protosens.maestro/stringify-required">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro/src/main/clj/protosens/maestro.clj#L329-L339) `stringify-required`</a>
 ``` clojure
@@ -540,7 +540,7 @@ Generate a single `deps.edn` file by merging everything required by `alias`.
 
 About running shell commands with computed required aliases.
   
-   [[protosens.maestro/task]] prints required aliases and this is often
+   [`protosens.maestro/main`](#protosens.maestro/main) prints required aliases and this is often
    useful in combination with Clojure CLI, by leveraging shell substitution
    like `$()`.
 
@@ -562,7 +562,7 @@ About running shell commands with computed required aliases.
 Templates a shell command with required aliases and runs it.
 
    Command-line arguments are split in two at `--`. Everything before is fed
-   to [[protosens.maestro/task]] to compute required aliases. Everything after
+   to [`protosens.maestro/main`](#protosens.maestro/main) to compute required aliases. Everything after
    is a command to template (see [`template-command`](#protosens.maestro.process/template-command)).
 
    `proto-basis` may contain a `:maestro.process/command` that will be prepended before
