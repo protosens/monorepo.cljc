@@ -3,11 +3,11 @@
   "Loaded automatically."
 
   (:require [protosens.namespace :as $.namespace]
-            [protosens.symbol    :as $.symbol]))
+            [protosens.symbol    :as $.symbol]
+            [portal.api          :as portal]))
 
 
-
-;;;;;;;;;;
+;;;;;;;;;; Automatically requiring namespaces
 
 
 (defn req
@@ -33,3 +33,16 @@
   "Namespace required automatically."
 
   (req))
+
+
+;;;;;;;;;; Portal
+
+
+(defn p
+
+  "Opens Portal in the browser."
+
+  []
+
+  (add-tap portal/submit)
+  (portal/open {:app false}))

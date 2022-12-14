@@ -70,6 +70,13 @@
    :maestro/url "https://github.com/lambdaisland/kaocha"}
 
 
+  :ext/portal
+
+  {:extra-deps  {djblue/portal {:mvn/version "0.35.0"}}
+   :maestro/doc "Clojure data explorer"
+   :maestro/url "https://github.com/djblue/portal"}
+
+
   :ext/quickdoc
 
   {:extra-deps  {io.github.borkdude/quickdoc {:git/sha "fc5a18bb419ccac3c8769aa0761384025b27f68c"}}
@@ -138,6 +145,7 @@
   {:maestro/doc     "Provides what is commonly necessary during dev"
    :maestro/require [:bundle/test
                      :ext/criterium
+                     :ext/portal
                      :module/dev]}
 
 
