@@ -28,7 +28,7 @@
     (T/is (true? ($.git/repo? option+))
           "Repo now detected")
 
-    (T/is (= "master"
+    (T/is (= "main"
              ($.git/branch option+))
           "Default branch")
 
