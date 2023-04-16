@@ -28,7 +28,7 @@ Reading EDN data.
 
 
 
-## <a name="protosens.edn.read/file">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/edn/src/main/clj/protosens/edn/read.clj#L49-L66) `file`</a>
+## <a name="protosens.edn.read/file">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/edn/src/main/clj/protosens/edn/read.clj#L49-L66) `file`</a>
 ``` clojure
 
 (file path)
@@ -38,7 +38,7 @@ Reading EDN data.
 
 Reads the first object from the file at the given `path`.
 
-## <a name="protosens.edn.read/string">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/edn/src/main/clj/protosens/edn/read.clj#L70-L84) `string`</a>
+## <a name="protosens.edn.read/string">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/edn/src/main/clj/protosens/edn/read.clj#L70-L84) `string`</a>
 ``` clojure
 
 (string s)

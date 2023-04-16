@@ -17,7 +17,7 @@ Specialized functions for handling `deps.edn` files.
 
 
 
-## <a name="protosens.deps.edn/extra-path+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/deps.edn/src/main/clj/protosens/deps/edn.clj#L71-L82) `extra-path+`</a>
+## <a name="protosens.deps.edn/extra-path+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/deps.edn/src/main/clj/protosens/deps/edn.clj#L71-L82) `extra-path+`</a>
 ``` clojure
 
 (extra-path+ deps-edn alias+)
@@ -28,7 +28,7 @@ Returns all `:extra-paths` from the given aliases.
 
    Prepends them prepended with `:deps/root`.
 
-## <a name="protosens.deps.edn/namespace+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/deps.edn/src/main/clj/protosens/deps/edn.clj#L86-L108) `namespace+`</a>
+## <a name="protosens.deps.edn/namespace+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/deps.edn/src/main/clj/protosens/deps/edn.clj#L86-L108) `namespace+`</a>
 ``` clojure
 
 (namespace+ deps-edn)
@@ -45,7 +45,7 @@ Returns namespaces provided by source files in that `deps.edn`.
    | `:alias+`     | See [`path+`](#protosens.deps.edn/path+)          | `nil`                            |
    | `:extension+` | Source file extensions | `[".clj" ".cljc" ".cljs"]` |
 
-## <a name="protosens.deps.edn/path+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/deps.edn/src/main/clj/protosens/deps/edn.clj#L112-L130) `path+`</a>
+## <a name="protosens.deps.edn/path+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/deps.edn/src/main/clj/protosens/deps/edn.clj#L112-L130) `path+`</a>
 ``` clojure
 
 (path+ deps-edn)
@@ -57,7 +57,7 @@ Returns all `:paths` and `:extra-paths` for the given aliases.
 
    Prepends them prepended with `:deps/root`.
 
-## <a name="protosens.deps.edn/read">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/deps.edn/src/main/clj/protosens/deps/edn.clj#L23-L46) `read`</a>
+## <a name="protosens.deps.edn/read">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/deps.edn/src/main/clj/protosens/deps/edn.clj#L23-L46) `read`</a>
 ``` clojure
 
 (read)

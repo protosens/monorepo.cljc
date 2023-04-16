@@ -14,7 +14,7 @@ Maestro plugin for linting Clojure code via [Clj-kondo](https://github.com/clj-k
 
 
 
-## <a name="protosens.maestro.plugin.clj-kondo/lint">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.clj-kondo/src/main/clj/protosens/maestro/plugin/clj_kondo.clj#L34-L71) `lint`</a>
+## <a name="protosens.maestro.plugin.clj-kondo/lint">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.plugin.clj-kondo/src/main/clj/protosens/maestro/plugin/clj_kondo.clj#L34-L71) `lint`</a>
 ``` clojure
 
 (lint)
@@ -32,7 +32,7 @@ Lints the whole repository by extracting `:extra-paths` from aliases.
 
    Returns `true` in case of success.
 
-## <a name="protosens.maestro.plugin.clj-kondo/prepare">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.clj-kondo/src/main/clj/protosens/maestro/plugin/clj_kondo.clj#L15-L30) `prepare`</a>
+## <a name="protosens.maestro.plugin.clj-kondo/prepare">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.plugin.clj-kondo/src/main/clj/protosens/maestro/plugin/clj_kondo.clj#L15-L30) `prepare`</a>
 ``` clojure
 
 (prepare)

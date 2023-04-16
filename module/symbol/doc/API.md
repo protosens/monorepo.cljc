@@ -23,7 +23,7 @@ Collection of helpers for handling symbols.
 
 
 
-## <a name="protosens.symbol/ends-with?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/symbol/src/main/clj/protosens/symbol.clj#L19-L26) `ends-with?`</a>
+## <a name="protosens.symbol/ends-with?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/symbol/src/main/clj/protosens/symbol.clj#L19-L26) `ends-with?`</a>
 ``` clojure
 
 (ends-with? sym x)
@@ -32,7 +32,7 @@ Collection of helpers for handling symbols.
 
 Returns `true` if the given `sym` ends with `x`.
 
-## <a name="protosens.symbol/includes?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/symbol/src/main/clj/protosens/symbol.clj#L30-L37) `includes?`</a>
+## <a name="protosens.symbol/includes?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/symbol/src/main/clj/protosens/symbol.clj#L30-L37) `includes?`</a>
 ``` clojure
 
 (includes? sym x)
@@ -41,7 +41,7 @@ Returns `true` if the given `sym` ends with `x`.
 
 Returns `true` if the given `sym` include `x`.
 
-## <a name="protosens.symbol/join">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/symbol/src/main/clj/protosens/symbol.clj#L41-L60) `join`</a>
+## <a name="protosens.symbol/join">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/symbol/src/main/clj/protosens/symbol.clj#L41-L60) `join`</a>
 ``` clojure
 
 (join segment+)
@@ -53,7 +53,7 @@ Joins the given collection of symbols.
   
    Default separator is `.`.
 
-## <a name="protosens.symbol/qualify">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/symbol/src/main/clj/protosens/symbol.clj#L64-L71) `qualify`</a>
+## <a name="protosens.symbol/qualify">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/symbol/src/main/clj/protosens/symbol.clj#L64-L71) `qualify`</a>
 ``` clojure
 
 (qualify namespace sym)
@@ -62,7 +62,7 @@ Joins the given collection of symbols.
 
 Qualifies or requalifies `sym` in terms of `namespace`.
 
-## <a name="protosens.symbol/replace">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/symbol/src/main/clj/protosens/symbol.clj#L90-L102) `replace`</a>
+## <a name="protosens.symbol/replace">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/symbol/src/main/clj/protosens/symbol.clj#L90-L102) `replace`</a>
 ``` clojure
 
 (replace sym match replacement)
@@ -74,7 +74,7 @@ Replaces `match`es in the given `sym`.
    Like [`clojure.string/replace`](https://clojuredocs.org/clojure.string/replace)
    but inputs can be symbols.
 
-## <a name="protosens.symbol/replace-first">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/symbol/src/main/clj/protosens/symbol.clj#L106-L117) `replace-first`</a>
+## <a name="protosens.symbol/replace-first">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/symbol/src/main/clj/protosens/symbol.clj#L106-L117) `replace-first`</a>
 ``` clojure
 
 (replace-first sym match replacement)
@@ -85,7 +85,7 @@ Replaces the first occurence of `match` in the given `sym`.
 
    Other than that, exactly like [`replace`](#protosens.symbol/replace).
 
-## <a name="protosens.symbol/split">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/symbol/src/main/clj/protosens/symbol.clj#L121-L139) `split`</a>
+## <a name="protosens.symbol/split">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/symbol/src/main/clj/protosens/symbol.clj#L121-L139) `split`</a>
 ``` clojure
 
 (split sym)
@@ -97,7 +97,7 @@ Splits the given `sym`.
   
    Default separator is `.`.
 
-## <a name="protosens.symbol/starts-with?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/symbol/src/main/clj/protosens/symbol.clj#L143-L150) `starts-with?`</a>
+## <a name="protosens.symbol/starts-with?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/symbol/src/main/clj/protosens/symbol.clj#L143-L150) `starts-with?`</a>
 ``` clojure
 
 (starts-with? sym x)
@@ -106,7 +106,7 @@ Splits the given `sym`.
 
 Returns `true` if the given `sym` starts with `x`.
 
-## <a name="protosens.symbol/stringify">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/symbol/src/main/clj/protosens/symbol.clj#L154-L163) `stringify`</a>
+## <a name="protosens.symbol/stringify">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/symbol/src/main/clj/protosens/symbol.clj#L154-L163) `stringify`</a>
 ``` clojure
 
 (stringify x)

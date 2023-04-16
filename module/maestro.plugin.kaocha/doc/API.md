@@ -14,7 +14,7 @@ Maestro plugin for the [Kaocha](https://github.com/lambdaisland/kaocha) test run
 
 
 
-## <a name="protosens.maestro.plugin.kaocha/prepare">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.kaocha/src/main/clj/protosens/maestro/plugin/kaocha.clj#L16-L51) `prepare`</a>
+## <a name="protosens.maestro.plugin.kaocha/prepare">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.plugin.kaocha/src/main/clj/protosens/maestro/plugin/kaocha.clj#L16-L51) `prepare`</a>
 ``` clojure
 
 (prepare basis)

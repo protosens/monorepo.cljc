@@ -24,7 +24,7 @@ Spawning processes from Babahska or Clojure JVM.
 
 
 
-## <a name="protosens.process/await">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/process/src/main/clj/protosens/process.clj#L98-L106) `await`</a>
+## <a name="protosens.process/await">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/process/src/main/clj/protosens/process.clj#L98-L106) `await`</a>
 ``` clojure
 
 (await process)
@@ -35,7 +35,7 @@ Awaits the termination of the given `process`.
   
    Returns the process with an `:exit` code.
 
-## <a name="protosens.process/destroy">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/process/src/main/clj/protosens/process.clj#L110-L116) `destroy`</a>
+## <a name="protosens.process/destroy">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/process/src/main/clj/protosens/process.clj#L110-L116) `destroy`</a>
 ``` clojure
 
 (destroy process)
@@ -44,7 +44,7 @@ Awaits the termination of the given `process`.
 
 Detroys the given `process` and all its descendant.
 
-## <a name="protosens.process/err">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/process/src/main/clj/protosens/process.clj#L120-L127) `err`</a>
+## <a name="protosens.process/err">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/process/src/main/clj/protosens/process.clj#L120-L127) `err`</a>
 ``` clojure
 
 (err process)
@@ -53,7 +53,7 @@ Detroys the given `process` and all its descendant.
 
 Like [`out`](#protosens.process/out) but for STDERR.
 
-## <a name="protosens.process/exit-code">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/process/src/main/clj/protosens/process.clj#L131-L139) `exit-code`</a>
+## <a name="protosens.process/exit-code">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/process/src/main/clj/protosens/process.clj#L131-L139) `exit-code`</a>
 ``` clojure
 
 (exit-code process)
@@ -64,7 +64,7 @@ Returns the exit code of the given `process`.
 
    Blocks until termination if needed.
 
-## <a name="protosens.process/out">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/process/src/main/clj/protosens/process.clj#L143-L152) `out`</a>
+## <a name="protosens.process/out">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/process/src/main/clj/protosens/process.clj#L143-L152) `out`</a>
 ``` clojure
 
 (out process)
@@ -75,7 +75,7 @@ Captures and returns STDOUT as a string.
   
    Trims whitespace at the end (typically, a new line).
 
-## <a name="protosens.process/run">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/process/src/main/clj/protosens/process.clj#L41-L76) `run`</a>
+## <a name="protosens.process/run">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/process/src/main/clj/protosens/process.clj#L41-L76) `run`</a>
 ``` clojure
 
 (run command)
@@ -105,7 +105,7 @@ Runs the given `command` and returns a process.
    **Note:** this uses `babasha.process/process` but there is no guarantee other options will
    be supported in the future.
 
-## <a name="protosens.process/shell">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/process/src/main/clj/protosens/process.clj#L19-L37) `shell`</a>
+## <a name="protosens.process/shell">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/process/src/main/clj/protosens/process.clj#L19-L37) `shell`</a>
 ``` clojure
 
 (shell command)
@@ -115,7 +115,7 @@ Runs the given `command` and returns a process.
 
 Exactly like [`run`](#protosens.process/run) but STDIO is set to `:inherit`.
 
-## <a name="protosens.process/success?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/process/src/main/clj/protosens/process.clj#L156-L164) `success?`</a>
+## <a name="protosens.process/success?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/process/src/main/clj/protosens/process.clj#L156-L164) `success?`</a>
 ``` clojure
 
 (success? process)
