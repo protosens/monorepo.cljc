@@ -17,7 +17,7 @@
  :maestro.plugin.build.path/exclude ["(?i)^META-INF/license/.*"
                                      "^license/.*"]
  :maestro.plugin.kaocha/path        "private/maestro-kaocha.edn"
- :maestro.plugin.quickdoc/option+   {:git/branch  "develop"
+ :maestro.plugin.quickdoc/option+   {:git/branch  "main"
                                      :github/repo "https://github.com/protosens/monorepo.cljc"
                                      :toc         true
                                      :var-links   true
