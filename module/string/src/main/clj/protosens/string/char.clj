@@ -1,6 +1,8 @@
 (ns protosens.string.char
 
-  "Operations related to characters in strings.")
+  "Operations related to characters in strings."
+
+  (:refer-clojure :exclude [last]))
 
 
 ;;;;;;;;;;
@@ -28,8 +30,21 @@
   
    Throws if `i` is out of range."
 
-  [^String string i]
+  [string i]
 
   (at string
       (- (count string)
          (inc i))))
+
+
+
+(defn last
+
+  "Returns the last character of `string`.
+  
+   Throws if `string` is empty."
+
+  [string]
+
+  (at-end string
+          0))

@@ -1,5 +1,6 @@
 (ns protosens.test.string.char
 
+  (:refer-clojure :exclude [last])
   (:require [clojure.test          :as T]
             [protosens.string.char :as $.string.char]))
 
@@ -42,3 +43,15 @@
                  ($.string.char/at-end "foobar"
                                        1000))
         "Out of range"))
+
+
+
+(T/deftest last
+
+  (T/is (= \r
+           ($.string.char/last "bar"))
+        "Non-empty string")
+
+  (T/is (thrown? Exception
+                 ($.string.char/last ""))
+        "Empty string"))

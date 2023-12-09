@@ -13,6 +13,7 @@ repository.
     - `$.string.char` namespace
         - `$.string.char/at`
         - `$.string.char/at-end`
+        - `$.string.char/last`
 
 
 ---
