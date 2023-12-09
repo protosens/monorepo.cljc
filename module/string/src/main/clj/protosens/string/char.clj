@@ -2,7 +2,12 @@
 
   "Operations related to characters in strings."
 
-  (:refer-clojure :exclude [last]))
+  (:refer-clojure :exclude [first
+                            last]))
+
+
+(set! *warn-on-reflection*
+      true)
 
 
 ;;;;;;;;;;
@@ -35,6 +40,19 @@
   (at string
       (- (count string)
          (inc i))))
+
+
+
+(defn first
+
+  "Returns the first character of `string`.
+  
+   Throws if `string` is empty."
+
+  [string]
+
+  (at string
+      0))
 
 
 

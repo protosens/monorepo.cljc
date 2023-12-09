@@ -13,6 +13,7 @@
 -  [`protosens.string.char`](#protosens.string.char)  - Operations related to characters in strings.
     -  [`at`](#protosens.string.char/at) - Returns the character in <code>string</code> at index <code>i</code>.
     -  [`at-end`](#protosens.string.char/at-end) - Like [[at]] but works in the opposite direction, starting from the end of <code>string</code>.
+    -  [`first`](#protosens.string.char/first) - Returns the first character of <code>string</code>.
     -  [`last`](#protosens.string.char/last) - Returns the last character of <code>string</code>.
 
 -----
@@ -146,7 +147,7 @@ Operations related to characters in strings.
 
 
 
-## <a name="protosens.string.char/at">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/string/src/main/clj/protosens/string/char.clj#L11-L20) `at`</a>
+## <a name="protosens.string.char/at">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/string/src/main/clj/protosens/string/char.clj#L16-L25) `at`</a>
 ``` clojure
 
 (at string i)
@@ -157,7 +158,7 @@ Returns the character in `string` at index `i`.
   
    Throws if `i` is out of range.
 
-## <a name="protosens.string.char/at-end">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/string/src/main/clj/protosens/string/char.clj#L24-L37) `at-end`</a>
+## <a name="protosens.string.char/at-end">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/string/src/main/clj/protosens/string/char.clj#L29-L42) `at-end`</a>
 ``` clojure
 
 (at-end string i)
@@ -171,7 +172,18 @@ Like [`at`](#protosens.string.char/at) but works in the opposite direction, star
   
    Throws if `i` is out of range.
 
-## <a name="protosens.string.char/last">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/string/src/main/clj/protosens/string/char.clj#L41-L50) `last`</a>
+## <a name="protosens.string.char/first">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/string/src/main/clj/protosens/string/char.clj#L46-L55) `first`</a>
+``` clojure
+
+(first string)
+```
+
+
+Returns the first character of `string`.
+  
+   Throws if `string` is empty.
+
+## <a name="protosens.string.char/last">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/string/src/main/clj/protosens/string/char.clj#L59-L68) `last`</a>
 ``` clojure
 
 (last string)
