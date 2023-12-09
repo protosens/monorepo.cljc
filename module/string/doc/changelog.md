@@ -7,6 +7,16 @@ repository.
 ---
 
 
+## {{ next-release }}
+
+- Add
+    - `$.string.char` namespace
+        - `$.string.char/at`
+
+
+---
+
+
 ## 2022-10-13
 
 - Add

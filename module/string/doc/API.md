@@ -10,6 +10,8 @@
     -  [`realign`](#protosens.string/realign) - Realign all lines in the given string.
     -  [`trunc-left`](#protosens.string/trunc-left) - Truncates from the left.
     -  [`trunc-right`](#protosens.string/trunc-right) - Truncates from the right.
+-  [`protosens.string.char`](#protosens.string.char)  - Operations related to characters in strings.
+    -  [`at`](#protosens.string.char/at) - Returns the character in <code>string</code> at index <code>i</code>.
 
 -----
 # <a name="protosens.string">protosens.string</a>
@@ -132,3 +134,21 @@ Truncates from the right.
    Returns the given `s`tring without the last `n` characters.
 
 -----
+
+-----
+# <a name="protosens.string.char">protosens.string.char</a>
+
+
+Operations related to characters in strings.
+
+
+
+
+## <a name="protosens.string.char/at">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/string/src/main/clj/protosens/string/char.clj#L11-L18) `at`</a>
+``` clojure
+
+(at string i)
+```
+
+
+Returns the character in `string` at index `i`.

@@ -10,6 +10,15 @@ provided.
 ---
 
 
+## {{ next-release }}
+
+- Impacted
+    - [`module/string`]
+
+
+---
+
+
 ## 2022-10-13
 
 - Add
