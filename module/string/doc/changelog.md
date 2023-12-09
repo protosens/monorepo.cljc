@@ -12,6 +12,7 @@ repository.
 - Add
     - `$.string.char` namespace
         - `$.string.char/at`
+        - `$.string.char/at-end`
 
 
 ---

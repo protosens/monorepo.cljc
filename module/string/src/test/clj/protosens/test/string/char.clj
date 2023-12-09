@@ -12,7 +12,7 @@
   (T/is (= \b
            ($.string.char/at "bar"
                              0))
-        "Existing index")
+        "In range")
 
   (T/is (thrown? Exception
                  ($.string.char/at "bar"
@@ -21,5 +21,24 @@
 
   (T/is (thrown? Exception
                  ($.string.char/at "bar"
-                                   10))
-        "Outside of range"))
+                                   1000))
+        "Out of range"))
+
+
+
+(T/deftest at-end
+
+  (T/is (= \b
+           ($.string.char/at-end "foobar"
+                                 2))
+        "In range")
+
+  (T/is (thrown? Exception
+                 ($.string.char/at-end "foobar"
+                                       -1))
+        "Negative index")
+
+  (T/is (thrown? Exception
+                 ($.string.char/at-end "foobar"
+                                       1000))
+        "Out of range"))

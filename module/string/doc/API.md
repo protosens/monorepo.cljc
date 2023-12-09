@@ -12,6 +12,7 @@
     -  [`trunc-right`](#protosens.string/trunc-right) - Truncates from the right.
 -  [`protosens.string.char`](#protosens.string.char)  - Operations related to characters in strings.
     -  [`at`](#protosens.string.char/at) - Returns the character in <code>string</code> at index <code>i</code>.
+    -  [`at-end`](#protosens.string.char/at-end) - Like [[at]] but works in the opposite direction, starting from the end of <code>string</code>.
 
 -----
 # <a name="protosens.string">protosens.string</a>
@@ -144,7 +145,7 @@ Operations related to characters in strings.
 
 
 
-## <a name="protosens.string.char/at">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/string/src/main/clj/protosens/string/char.clj#L11-L18) `at`</a>
+## <a name="protosens.string.char/at">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/string/src/main/clj/protosens/string/char.clj#L9-L18) `at`</a>
 ``` clojure
 
 (at string i)
@@ -152,3 +153,19 @@ Operations related to characters in strings.
 
 
 Returns the character in `string` at index `i`.
+  
+   Throws if `i` is out of range.
+
+## <a name="protosens.string.char/at-end">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/string/src/main/clj/protosens/string/char.clj#L22-L35) `at-end`</a>
+``` clojure
+
+(at-end string i)
+```
+
+
+Like [`at`](#protosens.string.char/at) but works in the opposite direction, starting from the
+   end of `string`.
+
+   E.g. When `i` is `0`, returns the last character.
+  
+   Throws if `i` is out of range.
