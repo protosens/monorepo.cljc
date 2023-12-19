@@ -19,7 +19,7 @@
   
    Throws if `i` is out of range."
 
-  [^String string i]
+  [^CharSequence string i]
 
   (.charAt string
            i))
@@ -30,7 +30,7 @@
 
   "Returns true is character at `i` in `string` equals given character `c`."
 
-  [^String string i c]
+  [string i c]
 
   (= (at string
          i)
