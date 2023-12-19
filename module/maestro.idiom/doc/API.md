@@ -47,7 +47,7 @@ Templating changelogs.
 
 
 
-## <a name="protosens.maestro.idiom.changelog/main">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/changelog.clj#L118-L143) `main`</a>
+## <a name="protosens.maestro.idiom.changelog/main">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/changelog.clj#L118-L143) `main`</a>
 ``` clojure
 
 (main)
@@ -67,7 +67,7 @@ Templates all changelogs.
    | `:maestro.idiom.changelog.path/module` | Path to module changelog in each `:maestro/root`    | No         | `"doc/changelog.md"` |
    | `:maestro.idiom.changelog.path/top`    | Path to top changelog                               | No         | `"doc/changelog.md"` |
 
-## <a name="protosens.maestro.idiom.changelog/module+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/changelog.clj#L49-L85) `module+`</a>
+## <a name="protosens.maestro.idiom.changelog/module+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/changelog.clj#L49-L85) `module+`</a>
 ``` clojure
 
 (module+)
@@ -82,7 +82,7 @@ Templates module changelogs.
 
    See [`main`](#protosens.maestro.idiom.changelog/main) about options.
 
-## <a name="protosens.maestro.idiom.changelog/top">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/changelog.clj#L89-L112) `top`</a>
+## <a name="protosens.maestro.idiom.changelog/top">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/changelog.clj#L89-L112) `top`</a>
 ``` clojure
 
 (top)
@@ -110,7 +110,7 @@ Geneting a Markdown files listing existing modules.
 
 
 
-## <a name="protosens.maestro.idiom.listing/create-list+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/listing.clj#L41-L110) `create-list+`</a>
+## <a name="protosens.maestro.idiom.listing/create-list+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/listing.clj#L41-L110) `create-list+`</a>
 ``` clojure
 
 (create-list+ path-list)
@@ -133,7 +133,7 @@ Creates lists of modules.
 
    `path-list` illustrates the file where those modules will be listed.
 
-## <a name="protosens.maestro.idiom.listing/default-list+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/listing.clj#L18-L37) `default-list+`</a>
+## <a name="protosens.maestro.idiom.listing/default-list+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/listing.clj#L18-L37) `default-list+`</a>
 
 Default predicates for creating lists of modules.
 
@@ -146,7 +146,7 @@ Default predicates for creating lists of modules.
   
    See [`create-list+`](#protosens.maestro.idiom.listing/create-list+).
 
-## <a name="protosens.maestro.idiom.listing/main">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/listing.clj#L150-L186) `main`</a>
+## <a name="protosens.maestro.idiom.listing/main">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/listing.clj#L150-L186) `main`</a>
 ``` clojure
 
 (main path-list)
@@ -163,7 +163,7 @@ Prints a Markdown file under `path-list` listing modules.
 
    `path-list` is typically the path to the `README.md` file in a directory hosting all those modules.
 
-## <a name="protosens.maestro.idiom.listing/table">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/listing.clj#L114-L144) `table`</a>
+## <a name="protosens.maestro.idiom.listing/table">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/listing.clj#L114-L144) `table`</a>
 ``` clojure
 
 (table prepared-module+)
@@ -200,7 +200,7 @@ Generating READMEs for modules.
 
 
 
-## <a name="protosens.maestro.idiom.readme/body">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L27-L45) `body`</a>
+## <a name="protosens.maestro.idiom.readme/body">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L27-L45) `body`</a>
 ``` clojure
 
 (body alias-data)
@@ -215,7 +215,7 @@ Prints a body of text.
    This function prints the file under `./doc/body.md` relative to the `maestro/root`
    of the alias if it exists.
 
-## <a name="protosens.maestro.idiom.readme/default">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L160-L184) `default`</a>
+## <a name="protosens.maestro.idiom.readme/default">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L160-L184) `default`</a>
 ``` clojure
 
 (default alias-data)
@@ -235,7 +235,7 @@ Default README printer.
    - [`platform+`](#protosens.maestro.idiom.readme/platform+)
    - [`body`](#protosens.maestro.idiom.readme/body)
 
-## <a name="protosens.maestro.idiom.readme/doc">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L49-L57) `doc`</a>
+## <a name="protosens.maestro.idiom.readme/doc">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L49-L57) `doc`</a>
 ``` clojure
 
 (doc alias-data)
@@ -246,7 +246,7 @@ Prints `:maestro/doc`.
   
    After realigning it.
 
-## <a name="protosens.maestro.idiom.readme/git-dependency">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L61-L86) `git-dependency`</a>
+## <a name="protosens.maestro.idiom.readme/git-dependency">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L61-L86) `git-dependency`</a>
 ``` clojure
 
 (git-dependency alias-data)
@@ -263,7 +263,7 @@ Prints how to consume the alias as a Git dependency in `deps.edn.`.
    - `:maestro.module.expose/tag`
    - `:maestro.module.expose/url`
 
-## <a name="protosens.maestro.idiom.readme/header">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L90-L119) `header`</a>
+## <a name="protosens.maestro.idiom.readme/header">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L90-L119) `header`</a>
 ``` clojure
 
 (header alias-data)
@@ -279,7 +279,7 @@ Prints the first line of the README.
    or indiviual alias data can contain `:maestro.idiom.changelog.path/module`
    specifying an alternative path.
 
-## <a name="protosens.maestro.idiom.readme/main">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L188-L240) `main`</a>
+## <a name="protosens.maestro.idiom.readme/main">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L188-L240) `main`</a>
 ``` clojure
 
 (main)
@@ -297,7 +297,7 @@ Generates READMEs for all modules.
    binding `*out*` to the relevant file writer, taking only one argument: the basis merged
    with the alias date of the currently handled alias.
 
-## <a name="protosens.maestro.idiom.readme/platform+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L123-L137) `platform+`</a>
+## <a name="protosens.maestro.idiom.readme/platform+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L123-L137) `platform+`</a>
 ``` clojure
 
 (platform+ alias-data)
@@ -308,7 +308,7 @@ Prints `:maestro/platform+`.
   
    Informing users which platforms this alias supports.
 
-## <a name="protosens.maestro.idiom.readme/warn-lab">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L141-L154) `warn-lab`</a>
+## <a name="protosens.maestro.idiom.readme/warn-lab">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/readme.clj#L141-L154) `warn-lab`</a>
 ``` clojure
 
 (warn-lab alias-data)
@@ -340,7 +340,7 @@ Tagging stable releases following [calver](https://calver.org).
 
 
 
-## <a name="protosens.maestro.idiom.stable/all">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/stable.clj#L38-L53) `all`</a>
+## <a name="protosens.maestro.idiom.stable/all">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/stable.clj#L38-L53) `all`</a>
 ``` clojure
 
 (all)
@@ -350,7 +350,7 @@ Tagging stable releases following [calver](https://calver.org).
 
 Returns a list of stable tags in the repository.
 
-## <a name="protosens.maestro.idiom.stable/latest">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/stable.clj#L57-L74) `latest`</a>
+## <a name="protosens.maestro.idiom.stable/latest">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/stable.clj#L57-L74) `latest`</a>
 ``` clojure
 
 (latest)
@@ -360,7 +360,7 @@ Returns a list of stable tags in the repository.
 
 Returns the latest stable tag
 
-## <a name="protosens.maestro.idiom.stable/tag->date">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/stable.clj#L110-L119) `tag->date`</a>
+## <a name="protosens.maestro.idiom.stable/tag->date">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/stable.clj#L110-L119) `tag->date`</a>
 ``` clojure
 
 (tag->date tag)
@@ -369,7 +369,7 @@ Returns the latest stable tag
 
 Returns the date portion of the given stable tag.
 
-## <a name="protosens.maestro.idiom.stable/tag-add">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/stable.clj#L89-L106) `tag-add`</a>
+## <a name="protosens.maestro.idiom.stable/tag-add">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/stable.clj#L89-L106) `tag-add`</a>
 ``` clojure
 
 (tag-add)
@@ -381,7 +381,7 @@ Tags the last commit as a stable release.
   
    See [`today`](#protosens.maestro.idiom.stable/today).
 
-## <a name="protosens.maestro.idiom.stable/tag?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/stable.clj#L78-L85) `tag?`</a>
+## <a name="protosens.maestro.idiom.stable/tag?">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/stable.clj#L78-L85) `tag?`</a>
 ``` clojure
 
 (tag? tag)
@@ -390,7 +390,7 @@ Tags the last commit as a stable release.
 
 Is the given `tag` a stable tag?
 
-## <a name="protosens.maestro.idiom.stable/today">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/stable.clj#L123-L155) `today`</a>
+## <a name="protosens.maestro.idiom.stable/today">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.idiom/src/main/clj/protosens/maestro/idiom/stable.clj#L123-L155) `today`</a>
 ``` clojure
 
 (today)

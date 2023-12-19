@@ -15,7 +15,7 @@ Simple classpath utilities that happens to be handy once in a while.
 
 
 
-## <a name="protosens.classpath/compute">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/classpath/src/main/clj/protosens/classpath.cljc#L16-L45) `compute`</a>
+## <a name="protosens.classpath/compute">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/classpath/src/main/clj/protosens/classpath.cljc#L16-L45) `compute`</a>
 ``` clojure
 
 (compute)
@@ -36,7 +36,7 @@ Computes the classpath.
   
    Returns `nil` if something goes wrong.
 
-## <a name="protosens.classpath/current">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/classpath/src/main/clj/protosens/classpath.cljc#L49-L56) `current`</a>
+## <a name="protosens.classpath/current">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/classpath/src/main/clj/protosens/classpath.cljc#L49-L56) `current`</a>
 ``` clojure
 
 (current)
@@ -45,7 +45,7 @@ Computes the classpath.
 
 Returns the current classpath.
 
-## <a name="protosens.classpath/pprint">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/classpath/src/main/clj/protosens/classpath.cljc#L60-L78) `pprint`</a>
+## <a name="protosens.classpath/pprint">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/classpath/src/main/clj/protosens/classpath.cljc#L60-L78) `pprint`</a>
 ``` clojure
 
 (pprint classpath)
@@ -59,7 +59,7 @@ Pretty-prints the given classpath.
    Great match for [`compute`](#protosens.classpath/compute). Classpath is [`split`](#protosens.classpath/split) and sorted paths are printed
    line by line.
 
-## <a name="protosens.classpath/separator">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/classpath/src/main/clj/protosens/classpath.cljc#L82-L88) `separator`</a>
+## <a name="protosens.classpath/separator">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/classpath/src/main/clj/protosens/classpath.cljc#L82-L88) `separator`</a>
 ``` clojure
 
 (separator)
@@ -68,7 +68,7 @@ Pretty-prints the given classpath.
 
 Returns the platform-dependent separator used in the classpath.
 
-## <a name="protosens.classpath/split">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/classpath/src/main/clj/protosens/classpath.cljc#L91-L99) `split`</a>
+## <a name="protosens.classpath/split">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/classpath/src/main/clj/protosens/classpath.cljc#L91-L99) `split`</a>
 ``` clojure
 
 (split classpath)

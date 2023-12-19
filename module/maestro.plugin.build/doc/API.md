@@ -26,7 +26,7 @@ Maestro plugin for `tools.build` focused on building jars and uberjars.
 
 
 
-## <a name="protosens.maestro.plugin.build/build">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.build/src/main/clj/protosens/maestro/plugin/build.cljc#L302-L332) `build`</a>
+## <a name="protosens.maestro.plugin.build/build">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.plugin.build/src/main/clj/protosens/maestro/plugin/build.cljc#L302-L332) `build`</a>
 ``` clojure
 
 (build option+)
@@ -44,7 +44,7 @@ Builds the module requested under `:maestro.plugin.build/alias`.
    In other words, options can be used to overwrite some information in the alias data of the target alias,
    like the output path of the artifact.
 
-## <a name="protosens.maestro.plugin.build/by-type">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.build/src/main/clj/protosens/maestro/plugin/build.cljc#L247-L262) `by-type`</a>
+## <a name="protosens.maestro.plugin.build/by-type">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.plugin.build/src/main/clj/protosens/maestro/plugin/build.cljc#L247-L262) `by-type`</a>
 
 Carries out specific build steps depending on the target type.
   
@@ -59,7 +59,7 @@ Carries out specific build steps depending on the target type.
    | `:jar`     | [`jar`](#protosens.maestro.plugin.build/jar)     |
    | `:uberjar` | [`uberjar`](#protosens.maestro.plugin.build/uberjar) |
 
-## <a name="protosens.maestro.plugin.build/clean">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.build/src/main/clj/protosens/maestro/plugin/build.cljc#L32-L42) `clean`</a>
+## <a name="protosens.maestro.plugin.build/clean">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.plugin.build/src/main/clj/protosens/maestro/plugin/build.cljc#L32-L42) `clean`</a>
 ``` clojure
 
 (clean basis)
@@ -68,7 +68,7 @@ Carries out specific build steps depending on the target type.
 
 Deletes the file under `:maestro.plugin.build.path/output`.
 
-## <a name="protosens.maestro.plugin.build/copy-src">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.build/src/main/clj/protosens/maestro/plugin/build.cljc#L47-L62) `copy-src`</a>
+## <a name="protosens.maestro.plugin.build/copy-src">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.plugin.build/src/main/clj/protosens/maestro/plugin/build.cljc#L47-L62) `copy-src`</a>
 ``` clojure
 
 (copy-src basis)
@@ -79,7 +79,7 @@ Copies source files.
 
    From `:maestro.plugin.build.path/src+` to `:maestro.plugin.build.path/class`.
 
-## <a name="protosens.maestro.plugin.build/jar">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.build/src/main/clj/protosens/maestro/plugin/build.cljc#L115-L174) `jar`</a>
+## <a name="protosens.maestro.plugin.build/jar">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.plugin.build/src/main/clj/protosens/maestro/plugin/build.cljc#L115-L174) `jar`</a>
 ``` clojure
 
 (jar basis)
@@ -104,7 +104,7 @@ Implementation for the `:jar` build type.
    that does not change from build to build like SCM, organization, etc. It will be copied to `./pom.xml` under
    `:maestro/root`.
 
-## <a name="protosens.maestro.plugin.build/main">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.build/src/main/clj/protosens/maestro/plugin/build.cljc#L336-L374) `main`</a>
+## <a name="protosens.maestro.plugin.build/main">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.plugin.build/src/main/clj/protosens/maestro/plugin/build.cljc#L336-L374) `main`</a>
 ``` clojure
 
 (main alias-plugin)
@@ -127,7 +127,7 @@ Higher-level task for building a module.
   
    Options will be passed to [`build`](#protosens.maestro.plugin.build/build).
 
-## <a name="protosens.maestro.plugin.build/tmp-dir">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.build/src/main/clj/protosens/maestro/plugin/build.cljc#L67-L83) `tmp-dir`</a>
+## <a name="protosens.maestro.plugin.build/tmp-dir">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.plugin.build/src/main/clj/protosens/maestro/plugin/build.cljc#L67-L83) `tmp-dir`</a>
 ``` clojure
 
 (tmp-dir)
@@ -138,7 +138,7 @@ Higher-level task for building a module.
 Creates a temporary directory and returns its path as a string.
    A prefix for the name may be provided.
 
-## <a name="protosens.maestro.plugin.build/uberjar">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/maestro.plugin.build/src/main/clj/protosens/maestro/plugin/build.cljc#L179-L240) `uberjar`</a>
+## <a name="protosens.maestro.plugin.build/uberjar">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/maestro.plugin.build/src/main/clj/protosens/maestro/plugin/build.cljc#L179-L240) `uberjar`</a>
 ``` clojure
 
 (uberjar basis)

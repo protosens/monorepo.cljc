@@ -26,7 +26,7 @@ High-level helpers for [Criterium](https://github.com/hugoduncan/criterium).
 
 
 
-## <a name="protosens.bench/report">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/lab.bench/src/main/clj/protosens/bench.clj#L190-L201) `report`</a>
+## <a name="protosens.bench/report">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/lab.bench/src/main/clj/protosens/bench.clj#L190-L201) `report`</a>
 ``` clojure
 
 (report x)
@@ -37,7 +37,7 @@ Prints result in humanized form.
 
    Pipe to this function values returned from [`run`](#protosens.bench/run) and [`run+`](#protosens.bench/run+).
 
-## <a name="protosens.bench/run">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/lab.bench/src/main/clj/protosens/bench.clj#L37-L80) `run`</a>
+## <a name="protosens.bench/run">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/lab.bench/src/main/clj/protosens/bench.clj#L37-L80) `run`</a>
 ``` clojure
 
 (run f)
@@ -74,7 +74,7 @@ Benchmarks a single function.
 
    Result can be humanized with [`report`](#protosens.bench/report).
 
-## <a name="protosens.bench/run+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/lab.bench/src/main/clj/protosens/bench.clj#L137-L172) `run+`</a>
+## <a name="protosens.bench/run+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/lab.bench/src/main/clj/protosens/bench.clj#L137-L172) `run+`</a>
 ``` clojure
 
 (run+ scenario+)
@@ -90,7 +90,7 @@ Runs benchmarks for several functions and compares results.
 
    See [`run`](#protosens.bench/run) about supported Criterium options.
 
-## <a name="protosens.bench/type->reporter">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/lab.bench/src/main/clj/protosens/bench.clj#L178-L185) `type->reporter`</a>
+## <a name="protosens.bench/type->reporter">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/lab.bench/src/main/clj/protosens/bench.clj#L178-L185) `type->reporter`</a>
 
 Reporters used for printing results in humanized form by type.
 
@@ -107,7 +107,7 @@ Printers for reporting results in humanized form.
 
 
 
-## <a name="protosens.bench.report/run">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/lab.bench/src/main/clj/protosens/bench/report.clj#L27-L37) `run`</a>
+## <a name="protosens.bench.report/run">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/lab.bench/src/main/clj/protosens/bench/report.clj#L27-L37) `run`</a>
 ``` clojure
 
 (run run)
@@ -118,7 +118,7 @@ Default reporter for single runs.
   
    See [`protosens.bench/run`](#protosens.bench/run).
 
-## <a name="protosens.bench.report/run+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/lab.bench/src/main/clj/protosens/bench/report.clj#L41-L85) `run+`</a>
+## <a name="protosens.bench.report/run+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/lab.bench/src/main/clj/protosens/bench/report.clj#L41-L85) `run+`</a>
 ``` clojure
 
 (run+ run+)

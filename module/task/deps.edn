@@ -32,14 +32,13 @@
 ;; be checkout out in version control.
 ;;
 {:deps
- {babashka/fs {:mvn/version "0.1.11"},
-  selmer/selmer {:mvn/version "1.12.55"},
-  babashka/process {:mvn/version "0.2.10"},
-  io.github.clojure/tools.build
-  {:git/sha "0d20256", :git/tag "v0.8.3"},
-  lambdaisland/kaocha {:mvn/version "1.63.998"},
+ {babashka/fs #:mvn{:version "0.1.11"},
+  selmer/selmer #:mvn{:version "1.12.55"},
+  babashka/process #:mvn{:version "0.2.10"},
+  io.github.clojure/tools.build #:git{:sha "0d20256", :tag "v0.8.3"},
+  lambdaisland/kaocha #:mvn{:version "1.63.998"},
   io.github.borkdude/quickdoc
-  {:git/sha "fc5a18bb419ccac3c8769aa0761384025b27f68c"}},
+  #:git{:sha "fc5a18bb419ccac3c8769aa0761384025b27f68c"}},
  :paths
  ["maestro/uber/module/bb.help/src/main/clj"
   "maestro/uber/module/classpath/src/main/clj"

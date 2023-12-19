@@ -25,7 +25,7 @@ Printing extra information about Babashka tasks.
 
 
 
-## <a name="protosens.bb.help/print">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/bb.help/src/main/clj/protosens/bb/help.clj#L118-L138) `print`</a>
+## <a name="protosens.bb.help/print">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/bb.help/src/main/clj/protosens/bb/help.clj#L118-L138) `print`</a>
 ``` clojure
 
 (print data)
@@ -41,7 +41,7 @@ Pretty-prints data maps returned from other functions.
    Uses [`printer+`](#protosens.bb.help/printer+) by default but any custom one can be provided under `:printer+`
    to be merged with those.
 
-## <a name="protosens.bb.help/printer+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/bb.help/src/main/clj/protosens/bb/help.clj#L142-L154) `printer+`</a>
+## <a name="protosens.bb.help/printer+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/bb.help/src/main/clj/protosens/bb/help.clj#L142-L154) `printer+`</a>
 
 Default printers.
   
@@ -49,7 +49,7 @@ Default printers.
 
    They come from the [`protosens.bb.help.print`](#protosens.bb.help.print) namespace.
 
-## <a name="protosens.bb.help/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/bb.help/src/main/clj/protosens/bb/help.clj#L39-L84) `task`</a>
+## <a name="protosens.bb.help/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/bb.help/src/main/clj/protosens/bb/help.clj#L39-L84) `task`</a>
 ``` clojure
 
 (task)
@@ -71,7 +71,7 @@ Prepares task extra documentation.
   
    Returns a data map that can be pretty-printed with [`print`](#protosens.bb.help/print).
 
-## <a name="protosens.bb.help/undocumented-task+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/bb.help/src/main/clj/protosens/bb/help.clj#L87-L112) `undocumented-task+`</a>
+## <a name="protosens.bb.help/undocumented-task+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/bb.help/src/main/clj/protosens/bb/help.clj#L87-L112) `undocumented-task+`</a>
 ``` clojure
 
 (undocumented-task+)
@@ -102,7 +102,7 @@ Default printers.
 
 
 
-## <a name="protosens.bb.help.print/no-task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/bb.help/src/main/clj/protosens/bb/help/print.clj#L13-L26) `no-task`</a>
+## <a name="protosens.bb.help.print/no-task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/bb.help/src/main/clj/protosens/bb/help/print.clj#L13-L26) `no-task`</a>
 ``` clojure
 
 (no-task data)
@@ -113,7 +113,7 @@ When no task has been provided as input.
   
    Prints available tasks (documented ones).
 
-## <a name="protosens.bb.help.print/no-task+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/bb.help/src/main/clj/protosens/bb/help/print.clj#L30-L36) `no-task+`</a>
+## <a name="protosens.bb.help.print/no-task+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/bb.help/src/main/clj/protosens/bb/help/print.clj#L30-L36) `no-task+`</a>
 ``` clojure
 
 (no-task+ _data)
@@ -122,7 +122,7 @@ When no task has been provided as input.
 
 When the `bb.edn` file does not have any task.
 
-## <a name="protosens.bb.help.print/not-found">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/bb.help/src/main/clj/protosens/bb/help/print.clj#L40-L53) `not-found`</a>
+## <a name="protosens.bb.help.print/not-found">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/bb.help/src/main/clj/protosens/bb/help/print.clj#L40-L53) `not-found`</a>
 ``` clojure
 
 (not-found data)
@@ -133,7 +133,7 @@ When the given task does not exist.
 
    Also prints `:no-task` ([`no-task`](#protosens.bb.help.print/no-task) by default).
 
-## <a name="protosens.bb.help.print/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/bb.help/src/main/clj/protosens/bb/help/print.clj#L57-L71) `task`</a>
+## <a name="protosens.bb.help.print/task">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/bb.help/src/main/clj/protosens/bb/help/print.clj#L57-L71) `task`</a>
 ``` clojure
 
 (task data)
@@ -144,7 +144,7 @@ When the given task has been found.
   
    Prints its docstring and `:protosens/doc` (if any).
 
-## <a name="protosens.bb.help.print/undocumented-task+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/bb.help/src/main/clj/protosens/bb/help/print.clj#L75-L88) `undocumented-task+`</a>
+## <a name="protosens.bb.help.print/undocumented-task+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/bb.help/src/main/clj/protosens/bb/help/print.clj#L75-L88) `undocumented-task+`</a>
 ``` clojure
 
 (undocumented-task+ data)

@@ -17,7 +17,7 @@ Mainly about inding available namespaces.
 
 
 
-## <a name="protosens.namespace/from-filename">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/namespace/src/main/clj/protosens/namespace.clj#L17-L51) `from-filename`</a>
+## <a name="protosens.namespace/from-filename">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/namespace/src/main/clj/protosens/namespace.clj#L17-L51) `from-filename`</a>
 ``` clojure
 
 (from-filename filename)
@@ -35,7 +35,7 @@ Converts a `filename` to a namespace symbol.
    The extension of `filename` is remembered in the `meta`data of the produced
    symbol under `:protosens.namespace/extension`.
 
-## <a name="protosens.namespace/in-cp-dir+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/namespace/src/main/clj/protosens/namespace.clj#L86-L103) `in-cp-dir+`</a>
+## <a name="protosens.namespace/in-cp-dir+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/namespace/src/main/clj/protosens/namespace.clj#L86-L103) `in-cp-dir+`</a>
 ``` clojure
 
 (in-cp-dir+)
@@ -48,7 +48,7 @@ Uses [`in-path+`](#protosens.namespace/in-path+) on directories from the current
    Useful for detecting available namespaces.
    Does not crawl JAR files.
 
-## <a name="protosens.namespace/in-path">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/namespace/src/main/clj/protosens/namespace.clj#L107-L138) `in-path`</a>
+## <a name="protosens.namespace/in-path">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/namespace/src/main/clj/protosens/namespace.clj#L107-L138) `in-path`</a>
 ``` clojure
 
 (in-path path)
@@ -64,7 +64,7 @@ Finds all namespaces available in the given directory `path`.
    |---------------|--------------------------------|----------------------------------|
    | `:extension+` | Extensions for files to handle | `[".clj" ".cljc" ".cljs"]` |
 
-## <a name="protosens.namespace/in-path+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/namespace/src/main/clj/protosens/namespace.clj#L143-L159) `in-path+`</a>
+## <a name="protosens.namespace/in-path+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/namespace/src/main/clj/protosens/namespace.clj#L143-L159) `in-path+`</a>
 ``` clojure
 
 (in-path+ path+)
@@ -74,7 +74,7 @@ Finds all namespaces available in the given directory `path`.
 
 Exactly like [`in-path`](#protosens.namespace/in-path) but works with a collection of directories.
 
-## <a name="protosens.namespace/require-cp-dir+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/namespace/src/main/clj/protosens/namespace.clj#L165-L200) `require-cp-dir+`</a>
+## <a name="protosens.namespace/require-cp-dir+">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/namespace/src/main/clj/protosens/namespace.clj#L165-L200) `require-cp-dir+`</a>
 ``` clojure
 
 (require-cp-dir+ f)
@@ -94,7 +94,7 @@ Requires all namespaces found with [`in-cp-dir+`](#protosens.namespace/in-cp-dir
    Useful to put in the `user` namespace for automatically requiring a set of
    namespaces.
 
-## <a name="protosens.namespace/requirer-ns">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/namespace/src/main/clj/protosens/namespace.clj#L204-L238) `requirer-ns`</a>
+## <a name="protosens.namespace/requirer-ns">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/namespace/src/main/clj/protosens/namespace.clj#L204-L238) `requirer-ns`</a>
 ``` clojure
 
 (requirer-ns ns-sym ns-require+)
@@ -108,7 +108,7 @@ Pretty-prints to `*out*` a CLJC namespace requiring all namespaces provided by `
 
    Aliases to activate may be provided in `option+` under `:alias+`.
 
-## <a name="protosens.namespace/to-filename">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/develop/module/namespace/src/main/clj/protosens/namespace.clj#L55-L80) `to-filename`</a>
+## <a name="protosens.namespace/to-filename">[:page_facing_up:](https://github.com/protosens/monorepo.cljc/blob/main/module/namespace/src/main/clj/protosens/namespace.clj#L55-L80) `to-filename`</a>
 ``` clojure
 
 (to-filename ns-sym extension)
