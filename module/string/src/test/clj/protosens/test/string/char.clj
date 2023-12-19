@@ -28,6 +28,20 @@
 
 
 
+(T/deftest at?
+
+  (T/is ($.string.char/at? "foo bar"
+                           4
+                           \b)
+        "Success")
+
+  (T/is (false? ($.string.char/at? "foo bar"
+                                   3
+                                   \b))
+        "Failure"))
+
+
+
 (T/deftest at-end
 
   (T/is (= \b

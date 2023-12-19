@@ -26,6 +26,18 @@
 
 
 
+(defn at?
+
+  "Returns true is character at `i` in `string` equals given character `c`."
+
+  [^String string i c]
+
+  (= (at string
+         i)
+     c))
+
+
+
 (defn at-end
 
   "Like [[at]] but works in the opposite direction, starting from the
