@@ -17,12 +17,14 @@
 
   "Returns the character in `string` at index `i`.
   
-   Throws if `i` is out of range."
+   Throws if `i` is negative."
 
   [^CharSequence string i]
 
-  (.charAt string
-           i))
+  (when (< i
+           (.length string))
+    (.charAt string
+             i)))
 
 
 
@@ -47,11 +49,14 @@
   
    Throws if `i` is out of range."
 
-  [string i]
+  [^CharSequence string i]
 
-  (at string
-      (- (count string)
-         (inc i))))
+  (let [i-2 (- (count string)
+               (inc i))]
+    (if (neg? i-2)
+      nil
+      (.charAt string
+               i-2))))
 
 
 

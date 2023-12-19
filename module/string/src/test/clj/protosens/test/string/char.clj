@@ -16,15 +16,14 @@
                              0))
         "In range")
 
-  (T/is (thrown? Exception
-                 ($.string.char/at "bar"
-                                   -1))
-        "Negative index fails")
+  (T/is (nil? ($.string.char/at "bar"
+                                1000))
+        "Beyond")
 
   (T/is (thrown? Exception
                  ($.string.char/at "bar"
-                                   1000))
-        "Out of range fails"))
+                                   -1))
+        "Negative index fails"))
 
 
 
@@ -38,26 +37,30 @@
   (T/is (false? ($.string.char/at? "foo bar"
                                    3
                                    \b))
-        "Failure"))
+        "Failure")
+  
+  (T/is (false? ($.string.char/at? "foo bar"
+                                   10000
+                                   \b))
+        "Beyond"))
 
 
 
 (T/deftest at-end
 
   (T/is (= \b
-           ($.string.char/at-end "foobar"
+           ($.string.char/at-end "foo bar"
                                  2))
         "In range")
 
-  (T/is (thrown? Exception
-                 ($.string.char/at-end "foobar"
-                                       -1))
-        "Negative index fails")
+  (T/is (nil? ($.string.char/at-end "foo bar"
+                                    1000))
+        "Beyond")
 
   (T/is (thrown? Exception
-                 ($.string.char/at-end "foobar"
-                                       1000))
-        "Out of range fails"))
+                 ($.string.char/at-end "foo bar"
+                                       -1))
+        "Negative index fails"))
 
 
 
@@ -67,9 +70,8 @@
            ($.string.char/first "bar"))
         "Non-empty string")
 
-  (T/is (thrown? Exception
-                 ($.string.char/first ""))
-        "Empty string fails"))
+  (T/is (nil? ($.string.char/first ""))
+        "Empty"))
 
 
 
@@ -79,6 +81,5 @@
            ($.string.char/last "bar"))
         "Non-empty string")
 
-  (T/is (thrown? Exception
-                 ($.string.char/last ""))
-        "Empty string fails"))
+  (T/is (nil? ($.string.char/last ""))
+        "Empty"))
