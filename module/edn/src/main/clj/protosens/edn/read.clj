@@ -17,8 +17,8 @@
    EDN in similar ways."
 
   (:import (java.io PushbackReader))
-  (:require [clojure.edn     :as edn]
-            [clojure.java.io :as java.io]))
+  (:require [clojure.edn     :as C.edn]
+            [clojure.java.io :as C.java.io]))
 
 
 (set! *warn-on-reflection*
@@ -60,10 +60,10 @@
   ([path option+]
 
    (with-open [reader (-> path
-                          (java.io/reader)
+                          (C.java.io/reader)
                           (PushbackReader.))]
-     (edn/read (-option+ option+)
-               reader))))
+     (C.edn/read (-option+ option+)
+                 reader))))
 
 
 
@@ -80,5 +80,5 @@
 
   ([s option+]
 
-   (edn/read-string (-option+ option+)
-                    s)))
+   (C.edn/read-string (-option+ option+)
+                      s)))

@@ -1,6 +1,11 @@
 (ns protosens.maestro2
 
-  (:require [clojure.string :as C.string]))
+  (:require [clojure.string     :as C.string]
+            [protosens.edn.read :as $.edn.read]))
+
+
+(set! *warn-on-reflection*
+      true)
 
 
 ;;;;;;;;;; Directives
@@ -87,13 +92,13 @@
 ;;;;;;;;;; Main algorithm
 
 
-(declare -run
-         -run-next
-         -run+)
+(declare -walk
+         -walk-next
+         -walk+)
 
 
 
-(defn -run-maybe-alias
+(defn -walk-maybe-alias
 
   [state alias]
 
@@ -106,12 +111,12 @@
                   (zero? (state ::depth)))
           (-> state
               (-transplant-def alias)
-              (-run-next alias)))
+              (-walk-next alias)))
         state)))
 
 
 
-(defn- -run-directive-long
+(defn- -walk-directive-long
 
   [state kw]
 
@@ -124,25 +129,25 @@
           (-> (-transplant-def nspace-kw)
               (directive nspace-str
                          nil)
-              (-run nspace-kw)))
+              (-walk nspace-kw)))
         (-conj-path kw)
         (directive nspace-str
                    (name kw)))))
 
 
 
-(defn -run-qualified
+(defn -walk-qualified
 
   [state kw]
 
-  (or (-run-maybe-alias state
-                        kw)
-      (-run-directive-long state
-                           kw)))
+  (or (-walk-maybe-alias state
+                         kw)
+      (-walk-directive-long state
+                            kw)))
 
 
 
-(defn -run-unqualified
+(defn -walk-unqualified
 
   [state kw]
 
@@ -150,37 +155,37 @@
       (-transplant-def kw)
       (directive (name kw)
                  nil)
-      (-run-next kw)))
+      (-walk-next kw)))
 
 
 ;;;
 
 
-(defn- -run-next
+(defn- -walk-next
 
   [state kw]
 
   (-> state
       (update ::depth
               inc)
-      (-run kw)))
+      (-walk kw)))
 
 
 
-(defn- -run
+(defn- -walk
 
   [state kw]
 
-  (-run+ state
-         (get-in state
-                 [::result
-                  :aliases
-                  kw
-                  :maestro/require])))
+  (-walk+ state
+          (get-in state
+                  [::result
+                   :aliases
+                   kw
+                   :maestro/require])))
 
 
 
-(defn- -run+
+(defn- -walk+
 
   [state kw+]
 
@@ -191,10 +196,10 @@
               (or (some-> (when-not (-processed? state-2
                                                  kw)
                             (if (qualified-keyword? kw)
-                              (-run-qualified state-2
-                                              kw) 
-                              (-run-unqualified state-2
-                                                kw)))
+                              (-walk-qualified state-2
+                                               kw) 
+                              (-walk-unqualified state-2
+                                                 kw)))
                           (assoc ::depth
                                  depth))
                   state-2))
@@ -205,26 +210,14 @@
 ;;;;;;;;;;
 
 
-(defn run
+(defn ^:no-doc -run
 
-  
-  ([]
+  [alias+ dep+]
 
-   (run nil))
-
-
-  ([alias+]
-
-   (run alias+
-        nil))
-
-
-  ([alias+ dep+]
-
-   ;; Need to dedupe input aliases because inputs are systematically visited once
-   ;; the algorithm kicks in, as opposed to deps that are indeed deduped.
-   ;;
-   (let [alias-2+ (first
+  ;; Need to dedupe input aliases because inputs are systematically visited once
+  ;; the algorithm kicks in, as opposed to deps that are indeed deduped.
+  ;;
+  (let [alias-2+ (first
                     (reduce (fn [[alias-2+ visited+ :as state] alias]
                               (if (contains? visited+
                                              alias)
@@ -250,6 +243,36 @@
           ::filter #{}
           ::path   []
           ::result {}}
-         (-run+ alias-2+)
-         ;(::result)
-         ))))
+         (-walk+ alias-2+)
+         )))
+
+
+
+(defn run
+
+  
+  ([]
+
+   (run nil))
+
+
+  ([alias-str]
+
+   (run alias-str
+        nil))
+
+
+  ([alias-str dep+]
+
+   (let [state  (-run alias-str
+                      (or dep+
+                          (try
+                            ($.edn.read/file "deps.maestro.edn")
+                            (catch Exception ex
+                              (throw (ex-info "Unable to read `deps.maestro.edn"
+                                              {}
+                                              ex))))))
+         result (state ::result)]
+     (spit "deps.edn"
+           result)
+     result)))

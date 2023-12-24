@@ -347,7 +347,8 @@
   :module/maestro2
 
   {:extra-paths     ["module/maestro2/src/main/clj"]
-   :maestro/require [{test :test/maestro2}]}
+   :maestro/require [:module/edn
+                     {test :test/maestro2}]}
 
 
   :test/maestro2

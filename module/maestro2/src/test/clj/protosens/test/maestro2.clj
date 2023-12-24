@@ -28,8 +28,8 @@
   [message input alias-def+ path]
 
   (T/is (= path
-           (-> ($.maestro/run input
-                              {:aliases alias-def+})
+           (-> ($.maestro/-run input
+                               {:aliases alias-def+})
                (::$.maestro/path)))
         message))
 
@@ -183,9 +183,9 @@
     "Directive initialization"
 
     (T/is (= 1
-             (-> ($.maestro/run ":test-directive*/foo:m/a"
-                                {:aliases {:m/a {:maestro/require [:test-directive*]}}
-                                 ::i      0})
+             (-> ($.maestro/-run ":test-directive*/foo:m/a"
+                                 {:aliases {:m/a {:maestro/require [:test-directive*]}}
+                                  ::i      0})
                  (get-in [::$.maestro/deps
                           ::i])))))
 
@@ -210,8 +210,8 @@
                         [[:m 0] [:m/a 0] [:m/b 1] [:m/c 1]]]]]
       (T/is (= path
                (-> (deref (future
-                            ($.maestro/run ":m/a"
-                                           {:aliases def-dep+}))
+                            ($.maestro/-run ":m/a"
+                                            {:aliases def-dep+}))
                           100
                           nil)
                    (::$.maestro/path)))
@@ -223,11 +223,11 @@
     "Missing namespaced aliases throw"
 
     (T/is (thrown? Exception
-                   ($.maestro/run ":m/a"
-                                  {}))
+                   ($.maestro/-run ":m/a"
+                                   {}))
           "Empty")
 
     (T/is (thrown? Exception
-                   ($.maestro/run ":m/a"
-                                  {:aliases {:m/a {:maestro/require [:m/b]}}}))
+                   ($.maestro/-run ":m/a"
+                                   {:aliases {:m/a {:maestro/require [:m/b]}}}))
           "Missing dep")))
