@@ -1,6 +1,8 @@
 (ns protosens.maestro2
 
-  (:require [clojure.string     :as C.string]
+  (:require [clojure.java.io    :as C.java.io]
+            [clojure.pprint     :as C.pprint]
+            [clojure.string     :as C.string]
             [protosens.edn.read :as $.edn.read]))
 
 
@@ -60,6 +62,27 @@
           conj
           [kw
            (state ::depth)]))
+
+
+
+(defn- -flatten-alias+
+
+  [state]
+
+  (update state
+          ::result
+          (fn [result]
+            (reduce (fn [result-2 alias-def]
+                      (-> result-2
+                          (update :deps
+                                  merge ;; TODO. Ensure that no dep gets overwritten?
+                                  (:extra-deps alias-def))
+                          (update :paths
+                                  (fnil into
+                                        [])
+                                  (:extra-paths alias-def))))
+                    result
+                    (vals (result :aliases))))))
 
 
 
@@ -242,9 +265,10 @@
           ::depth  0
           ::filter #{}
           ::path   []
-          ::result {}}
+          ::result (dissoc dep+
+                           :aliases)}
          (-walk+ alias-2+)
-         )))
+         (-flatten-alias+))))
 
 
 
@@ -273,6 +297,7 @@
                                               {}
                                               ex))))))
          result (state ::result)]
-     (spit "deps.edn"
-           result)
+     (with-open [file (C.java.io/writer "deps.edn")]
+       (C.pprint/pprint result
+                        file))
      result)))

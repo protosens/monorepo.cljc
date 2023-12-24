@@ -230,4 +230,36 @@
     (T/is (thrown? Exception
                    ($.maestro/-run ":m/a"
                                    {:aliases {:m/a {:maestro/require [:m/b]}}}))
-          "Missing dep")))
+          "Missing dep"))
+
+
+  (T/testing
+
+    "Alias definitions are flattened and everything from root keys is present"
+
+    (let [dep+ {:foo     :bar
+                42       24
+                :aliases {:m/a {:extra-deps      {'dep/a :dep/a}
+                                :extra-paths     ["path/a"]
+                                :maestro/doc     "Module A"
+                                :maestro/require [:m/b]}
+                          ,
+                          :m/b {:extra-deps      {'dep/b :dep/b}
+                                :maestro/doc     "Module B"
+                                :maestro/require [:m/c]}
+                          ,
+                          :m/c {:extra-paths     ["path/c"] 
+                                :maestro/doc     "Module C"}}}]
+      (T/is (= (-> dep+
+                   (assoc :deps  {'dep/a :dep/a
+                                  'dep/b :dep/b}
+                          :paths #{"path/a"
+                                   "path/c"})
+                   (assoc-in [:aliases
+                              :m]
+                             nil))
+               (-> ($.maestro/-run ":m/a"
+                                   dep+)
+                   (::$.maestro/result)
+                   (update :paths
+                           set)))))))
