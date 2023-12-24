@@ -53,7 +53,8 @@
   (update state
           ::path
           conj
-          kw))
+          [kw
+           (state ::depth)]))
 
 
 
@@ -87,7 +88,8 @@
 
 
 (declare -run
-         -run-next)
+         -run-next
+         -run+)
 
 
 
@@ -122,7 +124,7 @@
           (-> (-transplant-def nspace-kw)
               (directive nspace-str
                          nil)
-              (-run-next nspace-kw)))
+              (-run nspace-kw)))
         (-conj-path kw)
         (directive nspace-str
                    (name kw)))))
@@ -161,15 +163,24 @@
   (-> state
       (update ::depth
               inc)
-      (-run (get-in state
-                    [::result
-                     :aliases
-                     kw
-                     :maestro/require]))))
+      (-run kw)))
 
 
 
 (defn- -run
+
+  [state kw]
+
+  (-run+ state
+         (get-in state
+                 [::result
+                  :aliases
+                  kw
+                  :maestro/require])))
+
+
+
+(defn- -run+
 
   [state kw+]
 
@@ -210,6 +221,9 @@
 
   ([alias+ dep+]
 
+   ;; Need to dedupe input aliases because inputs are systematically visited once
+   ;; the algorithm kicks in, as opposed to deps that are indeed deduped.
+   ;;
    (let [alias-2+ (first
                     (reduce (fn [[alias-2+ visited+ :as state] alias]
                               (if (contains? visited+
@@ -236,6 +250,6 @@
           ::filter #{}
           ::path   []
           ::result {}}
-         (-run alias-2+)
+         (-run+ alias-2+)
          ;(::result)
          ))))
