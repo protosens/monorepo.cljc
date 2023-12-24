@@ -344,6 +344,18 @@
 
   ;---
 
+  :module/maestro2
+
+  {:extra-paths     ["module/maestro2/src/main/clj"]
+   :maestro/require [{test :test/maestro2}]}
+
+
+  :test/maestro2
+
+  {:extra-paths ["module/maestro2/src/test/clj"]}
+
+  ;---
+
   :module/maestro.idiom
 
   {:extra-paths                         ["module/maestro.idiom/src/main/clj"]

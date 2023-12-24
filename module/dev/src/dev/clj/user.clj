@@ -7,6 +7,54 @@
             [portal.api          :as portal]))
 
 
+;;;;;;;;;; Portal
+
+
+(def *portal-started?
+
+  (atom false))
+
+
+
+(defn portal-tab
+
+  []
+
+  (portal/open {:app false}))
+
+
+
+(defn portal-start
+
+  "Opens Portal in the browser."
+
+  []
+
+  (let [[open?
+         _]    (reset-vals! *portal-started?
+                            true)]
+    (when-not open?
+      (add-tap portal/submit)
+      (portal-tab))))
+
+
+
+(intern 'clojure.core
+        '_p
+        portal-tab)
+
+
+
+(intern 'clojure.core
+        '_t
+        (fn [& arg+]
+          (portal-start)
+          (tap> (if (= (count arg+)
+                       1)
+                  (first arg+)
+                  (vec arg+)))))
+
+
 ;;;;;;;;;; Automatically requiring namespaces
 
 
@@ -28,21 +76,9 @@
 
 
 
+
 (def required-ns+
 
   "Namespace required automatically."
 
   (req))
-
-
-;;;;;;;;;; Portal
-
-
-(defn p
-
-  "Opens Portal in the browser."
-
-  []
-
-  (add-tap portal/submit)
-  (portal/open {:app false}))
