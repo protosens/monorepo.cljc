@@ -215,6 +215,9 @@
   ;(_t :run kw+ state)
   (let [depth (state ::depth)]
     (reduce (fn [state-2 kw]
+              (when-not (keyword? kw)
+                (throw (IllegalArgumentException. (format "%s should be a keyword!"
+                                                          (pr-str kw)))))
               ;(_t :reduce kw state-2)
               (or (some-> (when-not (-processed? state-2
                                                  kw)
@@ -260,12 +263,19 @@
                                          (first *command-line-args*)
                                          (throw (IllegalArgumentException. "Missing aliases")))
                                      (C.string/split #":")
-                                     (rest)))))]
-     (-> {::deps   dep+
+                                     (rest)))))
+        dep-2+    (or dep+
+                      (try
+                        ($.edn.read/file "deps.maestro.edn")
+                        (catch Exception ex
+                          (throw (ex-info "Unable to read `deps.maestro.edn"
+                                          {}
+                                          ex)))))]
+     (-> {::deps   dep-2+
           ::depth  0
           ::filter #{}
           ::path   []
-          ::result (dissoc dep+
+          ::result (dissoc dep-2+
                            :aliases)}
          (-walk+ alias-2+)
          (-flatten-alias+))))
@@ -289,13 +299,7 @@
   ([alias-str dep+]
 
    (let [state  (-run alias-str
-                      (or dep+
-                          (try
-                            ($.edn.read/file "deps.maestro.edn")
-                            (catch Exception ex
-                              (throw (ex-info "Unable to read `deps.maestro.edn"
-                                              {}
-                                              ex))))))
+                      dep+)
          result (state ::result)]
      (with-open [file (C.java.io/writer "deps.edn")]
        (C.pprint/pprint result

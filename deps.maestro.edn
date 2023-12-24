@@ -1,14 +1,4 @@
-{:maestro/mode+ {:dev           {:maestro/alias+   [:task/dev]
-                                 :maestro/profile+ [dev
-                                                    test]}
-
-                 :test          {:maestro/alias+   [:task/test]
-                                 :maestro/profile+ [^:direct? test]}
-
-                 :test-upstream {:maestro/alias+   [:task/test]
-                                 :maestro/profile+ [test]}}
-
-
+{
 
 
  ;; OPTIONS FOR MAESTRO AND PLUGINS
@@ -16,7 +6,6 @@
  :maestro.module.expose/url         "https://github.com/protosens/monorepo.cljc"
  :maestro.plugin.build.path/exclude ["(?i)^META-INF/license/.*"
                                      "^license/.*"]
- :maestro.plugin.kaocha/path        "private/maestro-kaocha.edn"
  :maestro.plugin.quickdoc/option+   {:git/branch  "develop"
                                      :github/repo "https://github.com/protosens/monorepo.cljc"
                                      :toc         true
@@ -102,59 +91,35 @@
 
 
 
-  ;; BUNDLES
+  ;; MODES
 
 
-  :bundle/module
+  :module
 
-  {:maestro/doc     "All main modules"
-   :maestro/require [:module/bb.help
-                     :module/classpath
-                     :module/deps.edn
-                     :module/edn
-                     :module/git
-                     :module/lab.bench
-                     :module/maestro
-                     :module/maestro.idiom
-                     :module/maestro.plugin.build
-                     :module/maestro.plugin.clj-kondo
-                     :module/maestro.plugin.kaocha
-                     :module/maestro.plugin.quickdoc
-                     :module/namespace
-                     :module/process
-                     :module/string
-                     :module/symbol
-                     :module/task]}
-
-
-  :bundle/test
-
-  {:maestro/doc        "Bundles necessities for testing"
-   :maestro/on-require [protosens.maestro.plugin.kaocha/prepare]
-   :maestro/require    [:ext/kaocha
-                        :module/maestro.plugin.kaocha]}
+  {:maestro/doc ""
+   :maestro/require [:ext]}
 
 
 
-
-  ;; TASKS
-
-
-  :task/dev
+  :dev
 
   {:maestro/doc     "Provides what is commonly necessary during dev"
-   :maestro/require [:bundle/test
+   :maestro/require [:ext
+                     :module
+                     :test
                      :ext/criterium
-                     :ext/portal
                      :module/dev]}
 
 
-  :task/test
+  :test
 
   {:main-opts       ["-m" "kaocha.runner"
                      "--config-file" "kaocha.edn"]
    :maestro/doc     "Starts the test runner"
-   :maestro/require [:bundle/test]}
+   :maestro/require [:ext
+                     :module
+                     :ext/kaocha
+                     :module/maestro.plugin.kaocha]}
 
 
 
@@ -170,7 +135,7 @@
                                          :jvm]              
    :maestro/require                     [:module/edn
                                          :module/string
-                                         {test :test/bb.help}]
+                                         :test/bb.help]
    :maestro/root                        "module/bb.help"
    :maestro.module.expose/name          protosens/bb.help
    :maestro.module.requirer/namespace   protosens.bb.help.-requirer
@@ -180,8 +145,9 @@
 
   :test/bb.help
 
-  {:extra-paths ["module/bb.help/resrc/test"
-                 "module/bb.help/src/test"]}
+  {:extra-paths     ["module/bb.help/resrc/test"
+                     "module/bb.help/src/test"]
+   :maestro/require [:module/bb.help]}
 
   ;---
 
@@ -192,7 +158,7 @@
    :maestro/platform+                   [:bb
                                          :jvm]              
    :maestro/require                     [:module/process
-                                         {test :test/classpath}]
+                                         :test/classpath]
    :maestro/root                        "module/classpath"
    :maestro.module.expose/name          protosens/classpath
    :maestro.module.requirer/namespace   protosens.classpath.-requirer
@@ -203,7 +169,8 @@
   :test/classpath
 
   {:extra-paths     ["module/classpath/src/test/clj"]
-   :maestro/require [:module/string]}
+   :maestro/require [:module/classpath
+                     :module/string]}
 
   ;---
 
@@ -215,7 +182,7 @@
                                          :jvm]
    :maestro/require                     [:module/edn
                                          :module/namespace
-                                         {test :test/deps.edn}]
+                                         :test/deps.edn]
    :maestro/root                        "module/deps.edn"
    :maestro.module.expose/name          protosens/deps.edn
    :maestro.module.requirer/namespace   protosens.deps.edn.-requirer
@@ -225,7 +192,8 @@
 
   :test/deps.edn
 
-  {:extra-paths ["module/deps.edn/src/test/clj"]}
+  {:extra-paths     ["module/deps.edn/src/test/clj"]
+   :maestro/require [:module/deps.edn]}
 
   ;---
 
@@ -235,7 +203,8 @@
    :maestro/doc     "Dev utilities used in this repository.
                      Not meant for public use."
    :maestro/root    "module/dev"
-   :maestro/require [:module/namespace
+   :maestro/require [:ext/portal
+                     :module/namespace
                      :module/symbol]}
 
   ;---
@@ -246,7 +215,7 @@
    :maestro/doc                         "One-liners for reading EDN."
    :maestro/platform+                   [:bb
                                          :jvm]              
-   :maestro/require                     [{test :test/edn}]
+   :maestro/require                     [:test/edn]
    :maestro/root                        "module/edn"
    :maestro.module.expose/name          protosens/edn
    :maestro.module.requirer/namespace   protosens.edn.-requirer
@@ -256,8 +225,9 @@
 
   :test/edn
 
-  {:extra-paths ["module/edn/resrc/test"
-                 "module/edn/src/test/clj"]}
+  {:extra-paths     ["module/edn/resrc/test"
+                     "module/edn/src/test/clj"]
+   :maestro/require [:module/edn]}
 
   ;---
 
@@ -270,7 +240,7 @@
    :maestro/require                     [:ext/babashka.process
                                          :module/process
                                          :module/string
-                                         {test :test/git}]
+                                         :test/git]
    :maestro/root                        "module/git"
    :maestro.module.expose/name          protosens/git
    :maestro.module.requirer/namespace   protosens.git.-requirer
@@ -281,7 +251,8 @@
   :test/git
 
   {:extra-paths     ["module/git/src/test/clj"]
-   :maestro/require [:ext/babashka.fs]}
+   :maestro/require [:ext/babashka.fs
+                     :module/git]}
 
   ;---
 
@@ -312,7 +283,7 @@
                                          :module/namespace
                                          :module/process
                                          :module/string
-                                         {test :test/maestro}]
+                                         :test/maestro]
    :maestro/root                        "module/maestro"
    :maestro.module.expose/name          protosens/maestro
    :maestro.module.requirer/namespace   protosens.maestro.-requirer
@@ -327,12 +298,13 @@
   :test.release/maestro
 
   {:extra-deps      {protosens/maestro {:local/root "module/maestro"}}
-   :maestro/require [{test :test/maestro}]}
+   :maestro/require [:test/maestro]}
 
 
   :test/maestro
 
-  {:extra-paths ["module/maestro/src/test/clj"]}
+  {:extra-paths     ["module/maestro/src/test/clj"]
+   :maestro/require [:module/maestro]}
 
 
   :test.uberjar/maestro
@@ -348,12 +320,13 @@
 
   {:extra-paths     ["module/maestro2/src/main/clj"]
    :maestro/require [:module/edn
-                     {test :test/maestro2}]}
+                     :test/maestro2]}
 
 
   :test/maestro2
 
-  {:extra-paths ["module/maestro2/src/test/clj"]}
+  {:extra-paths     ["module/maestro2/src/test/clj"]
+   :maestro/require [:module/maestro2]}
 
   ;---
 
@@ -369,7 +342,7 @@
                                          :module/classpath
                                          :module/edn
                                          :module/git
-                                         :module/maestro
+                                         :module/maestro2
                                          :module/maestro.plugin.build
                                          :module/maestro.plugin.clj-kondo
                                          :module/maestro.plugin.kaocha
@@ -378,7 +351,7 @@
                                          :module/process
                                          :module/string
                                          :module/symbol
-                                         {test :test/maestro.idiom}]
+                                         :test/maestro.idiom]
    :maestro/root                        "module/maestro.idiom"
    :maestro.module.expose/name          protosens/maestro.idiom
    :maestro.module.requirer/namespace   protosens.maestro.idiom.-requirer
@@ -389,7 +362,8 @@
   :test/maestro.idiom
 
   {:extra-paths     ["module/maestro.idiom/src/test/clj"]
-   :maestro/require [:ext/babashka.fs]}
+   :maestro/require [:ext/babashka.fs
+                     :module/maestro.idiom]}
 
   ;---
 
@@ -432,19 +406,18 @@
 
   :module/maestro.plugin.kaocha
 
-  {:extra-paths                         ["module/maestro.plugin.kaocha/src/main/clj"]
+  {:extra-paths                         ["module/maestro.plugin.kaocha2/src/main/clj"]
    :maestro/doc                         "Maestro plugin for the [Kaocha](https://github.com/lambdaisland/kaocha) test runner."
    :maestro/platform+                   [:bb
                                          :jvm]              
    :maestro/require                     [:ext/babashka.fs
                                          :ext/kaocha
                                          :module/deps.edn
-                                         :module/maestro]
-   :maestro/root                        "module/maestro.plugin.kaocha"
+                                         :module/maestro2]
+   :maestro/root                        "module/maestro.plugin.kaocha2"
    :maestro.module.expose/name          protosens/maestro.plugin.kaocha
-   :maestro.module.requirer/namespace   protosens.maestro.plugin.kaocha.-requirer
-   :maestro.module.requirer/path        "module/maestro.plugin.kaocha/src/main/clj"
-   :maestro.plugin.quickdoc.path/output "module/maestro.plugin.kaocha/doc/API.md"}
+   :maestro.module.requirer/path        "module/maestro.plugin.kaocha2/src/main/clj"
+   :maestro.plugin.quickdoc.path/output "module/maestro.plugin.kaocha2/doc/API.md"}
 
   ;---
 
@@ -459,7 +432,10 @@
                                          :module/deps.edn
                                          :module/edn
                                          :module/maestro
-                                         {dev :ext/quickdoc.jvm}]
+                                         ;;
+                                         ;; TODO.
+                                         ; {dev :ext/quickdoc.jvm}
+                                         ]
    :maestro/root                        "module/maestro.plugin.quickdoc"
    :maestro.module.expose/name          protosens/maestro.plugin.quickdoc
    :maestro.module.requirer/namespace   protosens.maestro.plugin.quickdoc.-requirer
@@ -477,7 +453,7 @@
    :maestro/root                        "module/namespace"
    :maestro/require                     [:ext/babashka.fs
                                          :module/classpath
-                                         {test :test/namespace}]
+                                         :test/namespace]
    :maestro.module.expose/name          protosens/namespace
    :maestro.module.requirer/namespace   protosens.namespace.-requirer
    :maestro.module.requirer/path        "module/namespace/src/main/clj"
@@ -486,7 +462,8 @@
 
   :test/namespace
 
-  {:extra-paths ["module/namespace/src/test/clj"]}
+  {:extra-paths     ["module/namespace/src/test/clj"]
+   :maestro/require [:module/namespace]}
 
   ;---
 
@@ -497,7 +474,7 @@
    :maestro/platform+                   [:bb
                                          :jvm]              
    :maestro/require                     [:ext/babashka.process
-                                         {test :test/process}]
+                                         :test/process]
    :maestro/root                        "module/process"
    :maestro.module.expose/name          protosens/process
    :maestro.module.requirer/namespace   protosens.process.-requirer
@@ -507,7 +484,8 @@
 
   :test/process
 
-  {:extra-paths ["module/process/src/test/clj"]}
+  {:extra-paths     ["module/process/src/test/clj"]
+   :maestro/require [:module/process]}
 
   ;---
 
@@ -517,7 +495,7 @@
    :maestro/doc                         "String manipulation library complementing [`clojure.string`](https://clojuredocs.org/clojure.string)."
    :maestro/platform+                   [:bb
                                          :jvm]              
-   :maestro/require                     [{test :test/string}]
+   :maestro/require                     [:test/string]
    :maestro/root                        "module/string"
    :maestro.module.expose/name          protosens/string
    :maestro.module.requirer/namespace   protosens.string.-requirer
@@ -527,7 +505,8 @@
 
   :test/string
 
-  {:extra-paths ["module/string/src/test/clj"]}
+  {:extra-paths     ["module/string/src/test/clj"]
+   :maestro/require [:module/string]}
 
   ;---
 
@@ -538,7 +517,7 @@
    :maestro/platform+                   [:bb
                                          :jvm]              
    :maestro/root                        "module/symbol"
-   :maestro/require                     [{test :test/symbol}]
+   :maestro/require                     [:test/symbol]
    :maestro.module.expose/name          protosens/symbol
    :maestro.module.requirer/namespace   protosens.symbol.-requirer
    :maestro.module.requirer/path        "module/symbol/src/main/clj"
@@ -547,7 +526,8 @@
 
   :test/symbol
 
-  {:extra-paths ["module/symbol/src/test/clj"]}
+  {:extra-paths     ["module/symbol/src/test/clj"]
+   :maestro/require [:module/symbol]}
 
   ;---
 
@@ -558,5 +538,19 @@
                      Not meant for public use."
    :maestro/require [:module/maestro.idiom]
    :maestro/root    "module/task"}
+
+#_["module/maestro/src/main/clj"
+  "module/maestro2/src/main/clj"
+  "module/edn/src/main/clj"
+  "module/string/src/main/clj"]
+
+
+
+
+  :module/maestro.bb
+
+  {:extra-paths     ["module/maestro.bb/src/main/clj/"]
+   :maestro/require [:module/maestro2]}
+
 
   }}
