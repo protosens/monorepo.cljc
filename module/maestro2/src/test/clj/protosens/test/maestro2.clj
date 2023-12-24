@@ -7,8 +7,8 @@
 ;;;;;;;;;; Preparation
 
 
-(defmethod $.maestro/process-mode
-           :test-directive*
+(defmethod $.maestro/directive
+           "test-directive*"
 
   [state _nspace nm]
 

@@ -3,35 +3,35 @@
   (:require [clojure.string :as C.string]))
 
 
-;;;;;;;;;;
+;;;;;;;;;; Directives
 
 
-(defmulti process-mode
+(defmulti directive
           (fn [_state nspace _nm]
             nspace))
 
 
 
-(defmethod process-mode
+(defmethod directive
            :default
 
   [state nspace nm]
 
   (when nm
-    (throw (Exception. (format "%s/%s is neither an existing alias nor directive"
+    (throw (Exception. (format "%s/%s is neither an existing alias nor a directive"
                                nspace
                                nm))))
   (update state
           ::filter
           conj
-          (name nspace)))
+          nspace))
 
 
 ;;;
 
 
-(defmethod process-mode
-           :shallow*
+(defmethod directive
+           "shallow*"
 
   [state _nspace nm]
 
@@ -43,94 +43,152 @@
             nm)))
 
 
-;;;;;;;;;;
+;;;;;;;;;; Private helpers
+
+
+(defn- -conj-path
+
+  [state kw]
+
+  (update state
+          ::path
+          conj
+          kw))
+
+
+
+(defn- -processed?
+
+  [state kw]
+
+  (contains? (get-in state
+                     [::result
+                      :aliases])
+             kw))
+
+
+
+(defn- -transplant-def
+
+  [state alias]
+
+  (-> state
+      (assoc-in [::result
+                 :aliases
+                 alias]
+                (get-in state
+                        [::deps
+                         :aliases
+                         alias]))
+      (-conj-path alias)))
+
+
+;;;;;;;;;; Main algorithm
+
+
+(declare -run
+         -run-next)
+
+
+
+(defn -run-maybe-alias
+
+  [state alias]
+
+  (when (contains? (get-in state
+                           [::deps
+                            :aliases])
+                   alias)
+    (or (when (or (contains? (state ::filter)
+                             (namespace alias))
+                  (zero? (state ::depth)))
+          (-> state
+              (-transplant-def alias)
+              (-run-next alias)))
+        state)))
+
+
+
+(defn- -run-directive-long
+
+  [state kw]
+
+  (let [nspace-str (namespace kw)
+        nspace-kw  (keyword nspace-str)]
+    (-> state
+        (cond->
+          (not (-processed? state
+                            nspace-kw))
+          (-> (-transplant-def nspace-kw)
+              (directive nspace-str
+                         nil)
+              (-run-next nspace-kw)))
+        (-conj-path kw)
+        (directive nspace-str
+                   (name kw)))))
+
+
+
+(defn -run-qualified
+
+  [state kw]
+
+  (or (-run-maybe-alias state
+                        kw)
+      (-run-directive-long state
+                           kw)))
+
+
+
+(defn -run-unqualified
+
+  [state kw]
+
+  (-> state
+      (-transplant-def kw)
+      (directive (name kw)
+                 nil)
+      (-run-next kw)))
+
+
+;;;
+
+
+(defn- -run-next
+
+  [state kw]
+
+  (-> state
+      (update ::depth
+              inc)
+      (-run (get-in state
+                    [::result
+                     :aliases
+                     kw
+                     :maestro/require]))))
+
 
 
 (defn- -run
 
-  [state alias+]
+  [state kw+]
 
+  ;(_t :run kw+ state)
   (let [depth (state ::depth)]
-    (reduce (fn [state-2 alias]
-              (or (when-not (contains? (get-in state-2
-                                               [::result
-                                                :aliases])
-                                       alias)
-                    (if (qualified-keyword? alias)
-                      (or (when-some [alias-def (get-in state-2
-                                                        [::deps
-                                                         :aliases
-                                                         alias])]
-                            (or (when (or (contains? (state-2 ::filter)
-                                                     (namespace alias))
-                                          (zero? depth))
-                                  (-> state-2
-                                      (assoc-in [::result
-                                                 :aliases
-                                                 alias]
-                                                alias-def)
-                                      (update ::path
-                                              conj
-                                              alias)
-                                      (assoc ::depth
-                                             (inc depth))
-                                      (-run (:maestro/require alias-def))
-                                      (assoc ::depth
-                                             depth)))
-                                state-2))
-                          (-> state-2
-                              (cond->
-                                (not (contains? (get-in state-2
-                                                        [::result
-                                                         :aliases])
-                                                (keyword (namespace alias))))
-                                (-> (assoc-in [::result
-                                               :aliases
-                                               (keyword (namespace alias))]
-                                              (get-in state-2
-                                                      [::deps
-                                                       :aliases
-                                                       (keyword (namespace alias))]))
-                                    (update ::path
-                                            conj
-                                            (keyword (namespace alias)))
-                                    (process-mode (keyword (namespace alias))
-                                                  nil)
-                                    (assoc ::depth
-                                           (inc depth))
-                                    (-run (:maestro/require  (get-in state-2
-                                                                     [::deps
-                                                                      :aliases
-                                                                      (keyword (namespace alias))])))
-                                    (assoc ::depth
-                                           depth)))
-                              (update ::path
-                                      conj
-                                      alias)
-                              (process-mode (keyword (namespace alias))
-                                            (name alias))))
-                      (let [mode-def (get-in state-2
-                                             [::deps
-                                              :aliases
-                                              alias])]
-                        (-> state-2
-                            (assoc-in [::result
-                                       :aliases
-                                       alias]
-                                      mode-def)
-                            (update ::path
-                                    conj
-                                    alias)
-                            (process-mode alias
-                                          nil)
-                            (assoc ::depth
-                                   (inc depth))
-                            (-run (:maestro/require mode-def))
-                            (assoc ::depth
-                                   depth)))))
+    (reduce (fn [state-2 kw]
+              ;(_t :reduce kw state-2)
+              (or (some-> (when-not (-processed? state-2
+                                                 kw)
+                            (if (qualified-keyword? kw)
+                              (-run-qualified state-2
+                                              kw) 
+                              (-run-unqualified state-2
+                                                kw)))
+                          (assoc ::depth
+                                 depth))
                   state-2))
             state
-            alias+)))
+            kw+)))
 
 
 ;;;;;;;;;;
@@ -169,7 +227,8 @@
                              #{}]
                             (map keyword
                                  (-> (or alias+
-                                         *command-line-args*)
+                                         (first *command-line-args*)
+                                         (throw (IllegalArgumentException. "Missing aliases")))
                                      (C.string/split #":")
                                      (rest)))))]
      (-> {::deps   dep+
