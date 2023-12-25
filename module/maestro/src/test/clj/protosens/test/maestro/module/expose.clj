@@ -6,67 +6,147 @@
             [protosens.maestro.module.expose :as $.maestro.module.expose]))
 
 
-;;;;;;;;;;
+;;;;;;;;;; `deps.edn` files for test
 
 
-(comment
+(def -deps-edn-root
 
-(def basis
-     {:aliases
-      (sorted-map :module/a  {:extra-paths                ["a/src"]
-                              :maestro/require            [:dev/a
-                                                           {'release :release/a}]
-                              :maestro/root               "a"
-                              :maestro.module.expose/name 'org/a}
-                  :dev/a     {:extra-paths     ["a/dev"]
-                              :maestro/require [:module/b]}
-                  :release/a {:extra-deps  {'release/a {:mvn/version "0.0.0"}}
-                              :extra-paths ["a/release"]}
-                  :module/b  {:extra-paths                ["b/src"]
-                              :maestro/require            [:ext/c]
-                              :maestro/root               "b"
-                              :maestro.module.expose/name 'org/b}
-                  :ext/c     {:extra-deps {'ext/c {:mvn/version "0.0.0"}}}
-                  :module/d  {:extra-deps  {'d/d {:mvn/version "0.0.0"}}
-                              :extra-paths ["d/src"]})
-      ;;
-      :maestro.module.expose/url
-      "GIT-URL"})
+  {:aliases
+     (sorted-map ;; Sorted for predictability in tests.
+       :m/a    {:extra-paths                ["module/a/src"]
+                :maestro/require            [:ext/a
+                                             :m/b
+                                             :m/c
+                                             :test/a]
+                :maestro/root               "module/a"
+                :maestro.module.expose/name 'acme/a}
+       ,
+       :m/b    {:extra-paths                ["module/b/src"]
+                :maestro/require            [:ext/b
+                                             :m/c
+                                             :test/b]
+                :maestro/root               "module/b"
+                :maestro.module.expose/name 'acme/b}
+       ,
+       :m/c    {:extra-paths                ["module/c/src"]
+                :maestro/require            [:test/c]
+                :maestro/root               "module/c"
+                :maestro.module.expose/name 'acme/c}
+       ,
+       :m      {:maestro/require [:ext]}
+       ,
+       :ext/a  {:extra-deps {'foo/lib-1 {1 2}
+                             'bar/lib-2 {3 4}}}
+       ,
+       :ext/b  {:extra-deps {'baz/lib-3 {5 6}}}
+       ,
+       :test/a {}
+       :test/b {}
+       :test/c {})
+     ,
+   :maestro.module.expose/url
+     "SOME_URL"})
 
+
+;; Based on the root one above.
+
+
+(def -deps-edn-local-a
+
+  {:deps  {'acme/b    {:deps/root "module/b"
+                       :git/sha   "SOME_SHA"
+                       :git/url   "SOME_URL"}
+           'acme/c    {:deps/root "module/c"
+                       :git/sha   "SOME_SHA"
+                       :git/url   "SOME_URL"}
+           'foo/lib-1 {1 2}
+           'bar/lib-2 {3 4}
+           'baz/lib-3 {5 6}}
+   :paths ["src"]})
+
+
+
+(def -deps-edn-local-b
+
+  {:deps  {'acme/c    {:deps/root "module/c"
+                       :git/sha   "SOME_SHA"
+                       :git/url   "SOME_URL"}
+           'baz/lib-3 {5 6}}
+   :paths ["src"]})
+
+
+
+(def -deps-edn-local-c
+
+  {:deps  {}
+   :paths ["src"]})
+
+
+;;;;;;;;;; Tests
 
 
 (T/deftest -expose
 
-  (let [*deps-edn+ (atom {})]
-
-    (T/is (= {:module/a {:maestro/require                        [:ext/c :module/b :dev/a :release/a :module/a]
-                         ::$.maestro.module.expose/deps.edn.path "a/deps.edn"}
-              :module/b {:maestro/require                        [:ext/c :module/b]
-                         ::$.maestro.module.expose/deps.edn.path "b/deps.edn"}}
-             ($.maestro.module.expose/-expose "GIT-SHA"
-                                              (assoc basis
-                                                     :maestro.module.expose/write
-                                                     (fn [path deps-edn]
-                                                       (swap! *deps-edn+
-                                                              assoc
-                                                              path
-                                                              deps-edn)))))
-          "Expected result")
-
-    (T/is (= {"a/deps.edn" {:deps  {'ext/c     {:mvn/version "0.0.0"}
-                                    'org/b     {:deps/root "b"
-                                                :git/sha   "GIT-SHA"
-                                                :git/url   "GIT-URL"}
-                                    'release/a {:mvn/version "0.0.0"}}
-                            :paths ["dev"
-                                    "release"
-                                    "src"]}
-              "b/deps.edn" {:deps  {'ext/c {:mvn/version "0.0.0"}}
-                            :paths ["src"]}}
-             @*deps-edn+)
-          "Expected `deps.edn` files")))
+  (let [*log (atom [])]
+    (T/is (= [["module/a/deps.edn"
+               -deps-edn-local-a]
+              ,
+              ["module/b/deps.edn"
+               -deps-edn-local-b]
+              ,
+              ["module/c/deps.edn"
+               -deps-edn-local-c]]
+             ;
+             (do
+               ($.maestro.module.expose/-expose "SOME_SHA"
+                                                (assoc -deps-edn-root
+                                                       :maestro.module.expose/write
+                                                       (fn [path deps-edn]
+                                                         (swap! *log
+                                                                conj
+                                                                [path
+                                                                 deps-edn]))))
+               @*log)))))
 
 
 
+(T/deftest -prepare-deps-edn
 
-)
+  (T/is (= {::$.maestro.module.expose/file    -deps-edn-local-a
+            ::$.maestro.module.expose/path    "module/a/deps.edn"
+            ::$.maestro.module.expose/require [:m/b :m/c]}
+           ,
+           ($.maestro.module.expose/-prepare-deps-edn -deps-edn-root
+                                                      "SOME_SHA"
+                                                      :m/a))
+        "Success")
+
+  (T/is (thrown? Exception
+                 (-> -deps-edn-root
+                     (update-in [:aliases
+                                 :m/a]
+                                dissoc
+                                :maestro/root)
+                     ($.maestro.module.expose/-prepare-deps-edn "SOME_SHA"
+                                                                :m/a)))
+        "Missing root directory")
+
+  (T/is (thrown? Exception
+                 (-> -deps-edn-root
+                     (assoc-in [:aliases
+                                :m/a
+                                :extra-paths]
+                               ["../foo"])
+                     ($.maestro.module.expose/-prepare-deps-edn "SOME_SHA"
+                                                                :m/a)))
+        "Path outside of module")
+
+   (T/is (thrown? Exception
+                 (-> -deps-edn-root
+                     (update-in [:aliases
+                                 :m/b]
+                                dissoc
+                                :maestro.module.expose/name)
+                     ($.maestro.module.expose/-prepare-deps-edn "SOME_SHA"
+                                                                :m/a)))
+        "Require local modules that is not exposed"))
