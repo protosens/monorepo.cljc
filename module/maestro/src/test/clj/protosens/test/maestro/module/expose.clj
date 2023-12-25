@@ -9,6 +9,8 @@
 ;;;;;;;;;;
 
 
+(comment
+
 (def basis
      {:aliases
       (sorted-map :module/a  {:extra-paths                ["a/src"]
@@ -63,3 +65,8 @@
                             :paths ["src"]}}
              @*deps-edn+)
           "Expected `deps.edn` files")))
+
+
+
+
+)

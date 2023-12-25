@@ -10,26 +10,32 @@
    Modules meant for exposition must have a `:maestro.module.expose/name`. A name is a symbol
    `<organization>/<artifact>` such as `com.acme/some-lib`.
 
-   The [[deploy]] task does the necessary step for exposition.
-   The [[verify]] task may be used as a precaution."
+   The [[deploy]] task does the necessary step for exposition."
 
-  (:require [babashka.fs                       :as bb.fs]
-            [clojure.java.io                   :as java.io]
-            [clojure.pprint                    :as pprint]
-            [clojure.string                    :as string]
-            [protosens.git                     :as $.git]
-            [protosens.maestro                 :as $.maestro]
-            [protosens.maestro.module.requirer :as $.maestro.module.requirer]))
-
-
-(declare exposed?)
+  (:require [babashka.fs        :as bb.fs]
+            [clojure.java.io    :as java.io]
+            [clojure.pprint     :as pprint]
+            [clojure.string     :as string]
+            [protosens.edn.read :as $.edn.read]
+            [protosens.git      :as $.git]
+            [protosens.maestro  :as $.maestro]))
 
 
 (set! *warn-on-reflection*
       true)
 
 
-;;;;;;;;;; Generating `deps.edn` files
+;;;;;;;;;; Private helpers
+
+
+(defn- -read-deps-edn
+
+  []
+
+  ($.edn.read/file "deps.maestro.edn"))
+
+
+;;; Generating `deps.edn` files
 
 
 (defn- -prepare-deps-edn
@@ -38,72 +44,57 @@
   ;;
   ;; Returns data for feedack.
 
-  [basis git-sha alias]
+  [deps-edn git-sha exposed]
 
-  (let [alias->data (basis :aliases)
-        data        (alias->data alias)
-        root-dir    (data :maestro/root)
-        _           (when-not root-dir
-                      ($.maestro/fail (str "Missing root directory for alias: "
-                                           alias)))
-        required    (-> basis
-                        (assoc :maestro/alias+
-                               [alias])
-                        ($.maestro/search)
-                        (:maestro/require))
-        deps-edn    (reduce (fn [deps-edn alias-required]
-                              (let [data-required (alias->data alias-required)
-                                    deps-edn-2    (update deps-edn
-                                                          :deps
-                                                          merge
-                                                          (data-required :extra-deps))]
-                                (if (and (not= alias-required
-                                               alias)
-                                         (exposed? data-required))
-                                  (assoc-in deps-edn-2
-                                            [:deps
-                                             (data-required :maestro.module.expose/name)]
-                                            {:deps/root (data-required :maestro/root)
-                                             :git/sha   git-sha
-                                             :git/url   (basis :maestro.module.expose/url)})
-                                  (update deps-edn-2
-                                          :paths
-                                          into
-                                          (map (fn [path]
-                                                 (when-not (string/starts-with? path
-                                                                                root-dir)
-                                                   ($.maestro/fail (format "Path to add does not belong:
-                                                                           
-                                                                                Exposed alias `%s` has root `%s`
-                                                                                Required alias %s` has path `%s`
-                                                                            
-                                                                            Probably, required alias should be exposed as well.
-                                                                            Does it have a `:maestro.module.expose/name` in its data?"
-                                                                           alias
-                                                                           root-dir
-                                                                           alias-required
-                                                                           path)))
-                                                 (str (bb.fs/relativize root-dir
-                                                                        path))))
-                                          (data-required :extra-paths)))))
-                            {:deps  (sorted-map)
-                             :paths #{}}
-                            required)]
-    {:maestro/require required
-     ::deps.edn       (update deps-edn
-                              :paths
-                              (comp vec
-                                    sort))
-     ::deps.edn.path  (str root-dir
-                           "/deps.edn")}))
+  (let [definition       (get-in deps-edn
+                                 [:aliases
+                                  exposed])
+        root-dir         (or (definition :maestro/root)
+                             ($.maestro/fail (format "Missing root directory for module `%s`.")))
+        path+            (mapv (fn [path]
+                                 (when-not (string/starts-with? path
+                                                                root-dir)
+                                   ($.maestro/fail (format "Module `%s` has an extra path outside of its `:maestro/root`: `%s`"
+                                                           exposed
+                                                           path)))
+                                 (str (bb.fs/relativize root-dir
+                                                        path)))
+                               (definition :extra-paths))
+        deps-edn-exposed (-> ($.maestro/-run (str exposed)
+                                             deps-edn)
+                             (::$.maestro/result))
+        child+           (into []
+                               (keep (fn [[dep-alias dep-definition]]
+                                       (when-not (= dep-alias
+                                                    exposed)
+                                         (when-some [dep-root-dir (:maestro/root dep-definition)]
+                                           (if-some [exposed-name (:maestro.module.expose/name dep-definition)]
+                                             [dep-alias
+                                              exposed-name
+                                              dep-root-dir]
+                                             ($.maestro/fail (format "Module `%s` is required by module `%s` but is not exposed."
+                                                                     exposed
+                                                                     dep-alias)))))))
+                               (deps-edn-exposed :aliases))
+        url              (deps-edn-exposed :maestro.module.expose/url)]
+    {::file    {:deps  (into (deps-edn-exposed :deps)
+                             (map (fn [[_dep-alias exposed-name dep-root-dir]]
+                                    [exposed-name
+                                     {:deps/root dep-root-dir
+                                      :git/sha   git-sha
+                                      :git/url   url}]))
+                             child+)
+                :paths path+}
+     ::path    (str root-dir
+                    "/deps.edn")
+     ::require (map first
+                    child+)}))
 
 
 
-(defn- -write-deps-edn
+(defn- -write-deps-edn-exposed
 
-  ;; Default way of writing a `deps-edn` file by pretty-printing it to the given `path`."
-
-  [path deps-edn]
+  [path deps-edn-exposed]
 
   (let [parent (bb.fs/parent path)]
     (when-not (bb.fs/exists? parent)
@@ -115,8 +106,28 @@
       (println ";;")
       (println ";; It is accessible as a Git dependency with `:deps/root` pointing to this directory.")
       (println ";;")
-      (pprint/pprint deps-edn)))
+      (pprint/pprint deps-edn-exposed)))
   path)
+
+
+;;;;;;;;;; Public helpers
+
+
+(defn exposed?
+
+  "Returns true if an alias (given its data) is meant to be exposed as a Git library."
+
+  
+  ([definition]
+
+   (:maestro.module.expose/name definition))
+
+
+  ([deps-edn alias]
+
+   (exposed? (get-in deps-edn
+                     [:aliases
+                      alias]))))
 
 
 ;;;;;;;;;; Exposition
@@ -126,42 +137,30 @@
 
   ;; Exposition step.
   ;;
-  ;; Repeated twice in [[deploy]] which also pretty-prints feedback data returned by this function.
+  ;; Repeated twice in [[run]] which also pretty-prints feedback data returned by this function.
 
-  [git-sha basis]
+  [git-sha deps-edn]
 
-  (let [basis-2     (-> basis
-                        ($.maestro/ensure-basis)
-                        (update :maestro/profile+
-                                #(conj (vec %)
-                                       'release)))
-        alias->data (basis-2 :aliases)
-        basis-3     (-> basis-2
-                        (assoc :maestro/alias+
-                               (vec (keys alias->data)))
-                        ($.maestro/search))
-        gitlib+     (filterv (fn [alias]
-                               (if-some [data (alias->data alias)]
-                                 (exposed? data)
-                                 ($.maestro/fail (str "No data for alias: "
-                                                      alias))))
-                             (basis-3 :maestro/require))
-        write       (or (basis-2 :maestro.module.expose/write)
-                        -write-deps-edn)]
+  (let [exposed+ (into []
+                       (keep (fn [alias]
+                               (when (exposed? deps-edn
+                                               alias)
+                                 alias)))
+                       (keys (deps-edn :aliases)))]
     (into (sorted-map)
-          (map (fn [alias]
-                 (let [prepared (-prepare-deps-edn basis-2
-                                                   git-sha
-                                                   alias)]
-                   (write (prepared ::deps.edn.path)
-                          (prepared ::deps.edn))
-                   [alias (dissoc prepared
-                                  ::deps.edn)])))
-          (sort gitlib+))))
+          (map (fn [exposed]
+                 (let [deps-edn-exposed (-prepare-deps-edn deps-edn
+                                                           git-sha
+                                                           exposed)]
+                   (-write-deps-edn-exposed (deps-edn-exposed ::path)
+                                            (deps-edn-exposed ::file))
+                   [exposed
+                    deps-edn-exposed])))
+          exposed+)))
 
 
 
-(defn deploy
+(defn run
 
   "Task exposing selected modules for consumption by Clojure CLI as Git dependencies.
 
@@ -188,60 +187,58 @@
 
   ([]
 
-   (deploy nil))
+   (run nil))
 
 
-  ([proto-basis]
+  ([deps-edn]
 
    ;;
    ;; Ensure repository is clean.
    (when-not ($.git/clean?)
      ($.maestro/fail "Repository must be sparkling clean, no modified or untracked files"))
-   (let [basis ($.maestro/ensure-basis proto-basis)]
-     (when-not (basis :maestro.module.expose/url)
+   (let [deps-edn-2 (or deps-edn
+                        (-read-deps-edn))]
+     (when-not (deps-edn-2 :maestro.module.expose/url)
        ($.maestro/fail "Missing Git URL"))
-      ;;
-      ;; Prepare exposition.
-      (let [git-sha ($.git/commit-sha 0)]
-        (println "Prepare module exposition")
-        (-expose git-sha
-                 basis)
-        ($.git/add ["."])
-        ($.git/commit (format "Prepare module exposition
-                       
-                               Base: %s"
-                               git-sha)))
-      ;;
-      ;; Expose and print feedback for all modules.
-      (let [git-sha-2 ($.git/commit-sha 0)]
-        (println "Expose modules")
-        (println)
-        (doseq [[alias
-                 feedback] (-expose git-sha-2
-                                    basis)]
-          (println (format "    %s -> %s"
-                           alias
-                           (feedback ::deps.edn.path)))
-          (doseq [alias-child (sort (filter (fn [alias-child]
-                                              (not= alias-child
-                                                    alias))
-                                            (feedback :maestro/require)))]
-            (println "       "
-                     alias-child))
-          (println))
-        ($.git/add ["."])
-        ($.git/commit (format "Expose modules
-                            
-                               Pre-exposed: %s"
-                              git-sha-2)))
-      ;;
-      ;; Done!
-      (println "Users can point to commit:"
-               ($.git/commit-sha 0)))))
+     ;;
+     ;; Prepare exposition.
+     (let [git-sha ($.git/commit-sha 0)]
+       (println "Prepare module exposition")
+       (-expose git-sha
+                deps-edn-2)
+       ($.git/add ["."])
+       ($.git/commit (format "Prepare module exposition
+                      
+                              Base: %s"
+                              git-sha)))
+     ;;
+     ;; Expose and print feedback for all modules.
+     (let [git-sha-2 ($.git/commit-sha 0)]
+       (println "Expose modules")
+       (println)
+       (doseq [[alias
+                feedback] (-expose git-sha-2
+                                   deps-edn-2)]
+         (println (format "    %s -> %s"
+                          alias
+                          (feedback ::path)))
+         (doseq [alias-child (sort (feedback ::require))]
+           (println "       "
+                    alias-child))
+         (println))
+       ($.git/add ["."])
+       ($.git/commit (format "Expose modules
+                           
+                              Pre-exposed: %s"
+                             git-sha-2)))
+        ;;
+        ;; Done!
+        (println "Users can point to commit:"
+                 ($.git/commit-sha 0)))))
 
 
 
-(defn deploy-local
+(defn run-local
 
   "Local exposition for testing purporses.
 
@@ -254,97 +251,12 @@
 
   ([]
 
-   (deploy-local nil))
+   (run-local nil))
 
 
-  ([basis]
+  ([deps-edn]
 
-   (deploy (assoc basis
-                  :maestro.module.expose/url
-                  (System/getProperty "user.dir")))))
-
-
-
-(defn exposed?
-
-  "Returns true if an alias (given its data) is meant to be exposed as a Git library."
-
-  
-  ([alias-data]
-
-   (alias-data :maestro.module.expose/name))
-
-
-  ([basis alias]
-
-   (exposed? (get-in basis
-                     [:aliases
-                      alias]))))
-
-
-;;;;;;;;;; Verification
-
-
-(defn- -req-alias-filter
-
-  ;; Used to seled only exposed modules when interacting with [[$.maestro.module.requirer]].
-
-  [basis]
-
-  (let [f (fn [_alias data]
-            (exposed? data))]
-    (update basis
-            :maestro.module.requirer/alias-filter
-            #(if %
-               (fn [alias data]
-                 (and (f alias
-                         data)
-                      (% alias
-                         data)))
-               f))))
-
-
-
-(defn requirer+
-
-  "Task generating requirer namespaces for all exposed modules.
-  
-   See the [[protosens.maestro.module.requirer]] about requirer namespaces and
-   especially [[protosens.maestro.module.requirer/generate]] about the required
-   setup.
-
-   The main benefit about generating those is being able to call the [[verify]]
-   task."
-
-
-  ([]
-
-   (requirer+ nil))
-
-
-  ([basis]
-
-   ($.maestro.module.requirer/generate (-req-alias-filter basis))))
-
-
-
-
-
-(defn verify
-
-  "Task verifying exposed modules, checking if namespaces compile.
- 
-   This is done via [[protosens.maestro.module.requirer/verify]] and ensure that
-   modules can be required in their production state.
-
-   See [[requirer+]]."
-
-
-  ([]
-
-   (verify nil))
-
-
-  ([basis]
-
-   ($.maestro.module.requirer/verify (-req-alias-filter basis))))
+   (run (-> (or deps-edn
+                (-read-deps-edn))
+            (assoc :maestro.module.expose/url
+                   (System/getProperty "user.dir"))))))
