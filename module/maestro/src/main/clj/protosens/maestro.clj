@@ -19,7 +19,8 @@
 
   (if (System/getProperty "babashka.version")
     (do
-      (println message)
+      (println "[ERROR]"
+               message)
       (System/exit 1))
     (throw (Exception. message))))
 
