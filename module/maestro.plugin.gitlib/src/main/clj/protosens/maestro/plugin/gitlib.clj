@@ -198,6 +198,9 @@
 
   ([deps-edn]
 
+   (println)
+   (println "[maestro.plugin.gitlib]")
+   (println)
    ;;
    ;; Ensure repository is clean.
    (when-not ($.git/clean?)
@@ -209,38 +212,39 @@
      ;;
      ;; Prepare exposition.
      (let [git-sha ($.git/commit-sha 0)]
-       (println "Prepare module exposition")
+       (println "- Preparing modules to be exposed as gitlibs")
+       (println "- First commit")
        (-expose git-sha
                 deps-edn-2)
        ($.git/add ["."])
-       ($.git/commit (format "Prepare module exposition
+       ($.git/commit (format "Prepare module exposition as gitlibs
                       
                               Base: %s"
                               git-sha)))
      ;;
      ;; Expose and print feedback for all modules.
      (let [git-sha-2 ($.git/commit-sha 0)]
-       (println "Expose modules")
-       (println)
+       (println "- Exposing modules as gitlibs")
+       (println "- Second commit")
+       (println "- Local `deps.edn` files created for:")
        (doseq [[alias
                 feedback] (-expose git-sha-2
                                    deps-edn-2)]
-         (println (format "    %s -> %s"
+         (println (format "    - %s -> %s"
                           alias
                           (feedback ::path)))
          (doseq [alias-child (sort (feedback ::require))]
-           (println "       "
-                    alias-child))
-         (println))
+           (println (format "       - %s"
+                            alias-child))))
        ($.git/add ["."])
-       ($.git/commit (format "Expose modules
+       ($.git/commit (format "Expose modules as gitlibs
                            
                               Pre-exposed: %s"
                              git-sha-2)))
         ;;
         ;; Done!
-        (println "Users can point to commit:"
-                 ($.git/commit-sha 0)))))
+        (println (format "- After pushing, users can point to commit `%s`"
+                         ($.git/commit-sha 0))))))
 
 
 
