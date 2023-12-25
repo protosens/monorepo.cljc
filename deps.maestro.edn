@@ -327,6 +327,13 @@
 
   ;---
 
+  :module/maestro.plugin.bb
+
+  {:extra-paths     ["module/maestro.plugin.bb/src/main/clj/"]
+   :maestro/require [:module/maestro]}
+
+  ;---
+
   :module/maestro.plugin.clj-kondo
 
   {:extra-paths                         ["module/maestro.plugin.clj-kondo/src/main/clj"]
@@ -485,16 +492,9 @@
   {:extra-paths     ["module/task/src/main/clj"]
    :maestro/doc     "Merges dependencies and paths for Babashka tasks.
                      Not meant for public use."
-   :maestro/require [:module/maestro.idiom]
+   :maestro/require [:module/maestro.idiom
+                     :module/maestro.plugin.bb]
    :maestro/root    "module/task"}
-
-
-
-
-  :module/maestro.plugin.bb
-
-  {:extra-paths     ["module/maestro.plugin.bb/src/main/clj/"]
-   :maestro/require [:module/maestro]}
 
 
   }}

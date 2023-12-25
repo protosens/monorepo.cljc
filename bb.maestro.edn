@@ -12,23 +12,7 @@
 
 
  :tasks
- {aliases
-  {:doc           "Print all required aliases"
-   :protosens/doc "Given an alias or a vector of aliases and profiles, prints all necessary
-                   aliases, following `:maestro/require` in `deps.edn`.
-
-                        bb aliases :module/maestro
-                        bb aliases '[dev :module/maestro]'
-                    
-                   Based on `protosens.maestro/task`.
-                   Also accepts a mode, see available ones in `deps.edn`:
-                    
-                        bb aliases :dev :module/maestro"
-   :requires      ([protosens.maestro])
-   :task          (protosens.maestro/main)}
-
-
-  api
+ {api
   {:doc           "Generate documentation for modules"
    :protosens/doc "Generate a markdown file for each module specifying a path via
                    `:maestro.plugin.quickdoc.path/output`.
@@ -58,10 +42,12 @@
   deps
   {:doc      ""
    :requires ([protosens.maestro]
+              [protosens.maestro.plugin.bb]
               [protosens.maestro.plugin.kaocha])
-   :task     (-> (protosens.maestro/run)
-                 (protosens.maestro.plugin.kaocha/run)
-                 )}
+   :task     (do
+               (-> (protosens.maestro/run)
+                   (protosens.maestro.plugin.kaocha/run))
+               (protosens.maestro.plugin.bb/run :module/task))}
 
 
   expose
@@ -71,8 +57,8 @@
                    
                    Consumers can then require the repository as a Git dependency and point to a
                    particular module using `:deps/root`."
-   :requires      ([protosens.maestro.module.expose])
-   :task          (protosens.maestro.module.expose/deploy)}
+   :requires      ([protosens.maestro.plugin.gitlib])
+   :task          (protosens.maestro.plugin.gitlib/run)}
 
 
   expose:local
@@ -81,8 +67,8 @@
                   
                    Allows testing exposition and running tasks like `req:verify` without having
                    to push commits."
-   :requires      ([protosens.maestro.module.expose])
-   :task          (protosens.maestro.module.expose/deploy-local)}
+   :requires      ([protosens.maestro.plugin.gitlib])
+   :task          (protosens.maestro.plugin.gitlib/deploy-local)}
 
 
   help

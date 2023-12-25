@@ -1,30 +1,27 @@
 {:min-bb-version "0.8.0",
- :pods #:clj-kondo{clj-kondo {:version "2022.09.08"}},
+ :pods {clj-kondo/clj-kondo {:version "2022.09.08"}},
  :tasks
  {expose
   {:doc "Expose modules meant to be consumed as Git libraries",
    :protosens/doc
    "By generating a custom `deps.edn` file in the `:meastro/root` of aliases that\n                   have a `:maestro.git.lib/name`.\n                   \n                   Consumers can then require the repository as a Git dependency and point to a\n                   particular module using `:deps/root`.",
-   :requires ([protosens.maestro.module.expose]),
-   :task (protosens.maestro.module.expose/deploy)},
+   :requires ([protosens.maestro.plugin.gitlib]),
+   :task (protosens.maestro.plugin.gitlib/run)},
   help
   {:doc "Print documentation for the given task",
    :protosens/doc "If there is any.",
    :requires ([protosens.bb.help]),
    :task (-> (protosens.bb.help/task) (protosens.bb.help/print))},
-  aliases
-  {:doc "Print all required aliases",
-   :protosens/doc
-   "Given an alias or a vector of aliases and profiles, prints all necessary\n                   aliases, following `:maestro/require` in `deps.edn`.\n\n                        bb aliases :module/maestro\n                        bb aliases '[dev :module/maestro]'\n                    \n                   Based on `protosens.maestro/task`.\n                   Also accepts a mode, see available ones in `deps.edn`:\n                    \n                        bb aliases :dev :module/maestro",
-   :requires ([protosens.maestro]),
-   :task (protosens.maestro/main)},
   deps
   {:doc "",
-   :requires ([protosens.maestro] [protosens.maestro.plugin.kaocha]),
+   :requires
+   ([protosens.maestro]
+    [protosens.maestro.plugin.bb]
+    [protosens.maestro.plugin.kaocha]),
    :task
-   (->
-    (protosens.maestro/run)
-    (protosens.maestro.plugin.kaocha/run))},
+   (do
+    (-> (protosens.maestro/run) (protosens.maestro.plugin.kaocha/run))
+    (protosens.maestro.plugin.bb/run :module/task))},
   module:readme
   {:doc "Generate READMEs for all modules",
    :protosens/doc
@@ -47,8 +44,8 @@
    "Like `expose` but Git URL will point to the repository directory",
    :protosens/doc
    "Only for testing.\n                  \n                   Allows testing exposition and running tasks like `req:verify` without having\n                   to push commits.",
-   :requires ([protosens.maestro.module.expose]),
-   :task (protosens.maestro.module.expose/deploy-local)},
+   :requires ([protosens.maestro.plugin.gitlib]),
+   :task (protosens.maestro.plugin.gitlib/deploy-local)},
   api
   {:doc "Generate documentation for modules",
    :protosens/doc
@@ -73,13 +70,6 @@
    "Useful in combination with `-Spath`. For instance:\n                 \n                       clojure -Spath -A$( bb aliases :module/maestro ) | bb pprint-cp\n                   \n                   In reality, it will pretty print any string where items are separated by `:`.\n                   \n                       bb aliases :module/maestro | bb pprint-cp",
    :requires ([protosens.classpath]),
    :task (protosens.classpath/pprint)},
-  build
-  {:doc "Build the given module",
-   :protosens/doc
-   "Based on information located in the alias data in `deps.edn`.\n                   See the `$.maestro.plugin.build` namespace.",
-   :requires ([protosens.maestro.plugin.build]),
-   :task
-   (protosens.maestro.plugin.build/main :module/maestro.plugin.build)},
   lint
   {:doc "Lint Clojure code throughout the whole repository",
    :protosens/doc
@@ -99,24 +89,24 @@
     (protosens.bb.help/undocumented-task+)
     (protosens.bb.help/print))}},
  :deps
- {io.github.clojure/tools.build #:git{:sha "0d20256", :tag "v0.8.3"},
-  io.github.borkdude/quickdoc
-  #:git{:sha "fc5a18bb419ccac3c8769aa0761384025b27f68c"},
-  babashka/fs #:mvn{:version "0.1.11"},
-  selmer/selmer #:mvn{:version "1.12.55"},
-  babashka/process #:mvn{:version "0.2.10"},
-  lambdaisland/kaocha #:mvn{:version "1.63.998"}},
+ {io.github.borkdude/quickdoc
+  {:git/sha "fc5a18bb419ccac3c8769aa0761384025b27f68c"},
+  babashka/fs {:mvn/version "0.1.11"},
+  selmer/selmer {:mvn/version "1.12.55"},
+  babashka/process {:mvn/version "0.2.10"},
+  lambdaisland/kaocha {:mvn/version "1.63.998"}},
  :paths
  ["module/string/src/main/clj"
   "module/maestro/src/main/clj"
   "module/edn/src/main/clj"
+  "module/maestro.plugin.bb/src/main/clj/"
   "module/task/src/main/clj"
   "module/classpath/src/main/clj"
   "module/maestro.plugin.clj-kondo/src/main/clj"
   "module/maestro.plugin.quickdoc/src/main/clj"
+  "module/maestro.plugin.gitlib/src/main/clj"
   "module/maestro.plugin.kaocha/src/main/clj"
   "module/bb.help/src/main/clj"
-  "module/maestro.plugin.build/src/main/clj"
   "module/namespace/src/main/clj"
   "module/symbol/src/main/clj"
   "module/git/src/main/clj"
