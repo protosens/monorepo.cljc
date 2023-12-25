@@ -318,4 +318,15 @@
      (with-open [file (C.java.io/writer "deps.edn")]
        (C.pprint/pprint result
                         file))
+     (println)
+     (println "[maestro]")
+     (println)
+     (println "- Prepared `deps.edn` for:")
+     (println)
+     (doseq [[alias
+              depth] (state ::path)]
+       (println (format "%s%s"
+                        (C.string/join (repeat (inc depth)
+                                               "  "))
+                        alias)))
      result)))
