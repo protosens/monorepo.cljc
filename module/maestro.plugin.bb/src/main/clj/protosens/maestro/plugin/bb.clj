@@ -19,6 +19,8 @@
   (println "[maestro.plugin.bb]")
   (println)
   (println "- Creating `bb.edn` from `bb.maestro.edn` and `deps.maestro.edn`")
+  (println (format "- Computing everything required for alias `%s`"
+                   alias))
   (let [merged (merge ($.edn.read/file "bb.maestro.edn")
                       (-> ($.maestro/-run (str alias)
                                           nil)

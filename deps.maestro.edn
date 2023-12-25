@@ -11,7 +11,6 @@
                                    :var-links   true
                                    :var-pattern :wikilinks}
  ,
- :maestro.plugin.kaocha/for       [:test/_]
  :maestro.plugin.kaocha/path      "private/maestro-kaocha.edn"
 
 

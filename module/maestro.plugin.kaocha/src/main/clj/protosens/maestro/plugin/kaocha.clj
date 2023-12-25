@@ -49,7 +49,8 @@
     ;;
     (let [alias+ (deps :aliases)
           path   (deps :maestro.plugin.kaocha/path)
-          for+   (deps :maestro.plugin.kaocha/for)]
+          for+   (or (deps :maestro.plugin.kaocha/for)
+                     [:test/_])]
       (println "- Kaocha is required, proceeding")
       (when-not path
         ($.maestro/fail "Kaocha plugin for Maestro requires a path!"))
@@ -69,7 +70,7 @@
                            for+)]
         (println "- Aliases providing test paths are namespaced with:")
         (doseq [nspace (sort for-2+)]
-          (println (format "    - :%s/..."
+          (println (format "    - `:%s/...`"
                            nspace)))
         (spit path
               (let [alias+ (deps :aliases)]

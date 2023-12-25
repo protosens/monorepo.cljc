@@ -68,7 +68,7 @@
                    Allows testing exposition and running tasks like `req:verify` without having
                    to push commits."
    :requires      ([protosens.maestro.plugin.gitlib])
-   :task          (protosens.maestro.plugin.gitlib/deploy-local)}
+   :task          (protosens.maestro.plugin.gitlib/run-local)}
 
 
   help

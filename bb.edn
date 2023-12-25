@@ -45,7 +45,7 @@
    :protosens/doc
    "Only for testing.\n                  \n                   Allows testing exposition and running tasks like `req:verify` without having\n                   to push commits.",
    :requires ([protosens.maestro.plugin.gitlib]),
-   :task (protosens.maestro.plugin.gitlib/deploy-local)},
+   :task (protosens.maestro.plugin.gitlib/run-local)},
   api
   {:doc "Generate documentation for modules",
    :protosens/doc
