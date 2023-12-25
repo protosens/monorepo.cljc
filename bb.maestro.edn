@@ -47,14 +47,6 @@
    :task          (protosens.maestro.plugin.quickdoc/bundle)}
 
 
-  build
-  {:doc           "Build the given module"
-   :protosens/doc "Based on information located in the alias data in `deps.edn`.
-                   See the `$.maestro.plugin.build` namespace."
-   :requires      ([protosens.maestro.plugin.build])
-   :task          (protosens.maestro.plugin.build/main :module/maestro.plugin.build)}
-
-
   changelog+
   {:doc           "Template all changelogs with the last stable tag"
    :protosens/doc "Changelogs use `{{ next-release }}` as a placeholder for the next

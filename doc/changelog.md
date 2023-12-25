@@ -14,6 +14,8 @@ provided.
 
 - Impacted
     - [`module/string`]
+- Remove
+    - [`module/maestro.plugin.build`] 
 
 
 ---
@@ -63,7 +65,7 @@ Inception.
 [`module/git`]:                      ../module/git/doc/changelog.md
 [`module/lab.bench`]:                ../module/lab.bench/doc/changelog.md
 [`module/maestro.idiom`]:            ../module/maestro.idiom/doc/changelog.md
-[`module/maestro.plugin.build`]:     ../module/maestro.plugin.build/doc/changelog.md
+[`module/maestro.plugin.build`]:     ../module/ARCHIVE/maestro.plugin.build/doc/changelog.md
 [`module/maestro.plugin.clj-kondo`]: ../module/maestro.plugin.clj-kondo/doc/changelog.md
 [`module/maestro.plugin.kaocha`]:    ../module/maestro.plugin.kaocha/doc/changelog.md
 [`module/maestro.plugin.quickdoc`]:  ../module/maestro.plugin.quickdoc/doc/changelog.md

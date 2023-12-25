@@ -3,19 +3,16 @@
 
  ;; OPTIONS FOR MAESTRO AND PLUGINS
 
- :maestro.plugin.gitlib/url         "https://github.com/protosens/monorepo.cljc"
+ :maestro.plugin.gitlib/url       "https://github.com/protosens/monorepo.cljc"
  ,
- :maestro.plugin.build.path/exclude ["(?i)^META-INF/license/.*"
-                                     "^license/.*"]
+ :maestro.plugin.quickdoc/option+ {:git/branch  "develop"
+                                   :github/repo "https://github.com/protosens/monorepo.cljc"
+                                   :toc         true
+                                   :var-links   true
+                                   :var-pattern :wikilinks}
  ,
- :maestro.plugin.quickdoc/option+   {:git/branch  "develop"
-                                     :github/repo "https://github.com/protosens/monorepo.cljc"
-                                     :toc         true
-                                     :var-links   true
-                                     :var-pattern :wikilinks}
- ,
- :maestro.plugin.kaocha/for         [:test/_]
- :maestro.plugin.kaocha/path        "private/maestro-kaocha.edn"
+ :maestro.plugin.kaocha/for       [:test/_]
+ :maestro.plugin.kaocha/path      "private/maestro-kaocha.edn"
 
 
 
@@ -279,10 +276,6 @@
                                          :test/maestro]
    :maestro/root                        "module/maestro"
    :maestro.plugin.gitlib/name          protosens/maestro
-   :maestro.plugin.build/type           :jar
-   :maestro.plugin.build.jar/name       protosens/maestro
-   :maestro.plugin.build.jar/version    "0.0.0"
-   :maestro.plugin.build.path/output    "private/target/maestro.jar"
    :maestro.plugin.quickdoc.path/output "module/maestro/doc/API.md"}
 
 
@@ -296,14 +289,6 @@
 
   {:extra-paths     ["module/maestro/src/test/clj"]
    :maestro/require [:module/maestro]}
-
-
-  :test.uberjar/maestro
-
-  {:maestro/doc                      "Used to test uberjar building with `:module/maestro.plugin.build`."
-   :maestro/require                  [:module/maestro]
-   :maestro.plugin.build/type        :uberjar
-   :maestro.plugin.build.path/output "private/target/maestro.uber.jar"}
 
   ;---
 
@@ -320,7 +305,6 @@
                                          :module/edn
                                          :module/git
                                          :module/maestro
-                                         :module/maestro.plugin.build
                                          :module/maestro.plugin.clj-kondo
                                          :module/maestro.plugin.gitlib
                                          :module/maestro.plugin.kaocha
@@ -340,23 +324,6 @@
   {:extra-paths     ["module/maestro.idiom/src/test/clj"]
    :maestro/require [:ext/babashka.fs
                      :module/maestro.idiom]}
-
-  ;---
-
-  :module/maestro.plugin.build
-
-  {:extra-paths                         ["module/maestro.plugin.build/src/main/clj"]
-   :maestro/doc                         "Maestro plugin for [`tools.build`](https://github.com/clojure/tools.build).  
-                                         The building utilities only work with Clojure JVM."
-   :maestro/platform+                   [:bb
-                                         :jvm]              
-   :maestro/require                     [:ext/babashka.process
-                                         :ext/clojure.tools.build
-                                         :module/deps.edn
-                                         :module/maestro]
-   :maestro/root                        "module/maestro.plugin.build"
-   :maestro.plugin.gitlib/name          protosens/maestro.plugin.build
-   :maestro.plugin.quickdoc.path/output "module/maestro.plugin.build/doc/API.md"}
 
   ;---
 
