@@ -39,20 +39,21 @@
   (println)
   (println "---")
   (println)
+  (println "[maestro.plugin.kaocha]")
+  (println)
   (if-not (some #(= %
                    'lambdaisland/kaocha)
                 (keys (deps :deps)))
     ;;
-    (println "KAOCHA IS NOT REQUIRED.")
+    (println "- Kaocha is not required, nothing will be done")
     ;;
     (let [alias+ (deps :aliases)
           path   (deps :maestro.plugin.kaocha/path)
           for+   (deps :maestro.plugin.kaocha/for)]
-      (println "PREPARING KAOCHA...")
-      (println)
+      (println "- Kaocha is required, proceeding")
       (when-not path
         ($.maestro/fail "Kaocha plugin for Maestro requires a path!"))
-      (println (format "File to reference in your Kaocha test file is `%s`."
+      (println (format "- File to reference in your Kaocha test file is `%s`"
                        path))
       (bb.fs/create-dirs (bb.fs/parent path))
       (when (or (not (coll? for+))
@@ -66,13 +67,10 @@
                                    (namespace kw)))
                            #{}
                            for+)]
-        (println)
-        (println "Aliases providing test paths are namespaced with:")
-        (println)
+        (println "- Aliases providing test paths are namespaced with:")
         (doseq [nspace (sort for-2+)]
-          (println (format "    :%s/..."
+          (println (format "    - :%s/..."
                            nspace)))
-        (println)
         (spit path
               (let [alias+ (deps :aliases)]
                 {:kaocha/source-paths (into []
@@ -87,13 +85,5 @@
                                                                        (namespace alias))
                                                         (:extra-paths definition))))
                                             alias+)})))
-      (println "Ready for testing.")))
+      (println "- Done, ready for testing")))
   deps)
-
-
-(comment
-
-
-  (run (protosens.edn.read/file "deps.maestro.edn"))
-
-  )
