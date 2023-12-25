@@ -1,9 +1,7 @@
-(ns protosens.test.maestro.module.expose
-
-  "Tests `$.maestro.module.expose`."
+(ns protosens.test.maestro.plugin.gitlib
 
   (:require [clojure.test                    :as T]
-            [protosens.maestro.module.expose :as $.maestro.module.expose]))
+            [protosens.maestro.plugin.gitlib :as $.maestro.plugin.gitlib]))
 
 
 ;;;;;;;;;; `deps.edn` files for test
@@ -19,19 +17,19 @@
                                              :m/c
                                              :test/a]
                 :maestro/root               "module/a"
-                :maestro.module.expose/name 'acme/a}
+                :maestro.plugin.gitlib/name 'acme/a}
        ,
        :m/b    {:extra-paths                ["module/b/src"]
                 :maestro/require            [:ext/b
                                              :m/c
                                              :test/b]
                 :maestro/root               "module/b"
-                :maestro.module.expose/name 'acme/b}
+                :maestro.plugin.gitlib/name 'acme/b}
        ,
        :m/c    {:extra-paths                ["module/c/src"]
                 :maestro/require            [:test/c]
                 :maestro/root               "module/c"
-                :maestro.module.expose/name 'acme/c}
+                :maestro.plugin.gitlib/name 'acme/c}
        ,
        :m      {:maestro/require [:ext]}
        ,
@@ -44,7 +42,7 @@
        :test/b {}
        :test/c {})
      ,
-   :maestro.module.expose/url
+   :maestro.plugin.gitlib/url
      "SOME_URL"})
 
 
@@ -98,9 +96,9 @@
                -deps-edn-local-c]]
              ;
              (do
-               ($.maestro.module.expose/-expose "SOME_SHA"
+               ($.maestro.plugin.gitlib/-expose "SOME_SHA"
                                                 (assoc -deps-edn-root
-                                                       :maestro.module.expose/write
+                                                       :maestro.plugin.gitlib/write
                                                        (fn [path deps-edn]
                                                          (swap! *log
                                                                 conj
@@ -112,11 +110,11 @@
 
 (T/deftest -prepare-deps-edn
 
-  (T/is (= {::$.maestro.module.expose/file    -deps-edn-local-a
-            ::$.maestro.module.expose/path    "module/a/deps.edn"
-            ::$.maestro.module.expose/require [:m/b :m/c]}
+  (T/is (= {::$.maestro.plugin.gitlib/file    -deps-edn-local-a
+            ::$.maestro.plugin.gitlib/path    "module/a/deps.edn"
+            ::$.maestro.plugin.gitlib/require [:m/b :m/c]}
            ,
-           ($.maestro.module.expose/-prepare-deps-edn -deps-edn-root
+           ($.maestro.plugin.gitlib/-prepare-deps-edn -deps-edn-root
                                                       "SOME_SHA"
                                                       :m/a))
         "Success")
@@ -127,7 +125,7 @@
                                  :m/a]
                                 dissoc
                                 :maestro/root)
-                     ($.maestro.module.expose/-prepare-deps-edn "SOME_SHA"
+                     ($.maestro.plugin.gitlib/-prepare-deps-edn "SOME_SHA"
                                                                 :m/a)))
         "Missing root directory")
 
@@ -137,7 +135,7 @@
                                 :m/a
                                 :extra-paths]
                                ["../foo"])
-                     ($.maestro.module.expose/-prepare-deps-edn "SOME_SHA"
+                     ($.maestro.plugin.gitlib/-prepare-deps-edn "SOME_SHA"
                                                                 :m/a)))
         "Path outside of module")
 
@@ -146,7 +144,7 @@
                      (update-in [:aliases
                                  :m/b]
                                 dissoc
-                                :maestro.module.expose/name)
-                     ($.maestro.module.expose/-prepare-deps-edn "SOME_SHA"
+                                :maestro.plugin.gitlib/name)
+                     ($.maestro.plugin.gitlib/-prepare-deps-edn "SOME_SHA"
                                                                 :m/a)))
         "Require local modules that is not exposed"))

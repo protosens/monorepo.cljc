@@ -3,7 +3,7 @@
 
  ;; OPTIONS FOR MAESTRO AND PLUGINS
 
- :maestro.module.expose/url         "https://github.com/protosens/monorepo.cljc"
+ :maestro.plugin.gitlib/url         "https://github.com/protosens/monorepo.cljc"
  ,
  :maestro.plugin.build.path/exclude ["(?i)^META-INF/license/.*"
                                      "^license/.*"]
@@ -142,7 +142,7 @@
                                          :module/string
                                          :test/bb.help]
    :maestro/root                        "module/bb.help"
-   :maestro.module.expose/name          protosens/bb.help
+   :maestro.plugin.gitlib/name          protosens/bb.help
    :maestro.plugin.quickdoc.path/output "module/bb.help/doc/API.md"}
 
 
@@ -163,7 +163,7 @@
    :maestro/require                     [:module/process
                                          :test/classpath]
    :maestro/root                        "module/classpath"
-   :maestro.module.expose/name          protosens/classpath
+   :maestro.plugin.gitlib/name          protosens/classpath
    :maestro.plugin.quickdoc.path/output "module/classpath/doc/API.md"}
 
 
@@ -185,7 +185,7 @@
                                          :module/namespace
                                          :test/deps.edn]
    :maestro/root                        "module/deps.edn"
-   :maestro.module.expose/name          protosens/deps.edn
+   :maestro.plugin.gitlib/name          protosens/deps.edn
    :maestro.plugin.quickdoc.path/output "module/deps.edn/doc/API.md"}
 
 
@@ -216,7 +216,7 @@
                                          :jvm]              
    :maestro/require                     [:test/edn]
    :maestro/root                        "module/edn"
-   :maestro.module.expose/name          protosens/edn
+   :maestro.plugin.gitlib/name          protosens/edn
    :maestro.plugin.quickdoc.path/output "module/edn/doc/API.md"}
 
 
@@ -239,7 +239,7 @@
                                          :module/string
                                          :test/git]
    :maestro/root                        "module/git"
-   :maestro.module.expose/name          protosens/git
+   :maestro.plugin.gitlib/name          protosens/git
    :maestro.plugin.quickdoc.path/output "module/git/doc/API.md"}
 
 
@@ -258,7 +258,7 @@
    :maestro/platform+                   [:jvm]
    :maestro/require                     [:ext/criterium]
    :maestro/root                        "module/lab.bench"
-   :maestro.module.expose/name          protosens/lab.bench
+   :maestro.plugin.gitlib/name          protosens/lab.bench
    :maestro.plugin.quickdoc.path/output "module/lab.bench/doc/API.md"}
 
   ;---
@@ -278,7 +278,7 @@
                                          :module/string
                                          :test/maestro]
    :maestro/root                        "module/maestro"
-   :maestro.module.expose/name          protosens/maestro
+   :maestro.plugin.gitlib/name          protosens/maestro
    :maestro.plugin.build/type           :jar
    :maestro.plugin.build.jar/name       protosens/maestro
    :maestro.plugin.build.jar/version    "0.0.0"
@@ -322,6 +322,7 @@
                                          :module/maestro
                                          :module/maestro.plugin.build
                                          :module/maestro.plugin.clj-kondo
+                                         :module/maestro.plugin.gitlib
                                          :module/maestro.plugin.kaocha
                                          :module/maestro.plugin.quickdoc
                                          :module/namespace
@@ -330,7 +331,7 @@
                                          :module/symbol
                                          :test/maestro.idiom]
    :maestro/root                        "module/maestro.idiom"
-   :maestro.module.expose/name          protosens/maestro.idiom
+   :maestro.plugin.gitlib/name          protosens/maestro.idiom
    :maestro.plugin.quickdoc.path/output "module/maestro.idiom/doc/API.md"}
 
 
@@ -354,7 +355,7 @@
                                          :module/deps.edn
                                          :module/maestro]
    :maestro/root                        "module/maestro.plugin.build"
-   :maestro.module.expose/name          protosens/maestro.plugin.build
+   :maestro.plugin.gitlib/name          protosens/maestro.plugin.build
    :maestro.plugin.quickdoc.path/output "module/maestro.plugin.build/doc/API.md"}
 
   ;---
@@ -369,9 +370,31 @@
                                          :module/maestro
                                          :module/process]
    :maestro/root                        "module/maestro.plugin.clj-kondo"
-   :maestro.module.expose/name          protosens/maestro.plugin.clj-kondo
+   :maestro.plugin.gitlib/name          protosens/maestro.plugin.clj-kondo
    :maestro.plugin.quickdoc.path/output "module/maestro.plugin.clj-kondo/doc/API.md"}
 
+  ;---
+
+  :module/maestro.plugin.gitlib
+
+  {:extra-paths                         ["module/maestro.plugin.gitlib/src/main/clj"]
+   :maestro/doc                         "Exposing modules as Gitlibs."
+   :maestro/platform+                   [:bb
+                                         :jvm]              
+   :maestro/require                     [:ext/babashka.fs
+                                         :module/deps.edn
+                                         :module/git
+                                         :module/maestro
+                                         :test/maestro.plugin.gitlib]
+   :maestro/root                        "module/maestro.plugin.gitlib"
+   :maestro.plugin.gitlib/name          protosens/maestro.plugin.gitlib
+   :maestro.plugin.quickdoc.path/output "module/maestro.plugin.gitlib/doc/API.md"}
+
+
+  :test/maestro.plugin.gitlib
+
+  {:extra-paths     ["module/maestro.plugin.gitlib/src/test/clj"]
+   :maestro/require [:module/maestro.plugin.gitlib]}
 
   ;---
 
@@ -385,7 +408,7 @@
                                          :ext/kaocha
                                          :module/maestro]
    :maestro/root                        "module/maestro.plugin.kaocha"
-   :maestro.module.expose/name          protosens/maestro.plugin.kaocha
+   :maestro.plugin.gitlib/name          protosens/maestro.plugin.kaocha
    :maestro.plugin.quickdoc.path/output "module/maestro.plugin.kaocha/doc/API.md"}
 
   ;---
@@ -406,7 +429,7 @@
                                          ; {dev :ext/quickdoc.jvm}
                                          ]
    :maestro/root                        "module/maestro.plugin.quickdoc"
-   :maestro.module.expose/name          protosens/maestro.plugin.quickdoc
+   :maestro.plugin.gitlib/name          protosens/maestro.plugin.quickdoc
    :maestro.plugin.quickdoc.path/output "module/maestro.plugin.quickdoc/doc/API.md"}
 
   ;---
@@ -421,7 +444,7 @@
    :maestro/require                     [:ext/babashka.fs
                                          :module/classpath
                                          :test/namespace]
-   :maestro.module.expose/name          protosens/namespace
+   :maestro.plugin.gitlib/name          protosens/namespace
    :maestro.plugin.quickdoc.path/output "module/namespace/doc/API.md"}
 
 
@@ -441,7 +464,7 @@
    :maestro/require                     [:ext/babashka.process
                                          :test/process]
    :maestro/root                        "module/process"
-   :maestro.module.expose/name          protosens/process
+   :maestro.plugin.gitlib/name          protosens/process
    :maestro.plugin.quickdoc.path/output "module/process/doc/API.md"}
 
 
@@ -460,7 +483,7 @@
                                          :jvm]              
    :maestro/require                     [:test/string]
    :maestro/root                        "module/string"
-   :maestro.module.expose/name          protosens/string
+   :maestro.plugin.gitlib/name          protosens/string
    :maestro.plugin.quickdoc.path/output "module/string/doc/API.md"}
 
 
@@ -479,7 +502,7 @@
                                          :jvm]              
    :maestro/root                        "module/symbol"
    :maestro/require                     [:test/symbol]
-   :maestro.module.expose/name          protosens/symbol
+   :maestro.plugin.gitlib/name          protosens/symbol
    :maestro.plugin.quickdoc.path/output "module/symbol/doc/API.md"}
 
 

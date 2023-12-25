@@ -1,13 +1,13 @@
-(ns protosens.maestro.module.expose
+(ns protosens.maestro.plugin.gitlib
 
   "Exposing modules to be consumed publicly.
  
-   Modules containing a `:maestro.module.expose/name` in their alias data can be exposed publicly as
+   Modules containing a `:maestro.plugin.gitlib/name` in their alias data can be exposed publicly as
    [Git dependencies](https://clojure.org/guides/deps_and_cli#_using_git_libraries) and consumed from
    [Clojure CLI](https://clojure.org/guides/deps_and_cli). Naturally, users must rely on `:deps/root`
    to point to individual modules.
 
-   Modules meant for exposition must have a `:maestro.module.expose/name`. A name is a symbol
+   Modules meant for exposition must have a `:maestro.plugin.gitlib/name`. A name is a symbol
    `<organization>/<artifact>` such as `com.acme/some-lib`.
 
    The [[deploy]] task does the necessary step for exposition."
@@ -71,7 +71,7 @@
                                        (when-not (= dep-alias
                                                     exposed)
                                          (when-some [dep-root-dir (:maestro/root dep-definition)]
-                                           (if-some [exposed-name (:maestro.module.expose/name dep-definition)]
+                                           (if-some [exposed-name (:maestro.plugin.gitlib/name dep-definition)]
                                              [dep-alias
                                               exposed-name
                                               dep-root-dir]
@@ -79,7 +79,7 @@
                                                                      exposed
                                                                      dep-alias)))))))
                                (deps-edn-exposed :aliases))
-        url              (deps-edn-exposed :maestro.module.expose/url)]
+        url              (deps-edn-exposed :maestro.plugin.gitlib/url)]
     {::file    {:deps  (into (or (deps-edn-exposed :deps)
                                  {})
                              (map (fn [[_dep-alias exposed-name dep-root-dir]]
@@ -124,7 +124,7 @@
   
   ([definition]
 
-   (:maestro.module.expose/name definition))
+   (:maestro.plugin.gitlib/name definition))
 
 
   ([deps-edn alias]
@@ -151,7 +151,7 @@
                                                alias)
                                  alias)))
                        (keys (deps-edn :aliases)))
-        write    (or (deps-edn :maestro.module.expose/write)
+        write    (or (deps-edn :maestro.plugin.gitlib/write)
                      -write-deps-edn-exposed)]
     (into (sorted-map)
           (map (fn [exposed]
@@ -173,7 +173,7 @@
    High-level steps are:
 
    - Ensure Git tree is absolutely clean
-   - Select modules with a `:maestro.module.expose/name` in their alias data
+   - Select modules with a `:maestro.plugin.gitlib/name` in their alias data
    - In their `:maestro/root`, generate a `deps.edn` file
    - Dependencies on other modules are Git dependencies with the SHA of the previous commit
    - Commit
@@ -181,7 +181,7 @@
 
    This produces 2 commits and the SHA of the last commit is what users can rely on when pushed.
    
-   Either `proto-basis` or the top `deps.edn` file must contain `:maestro.module.expose/url` pointing
+   Either `proto-basis` or the top `deps.edn` file must contain `:maestro.plugin.gitlib/url` pointing
    to the URL of the repo.
 
    For testing purposes, one can point to the absolute path of the repository. For production
@@ -204,7 +204,7 @@
      ($.maestro/fail "Repository must be sparkling clean, no modified or untracked files"))
    (let [deps-edn-2 (or deps-edn
                         (-read-deps-edn))]
-     (when-not (deps-edn-2 :maestro.module.expose/url)
+     (when-not (deps-edn-2 :maestro.plugin.gitlib/url)
        ($.maestro/fail "Missing Git URL"))
      ;;
      ;; Prepare exposition.
@@ -264,5 +264,5 @@
 
    (run (-> (or deps-edn
                 (-read-deps-edn))
-            (assoc :maestro.module.expose/url
+            (assoc :maestro.plugin.gitlib/url
                    (System/getProperty "user.dir"))))))
