@@ -5,15 +5,14 @@
    Reliably computes source and test paths for aliases you are working with.
    No need to maintain several test suites manually."
 
-  (:require [babashka.fs        :as bb.fs]
-            [protosens.deps.edn :as $.deps.edn]
-            [protosens.maestro  :as $.maestro]))
+  (:require [babashka.fs       :as bb.fs]
+            [protosens.maestro :as $.maestro]))
 
 
 ;;;;;;;;;;
 
 
-(defn prepare
+(defn run
 
   "Produces and EDN file supplementing the Kaocha EDN configuraton file.
 
@@ -35,17 +34,66 @@
                          #include \"<PATH>\"]]}
    ```"
 
-  [basis]
+  [deps]
 
-  (let [path (basis :maestro.plugin.kaocha/path)]
-    (when-not path
-      ($.maestro/fail "Kaocha plugin for Maestro require a path"))
-    (bb.fs/create-dirs (bb.fs/parent path))
-    (spit path
-          {:kaocha/source-paths ($.deps.edn/path+ basis
-                                                  ($.maestro/not-by-profile+ basis
-                                                                             '[test]))
-           :kaocha/test-paths   ($.deps.edn/extra-path+ basis
-                                                        ($.maestro/by-profile+ basis
-                                                                               '[test]))})
-    basis))
+  (println)
+  (println "---")
+  (println)
+  (if-not (some #(= %
+                   'lambdaisland/kaocha)
+                (keys (deps :deps)))
+    ;;
+    (println "KAOCHA IS NOT REQUIRED.")
+    ;;
+    (let [alias+ (deps :aliases)
+          path   (deps :maestro.plugin.kaocha/path)
+          for+   (deps :maestro.plugin.kaocha/for)]
+      (println "PREPARING KAOCHA...")
+      (println)
+      (when-not path
+        ($.maestro/fail "Kaocha plugin for Maestro requires a path!"))
+      (println (format "File to reference in your Kaocha test file is `%s`."
+                       path))
+      (bb.fs/create-dirs (bb.fs/parent path))
+      (when (or (not (coll? for+))
+                (empty? for+))
+        ($.maestro/fail "Kaocha plugin for Maestro requires a collection of alias namespaces to test!"))
+      (let [for-2+ (reduce (fn [for-2+ kw]
+                             (when-not (qualified-keyword? kw)
+                               ($.maestro/fail (format "Only qualified keywords can be used to select aliases, got: %s"
+                                                       (pr-str kw))))
+                             (conj for-2+
+                                   (namespace kw)))
+                           #{}
+                           for+)]
+        (println)
+        (println "Aliases providing test paths are namespaced with:")
+        (println)
+        (doseq [nspace (sort for-2+)]
+          (println (format "    :%s/..."
+                           nspace)))
+        (println)
+        (spit path
+              (let [alias+ (deps :aliases)]
+                {:kaocha/source-paths (into []
+                                            (mapcat (fn [[alias definition]]
+                                                      (when-not (contains? for-2+
+                                                                           (namespace alias))
+                                                        (:extra-paths definition))))
+                                            alias+)
+                 :kaocha/test-paths   (into []
+                                            (mapcat (fn [[alias definition]]
+                                                      (when (contains? for-2+
+                                                                       (namespace alias))
+                                                        (:extra-paths definition))))
+                                            alias+)})))
+      (println "Ready for testing.")))
+  deps)
+
+
+(comment
+
+
+  (run (protosens.edn.read/file "deps.maestro.edn"))
+
+  )

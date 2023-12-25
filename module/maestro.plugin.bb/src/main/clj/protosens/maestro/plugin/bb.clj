@@ -1,9 +1,9 @@
-(ns protosens.maestro.bb
+(ns protosens.maestro.plugin.bb
 
   (:require [clojure.java.io    :as C.java.io]
             [clojure.pprint     :as C.pprint]
             [protosens.edn.read :as $.edn.read]
-            [protosens.maestro2 :as $.maestro]))
+            [protosens.maestro  :as $.maestro]))
 
 
 ;;;;;;;;;;

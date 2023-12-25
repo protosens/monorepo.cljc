@@ -1,194 +1,265 @@
 (ns protosens.test.maestro
 
-  (:require [clojure.test       :as T]
-            [protosens.deps.edn :as $.deps.edn]
-            [protosens.maestro  :as $.maestro]))
+  (:require [clojure.test      :as T]
+            [protosens.maestro :as $.maestro]))
 
 
-;;;;;;;;;;
+;;;;;;;;;; Preparation
 
 
-(T/deftest cli-arg+
+(defmethod $.maestro/directive
+           "test-directive*"
 
-  (let [basis {:maestro/alias+   [:a]
-               :maestro/profile+ ['a]}]
+  [state _nspace nm]
 
-    (T/is (= {:maestro/alias+   [:b :a]
-              :maestro/profile+ ['a]}
-             ($.maestro/cli-arg+ basis
-                                 [":b"]))
-          "One alias")
-
-    (T/is (= {:maestro/alias+   [:a]
-              :maestro/profile+ ['b 'a]}
-             ($.maestro/cli-arg+ basis
-                                 ["b"]))
-          "One profile")
-
-    (T/is (= {:maestro/alias+   [:b :c :a]
-              :maestro/profile+ ['b 'c 'a]}
-             ($.maestro/cli-arg+ basis
-                                 ["[:b b c :c]"]))
-          "Vector of aliases and profiles")
-
-    (T/is (= {:maestro/alias+   [:b :a]
-              :maestro/mode     :m
-              :maestro/profile+ ['a]}
-             ($.maestro/cli-arg+ basis
-                                 [":m" ":b"]))
-          "Alias with a mode")))
+  (cond->
+    state
+    (not nm)
+    (update-in [::$.maestro/deps
+                ::i]
+               inc)))
 
 
-
-(T/deftest create-basis
-
-  (T/is (map? ($.maestro/create-basis)))
-
-  (T/is (= ($.maestro/create-basis)
-           ($.maestro/create-basis {:maestro/project "./deps.edn"}))))
+;;;;;;;;;; Reusable assertions
 
 
-;;;;;;;;;;
+(defn- -t-path
+
+  [message input alias-def+ path]
+
+  (T/is (= path
+           (-> ($.maestro/-run input
+                               {:aliases alias-def+})
+               (::$.maestro/path)))
+        message))
 
 
-(T/deftest search
-
-  (let [basis     ($.maestro/search '{:aliases          {:a {:extra-paths     ["./a"]
-                                                             :maestro/env     {:a a}
-                                                             :maestro/require [:b
-                                                                               :c
-                                                                               {profile-direct :direct}]}
-                                                         :b {:extra-paths     ["./b"]
-                                                             :maestro/env     {:b b}
-                                                             :maestro/require [{profile-direct :not-direct}]}
-                                                         :c {:extra-paths     ["./c"]
-                                                             :maestro/env     {:c c}
-                                                             :maestro/require [:d
-                                                                               {profile-1 :e
-                                                                                profile-2 :f}
-                                                                               {profile-3 :g}
-                                                                               {default   :h
-                                                                                profile-4 :i}
-                                                                               {default :e}]}
-                                                         :d {:extra-paths ["./d"]
-                                                             :maestro/env {:d d}}
-                                                         :e {:extra-paths ["./e"]
-                                                             :maestro/env {:e e}}
-                                                         :f {:extra-paths ["./f"]
-                                                             :maestro/env {:f f}}
-                                                         :g {:extra-paths ["./g"]
-                                                             :maestro/env {:g g}}
-                                                         :h {:extra-paths ["./h"]
-                                                             :maestro/env {:h h}}
-                                                         :i {:extra-paths ["./i"]
-                                                             :maestro/env {:i i}}
-                                                         ;;
-                                                         :direct     {:extra-paths ["./direct"]
-                                                                      :maestro/env {:direct direct}}
-                                                         :not-direct {:extra-paths ["./not-direct"]
-                                                                      :maestro/env {:non-direct non-direct}}}
-                                      :maestro/alias+   [:a]
-                                      :maestro/mode     :some-mode
-                                      :maestro/mode+    {:some-mode {:maestro/profile+ [profile-1]}}
-                                      :maestro/profile+ [profile-1
-                                                         ^:direct? profile-direct]})
-        required+ (basis :maestro/require)]
-
-    (T/is (= [:b :d :e :h :c :direct :a]
-             required+)
-          "Aliases are required in the right order")
-
-    (T/is (= '{:a      a
-               :b      b
-               :c      c
-               :d      d
-               :direct direct
-               :e      e
-               :h      h}
-             (basis :maestro/env))
-          "Envs from required aliases are merged")
-
-    (T/is (= '{default        #{:a :b :c :d :e :h}
-               profile-1      #{:e}
-               profile-direct #{:direct}}
-             (basis :maestro/profile->alias+))
-          "Keeps track of which profiles resulted in selecting which aliases")
-
-    (T/is (= #{"./a" "./b" "./c" "./d" "./e" "./h"}
-             (set ($.deps.edn/extra-path+ basis
-                                          ($.maestro/by-profile+ basis
-                                                                 '[default]))))
-          "Retrieve paths for a desired profile")))
+;;;;;;;;;; Tests
 
 
-;;;;;;;;;;
+(T/deftest run
 
 
-(def profile->alias+
-     {:maestro/profile->alias+ '{p-1 #{:a
-                                       :b}
-                                 p-2 #{:c
-                                       :d}
-                                 p-3 #{:e
-                                       :f}
-                                 p-4 #{:g
-                                       :h}}})
+  (T/testing
 
-(def p-1+p-2
-     #{:a
-       :b
-       :c
-       :d})
+    "Core assumptions about graph traversal"
+
+    (-t-path "Empty"
+             ""
+             {}
+             [])
+
+    (-t-path "No deps (but mode activated)"
+             ":m/a"
+             {:m/a {}}
+             [[:m 0] [:m/a 0]])
+
+    (-t-path "Single dep"
+             ":m/a"
+             {:m/a {:maestro/require [:m/b]}
+              :m/b {}}
+             [[:m 0] [:m/a 0] [:m/b 1]])
+
+    (-t-path  "Input deduplication"
+              ":m/a:m/a"
+              {:m/a {:maestro/require [:m/b]}
+               :m/b {}}
+              [[:m 0] [:m/a 0] [:m/b 1]])
+
+    (-t-path "Input deduplication after transitive processing"
+             ":m/a:m/b"
+             {:m/a {:maestro/require [:m/b]}
+              :m/b {}}
+             [[:m 0] [:m/a 0] [:m/b 1]])
+
+    (-t-path "Transitive dep"
+             ":m/a"
+             {:m/a {:maestro/require [:m/b]}
+              :m/b {:maestro/require [:m/c]}
+              :m/c {}}
+             [[:m 0] [:m/a 0] [:m/b 1] [:m/c 2]])
+
+    (-t-path "Transitive dep with input deduplication"
+             ":m/a:m/b"
+             {:m/a {:maestro/require [:m/b]}
+              :m/b {:maestro/require [:m/c]}
+              :m/c {}}
+             [[:m 0] [:m/a 0] [:m/b 1] [:m/c 2]])
+
+    (-t-path "Transitive deps with transitive deduplication"
+             ":m/a"
+             {:m/a {:maestro/require [:m/b]}
+              :m/b {:maestro/require [:m/c
+                                      :m/d]}
+              :m/c {:maestro/require [:m/d]}
+              :m/d {}} 
+             [[:m 0] [:m/a 0] [:m/b 1] [:m/c 2] [:m/d 3]])
+
+    (-t-path "Dep but relevant mode not activated"
+             ":m/a"
+             {:m/a {:maestro/require [:t/a]}
+              :t/a {}}
+             [[:m 0] [:m/a 0]])
+
+    (-t-path "Dep by preactivating relevant mode"
+             ":t:m/a"
+             {:m/a {:maestro/require [:t/a]}
+              :t/a {}}
+             [[:t 0] [:m 0] [:m/a 0] [:t/a 1]])
+
+    (-t-path "Dep by postactivating a mode"
+              ":m/a:t"
+              {:m/a {:maestro/require [:t/a]}
+               :t/a {}}
+              [[:m 0] [:m/a 0] [:t 0]])
+    
+    (-t-path "Transitive deps on mode with further mode activation"
+             ":t:m/a"
+             {:m/a   {:maestro/require [:t/a]}
+              :t/a   {}
+              :t     {:maestro/require [:e
+                                        :e/lib]}
+              :e/lib {}}
+             [[:t 0] [:e 1] [:e/lib 1] [:m 0] [:m/a 0] [:t/a 1]])
+
+    (T/testing
+
+      "Directives (with `:shallow*` as example)"
+
+      (-t-path "Activated at input"
+               ":t:shallow*/t:t/a"
+               {:t/a {:maestro/require [:m/a
+                                        :t/b]}
+                :t/b {}
+                :t   {:maestro/require [:m]}
+                :m/a {}}
+               [[:t 0] [:m 1] [:shallow* 0] [:shallow*/t 0] [:t/a 0] [:m/a 1]])
+
+      (-t-path "Activated at input but too late"
+               ":t/a:shallow*/t"
+               {:t/a {:maestro/require [:m/a
+                                        :t/b]}
+                :t/b {}
+                :t   {:maestro/require [:m]}
+                :m/a {}}
+               [[:t 0] [:m 1] [:t/a 0] [:m/a 1] [:t/b 1] [:shallow* 0] [:shallow*/t 0]])
+
+      (-t-path "Activated at input counteracted afterwards"
+               ":shallow*/t:t/a"
+               {:t/a {:maestro/require [:m/a
+                                        :t/b]}
+                :t/b {}
+                :t   {:maestro/require [:m]}
+                :m/a {}}
+               [[:shallow* 0] [:shallow*/t 0] [:t 0] [:m 1] [:t/a 0] [:m/a 1] [:t/b 1]])
+
+      (-t-path "Activated transitively"
+               ":t/a"
+               {:t/a {:maestro/require [:m/a
+                                        :shallow*/t
+                                        :t/b]}
+                :t/b {}
+                :t   {:maestro/require [:m]}
+                :m/a {}}
+               [[:t 0] [:m 1] [:t/a 0] [:m/a 1] [:shallow* 1] [:shallow*/t 1]])
+
+      (-t-path "Activated transitively twice but initialized once"
+               ":t/a"
+               {:t/a {:maestro/require [:m/a
+                                        :shallow*/t
+                                        :shallow*/d
+                                        :t/b
+                                        :d/a]}
+                :t/b {}
+                :t   {:maestro/require [:m
+                                        :d]}
+                :d/a {}
+                :m/a {}}
+               [[:t 0] [:m 1] [:d 1] [:t/a 0] [:m/a 1] [:shallow* 1] [:shallow*/t 1] [:shallow*/d 1]])))
 
 
-(def p-3+p-4
-     #{:e
-       :f
-       :g
-       :h})
+  (T/testing
+
+    "Directive initialization"
+
+    (T/is (= 1
+             (-> ($.maestro/-run ":test-directive*/foo:m/a"
+                                 {:aliases {:m/a {:maestro/require [:test-directive*]}}
+                                  ::i      0})
+                 (get-in [::$.maestro/deps
+                          ::i])))))
 
 
-(T/deftest by-profile+
+  (T/testing
 
-  (T/is (= p-1+p-2
-           ($.maestro/by-profile+ profile->alias+
-                                  '[p-1
-                                    p-2])))
+    "Circular deps allowed, processed without infinite loop"
 
-  (T/is (= p-3+p-4
-           ($.maestro/by-profile+ profile->alias+
-                                  '[p-3
-                                    p-4]))))
+    (doseq [[message
+             def-dep+
+             path]    [["Direct"
+                        {:m/a {:maestro/require [:m/a
+                                                 :m/b]}
+                         :m/b {}}
+                        [[:m 0] [:m/a 0] [:m/b 1]]]
+                       ,
+                       ["Transitive"
+                        {:m/a {:maestro/require [:m/b
+                                                 :m/c]}
+                         :m/b {:maestro/require [:m/a]}
+                         :m/c {}}
+                        [[:m 0] [:m/a 0] [:m/b 1] [:m/c 1]]]]]
+      (T/is (= path
+               (-> (deref (future
+                            ($.maestro/-run ":m/a"
+                                            {:aliases def-dep+}))
+                          100
+                          nil)
+                   (::$.maestro/path)))
+            message)))
 
 
-(T/deftest not-by-profile+
+  (T/testing
 
-  (T/is (= p-3+p-4
-           ($.maestro/not-by-profile+ profile->alias+
-                                      '[p-1
-                                        p-2])))
- 
-  (T/is (= p-1+p-2
-           ($.maestro/not-by-profile+ profile->alias+
-                                      '[p-3
-                                        p-4]))))
+    "Missing namespaced aliases throw"
+
+    (T/is (thrown? Exception
+                   ($.maestro/-run ":m/a"
+                                   {}))
+          "Empty")
+
+    (T/is (thrown? Exception
+                   ($.maestro/-run ":m/a"
+                                   {:aliases {:m/a {:maestro/require [:m/b]}}}))
+          "Missing dep"))
 
 
-;;;;;;;;;;
+  (T/testing
 
+    "Alias definitions are flattened and everything from root keys is present"
 
-(T/deftest stringify-required
-
-  (T/is (= ""
-           ($.maestro/stringify-required {:maestro/require []}))
-        "No alias")
-
-  (T/is (= ":a"
-           ($.maestro/stringify-required {:maestro/require [:a]}))
-        "One alias")
-
-  (T/is (= ":a:b:c"
-           ($.maestro/stringify-required {:maestro/require [:a
-                                                            :b
-                                                            :c]}))
-        "Several aliases"))
+    (let [dep+ {:foo     :bar
+                42       24
+                :aliases {:m/a {:extra-deps      {'dep/a :dep/a}
+                                :extra-paths     ["path/a"]
+                                :maestro/doc     "Module A"
+                                :maestro/require [:m/b]}
+                          ,
+                          :m/b {:extra-deps      {'dep/b :dep/b}
+                                :maestro/doc     "Module B"
+                                :maestro/require [:m/c]}
+                          ,
+                          :m/c {:extra-paths     ["path/c"] 
+                                :maestro/doc     "Module C"}}}]
+      (T/is (= (-> dep+
+                   (assoc :deps  {'dep/a :dep/a
+                                  'dep/b :dep/b}
+                          :paths #{"path/a"
+                                   "path/c"})
+                   (assoc-in [:aliases
+                              :m]
+                             nil))
+               (-> ($.maestro/-run ":m/a"
+                                   dep+)
+                   (::$.maestro/result)
+                   (update :paths
+                           set)))))))
