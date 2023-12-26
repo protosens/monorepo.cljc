@@ -44,7 +44,7 @@
                                nspace
                                nm))))
   (update state
-          ::filter
+          ::include
           conj
           nspace))
 
@@ -60,9 +60,12 @@
   (cond->
     state
     nm
-    (update ::filter
-            disj
-            nm)))
+    (-> (update ::exclude
+                conj
+                nm)
+        (update ::include
+                disj
+                nm))))
 
 
 ;;;;;;;;;; Private helpers
@@ -144,8 +147,11 @@
                            [::deps
                             :aliases])
                    alias)
-    (or (when (or (contains? (state ::filter)
-                             (namespace alias))
+    (or (when (or (let [nspace (namespace alias)]
+                    (and (not (contains? (state ::exclude)
+                                         nspace))
+                         (contains? (state ::include)
+                                    nspace)))
                   (zero? (state ::depth)))
           (-> state
               (-transplant-def alias)
@@ -227,13 +233,11 @@
 
   [state kw+]
 
-  ;(_t :run kw+ state)
   (let [depth (state ::depth)]
     (reduce (fn [state-2 kw]
               (when-not (keyword? kw)
                 (throw (IllegalArgumentException. (format "%s should be a keyword!"
                                                           (pr-str kw)))))
-              ;(_t :reduce kw state-2)
               (or (some-> (when-not (-processed? state-2
                                                  kw)
                             (if (qualified-keyword? kw)
@@ -286,12 +290,13 @@
                           (throw (ex-info "Unable to read `deps.maestro.edn"
                                           {}
                                           ex)))))]
-     (-> {::deps   dep-2+
-          ::depth  0
-          ::filter #{}
-          ::path   []
-          ::result (dissoc dep-2+
-                           :aliases)}
+     (-> {::deps    dep-2+
+          ::depth   0
+          ::exclude #{}
+          ::include #{}
+          ::path    []
+          ::result  (dissoc dep-2+
+                            :aliases)}
          (-walk+ alias-2+)
          (-flatten-alias+))))
 

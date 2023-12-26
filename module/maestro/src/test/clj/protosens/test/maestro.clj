@@ -135,6 +135,15 @@
                 :m/a {}}
                [[:t 0] [:m 1] [:SHALLOW 0] [:SHALLOW/t 0] [:t/a 0] [:m/a 1]])
 
+      (-t-path "Activated at input (2)"
+               ":SHALLOW/t:t/a"
+               {:t/a {:maestro/require [:m/a
+                                        :t/b]}
+                :t/b {}
+                :t   {:maestro/require [:m]}
+                :m/a {}}
+               [[:SHALLOW 0] [:SHALLOW/t 0] [:t 0] [:m 1] [:t/a 0] [:m/a 1]])
+
       (-t-path "Activated at input but too late"
                ":t/a:SHALLOW/t"
                {:t/a {:maestro/require [:m/a
@@ -143,15 +152,6 @@
                 :t   {:maestro/require [:m]}
                 :m/a {}}
                [[:t 0] [:m 1] [:t/a 0] [:m/a 1] [:t/b 1] [:SHALLOW 0] [:SHALLOW/t 0]])
-
-      (-t-path "Activated at input counteracted afterwards"
-               ":SHALLOW/t:t/a"
-               {:t/a {:maestro/require [:m/a
-                                        :t/b]}
-                :t/b {}
-                :t   {:maestro/require [:m]}
-                :m/a {}}
-               [[:SHALLOW 0] [:SHALLOW/t 0] [:t 0] [:m 1] [:t/a 0] [:m/a 1] [:t/b 1]])
 
       (-t-path "Activated transitively"
                ":t/a"
