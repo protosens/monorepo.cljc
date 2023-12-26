@@ -53,6 +53,30 @@
 
 
 (defmethod directive
+           "GOD"
+
+  [state nspace nm]
+
+  (when nm
+    (fail (format "`:GOD` directive should not be namespaced: `%s`"
+                  (keyword nspace
+                           nm))))
+  (update state
+          ::level
+          (fn [level]
+            (let [alias+ (keys (get-in state
+                                       [::deps
+                                        :aliases]))]
+              (concat (sort (into #{}
+                                  (comp (keep namespace)
+                                        (map keyword))
+                                  alias+))
+                      (sort alias+)
+                      level)))))
+
+
+
+(defmethod directive
            "EVERY"
 
   [state _nspace nm]
