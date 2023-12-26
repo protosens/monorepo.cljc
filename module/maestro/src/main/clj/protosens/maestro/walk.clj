@@ -3,7 +3,8 @@
   (:require [clojure.string              :as       C.string]
             [protosens.edn.read          :as       $.edn.read]
             [protosens.maestro           :as-alias $.maestro]
-            [protosens.maestro.directive :as       $.maestro.directive]))
+            [protosens.maestro.directive :as       $.maestro.directive]
+            [protosens.maestro.plugin    :as       $.maestro.plugin]))
 
 
 ;;;;;;;;;; Private helpers
@@ -26,10 +27,10 @@
   [state]
 
   (update state
-          ::$.maestro/result
-          (fn [result]
-            (reduce (fn [result-2 alias-def]
-                      (-> result-2
+          ::$.maestro/deps-edn
+          (fn [deps-edn]
+            (reduce (fn [deps-edn-2 alias-def]
+                      (-> deps-edn-2
                           (update :deps
                                   merge ;; TODO. Ensure that no dep gets overwritten?
                                   (:extra-deps alias-def))
@@ -37,8 +38,8 @@
                                   (fnil into
                                         [])
                                   (:extra-paths alias-def))))
-                    result
-                    (vals (result :aliases))))))
+                    deps-edn
+                    (vals (deps-edn :aliases))))))
 
 
 
@@ -47,7 +48,7 @@
   [state kw]
 
   (contains? (get-in state
-                     [::$.maestro/result
+                     [::$.maestro/deps-edn
                       :aliases])
              kw))
 
@@ -58,11 +59,11 @@
   [state alias]
 
   (-> state
-      (assoc-in [::$.maestro/result
+      (assoc-in [::$.maestro/deps-edn
                  :aliases
                  alias]
                 (get-in state
-                        [::$.maestro/deps
+                        [::$.maestro/deps-maestro-edn
                          :aliases
                          alias]))
       (-conj-path alias)))
@@ -82,7 +83,7 @@
   [state alias]
 
   (when (contains? (get-in state
-                           [::$.maestro/deps
+                           [::$.maestro/deps-maestro-edn
                             :aliases])
                    alias)
     (or (when (or (let [nspace (namespace alias)]
@@ -160,7 +161,7 @@
 
   (-walk+ state
           (get-in state
-                  [::$.maestro/result
+                  [::$.maestro/deps-edn
                    :aliases
                    kw
                    :maestro/require])))
@@ -183,8 +184,8 @@
                                 ::$.maestro/level
                                 rest)]
             (when-not (keyword? kw)
-              (throw (IllegalArgumentException. (format "%s should be a keyword!"
-                                                        (pr-str kw)))))
+              ($.maestro.plugin/fail (format "%s should be a keyword!"
+                                             (pr-str kw))))
             (or (some-> (when-not (-processed? state-3
                                                kw)
                           (if (qualified-keyword? kw)
@@ -205,7 +206,7 @@
 
 (defn  run
 
-  [alias+ dep+]
+  [alias+ deps-maestro-edn]
 
   ;; Need to dedupe input aliases because inputs are systematically visited once
   ;; the algorithm kicks in, as opposed to deps that are indeed deduped.
@@ -226,13 +227,13 @@
                             [[]
                              #{}]
                             alias+))]
-     (-> {::$.maestro/deps    dep+
-          ::$.maestro/depth   0
-          ::$.maestro/exclude #{}
-          ::$.maestro/include #{}
-          ::$.maestro/path    []
-          ::$.maestro/result  (dissoc dep+
-                                      :aliases)}
+     (-> {::$.maestro/deps-edn         (dissoc deps-maestro-edn
+                                               :aliases)
+          ::$.maestro/deps-maestro-edn deps-maestro-edn
+          ::$.maestro/depth            0
+          ::$.maestro/exclude          #{}
+          ::$.maestro/include          #{}
+          ::$.maestro/path             []}
          (-walk+ alias-2+)
          (-flatten-alias+))))
 
@@ -240,10 +241,10 @@
 
 (defn run-string
 
-  [str-alias+ dep+]
+  [str-alias+ deps-maestro-edn]
 
   (run (map keyword
             (-> str-alias+
                 (C.string/split #":")
                 (rest)))
-       dep+))
+       deps-maestro-edn))

@@ -44,7 +44,7 @@
           ::$.maestro/level
           (fn [level]
             (let [alias+ (keys (get-in state
-                                       [::$.maestro/deps
+                                       [::$.maestro/deps-maestro-edn
                                         :aliases]))]
               (concat (sort (into #{}
                                   (comp (keep namespace)
@@ -70,7 +70,7 @@
                                             (= (namespace alias)
                                                nm))
                                           (keys (get-in state
-                                                        [::$.maestro/deps
+                                                        [::$.maestro/deps-maestro-edn
                                                          :aliases]))))
                             level))))))
 

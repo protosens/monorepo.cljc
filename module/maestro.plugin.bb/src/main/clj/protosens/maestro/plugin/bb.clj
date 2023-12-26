@@ -52,7 +52,7 @@
                                        deps-maestro-edn)
         bb-edn-new (merge bb-maestro-edn
                           (-> sorted
-                              (::$.maestro/result)
+                              (::$.maestro/deps-edn)
                               (select-keys [:deps
                                             :paths])))]
     (when-not (= bb-edn-new

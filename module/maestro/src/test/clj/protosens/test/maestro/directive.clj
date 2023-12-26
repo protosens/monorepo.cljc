@@ -19,7 +19,7 @@
   (cond->
     state
     (not nm)
-    (update-in [::$.maestro/deps
+    (update-in [::$.maestro/deps-maestro-edn
                 ::i]
                inc)))
 
@@ -36,7 +36,7 @@
                                            ,
                                            ::i
                                            0})
-               (get-in [::$.maestro/deps
+               (get-in [::$.maestro/deps-maestro-edn
                         ::i])))))
 
 

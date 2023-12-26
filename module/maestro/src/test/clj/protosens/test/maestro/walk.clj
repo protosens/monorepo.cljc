@@ -1,4 +1,4 @@
-(ns protosens.test.maestro
+(ns protosens.test.maestro.walk
 
   (:require [clojure.test                  :as T]
             [protosens.maestro             :as $.maestro]
@@ -11,6 +11,8 @@
 
 
 (T/deftest run
+
+  ;; Also tests `run-string` via [[-t-path]].
 
 
   (T/testing
@@ -166,6 +168,6 @@
                              nil))
                (-> ($.maestro.walk/run [:m/a]
                                        dep+)
-                   (::$.maestro/result)
+                   (::$.maestro/deps-edn)
                    (update :paths
                            set)))))))

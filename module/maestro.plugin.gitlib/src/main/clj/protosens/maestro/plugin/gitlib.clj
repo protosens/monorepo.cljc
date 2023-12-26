@@ -67,7 +67,7 @@
                                (definition :extra-paths))
         deps-edn-exposed (-> ($.maestro.walk/run [exposed]
                                                  deps-edn)
-                             (::$.maestro/result))
+                             (::$.maestro/deps-edn))
         child+           (into []
                                (keep (fn [[dep-alias dep-definition]]
                                        (when-not (= dep-alias
