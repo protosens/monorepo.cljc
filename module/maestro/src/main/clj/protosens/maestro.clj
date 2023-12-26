@@ -53,6 +53,27 @@
 
 
 (defmethod directive
+           "EVERY"
+
+  [state _nspace nm]
+
+  (cond->
+    state
+    nm
+    (update ::level
+            (fn [level]
+              (cons (keyword nm)
+                    (concat (sort (filter (fn [alias]
+                                            (= (namespace alias)
+                                               nm))
+                                          (keys (get-in state
+                                                        [::deps
+                                                         :aliases]))))
+                            level))))))
+
+
+
+(defmethod directive
            "SHALLOW"
 
   [state _nspace nm]
@@ -233,23 +254,33 @@
 
   [state kw+]
 
-  (let [depth (state ::depth)]
-    (reduce (fn [state-2 kw]
-              (when-not (keyword? kw)
-                (throw (IllegalArgumentException. (format "%s should be a keyword!"
-                                                          (pr-str kw)))))
-              (or (some-> (when-not (-processed? state-2
-                                                 kw)
-                            (if (qualified-keyword? kw)
-                              (-walk-qualified state-2
-                                               kw) 
-                              (-walk-unqualified state-2
-                                                 kw)))
-                          (assoc ::depth
-                                 depth))
-                  state-2))
-            state
-            kw+)))
+  (let [depth (state ::depth)
+        level (state ::level)]
+    (loop [state-2 (assoc state
+                          ::level
+                          kw+)]
+      (if-some [level-2 (seq (state-2 ::level))]
+        (recur
+          (let [kw      (first level-2)
+                state-3 (update state-2
+                                ::level
+                                rest)]
+            (when-not (keyword? kw)
+              (throw (IllegalArgumentException. (format "%s should be a keyword!"
+                                                        (pr-str kw)))))
+            (or (some-> (when-not (-processed? state-3
+                                               kw)
+                          (if (qualified-keyword? kw)
+                            (-walk-qualified state-3
+                                             kw) 
+                            (-walk-unqualified state-3
+                                               kw)))
+                        (assoc ::depth
+                               depth))
+                state-3)))
+        (assoc state-2
+               ::level
+               level)))))
 
 
 ;;;;;;;;;;
