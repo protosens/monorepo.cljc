@@ -329,7 +329,14 @@
   :module/maestro.plugin.bb
 
   {:extra-paths     ["module/maestro.plugin.bb/src/main/clj/"]
-   :maestro/require [:module/maestro]}
+   :maestro/require [:module/maestro
+                     :test/maestro.plugin.bb]}
+
+
+  :test/maestro.plugin.bb
+
+  {:extra-paths     ["module/maestro.plugin.bb/src/test/clj/"]
+   :maestro/require [:module/maestro.plugin.bb]}
 
   ;---
 

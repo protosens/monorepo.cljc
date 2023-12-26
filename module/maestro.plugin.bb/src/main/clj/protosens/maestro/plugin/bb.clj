@@ -7,6 +7,10 @@
             [protosens.maestro  :as $.maestro]))
 
 
+(set! *warn-on-reflection*
+      true)
+
+
 ;;;;;;;;;; Private side effects
 
 
