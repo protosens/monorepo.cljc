@@ -1,10 +1,36 @@
-(ns protosens.test.maestro.walk
+(ns protosens.test.maestro
 
-  (:require [clojure.test                  :as T]
-            [protosens.maestro             :as $.maestro]
-            [protosens.maestro.walk        :as $.maestro.walk]
-            [protosens.test.maestro.assert :refer  [path]
-                                           :rename {path -t-path}]))
+  (:require [clojure.test      :as T]
+            [protosens.maestro :as $.maestro]))
+
+
+;;;;;;;;;; Preparation
+
+
+(defmethod $.maestro/search
+           "UNIT_TEST"
+
+  [state kw]
+
+  (update-in state
+             [::$.maestro/deps-maestro-edn
+              ::result]
+             conj
+             kw))
+
+
+;;;;;;;;;; Reusable assertions
+
+
+(defn -t-path
+
+  [message input alias-def+ path]
+
+  (T/is (= path
+           (-> ($.maestro/run-string input
+                                     {:aliases alias-def+})
+               (::$.maestro/path)))
+        message))
 
 
 ;;;;;;;;;; Tests
@@ -12,7 +38,7 @@
 
 (T/deftest run
 
-  ;; Also tests `run-string` via [[-t-path]].
+  ;; Also tests [[$.maestro/run-string]] via [[-t-path]].
 
 
   (T/testing
@@ -118,8 +144,8 @@
                         [[:m 0] [:m/a 0] [:m/b 1] [:m/c 1]]]]]
       (T/is (= path
                (-> (deref (future
-                            ($.maestro.walk/run [:m/a]
-                                                {:aliases def-dep+}))
+                            ($.maestro/run [:m/a]
+                                           {:aliases def-dep+}))
                           100
                           nil)
                    (::$.maestro/path)))
@@ -128,16 +154,16 @@
 
   (T/testing
 
-    "Missing namespaced aliases throw"
+    "Throwes when namespaced aliases are missing"
 
     (T/is (thrown? Exception
-                   ($.maestro.walk/run [:m/a]
-                                       {}))
+                   ($.maestro/run [:m/a]
+                                  {}))
           "Empty")
 
     (T/is (thrown? Exception
-                   ($.maestro.walk/run [:m/a]
-                                       {:aliases {:m/a {:maestro/require [:m/b]}}}))
+                   ($.maestro/run [:m/a]
+                                  {:aliases {:m/a {:maestro/require [:m/b]}}}))
           "Missing dep"))
 
 
@@ -166,8 +192,112 @@
                    (assoc-in [:aliases
                               :m]
                              nil))
-               (-> ($.maestro.walk/run [:m/a]
-                                       dep+)
+               (-> ($.maestro/run [:m/a]
+                                  dep+)
                    (::$.maestro/deps-edn)
                    (update :paths
-                           set)))))))
+                           set))))))
+
+
+  (T/testing
+
+    "Directives"
+
+
+    (T/is (= [:UNIT_TEST
+              :UNIT_TEST/foo]
+             ,
+             (-> ($.maestro/run-string ":UNIT_TEST/foo:m/a"
+                                       {:aliases
+                                        {:m/a {}}
+                                        ,
+                                        ::result
+                                        []})
+                 (get-in [::$.maestro/deps-maestro-edn
+                          ::result])))
+          "Application")
+
+
+    (T/testing
+      
+      "`:EVERY/...`"
+
+      (-t-path "All \"tests\" required"
+               ":EVERY/t"
+               {:m/a {}
+                :m/b {}
+                :t   {:maestro/require [:m]}
+                :t/a {:maestro/require [:m/a]}
+                :t/b {:maestro/require [:m/b]}}
+               [[:EVERY 0] [:EVERY/t 0] [:t 1] [:m 2] [:t/a 1] [:m/a 2] [:t/b 1] [:m/b 2]]))
+    
+
+    (T/testing
+
+      "`:GOD`"
+
+      (-t-path "Everything is required"
+               ":GOD"
+               {:m/a {:maestro/require [:m/b
+                                        :t/a]}
+                :m/b {:maestro/require [:t/b]}
+                :t/a {}
+                :t/b {}}
+               [[:GOD 0] [:m 1] [:t 1] [:m/a 1] [:m/b 2] [:t/b 3] [:t/a 2]]))
+
+
+    (T/testing
+
+      "`:SHALLOW/...` (and core assumptions about directive application)"
+  
+
+      (-t-path "Activated at input"
+               ":t:SHALLOW/t:t/a"
+               {:t/a {:maestro/require [:m/a
+                                        :t/b]}
+                :t/b {}
+                :t   {:maestro/require [:m]}
+                :m/a {}}
+               [[:t 0] [:m 1] [:SHALLOW 0] [:SHALLOW/t 0] [:t/a 0] [:m/a 1]])
+    
+      (-t-path "Activated at input (2)"
+               ":SHALLOW/t:t/a"
+               {:t/a {:maestro/require [:m/a
+                                        :t/b]}
+                :t/b {}
+                :t   {:maestro/require [:m]}
+                :m/a {}}
+               [[:SHALLOW 0] [:SHALLOW/t 0] [:t 0] [:m 1] [:t/a 0] [:m/a 1]])
+    
+      (-t-path "Activated at input but too late"
+               ":t/a:SHALLOW/t"
+               {:t/a {:maestro/require [:m/a
+                                        :t/b]}
+                :t/b {}
+                :t   {:maestro/require [:m]}
+                :m/a {}}
+               [[:t 0] [:m 1] [:t/a 0] [:m/a 1] [:t/b 1] [:SHALLOW 0] [:SHALLOW/t 0]])
+    
+      (-t-path "Activated transitively"
+               ":t/a"
+               {:t/a {:maestro/require [:m/a
+                                        :SHALLOW/t
+                                        :t/b]}
+                :t/b {}
+                :t   {:maestro/require [:m]}
+                :m/a {}}
+               [[:t 0] [:m 1] [:t/a 0] [:m/a 1] [:SHALLOW/t 1]])
+    
+      (-t-path "Activated transitively twice but initialized once"
+               ":t/a"
+               {:t/a {:maestro/require [:m/a
+                                        :SHALLOW/t
+                                        :SHALLOW/d
+                                        :t/b
+                                        :d/a]}
+                :t/b {}
+                :t   {:maestro/require [:m
+                                        :d]}
+                :d/a {}
+                :m/a {}}
+               [[:t 0] [:m 1] [:d 1] [:t/a 0] [:m/a 1] [:SHALLOW/t 1] [:SHALLOW/d 1]]))))
