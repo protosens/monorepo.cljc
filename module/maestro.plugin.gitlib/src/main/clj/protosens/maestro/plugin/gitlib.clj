@@ -12,13 +12,15 @@
 
    The [[deploy]] task does the necessary step for exposition."
 
-  (:require [babashka.fs        :as bb.fs]
-            [clojure.java.io    :as C.java.io]
-            [clojure.pprint     :as C.pprint]
-            [clojure.string     :as C.string]
-            [protosens.edn.read :as $.edn.read]
-            [protosens.git      :as $.git]
-            [protosens.maestro  :as $.maestro]))
+  (:require [babashka.fs              :as       bb.fs]
+            [clojure.java.io          :as       C.java.io]
+            [clojure.pprint           :as       C.pprint]
+            [clojure.string           :as       C.string]
+            [protosens.edn.read       :as       $.edn.read]
+            [protosens.git            :as       $.git]
+            [protosens.maestro        :as-alias $.maestro]
+            [protosens.maestro.plugin :as       $.maestro.plugin]
+            [protosens.maestro.walk   :as       $.maestro.walk]))
 
 
 (set! *warn-on-reflection*
@@ -50,21 +52,21 @@
                                  [:aliases
                                   exposed])
         root-dir         (or (definition :maestro/root)
-                             ($.maestro/fail (format "Missing root directory for module `%s`."
-                                                     exposed)))
+                             ($.maestro.plugin/fail (format "Missing root directory for module `%s`."
+                                                            exposed)))
         path+            (mapv (fn [path]
                                  ;;
                                  ;; TODO. Should do proper resolution for accuracy.
                                  (when-not (C.string/starts-with? path
                                                                 root-dir)
-                                   ($.maestro/fail (format "Module `%s` has an extra path outside of its `:maestro/root`: `%s`"
-                                                           exposed
-                                                           path)))
+                                   ($.maestro.plugin/fail (format "Module `%s` has an extra path outside of its `:maestro/root`: `%s`"
+                                                                  exposed
+                                                                  path)))
                                  (str (bb.fs/relativize root-dir
                                                         path)))
                                (definition :extra-paths))
-        deps-edn-exposed (-> ($.maestro/-run (str exposed)
-                                             deps-edn)
+        deps-edn-exposed (-> ($.maestro.walk/run [exposed]
+                                                 deps-edn)
                              (::$.maestro/result))
         child+           (into []
                                (keep (fn [[dep-alias dep-definition]]
@@ -75,9 +77,9 @@
                                              [dep-alias
                                               exposed-name
                                               dep-root-dir]
-                                             ($.maestro/fail (format "Module `%s` is required by module `%s` but is not exposed."
-                                                                     exposed
-                                                                     dep-alias)))))))
+                                             ($.maestro.plugin/fail (format "Module `%s` is required by module `%s` but is not exposed."
+                                                                            exposed
+                                                                            dep-alias)))))))
                                (deps-edn-exposed :aliases))
         url              (deps-edn-exposed :maestro.plugin.gitlib/url)]
     {::file    {:deps  (into (or (deps-edn-exposed :deps)
@@ -204,11 +206,11 @@
    ;;
    ;; Ensure repository is clean.
    (when-not ($.git/clean?)
-     ($.maestro/fail "Repository must be sparkling clean, no modified or untracked files"))
+     ($.maestro.plugin/fail "Repository must be sparkling clean, no modified or untracked files"))
    (let [deps-edn-2 (or deps-edn
                         (-read-deps-edn))]
      (when-not (deps-edn-2 :maestro.plugin.gitlib/url)
-       ($.maestro/fail "Missing Git URL"))
+       ($.maestro.plugin/fail "Missing Git URL"))
      ;;
      ;; Prepare exposition.
      (let [git-sha ($.git/commit-sha 0)]

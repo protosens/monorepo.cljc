@@ -5,8 +5,8 @@
    Reliably computes source and test paths for aliases you are working with.
    No need to maintain several test suites manually."
 
-  (:require [babashka.fs       :as bb.fs]
-            [protosens.maestro :as $.maestro]))
+  (:require [babashka.fs              :as bb.fs]
+            [protosens.maestro.plugin :as $.maestro.plugin]))
 
 
 ;;;;;;;;;;
@@ -53,17 +53,17 @@
                      [:test/_])]
       (println "- Kaocha is required, proceeding")
       (when-not path
-        ($.maestro/fail "Kaocha plugin for Maestro requires a path!"))
+        ($.maestro.plugin/fail "Kaocha plugin for Maestro requires a path!"))
       (println (format "- File to reference in your Kaocha test file is `%s`"
                        path))
       (bb.fs/create-dirs (bb.fs/parent path))
       (when (or (not (coll? for+))
                 (empty? for+))
-        ($.maestro/fail "Kaocha plugin for Maestro requires a collection of alias namespaces to test!"))
+        ($.maestro.plugin/fail "Kaocha plugin for Maestro requires a collection of alias namespaces to test!"))
       (let [for-2+ (reduce (fn [for-2+ kw]
                              (when-not (qualified-keyword? kw)
-                               ($.maestro/fail (format "Only qualified keywords can be used to select aliases, got: %s"
-                                                       (pr-str kw))))
+                               ($.maestro.plugin/fail (format "Only qualified keywords can be used to select aliases, got: %s"
+                                                              (pr-str kw))))
                              (conj for-2+
                                    (namespace kw)))
                            #{}
