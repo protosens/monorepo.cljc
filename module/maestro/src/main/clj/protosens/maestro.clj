@@ -53,7 +53,7 @@
 
 
 (defmethod directive
-           "shallow*"
+           "SHALLOW"
 
   [state _nspace nm]
 
