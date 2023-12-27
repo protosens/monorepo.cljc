@@ -199,9 +199,7 @@
 
   ([deps-edn]
 
-   (println)
-   (println "[maestro.plugin.gitlib]")
-   (println)
+   ($.maestro.plugin/intro "maestro.plugin.gitlib")
    ;;
    ;; Ensure repository is clean.
    (when-not ($.git/clean?)

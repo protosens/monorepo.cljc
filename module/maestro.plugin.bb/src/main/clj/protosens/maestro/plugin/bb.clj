@@ -1,10 +1,11 @@
 (ns protosens.maestro.plugin.bb
 
-  (:require [clojure.java.io    :as C.java.io]
-            [clojure.pprint     :as C.pprint]
-            [clojure.string     :as C.string]
-            [protosens.edn.read :as $.edn.read]
-            [protosens.maestro  :as $.maestro]))
+  (:require [clojure.java.io          :as C.java.io]
+            [clojure.pprint           :as C.pprint]
+            [clojure.string           :as C.string]
+            [protosens.edn.read       :as $.edn.read]
+            [protosens.maestro        :as $.maestro]
+            [protosens.maestro.plugin :as $.maestro.plugin]))
 
 
 (set! *warn-on-reflection*
@@ -18,14 +19,15 @@
 
   [path]
 
-  (println "- Done, prepared `bb.edn` with aliases:")
+  (println "- Prepared `bb.edn` with aliases:")
   (println)
   (doseq [[alias
            depth] path]
     (println (format "%s%s"
                      (C.string/join (repeat (inc depth)
                                             "  "))
-                     alias))))
+                     alias)))
+  ($.maestro.plugin/done "Ready to use Babashka"))
 
 
 
@@ -65,11 +67,7 @@
 
   [alias]
 
-  (println)
-  (println "---")
-  (println)
-  (println "[maestro.plugin.bb]")
-  (println)
+  ($.maestro.plugin/intro "maestro.plugin.bb")
   (println "- Creating `bb.edn` from `bb.maestro.edn` and `deps.maestro.edn`")
   (println (format "- Computing everything required for alias `%s`"
                    alias))
@@ -80,4 +78,4 @@
                           ($.edn.read/file "deps.maestro.edn"))]
     (-write-file bb-edn
                  path)
-    (println "- Done, nothing changed")))
+    ($.maestro.plugin/done "Nothing changed")))

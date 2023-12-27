@@ -294,6 +294,7 @@
 
   ([alias-str]
 
+   ($.maestro.plugin/intro "maestro")
    (let [alias-str-2      (or alias-str
                               (first *command-line-args*)
                               ($.maestro.plugin/fail "No input aliases given"))
@@ -307,11 +308,6 @@
      (with-open [file (C.java.io/writer "deps.edn")]
        (C.pprint/pprint deps-edn
                         file))
-     (println)
-     (println "[maestro]")
-     (println)
-     (println "- Prepared `deps.edn` for:")
-     (println)
      (doseq [[alias
               depth] (state ::path)]
        (println (format "%s%s"

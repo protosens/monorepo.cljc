@@ -36,16 +36,12 @@
 
   [deps]
 
-  (println)
-  (println "---")
-  (println)
-  (println "[maestro.plugin.kaocha]")
-  (println)
+  ($.maestro.plugin/intro "maestro.plugin.kaocha")
   (if-not (some #(= %
                    'lambdaisland/kaocha)
                 (keys (deps :deps)))
     ;;
-    (println "- Kaocha is not required, nothing will be done")
+    ($.maestro.plugin/done "Kaocha is not required")
     ;;
     (let [alias+ (deps :aliases)
           path   (deps :maestro.plugin.kaocha/path)
@@ -86,5 +82,5 @@
                                                                        (namespace alias))
                                                         (:extra-paths definition))))
                                             alias+)})))
-      (println "- Done, ready for testing")))
+      ($.maestro.plugin/done "Ready for testing")))
   deps)
