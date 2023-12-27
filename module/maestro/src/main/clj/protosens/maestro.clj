@@ -251,36 +251,37 @@
                (when-not (keyword? node)
                  ($.maestro.plugin/fail (format "`%s` should be a keyword!"
                                                 (pr-str node))))
-               (if (not (contains? (state-2 ::visited)
+               (let [visited? (state-2 ::visited)]
+                 (if (visited? node)
+                   state-2
+                   (let [state-3 (-> state-2
+                                     (update ::visited
+                                             conj
+                                             node)
+                                     (search node))]
+                     (when (and $.maestro.plugin/*print-path?*
+                                (= (first (peek (state-3 ::path)))
                                    node))
-                 (do
-                   (when $.maestro.plugin/*print-path?*
-                     (let [visited? (state-2 ::visited)
-                           sibling? (boolean (some (comp not
-                                                         visited?)
-                                                   (some-> (state-2 ::stack)
-                                                           peek)))]
-                       (println (format "\033[33m%s%s\033[0m%s\033[0m"
-                                        (C.string/join (map (fn [level]
-                                                              (if (seq level)
-                                                                (if (seq (filter (comp not
-                                                                                     visited?)
-                                                                               level))
-                                                                  "│       "
-                                                                  "·       ")
-                                                                "        "))
-                                                            (reverse (rest (state-2 ::stack)))))
-                                        (if sibling?
-                                          "├───────"
-                                          ,
-                                          "└───────")
-                                        node))))
-                   (-> state-2
-                       (update ::visited
-                               conj
-                               node)
-                       (search node)))
-                 state-2))
+                       (let [sibling? (boolean (some (comp not
+                                                           visited?)
+                                                     (some-> (state-2 ::stack)
+                                                             peek)))]
+                         (println (format "\033[33m%s%s\033[0m%s\033[0m"
+                                          (C.string/join (map (fn [level]
+                                                                (if (seq level)
+                                                                  (if (seq (filter (comp not
+                                                                                       visited?)
+                                                                                 level))
+                                                                    "│       "
+                                                                    "·       ")
+                                                                  "        "))
+                                                              (reverse (rest (state-2 ::stack)))))
+                                          (if sibling?
+                                            "├───────"
+                                            ,
+                                            "└───────")
+                                          node))))
+                     state-3))))
              identity
              node-2+)
         ,
