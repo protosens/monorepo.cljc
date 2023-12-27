@@ -1,10 +1,13 @@
 (ns protosens.maestro
 
-  (:require [clojure.java.io          :as C.java.io]
-            [clojure.pprint           :as C.pprint]
-            [clojure.string           :as C.string]
-            [protosens.edn.read       :as $.edn.read]
-            [protosens.maestro.plugin :as $.maestro.plugin]))
+  (:require [clojure.java.io                    :as C.java.io]
+            [clojure.pprint                     :as C.pprint]
+            [clojure.string                     :as C.string]
+            [protosens.edn.read                 :as $.edn.read]
+            [protosens.maestro.plugin           :as $.maestro.plugin]
+            [protosens.maestro.search           :as $.maestro.search]
+            [protosens.maestro.search.alias     :as $.maestro.search.alias]
+            [protosens.maestro.search.namespace :as $.maestro.search.namespace]))
 
 
 (set! *warn-on-reflection*
@@ -22,89 +25,21 @@
                         ::level (seq node+)
                         ::stack '())]
     (if-some [level (seq (state-2 ::level))]
-      (let [node    (first level)
-            state-3 (-> state-2
-                        (dissoc ::level)
-                        (update ::stack
-                                conj
-                                (rest level))
-                        (enter node))]
-        (-> state-3 
+      (let [node (first level)]
+        (-> state-2
+            (dissoc ::level)
+            (update ::stack
+                    conj
+                    (rest level))
+            (enter node)
             (recur)))
       (if-some [stack (seq (state-2 ::stack))]
         (-> state-2
-            (assoc ::level (first stack)
-                   ::stack (rest stack))
+            (assoc ::level (peek stack)
+                   ::stack (pop stack))
             (exit)
             (recur))
         state-2))))
-
-
-;;;;;;;;;; Private helpers
-
-
-(defn- -conj-path
-
-  [state node]
-
-  (update state
-          ::path
-          conj
-          [node
-           (dec (count (state ::stack)))]))
-
-
-
-(defn- -flatten-alias+
-
-  [state]
-
-  (update state
-          ::deps-edn
-          (fn [deps-edn]
-            (reduce (fn [deps-edn-2 alias-def]
-                      (-> deps-edn-2
-                          (update :deps
-                                  merge ;; TODO. Ensure that no dep gets overwritten?
-                                  (:extra-deps alias-def))
-                          (update :paths
-                                  (fnil into
-                                        [])
-                                  (:extra-paths alias-def))))
-                    deps-edn
-                    (vals (deps-edn :aliases))))))
-
-
-
-(defn- -next-level
-
-  [state alias level]
-  
-  (-> state
-      (-conj-path alias)
-      (assoc ::level
-             level)))
-
-
-
-(defn- -require
-
-  [state alias]
-
-  (-> state
-      (assoc-in [::deps-edn
-                 :aliases
-                 alias]
-                (get-in state
-                        [::deps-maestro-edn
-                         :aliases
-                         alias]))
-      (-next-level alias
-                   (get-in state
-                           [::deps-maestro-edn
-                            :aliases
-                            alias
-                            :maestro/require]))))
 
 
 ;;;;;;;;;; Dispatching keywords which may be aliases or "directives"
@@ -134,30 +69,22 @@
 
   (if (qualified-keyword? kw)
     ;;
-    ;; Qualified.
-    (if-some [definition (get-in state
-                                 [::deps-maestro-edn
-                                  :aliases
-                                  kw])]
-      (let [nspace (namespace kw)]
-        (cond->
-          state
-          (or (and (not (contains? (state ::exclude)
-                                   nspace))
-                   (contains? (state ::include)
-                              nspace))
-              (contains? (state ::input)
-                         kw))
-          (-require kw)))
-      ($.maestro.plugin/fail (format "Node `%s` does not exist"
-                                     kw)))
+    ;; Qualified, must be an existing alias.
+    (do
+      (when-not ($.maestro.search.alias/defined? state
+                                                 kw)
+        ($.maestro.plugin/fail (format "Node `%s` does not exist"
+                                       kw)))
+      (cond->
+        state
+        ($.maestro.search.alias/include? state
+                                         kw)
+        ($.maestro.search.alias/deeper kw)))
     ;;
-    ;; Unqualified.
+    ;; Unqualified, might be an existing alias but does not need to be.
     (-> state
-        (update ::include
-                conj
-                (name kw))
-        (-require kw))))
+        ($.maestro.search.namespace/include (name kw))
+        ($.maestro.search.alias/deeper kw))))
 
 
 
@@ -167,15 +94,15 @@
   [state kw]
 
   (if-some [nm (name kw)]
-    (-next-level state
-                 kw
-                 (cons (keyword nm)
-                       (sort (filter (fn [alias]
-                                       (= (namespace alias)
-                                          nm))
-                                     (keys (get-in state
-                                                   [::deps-maestro-edn
-                                                    :aliases]))))))
+    ($.maestro.search/deeper state
+                             kw
+                             (cons (keyword nm)
+                                   (sort (filter (fn [alias]
+                                                   (= (namespace alias)
+                                                      nm))
+                                                 (keys (get-in state
+                                                               [::deps-maestro-edn
+                                                                :aliases]))))))
     state))
 
 
@@ -188,16 +115,16 @@
   (when (qualified-keyword? kw)
     ($.maestro.plugin/fail (format "`:GOD` node should not be namespaced: `%s`"
                                    kw)))
-  (-next-level state
-               kw
-               (let [alias+ (keys (get-in state
-                                          [::deps-maestro-edn
-                                           :aliases]))]
-                 (concat (sort (into #{}
-                                     (comp (keep namespace)
-                                           (map keyword))
-                                     alias+))
-                         (sort alias+)))))
+  ($.maestro.search/deeper state
+                           kw
+                           (let [alias+ (keys (get-in state
+                                                      [::deps-maestro-edn
+                                                       :aliases]))]
+                             (concat (sort (into #{}
+                                                 (comp (keep namespace)
+                                                       (map keyword))
+                                                 alias+))
+                                     (sort alias+)))))
 
 
 
@@ -208,17 +135,33 @@
 
   (if-some [nm (name kw)]
     (-> state
-        (-conj-path kw)
-        (update ::exclude
-                conj
-                nm)
-        (update ::include
-                disj
-                nm))
+        ($.maestro.search/conj-path kw)
+        ($.maestro.search.namespace/exclude nm))
     state))
 
 
 ;;;;;;;;;; Main algorithms
+
+
+(defn- -flatten-deps-edn
+
+  [state]
+
+  (update state
+          ::deps-edn
+          (fn [deps-edn]
+            (reduce (fn [deps-edn-2 alias-def]
+                      (-> deps-edn-2
+                          (update :deps
+                                  merge ;; TODO. Ensure that no dep gets overwritten?
+                                  (:extra-deps alias-def))
+                          (update :paths
+                                  (fnil into
+                                        [])
+                                  (:extra-paths alias-def))))
+                    deps-edn
+                    (vals (deps-edn :aliases))))))
+
 
 
 (defn  run
@@ -239,7 +182,7 @@
     (when $.maestro.plugin/*print-path?*
       (println "\033[33m│\033[32m"))
     (-> {::deps-edn         (dissoc deps-maestro-edn
-                                              :aliases)
+                                    :aliases)
          ::deps-maestro-edn deps-maestro-edn
          ::input            (set node-2+)
          ::exclude          #{}
@@ -285,7 +228,7 @@
              identity
              node-2+)
         ,
-        (-flatten-alias+))))
+        (-flatten-deps-edn))))
 
 
 
@@ -316,11 +259,11 @@
    (task nil))
 
 
-  ([alias-str]
+  ([string-node+]
 
    ($.maestro.plugin/intro "maestro")
    ($.maestro.plugin/step "Selecting required modules")
-   (let [alias-str-2      (or alias-str
+   (let [alias-str-2      (or string-node+
                               (first *command-line-args*)
                               ($.maestro.plugin/fail "No input aliases given"))
          deps-maestro-edn (try
@@ -331,10 +274,9 @@
                             (-> (run-string alias-str-2
                                             deps-maestro-edn)
                                 (::deps-edn)))]
+     ($.maestro.plugin/step "Writing selection to `deps.edn`")
      (with-open [file (C.java.io/writer "deps.edn")]
        (C.pprint/pprint deps-edn
                         file))
-     ($.maestro.plugin/step "Writing selection to `deps.edn`")
      ($.maestro.plugin/done "`deps.edn` is ready")
-     
      deps-edn)))
