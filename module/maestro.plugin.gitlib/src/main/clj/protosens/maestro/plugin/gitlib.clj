@@ -12,15 +12,14 @@
 
    The [[deploy]] task does the necessary step for exposition."
 
-  (:require [babashka.fs              :as       bb.fs]
-            [clojure.java.io          :as       C.java.io]
-            [clojure.pprint           :as       C.pprint]
-            [clojure.string           :as       C.string]
-            [protosens.edn.read       :as       $.edn.read]
-            [protosens.git            :as       $.git]
-            [protosens.maestro        :as-alias $.maestro]
-            [protosens.maestro.plugin :as       $.maestro.plugin]
-            [protosens.maestro.walk   :as       $.maestro.walk]))
+  (:require [babashka.fs              :as bb.fs]
+            [clojure.java.io          :as C.java.io]
+            [clojure.pprint           :as C.pprint]
+            [clojure.string           :as C.string]
+            [protosens.edn.read       :as $.edn.read]
+            [protosens.git            :as $.git]
+            [protosens.maestro        :as $.maestro]
+            [protosens.maestro.plugin :as $.maestro.plugin]))
 
 
 (set! *warn-on-reflection*
@@ -65,8 +64,8 @@
                                  (str (bb.fs/relativize root-dir
                                                         path)))
                                (definition :extra-paths))
-        deps-edn-exposed (-> ($.maestro.walk/run [exposed]
-                                                 deps-edn)
+        deps-edn-exposed (-> ($.maestro/run [exposed]
+                                            deps-edn)
                              (::$.maestro/deps-edn))
         child+           (into []
                                (keep (fn [[dep-alias dep-definition]]

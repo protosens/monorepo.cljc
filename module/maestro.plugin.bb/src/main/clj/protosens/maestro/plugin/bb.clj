@@ -1,11 +1,10 @@
 (ns protosens.maestro.plugin.bb
 
-  (:require [clojure.java.io        :as C.java.io]
-            [clojure.pprint         :as C.pprint]
-            [clojure.string         :as C.string]
-            [protosens.edn.read     :as $.edn.read]
-            [protosens.maestro      :as-alias $.maestro]
-            [protosens.maestro.walk :as $.maestro.walk]))
+  (:require [clojure.java.io    :as C.java.io]
+            [clojure.pprint     :as C.pprint]
+            [clojure.string     :as C.string]
+            [protosens.edn.read :as $.edn.read]
+            [protosens.maestro  :as $.maestro]))
 
 
 (set! *warn-on-reflection*
@@ -48,8 +47,8 @@
 
   [alias bb-edn bb-maestro-edn deps-maestro-edn]
 
-  (let [sorted     ($.maestro.walk/run [alias]
-                                       deps-maestro-edn)
+  (let [sorted     ($.maestro/run [alias]
+                                  deps-maestro-edn)
         bb-edn-new (merge bb-maestro-edn
                           (-> sorted
                               (::$.maestro/deps-edn)
