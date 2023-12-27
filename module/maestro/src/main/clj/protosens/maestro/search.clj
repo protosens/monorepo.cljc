@@ -1,6 +1,7 @@
 (ns protosens.maestro.search
 
-  (:require [protosens.maestro :as-alias $.maestro]))
+  (:require [protosens.graph.dfs :as $.graph.dfs]
+            [protosens.maestro   :as-alias $.maestro]))
 
 
 (set! *warn-on-reflection*
@@ -18,18 +19,17 @@
           ::$.maestro/path
           conj
           [node
-           (dec (count (state ::$.maestro/stack)))]))
+           ($.graph.dfs/depth state)]))
 
 
 
 (defn deeper
 
-  [state node level]
+  [state node node+]
   
   (-> state
       (conj-path node)
-      (assoc ::$.maestro/level
-             level)))
+      ($.graph.dfs/deeper node+)))
 
 
 

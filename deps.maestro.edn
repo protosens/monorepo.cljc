@@ -247,6 +247,19 @@
 
   ;---
 
+  :module/graph.dfs
+
+  {:extra-paths     ["module/graph.dfs/src/main/clj/"]
+   :maestro/require [:test/graph.dfs]}
+
+
+  :test/graph.dfs
+
+  {:extra-paths     ["module/graph.dfs/src/test/clj/"]
+   :maestro/require [:module/graph.dfs]}
+
+  ;---
+
   :module/lab.bench
 
   {:extra-paths                         ["module/lab.bench/src/main/clj"]
@@ -269,6 +282,7 @@
                                          :module/deps.edn
                                          :module/edn
                                          :module/git
+                                         :module/graph.dfs
                                          :module/namespace
                                          :module/process
                                          :module/string

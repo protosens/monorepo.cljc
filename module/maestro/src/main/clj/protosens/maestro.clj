@@ -4,6 +4,7 @@
             [clojure.pprint                     :as C.pprint]
             [clojure.string                     :as C.string]
             [protosens.edn.read                 :as $.edn.read]
+            [protosens.graph.dfs                :as $.graph.dfs]
             [protosens.maestro.plugin           :as $.maestro.plugin]
             [protosens.maestro.search           :as $.maestro.search]
             [protosens.maestro.search.alias     :as $.maestro.search.alias]
@@ -12,34 +13,6 @@
 
 (set! *warn-on-reflection*
       true)
-
-
-;;;;;;;;;; Generic graph implementations
-
-
-(defn dfs
-
-  [state enter exit node+]
-
-  (loop [state-2 (assoc state
-                        ::level (seq node+)
-                        ::stack '())]
-    (if-some [level (seq (state-2 ::level))]
-      (let [node (first level)]
-        (-> state-2
-            (dissoc ::level)
-            (update ::stack
-                    conj
-                    (rest level))
-            (enter node)
-            (recur)))
-      (if-some [stack (seq (state-2 ::stack))]
-        (-> state-2
-            (assoc ::level (peek stack)
-                   ::stack (pop stack))
-            (exit)
-            (recur))
-        state-2))))
 
 
 ;;;;;;;;;; Dispatching keywords which may be aliases or "directives"
@@ -190,7 +163,7 @@
          ::path             []
          ::visited          #{}}
         ,
-        (dfs (fn enter [state-2 node]
+        ($.graph.dfs/walk (fn enter [state-2 node]
                (when-not (keyword? node)
                  ($.maestro.plugin/fail (format "`%s` should be a keyword!"
                                                 (pr-str node))))
@@ -207,8 +180,7 @@
                                    node))
                        (let [sibling? (boolean (some (comp not
                                                            visited?)
-                                                     (some-> (state-2 ::stack)
-                                                             peek)))]
+                                                     ($.graph.dfs/sibling+ state-2)))]
                          (println (format "\033[33m%s%s\033[0m%s\033[0m"
                                           (C.string/join (map (fn [level]
                                                                 (if (seq level)
@@ -218,7 +190,7 @@
                                                                     "│       "
                                                                     "·       ")
                                                                   "        "))
-                                                              (reverse (rest (state-2 ::stack)))))
+                                                              (reverse ($.graph.dfs/pending state-2))))
                                           (if sibling?
                                             "├───────"
                                             ,
