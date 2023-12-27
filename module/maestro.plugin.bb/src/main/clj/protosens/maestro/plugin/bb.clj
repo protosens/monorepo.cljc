@@ -1,5 +1,6 @@
 (ns protosens.maestro.plugin.bb
 
+  (:import (java.io StringWriter))
   (:require [clojure.java.io          :as C.java.io]
             [clojure.pprint           :as C.pprint]
             [clojure.string           :as C.string]
@@ -15,31 +16,16 @@
 ;;;;;;;;;; Private side effects
 
 
-(defn- -print-path
-
-  [path]
-
-  (println "- Prepared `bb.edn` with aliases:")
-  (println)
-  (doseq [[alias
-           depth] path]
-    (println (format "%s%s"
-                     (C.string/join (repeat (inc depth)
-                                            "  "))
-                     alias)))
-  ($.maestro.plugin/done "Ready to use Babashka"))
-
-
-
 (defn- -write-file
 
   [bb-edn path]
 
-  (println "- Writing new `bb.edn`")
+  (println path)
+  ($.maestro.plugin/step "Writing new `bb.edn`")
   (with-open [file (C.java.io/writer "bb.edn")]
     (C.pprint/pprint bb-edn
                  file))
-  (-print-path path))
+  ($.maestro.plugin/done "Ready to use Babashka"))
 
 
 ;;;;;;;;;; Task
@@ -49,8 +35,11 @@
 
   [alias bb-edn bb-maestro-edn deps-maestro-edn]
 
-  (let [sorted     ($.maestro/run [alias]
-                                  deps-maestro-edn)
+  (let [path       (StringWriter.)
+        sorted     (binding [*out*                          path
+                             $.maestro.plugin/*print-path?* true]
+                     ($.maestro/run [alias]
+                                    deps-maestro-edn))
         bb-edn-new (merge bb-maestro-edn
                           (-> sorted
                               (::$.maestro/deps-edn)
@@ -59,7 +48,7 @@
     (when-not (= bb-edn-new
                  bb-edn)
       [bb-edn-new
-       (sorted ::$.maestro/path)])))
+       (str path)])))
 
 
 
@@ -68,9 +57,9 @@
   [alias]
 
   ($.maestro.plugin/intro "maestro.plugin.bb")
-  (println "- Creating `bb.edn` from `bb.maestro.edn` and `deps.maestro.edn`")
-  (println (format "- Computing everything required for alias `%s`"
-                   alias))
+  ($.maestro.plugin/step "Computing new `bb.edn` from `bb.maestro.edn` and `deps.maestro.edn`")
+  ($.maestro.plugin/step (format "Selecting everything required for alias `%s`"
+                                 alias))
   (if-some [[bb-edn
              path]  (-run alias
                           ($.edn.read/file "bb.edn")

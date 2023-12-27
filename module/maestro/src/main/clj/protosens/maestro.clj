@@ -25,11 +25,11 @@
       (let [node    (first level)
             state-3 (-> state-2
                         (dissoc ::level)
+                        (update ::stack
+                                conj
+                                (rest level))
                         (enter node))]
-        (-> state-3
-            (update ::stack
-                    conj
-                    (rest level))
+        (-> state-3 
             (recur)))
       (if-some [stack (seq (state-2 ::stack))]
         (-> state-2
@@ -51,7 +51,7 @@
           ::path
           conj
           [node
-           (count (state ::stack))]))
+           (dec (count (state ::stack)))]))
 
 
 
@@ -236,7 +236,8 @@
                                         [alias])))
                             (distinct))
                       node+)]
-    ,
+    (when $.maestro.plugin/*print-path?*
+      (println "\033[33m│\033[32m"))
     (-> {::deps-edn         (dissoc deps-maestro-edn
                                               :aliases)
          ::deps-maestro-edn deps-maestro-edn
@@ -250,14 +251,36 @@
                (when-not (keyword? node)
                  ($.maestro.plugin/fail (format "`%s` should be a keyword!"
                                                 (pr-str node))))
-               (cond->
-                 state-2
-                 (not (contains? (state-2 ::visited)
-                                 node))
-                 (-> (update ::visited
-                             conj
-                             node)
-                     (search node))))
+               (if (not (contains? (state-2 ::visited)
+                                   node))
+                 (do
+                   (when $.maestro.plugin/*print-path?*
+                     (let [visited? (state-2 ::visited)
+                           sibling? (boolean (some (comp not
+                                                         visited?)
+                                                   (some-> (state-2 ::stack)
+                                                           peek)))]
+                       (println (format "\033[33m%s%s\033[0m%s\033[0m"
+                                        (C.string/join (map (fn [level]
+                                                              (if (seq level)
+                                                                (if (seq (filter (comp not
+                                                                                     visited?)
+                                                                               level))
+                                                                  "│       "
+                                                                  "·       ")
+                                                                "        "))
+                                                            (reverse (rest (state-2 ::stack)))))
+                                        (if sibling?
+                                          "├───────"
+                                          ,
+                                          "└───────")
+                                        node))))
+                   (-> state-2
+                       (update ::visited
+                               conj
+                               node)
+                       (search node)))
+                 state-2))
              identity
              node-2+)
         ,
@@ -295,6 +318,7 @@
   ([alias-str]
 
    ($.maestro.plugin/intro "maestro")
+   ($.maestro.plugin/step "Selecting required modules")
    (let [alias-str-2      (or alias-str
                               (first *command-line-args*)
                               ($.maestro.plugin/fail "No input aliases given"))
@@ -302,16 +326,14 @@
                             ($.edn.read/file "deps.maestro.edn")
                             (catch Exception ex
                               ($.maestro.plugin/fail "Unable to read `deps.maestro.edn")))
-         state            (run-string alias-str-2
-                                      deps-maestro-edn)
-         deps-edn         (state ::deps-edn)]
+         deps-edn         (binding [$.maestro.plugin/*print-path?* true]
+                            (-> (run-string alias-str-2
+                                            deps-maestro-edn)
+                                (::deps-edn)))]
      (with-open [file (C.java.io/writer "deps.edn")]
        (C.pprint/pprint deps-edn
                         file))
-     (doseq [[alias
-              depth] (state ::path)]
-       (println (format "%s%s"
-                        (C.string/join (repeat (inc depth)
-                                               "  "))
-                        alias)))
+     ($.maestro.plugin/step "Writing selection to `deps.edn`")
+     ($.maestro.plugin/done "`deps.edn` is ready")
+     
      deps-edn)))

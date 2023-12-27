@@ -47,11 +47,11 @@
           path   (deps :maestro.plugin.kaocha/path)
           for+   (or (deps :maestro.plugin.kaocha/for)
                      [:test/_])]
-      (println "- Kaocha is required, proceeding")
+      ($.maestro.plugin/step "Kaocha is required, proceeding")
       (when-not path
         ($.maestro.plugin/fail "Kaocha plugin for Maestro requires a path!"))
-      (println (format "- File to reference in your Kaocha test file is `%s`"
-                       path))
+      ($.maestro.plugin/step (format "File to reference in your Kaocha test file is `%s`"
+                                     path))
       (bb.fs/create-dirs (bb.fs/parent path))
       (when (or (not (coll? for+))
                 (empty? for+))
@@ -64,10 +64,11 @@
                                    (namespace kw)))
                            #{}
                            for+)]
-        (println "- Aliases providing test paths are namespaced with:")
+        ($.maestro.plugin/step "Aliases providing test paths are namespaced with:")
         (doseq [nspace (sort for-2+)]
-          (println (format "    - `:%s/...`"
-                           nspace)))
+          ($.maestro.plugin/step 1
+                                 (format "`:%s/...`"
+                                         nspace)))
         (spit path
               (let [alias+ (deps :aliases)]
                 {:kaocha/source-paths (into []

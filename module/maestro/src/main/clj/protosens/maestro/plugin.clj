@@ -1,4 +1,6 @@
-(ns protosens.maestro.plugin)
+(ns protosens.maestro.plugin
+
+  (:require [clojure.string :as C.string]))
 
 
 ;;;;;;;;;; Private
@@ -9,7 +11,15 @@
   (atom true))
 
 
-;;;;;;;;;;
+;;;;;;;;;; Public
+
+
+(def ^:dynamic *print-path?*
+
+  false)
+
+
+;;;
 
 
 (defn done
@@ -49,3 +59,22 @@
   (println (format "\033[1m\033[36m[%s]\033[0m"
                    plugin-name))
   (println))
+
+
+
+(defn step
+
+
+  ([message]
+
+   (step nil
+         message))
+
+
+  ([level message]
+
+   (println (format "%s\033[33m•\033[0m %s"
+                    (C.string/join (repeat (or level
+                                               0)
+                                           "    "))
+                    message))))
