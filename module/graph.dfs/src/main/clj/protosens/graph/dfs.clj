@@ -8,9 +8,10 @@
 
   [state node+]
 
-  (assoc state
-         ::level
-         node+))
+  (update state
+          ::stack
+          conj
+          node+))
 
 
 
@@ -22,42 +23,118 @@
 
 
 
+(defn node
+
+  [state]
+
+  (first (peek (state ::stack))))
+
+
+
+(defn parent
+
+
+  ([state]
+
+   (parent state
+           nil))
+
+
+  ([state not-found]
+
+   (let [stack   (state ::stack)
+         stack-2 (pop stack)]
+     (if (seq stack-2)
+       (first (peek stack-2))
+       not-found))))
+
+
+
+(defn path
+
+  [state]
+
+  (map first
+       (state ::stack)))
+
+
+
 (defn pending
 
   [state]
 
-  (rest (state ::stack)))
+  (pop (state ::stack)))
 
 
 
-(defn sibling+
+(defn remaining-sibling+
 
   [state]
 
-  (peek (state ::stack)))
+  (rest (peek (state ::stack))))
 
 
 
 (defn walk
 
-  [state enter exit node+]
 
-  (loop [state-2 (assoc state
-                        ::level (seq node+)
-                        ::stack '())]
-    (if-some [level (seq (state-2 ::level))]
-      (let [node (first level)]
-        (-> state-2
-            (dissoc ::level)
-            (update ::stack
-                    conj
-                    (rest level))
-            (enter node)
-            (recur)))
-      (if-some [stack (seq (state-2 ::stack))]
-        (-> state-2
-            (assoc ::level (peek stack)
-                   ::stack (pop stack))
-            (exit)
-            (recur))
-        state-2))))
+  ([state enter node+]
+
+   (walk state
+         enter
+         nil
+         node+))
+
+
+  ([state enter exit node+]
+
+   (let [exit-2 (or exit
+                    identity)]
+     (loop [exiting? false
+            stack    (list node+)
+            state-2  state]
+       (if (seq stack)
+         (if exiting?
+           ;;
+           ;; Exiting.
+           (let [state-3 (exit-2 (assoc state-2
+                                        ::stack
+                                        stack))
+                 stack-2 (state-3 ::stack)]
+             (recur false
+                    (if (identical? stack-2
+                                    stack)
+                      (conj (pop stack)
+                            (rest (peek stack)))
+                      stack-2)
+                    state-3))
+           ;;
+           ;; Entering.
+           (if-some [level (seq (peek stack))]
+             ;;
+             ;; Node to process.
+             (let [state-3 (enter (assoc state-2
+                                         ::stack
+                                         stack))
+                   stack-2 (state-3 ::stack)]
+               (if (identical? stack-2
+                               stack)
+                 ;;
+                 ;; Cannot go deeper, mark node for exit.
+                 (recur true
+                        stack
+                        state-3)
+                 ;;
+                 ;; Go deeper.
+                 (recur false
+                        stack-2
+                        state-3)))
+             ;;
+             ;; Level processed, mark potential parent for exit.
+             (recur true
+                    (pop stack)
+                    state-2)))
+         ;;
+         ;; End.
+         (dissoc state-2
+                 ::stack))))))

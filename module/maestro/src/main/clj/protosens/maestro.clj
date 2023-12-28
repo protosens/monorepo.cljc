@@ -136,6 +136,48 @@
                     (vals (deps-edn :aliases))))))
 
 
+(defn- -enter
+
+  [state node]
+
+  (when-not (keyword? node)
+    ($.maestro.plugin/fail (format "`%s` should be a keyword!"
+                                   (pr-str node))))
+  (if (contains? (state ::visited)
+                 node)
+    state
+    (let [state-2 (-> state
+                     (update ::visited
+                             conj
+                             node)
+                     (search node))]
+      (when $.maestro.plugin/*print-path?*
+        (let [visited? (state-2 ::visited)
+              sibling? (boolean (some (comp not
+                                            visited?)
+                                      ($.graph.dfs/remaining-sibling+ state-2)))]
+          (println (format "\033[33m%s%s\033[0m%s%s\033[0m"
+                           (C.string/join (map (fn [level]
+                                                 (if-some [level-2 (identity level)]
+                                                   (if (seq (filter (comp not
+                                                                          visited?)
+                                                                    level-2))
+                                                     "│       "
+                                                     "·       ")
+                                                   "        "))
+                                               (reverse ($.graph.dfs/pending state))))
+                           (if sibling?
+                             "├───────"
+                             ,
+                             "└───────")
+                           (if (= (first (peek (state-2 ::path)))
+                                  node)
+                             "\033[32m"  ; green
+                             "\033[31m") ; red
+                           node))))
+      state-2)))
+
+
 
 (defn  run
 
@@ -163,42 +205,8 @@
          ::path             []
          ::visited          #{}}
         ,
-        ($.graph.dfs/walk (fn enter [state-2 node]
-               (when-not (keyword? node)
-                 ($.maestro.plugin/fail (format "`%s` should be a keyword!"
-                                                (pr-str node))))
-               (let [visited? (state-2 ::visited)]
-                 (if (visited? node)
-                   state-2
-                   (let [state-3 (-> state-2
-                                     (update ::visited
-                                             conj
-                                             node)
-                                     (search node))]
-                     (when (and $.maestro.plugin/*print-path?*
-                                (= (first (peek (state-3 ::path)))
-                                   node))
-                       (let [sibling? (boolean (some (comp not
-                                                           visited?)
-                                                     ($.graph.dfs/sibling+ state-2)))]
-                         (println (format "\033[33m%s%s\033[0m%s\033[0m"
-                                          (C.string/join (map (fn [level]
-                                                                (if (seq level)
-                                                                  (if (seq (filter (comp not
-                                                                                       visited?)
-                                                                                 level))
-                                                                    "│       "
-                                                                    "·       ")
-                                                                  "        "))
-                                                              (reverse ($.graph.dfs/pending state-2))))
-                                          (if sibling?
-                                            "├───────"
-                                            ,
-                                            "└───────")
-                                          node))))
-                     state-3))))
-             identity
-             node-2+)
+        ($.graph.dfs/walk -enter
+                          node-2+)
         ,
         (-flatten-deps-edn))))
 
