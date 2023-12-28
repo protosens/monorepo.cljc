@@ -75,6 +75,14 @@
 
 
 
+(defn stop
+
+  [state]
+
+  (dissoc state
+          ::stack))
+
+
 (defn walk
 
 

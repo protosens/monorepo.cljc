@@ -283,6 +283,59 @@
 
 
 
+(T/deftest stop
+
+  (T/is (= {:some :state}
+           ($.graph.dfs/stop {:some               :state
+                              ::$.graph.dfs/stack '((:a))})))
+
+  (T/is (= [:a :b]
+           (-> ($.graph.dfs/walk {::graph {:a [:b]
+                                           :b [:c
+                                               :d]
+                                           :c [:e]
+                                           :d []
+                                           :e []}
+                                  ::path  []}
+                                 (fn enter [state]
+                                   (let [node ($.graph.dfs/node state)]
+                                     (if (= node
+                                            :c)
+                                       ($.graph.dfs/stop state)
+                                       (-> state
+                                           (-track-path node)
+                                           (-deeper node)))))
+                                 [:a])
+               (::path)))
+        "While walking, on enter")
+
+  (T/is (= [:a :b :c :e [:e 2]]
+           (-> ($.graph.dfs/walk {::graph {:a [:b]
+                                           :b [:c
+                                               :d]
+                                           :c [:e]
+                                           :d []
+                                           :e []}
+                                  ::path  []}
+                                 (fn enter [state]
+                                   (let [node ($.graph.dfs/node state)]
+                                     (-> state
+                                         (-track-path node)
+                                         (-deeper node))))
+                                 (fn exit [state]
+                                   (let [node ($.graph.dfs/node state)]
+                                     (if (= node
+                                            :c)
+                                       ($.graph.dfs/stop state)
+                                       (-track-path state
+                                                    [node
+                                                     2]))))
+                                 [:a])
+               (::path)))
+        "While walking, on exit"))
+
+
+
 (T/deftest walk
 
 
