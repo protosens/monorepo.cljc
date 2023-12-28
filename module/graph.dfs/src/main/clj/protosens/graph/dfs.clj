@@ -19,7 +19,15 @@
 
   [state]
 
-  (dec (count (state ::stack))))
+  (dec (count (frontier state))))
+
+
+
+(defn frontier
+
+  [state]
+
+  (state ::stack))
 
 
 
@@ -27,7 +35,7 @@
 
   [state]
 
-  (first (peek (state ::stack))))
+  (first (peek (frontier state))))
 
 
 
@@ -55,23 +63,15 @@
   [state]
 
   (map first
-       (state ::stack)))
+       (frontier state)))
 
 
 
-(defn pending
-
-  [state]
-
-  (pop (state ::stack)))
-
-
-
-(defn remaining-sibling+
+(defn pending-sibling+
 
   [state]
 
-  (rest (peek (state ::stack))))
+  (rest (peek (frontier state))))
 
 
 
