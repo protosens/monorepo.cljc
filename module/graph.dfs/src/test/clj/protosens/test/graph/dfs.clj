@@ -96,6 +96,46 @@
 ;;;;;;;;;; Tests
 
 
+(T/deftest ancestor?
+
+  (T/is ($.graph.dfs/ancestor? {::$.graph.dfs/stack '((:b) (:a))}
+                               :a))
+
+  (T/is ($.graph.dfs/ancestor? {::$.graph.dfs/stack '((:c) (:b) (:a))}
+                               :b))
+
+  (T/is (false? ($.graph.dfs/ancestor? {::$.graph.dfs/stack '((:a))}
+                                       :a)))
+
+  (T/is (false? ($.graph.dfs/ancestor? {::$.graph.dfs/stack '((:c) (:b) (:a))}
+                                       :d)))
+
+  (T/is (= {::cycle :a
+            ::path  [:a :b :c]}
+           (-> ($.graph.dfs/walk {::graph {:a [:b]
+                                           :b [:c]
+                                           :c [:a
+                                               :d]
+                                           :d []}
+                                  ::path  []}
+                                 (fn enter [state]
+                                   (let [node ($.graph.dfs/node state)]
+                                     (if ($.graph.dfs/ancestor? state
+                                                                node)
+                                       (-> state
+                                           (assoc ::cycle
+                                                  node)
+                                           ($.graph.dfs/stop))
+                                       (-> state
+                                           (-track-path node)
+                                           (-deeper node)))))
+                                 [:a])
+               (select-keys [::cycle
+                             ::path])))
+        "While walking"))
+
+
+
 (T/deftest deeper
 
   ;; Tested more extensively throughout this namespace.
@@ -242,9 +282,6 @@
            [:a]
            $.graph.dfs/path
            "While walking"))
-
-
-
 
 
 

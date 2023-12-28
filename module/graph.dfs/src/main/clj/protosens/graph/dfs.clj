@@ -1,7 +1,25 @@
 (ns protosens.graph.dfs)
 
 
+(set! *warn-on-reflection*
+      true)
+
+
+(declare frontier
+         path)
+
+
 ;;;;;;;;;;
+
+
+(defn ancestor?
+
+  [state node]
+
+  (boolean (some #(= %
+                     node)
+                 (rest (path state)))))
+
 
 
 (defn deeper
@@ -105,9 +123,10 @@
          (if exiting?
            ;;
            ;; Exiting.
-           (let [state-3 (exit-2 (assoc state-2
-                                        ::stack
-                                        stack))
+           (let [state-3 (-> state-2
+                             (assoc ::stack
+                                    stack)
+                             (exit-2))
                  stack-2 (state-3 ::stack)]
              (recur false
                     (if (identical? stack-2
@@ -121,9 +140,10 @@
            (if-some [level (seq (peek stack))]
              ;;
              ;; Node to process.
-             (let [state-3 (enter (assoc state-2
-                                         ::stack
-                                         stack))
+             (let [state-3 (-> state-2
+                               (assoc ::stack
+                                      stack)
+                               (enter))
                    stack-2 (state-3 ::stack)]
                (if (identical? stack-2
                                stack)

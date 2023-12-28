@@ -155,7 +155,7 @@
         (let [visited? (state-2 ::visited)
               sibling? (boolean (some (comp not
                                             visited?)
-                                      ($.graph.dfs/remaining-sibling+ state-2)))]
+                                      ($.graph.dfs/pending-sibling+ state-2)))]
           (println (format "\033[33m%s%s\033[0m%s%s\033[0m"
                            (C.string/join (map (fn [level]
                                                  (if-some [level-2 (identity level)]
@@ -165,7 +165,7 @@
                                                      "│       "
                                                      "·       ")
                                                    "        "))
-                                               (reverse ($.graph.dfs/pending state))))
+                                               (reverse (rest ($.graph.dfs/frontier state)))))
                            (if sibling?
                              "├───────"
                              ,
