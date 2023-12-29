@@ -136,46 +136,83 @@
                     (vals (deps-edn :aliases))))))
 
 
+
+(defn- -print-tree-start
+
+  []
+
+  (when $.maestro.plugin/*print-path?*
+    (println "\033[33m│\033[32m")))
+
+
+
+(defn- -print-node
+
+  [state-before-enter state-after-enter node]
+
+  (when $.maestro.plugin/*print-path?*
+    (let [visited?           (state-after-enter ::visited)
+          unvisited-sibling? (boolean (some (comp not
+                                                  visited?)
+                                            ($.graph.dfs/pending-sibling+ state-before-enter)))
+          node-accepted?     (= (first (peek (state-after-enter ::path)))
+                                node)]
+      (println (format "\033[33m%s%s\033[0m%s%s\033[0m"
+                       (C.string/join (map (fn [level]
+                                             (if-some [level-2 (next level)]
+                                               (if (some (comp not
+                                                               visited?)
+                                                         level-2)
+                                                 "│       "
+                                                 "·       ")
+                                               "        "))
+                                           (reverse (rest ($.graph.dfs/frontier state-before-enter)))))
+                       (if unvisited-sibling?
+                         "├───────"
+                         ,
+                         "└───────")
+                       (if node-accepted?
+                         "\033[32m"  ; green
+                         "\033[31m") ; red
+                       node)))))
+
+
+
 (defn- -enter
 
-  [state node]
+  [state]
 
-  (when-not (keyword? node)
-    ($.maestro.plugin/fail (format "`%s` should be a keyword!"
-                                   (pr-str node))))
-  (if (contains? (state ::visited)
-                 node)
-    state
-    (let [state-2 (-> state
-                     (update ::visited
-                             conj
-                             node)
-                     (search node))]
-      (when $.maestro.plugin/*print-path?*
-        (let [visited? (state-2 ::visited)
-              sibling? (boolean (some (comp not
-                                            visited?)
-                                      ($.graph.dfs/pending-sibling+ state-2)))]
-          (println (format "\033[33m%s%s\033[0m%s%s\033[0m"
-                           (C.string/join (map (fn [level]
-                                                 (if-some [level-2 (identity level)]
-                                                   (if (seq (filter (comp not
-                                                                          visited?)
-                                                                    level-2))
-                                                     "│       "
-                                                     "·       ")
-                                                   "        "))
-                                               (reverse (rest ($.graph.dfs/frontier state)))))
-                           (if sibling?
-                             "├───────"
-                             ,
-                             "└───────")
-                           (if (= (first (peek (state-2 ::path)))
-                                  node)
-                             "\033[32m"  ; green
-                             "\033[31m") ; red
-                           node))))
-      state-2)))
+  (let [node ($.graph.dfs/node state)]
+    (when-not (keyword? node)
+      ($.maestro.plugin/fail (format "`%s` should be a keyword!"
+                                     (pr-str node))))
+    (if (contains? (state ::visited)
+                   node)
+      state
+      (let [state-2 (-> state
+                        (update ::visited
+                                conj
+                                node)
+                        (search node))]
+        (-print-node state
+                     state-2
+                     node)
+        state-2))))
+
+
+
+(defn- -expand-input
+
+  [node+]
+
+  (into []
+        (comp (mapcat (fn [alias]
+                        (if (qualified-keyword? alias)
+                          [(keyword (namespace alias))
+                           alias]
+                          [alias])))
+              (distinct))
+        node+))
 
 
 
@@ -186,16 +223,8 @@
   ;; Need to dedupe input aliases because inputs are systematically visited once
   ;; the algorithm kicks in, as opposed to deps that are indeed deduped.
   ;;
-  (let [node-2+ (into []
-                      (comp (mapcat (fn [alias]
-                                      (if (qualified-keyword? alias)
-                                        [(keyword (namespace alias))
-                                         alias]
-                                        [alias])))
-                            (distinct))
-                      node+)]
-    (when $.maestro.plugin/*print-path?*
-      (println "\033[33m│\033[32m"))
+  (let [node-2+ (-expand-input node+)]
+    (-print-tree-start)
     (-> {::deps-edn         (dissoc deps-maestro-edn
                                     :aliases)
          ::deps-maestro-edn deps-maestro-edn
