@@ -1,5 +1,5 @@
 {:min-bb-version "0.8.0",
- :pods #:clj-kondo{clj-kondo {:version "2022.09.08"}},
+ :pods {clj-kondo/clj-kondo {:version "2022.09.08"}},
  :tasks
  {expose
   {:doc "Expose modules meant to be consumed as Git libraries",
@@ -90,14 +90,15 @@
     (protosens.bb.help/print))}},
  :deps
  {io.github.borkdude/quickdoc
-  #:git{:sha "fc5a18bb419ccac3c8769aa0761384025b27f68c"},
-  babashka/fs #:mvn{:version "0.1.11"},
-  selmer/selmer #:mvn{:version "1.12.55"},
-  babashka/process #:mvn{:version "0.2.10"},
-  lambdaisland/kaocha #:mvn{:version "1.63.998"}},
+  {:git/sha "fc5a18bb419ccac3c8769aa0761384025b27f68c"},
+  babashka/fs {:mvn/version "0.1.11"},
+  selmer/selmer {:mvn/version "1.12.55"},
+  babashka/process {:mvn/version "0.2.10"},
+  lambdaisland/kaocha {:mvn/version "1.63.998"}},
  :paths
  ["module/string/src/main/clj"
   "module/maestro/src/main/clj"
+  "module/term.style/src/main/clj/"
   "module/edn/src/main/clj"
   "module/maestro.plugin.bb/src/main/clj/"
   "module/task/src/main/clj"

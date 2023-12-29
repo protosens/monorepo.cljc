@@ -286,6 +286,7 @@
                                          :module/namespace
                                          :module/process
                                          :module/string
+                                         :module/term.style
                                          :test/maestro]
    :maestro/root                        "module/maestro"
    :maestro.plugin.gitlib/name          protosens/maestro
@@ -515,6 +516,14 @@
    :maestro/require [:module/maestro.idiom
                      :module/maestro.plugin.bb]
    :maestro/root    "module/task"}
+
+  ;---
+
+  :module/term.style
+
+  {:extra-paths  ["module/term.style/src/main/clj/"]
+   :maestro/doc  "ANSI escape codes for beautiful terminal outputs."
+   :maestro/root "module/term.style"}
 
 
   }}
