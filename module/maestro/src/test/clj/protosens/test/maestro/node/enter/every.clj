@@ -11,7 +11,7 @@
 (T/deftest enter
 
   (-t-path "All \"tests\" required"
-           ":EVERY/t"
+           [:EVERY/t]
            {:m/a {}
             :m/b {}
             :t   {:maestro/require [:m]}

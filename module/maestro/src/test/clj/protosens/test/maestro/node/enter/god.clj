@@ -11,7 +11,7 @@
 (T/deftest enter
 
   (-t-path "Everything is required"
-           ":GOD"
+           [:GOD]
            {:m/a {:maestro/require [:m/b
                                     :t/a]}
             :m/b {:maestro/require [:t/b]}

@@ -1,9 +1,8 @@
 (ns protosens.test.maestro.node.enter
 
-  (:require [clojure.test           :as    T]
-            [protosens.maestro      :as    $.maestro]
-            [protosens.maestro.node :as    $.maestro.node]
-            [protosens.test.maestro :refer [-t-path]]))
+  (:require [clojure.test           :as T]
+            [protosens.maestro      :as $.maestro]
+            [protosens.maestro.node :as $.maestro.node]))
 
 
 ;;;;;;;;;; Preparation
