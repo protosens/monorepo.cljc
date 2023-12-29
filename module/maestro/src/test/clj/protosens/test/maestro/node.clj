@@ -1,4 +1,4 @@
-(ns protosens.test.maestro.node.enter
+(ns protosens.test.maestro.node
 
   (:require [clojure.test           :as T]
             [protosens.maestro      :as $.maestro]
