@@ -19,6 +19,64 @@
       true)
 
 
+;;;;;;;;;; Printing a tree of selected nodes during a run
+
+
+(def ^:private -color-tree
+
+  $.term.style/fg-yellow)
+
+
+
+(defn- -print-node
+
+  [state-before-enter state-after-enter node]
+
+  (when $.maestro.plugin/*print-path?*
+    (let [not-visited-after? (fn [node]
+                               (not ($.maestro.node/visited? state-after-enter
+                                                             node)))
+          color-node         (if ($.maestro.node/accepted? state-after-enter
+                                                           node)
+                               $.term.style/fg-green
+                               $.term.style/fg-red)
+          level              (if (some not-visited-after?
+                                       ($.graph.dfs/pending-sibling+ state-before-enter))
+                                  "├───────"
+                                  ,
+                                  "└───────")
+          prior-level+       (C.string/join (map (fn [level]
+                                                   (if-some [level-2 (next level)]
+                                                     (if (some not-visited-after?
+                                                               level-2)
+                                                       "│       "   ;; Unvisited upstream nodes.
+                                                       "·       ")  ;; Scheduled upstream nodes have been visited.
+                                                     "        "))   ;; Neither.
+                                                 (-> state-before-enter
+                                                     ($.graph.dfs/frontier)
+                                                     (rest)
+                                                     (reverse))))]
+      (println (str -color-tree
+                    prior-level+
+                    level
+                    $.term.style/reset
+                    color-node
+                    node
+                    $.term.style/reset)))))
+
+
+
+(defn- -print-tree-begin
+
+  []
+
+  (when $.maestro.plugin/*print-path?*
+    (println (str -color-tree
+                  "│"
+                  $.term.style/reset))))
+
+
+
 ;;;;;;;;;; Main algorithms
 
 
@@ -43,55 +101,6 @@
 
 
 
-(def -color-edge
-
-  $.term.style/fg-yellow)
-
-
-
-(defn- -print-tree-start
-
-  []
-
-  (when $.maestro.plugin/*print-path?*
-    (println (str -color-edge
-                  "│"
-                  $.term.style/reset))))
-
-
-
-(defn- -print-node
-
-  [state-before-enter state-after-enter node]
-
-  (when $.maestro.plugin/*print-path?*
-    (let [not-visited-after? (fn [node]
-                               (not ($.maestro.node/visited? state-after-enter
-                                                             node)))]
-      (println (str -color-edge
-                    (C.string/join (map (fn [level]
-                                          (if-some [level-2 (next level)]
-                                            (if (some not-visited-after?
-                                                      level-2)
-                                              "│       "
-                                              "·       ")
-                                            "        "))
-                                        (reverse (rest ($.graph.dfs/frontier state-before-enter)))))
-                    (if (some not-visited-after?
-                                 ($.graph.dfs/pending-sibling+ state-before-enter))
-                         "├───────"
-                         ,
-                         "└───────")
-                    $.term.style/reset
-                    (if ($.maestro.node/accepted? state-after-enter
-                                                  node)
-                      $.term.style/fg-green
-                      $.term.style/fg-red)
-                    node
-                    $.term.style/reset)))))
-
-
-
 (defn- -enter-node
 
   [state]
@@ -112,21 +121,6 @@
 
 
 
-(defn- -expand-input
-
-  [node+]
-
-  (into []
-        (comp (mapcat (fn [alias]
-                        (if (qualified-keyword? alias)
-                          [(keyword (namespace alias))
-                           alias]
-                          [alias])))
-              (distinct))
-        node+))
-
-
-
 (defn- -init-state
 
   [deps-maestro-edn node+]
@@ -140,12 +134,29 @@
 
 
 
+(defn expand-input
+
+  [node+]
+
+  (into []
+        (comp (mapcat (fn [alias]
+                        (if (qualified-keyword? alias)
+                          [(keyword (namespace alias))
+                           alias]
+                          [alias])))
+              (distinct))
+        node+))
+
+
+;;;
+
+
 (defn  run
 
   [node+ deps-maestro-edn]
 
-  (let [node-2+ (-expand-input node+)]
-    (-print-tree-start)
+  (let [node-2+ (expand-input node+)]
+    (-print-tree-begin)
     (-> (-init-state deps-maestro-edn
                      node-2+)
         ($.graph.dfs/walk -enter-node

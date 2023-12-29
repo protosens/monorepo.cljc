@@ -12,6 +12,14 @@
   (atom true))
 
 
+
+(defn- -babashka?
+
+  []
+
+  (some? (System/getProperty "babashka.version")))
+
+
 ;;;;;;;;;; Public
 
 
@@ -43,7 +51,7 @@
 
   [^String message]
 
-  (if (System/getProperty "babashka.version")
+  (if (-babashka?)
     (do
       (println)
       (println (str $.term.style/bold
