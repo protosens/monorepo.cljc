@@ -36,13 +36,10 @@
 
   [state nmspace]
 
-  (-> state
-      (update ::exclude
-              conj
-              nmspace)
-      (update ::include
-              disj
-              nmspace)))
+  (update state
+          ::exclude
+          conj
+          nmspace))
 
 
 

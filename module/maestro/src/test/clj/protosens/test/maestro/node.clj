@@ -25,6 +25,8 @@
 
 (T/deftest enter
 
+  ;; Core assumptions are tested more extensively in [[protosens.test.maestro.node.enter.shallow]].
+
   (T/is (= [:UNIT_TEST
             :UNIT_TEST/foo]
            ,
