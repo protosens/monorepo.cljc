@@ -8,10 +8,20 @@
       true)
 
 
-(declare conj-path)
+;;;;;;;;;; Helpers
 
 
-;;;;;;;;;; 
+(defn ^:no-doc init-state
+
+  [state node+]
+
+  (assoc state
+         ::accepted #{}
+         ::input    (set node+)
+         ::rejected #{}))
+
+
+;;;;;;;;;; Important, entry point for handling nodes
 
 
 (defn- -dispatch-by-namespace
@@ -28,7 +38,7 @@
   #'-dispatch-by-namespace)
 
 
-;;;;;;;;;;
+;;;;;;;;;; API
 
 
 (defn accept
@@ -44,10 +54,16 @@
   ([state node child+]
 
    (-> state
-       (update ::$.maestro/accepted
+       (update ::accepted
                conj
                node)
-       (conj-path node)
+       ;;
+       ;; Only needed for tests (but does not harm, might even become more useful).
+       (update ::$.maestro/path
+               conj
+               [node
+                ($.graph.dfs/depth state)])
+       ;;
        (cond->
          (not-empty child+)
          ($.graph.dfs/deeper child+)))))
@@ -58,20 +74,8 @@
 
   [state node]
 
-  (contains? (state ::$.maestro/accepted)
+  (contains? (state ::accepted)
              node))
-
-
-
-(defn conj-path
-
-  [state node]
-
-  (update state
-          ::$.maestro/path
-          conj
-          [node
-           ($.graph.dfs/depth state)]))
 
 
 
@@ -79,7 +83,7 @@
 
   [state node]
 
-  (contains? (state ::$.maestro/input)
+  (contains? (state ::input)
              node))
 
 

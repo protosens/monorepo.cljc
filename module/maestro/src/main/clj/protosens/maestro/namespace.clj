@@ -7,7 +7,19 @@
       true)
 
 
-;;;;;;;;;;
+;;;;;;;;;; Helpers
+
+
+(defn ^:no-doc init-state
+
+  [state]
+
+  (assoc state
+         ::exclude #{}
+         ::include #{}))
+
+
+;;;;;;;;;; API
 
 
 (defn exclude
@@ -15,10 +27,10 @@
   [state nmspace]
 
   (-> state
-      (update ::$.maestro/exclude
+      (update ::exclude
               conj
               nmspace)
-      (update ::$.maestro/include
+      (update ::include
               disj
               nmspace)))
 
@@ -29,7 +41,7 @@
   [state nmspace]
 
   (update state
-          ::$.maestro/include
+          ::include
           conj
           nmspace))
 
@@ -39,7 +51,7 @@
 
   [state nmspace]
 
-  (and (not (contains? (state ::$.maestro/exclude)
+  (and (not (contains? (state ::exclude)
                        nmspace))
-       (contains? (state ::$.maestro/include)
+       (contains? (state ::include)
                   nmspace)))

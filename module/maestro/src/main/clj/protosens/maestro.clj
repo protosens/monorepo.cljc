@@ -5,6 +5,7 @@
             [clojure.string                        :as C.string]
             [protosens.edn.read                    :as $.edn.read]
             [protosens.graph.dfs                   :as $.graph.dfs]
+            [protosens.maestro.namespace           :as $.maestro.namespace]
             [protosens.maestro.node                :as $.maestro.node]
             [protosens.maestro.plugin              :as $.maestro.plugin]
             [protosens.maestro.node.enter.default]
@@ -126,24 +127,27 @@
 
 
 
+(defn- -init-state
+
+  [deps-maestro-edn node+]
+
+  (-> {::deps-edn         (dissoc deps-maestro-edn
+                                  :aliases)
+       ::deps-maestro-edn deps-maestro-edn
+       ::path             []}
+      ($.maestro.namespace/init-state)
+      ($.maestro.node/init-state node+)))
+
+
+
 (defn  run
 
   [node+ deps-maestro-edn]
 
-  ;; Need to dedupe input aliases because inputs are systematically visited once
-  ;; the algorithm kicks in, as opposed to deps that are indeed deduped.
-  ;;
   (let [node-2+ (-expand-input node+)]
     (-print-tree-start)
-    (-> {::accepted         #{}
-         ::deps-edn         (dissoc deps-maestro-edn
-                                    :aliases)
-         ::deps-maestro-edn deps-maestro-edn
-         ::input            (set node-2+)
-         ::exclude          #{}
-         ::include          #{}
-         ::path             []
-         ::rejected         #{}}
+    (-> (-init-state deps-maestro-edn
+                     node-2+)
         ($.graph.dfs/walk -enter-node
                           node-2+)
         (-flatten-deps-edn))))
