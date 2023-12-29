@@ -1,6 +1,7 @@
 (ns protosens.maestro.plugin
 
-  (:require [clojure.string :as C.string]))
+  (:require [clojure.string       :as C.string]
+            [protosens.term.style :as $.term.style]))
 
 
 ;;;;;;;;;; Private
@@ -27,8 +28,14 @@
   [message]
 
   (println)
-  (println (format "\033[1m\033[32m[✓]\033[0m \033[32m%s\033[0m"
-                   message)))
+  (println (str $.term.style/bold
+                $.term.style/fg-green
+                "[✓] "
+                $.term.style/reset
+                $.term.style/fg-green
+                message
+                $.term.style/fg-green
+                $.term.style/reset)))
 
 
 
@@ -39,8 +46,13 @@
   (if (System/getProperty "babashka.version")
     (do
       (println)
-      (println (format "\033[1m\033[31m[x]\033[0m \033[31m%s\033[0m"
-                       message))
+      (println (str $.term.style/bold
+                    $.term.style/fg-red
+                    "[x] "
+                    $.term.style/reset
+                    $.term.style/fg-red
+                    message
+                    $.term.style/reset))
       (System/exit 1))
     (throw (Exception. message))))
 
@@ -56,8 +68,12 @@
     (println)
     (println "──────────"))
   (println)
-  (println (format "\033[1m\033[36m[%s]\033[0m"
-                   plugin-name))
+  (println (str $.term.style/bold
+                $.term.style/fg-cyan
+                "["
+                plugin-name
+                "]"
+                $.term.style/reset))
   (println))
 
 
@@ -73,8 +89,10 @@
 
   ([level message]
 
-   (println (format "%s\033[33m•\033[0m %s"
-                    (C.string/join (repeat (or level
-                                               0)
-                                           "    "))
-                    message))))
+   (println (str (C.string/join (repeat (or level
+                                            0)
+                                        "    "))
+                 $.term.style/fg-yellow
+                 "• "
+                 $.term.style/reset
+                 message))))

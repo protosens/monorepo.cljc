@@ -8,7 +8,8 @@
             [protosens.maestro.plugin           :as $.maestro.plugin]
             [protosens.maestro.search           :as $.maestro.search]
             [protosens.maestro.search.alias     :as $.maestro.search.alias]
-            [protosens.maestro.search.namespace :as $.maestro.search.namespace]))
+            [protosens.maestro.search.namespace :as $.maestro.search.namespace]
+            [protosens.term.style               :as $.term.style]))
 
 
 (set! *warn-on-reflection*
@@ -137,12 +138,20 @@
 
 
 
+(def -color-edge
+
+  $.term.style/fg-yellow)
+
+
+
 (defn- -print-tree-start
 
   []
 
   (when $.maestro.plugin/*print-path?*
-    (println "\033[33m│\033[32m")))
+    (println (str -color-edge
+                  "│"
+                  $.term.style/reset))))
 
 
 
@@ -154,25 +163,27 @@
     (let [not-visited-after? (fn [node]
                                (not ($.maestro.search/visited? state-after-enter
                                                                node)))]
-      (println (format "\033[33m%s%s\033[0m%s%s\033[0m"
-                       (C.string/join (map (fn [level]
-                                             (if-some [level-2 (next level)]
-                                               (if (some not-visited-after?
-                                                         level-2)
-                                                 "│       "
-                                                 "·       ")
-                                               "        "))
-                                           (reverse (rest ($.graph.dfs/frontier state-before-enter)))))
-                       (if (some not-visited-after?
+      (println (str -color-edge
+                    (C.string/join (map (fn [level]
+                                          (if-some [level-2 (next level)]
+                                            (if (some not-visited-after?
+                                                      level-2)
+                                              "│       "
+                                              "·       ")
+                                            "        "))
+                                        (reverse (rest ($.graph.dfs/frontier state-before-enter)))))
+                    (if (some not-visited-after?
                                  ($.graph.dfs/pending-sibling+ state-before-enter))
                          "├───────"
                          ,
                          "└───────")
-                       (if ($.maestro.search/accepted? state-after-enter
-                                                       node)
-                         "\033[32m"  ; green
-                         "\033[31m") ; red
-                       node)))))
+                    $.term.style/reset
+                    (if ($.maestro.search/accepted? state-after-enter
+                                                    node)
+                      $.term.style/fg-green
+                      $.term.style/fg-red)
+                    node
+                    $.term.style/reset)))))
 
 
 
