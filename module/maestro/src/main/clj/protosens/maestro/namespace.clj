@@ -7,6 +7,9 @@
       true)
 
 
+(declare include)
+
+
 ;;;;;;;;;; Helpers
 
 
@@ -33,6 +36,18 @@
       (update ::include
               disj
               nmspace)))
+
+
+
+(defn force-include
+
+  [state nmspace]
+
+  (-> state
+      (update ::exclude
+              disj
+              nmspace)
+      (include nmspace)))
 
 
 

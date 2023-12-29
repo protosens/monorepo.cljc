@@ -1,6 +1,7 @@
 (ns protosens.maestro.node
 
-  (:require [protosens.graph.dfs :as       $.graph.dfs]
+  (:require [clojure.set         :as       C.set]
+            [protosens.graph.dfs :as       $.graph.dfs]
             [protosens.maestro   :as-alias $.maestro]))
 
 
@@ -105,6 +106,17 @@
 
   (contains? (state ::rejected)
              node))
+
+
+
+(defn unreject+
+
+  [state node+]
+
+  (update state
+          ::rejected
+          C.set/difference
+          (set node+)))
 
 
 
