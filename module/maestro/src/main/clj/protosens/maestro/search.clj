@@ -1,6 +1,6 @@
 (ns protosens.maestro.search
 
-  (:require [protosens.graph.dfs :as $.graph.dfs]
+  (:require [protosens.graph.dfs :as       $.graph.dfs]
             [protosens.maestro   :as-alias $.maestro]))
 
 
@@ -8,7 +8,31 @@
       true)
 
 
+(declare conj-path)
+
+
 ;;;;;;;;;;
+
+
+(defn accept
+
+  [state node]
+
+  (-> state
+      (update ::$.maestro/accepted
+              conj
+              node)
+      (conj-path node)))
+
+
+
+(defn accepted?
+
+  [state node]
+
+  (contains? (state ::$.maestro/accepted)
+             node))
+
 
 
 (defn conj-path
@@ -28,7 +52,7 @@
   [state node node+]
   
   (-> state
-      (conj-path node)
+      (accept node)
       ($.graph.dfs/deeper node+)))
 
 
@@ -39,3 +63,34 @@
 
   (contains? (state ::$.maestro/input)
              node))
+
+
+
+(defn reject
+
+  [state node]
+
+  (update state
+          ::rejected
+          conj
+          node))
+
+
+
+(defn rejected?
+
+  [state node]
+
+  (contains? (state ::rejected)
+             node))
+
+
+
+(defn visited?
+
+  [state node]
+
+  (or (accepted? state
+                 node)
+      (rejected? state
+                 node)))

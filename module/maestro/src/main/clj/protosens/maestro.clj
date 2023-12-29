@@ -106,11 +106,11 @@
 
   [state kw]
 
-  (if-some [nm (name kw)]
-    (-> state
-        ($.maestro.search/conj-path kw)
-        ($.maestro.search.namespace/exclude nm))
-    state))
+  (-> (if-some [nm (name kw)]
+        (-> state
+            ($.maestro.search.namespace/exclude nm))
+        state)
+      ($.maestro.search/accept kw)))
 
 
 ;;;;;;;;;; Main algorithms
@@ -151,34 +151,32 @@
   [state-before-enter state-after-enter node]
 
   (when $.maestro.plugin/*print-path?*
-    (let [visited?           (state-after-enter ::visited)
-          unvisited-sibling? (boolean (some (comp not
-                                                  visited?)
-                                            ($.graph.dfs/pending-sibling+ state-before-enter)))
-          node-accepted?     (= (first (peek (state-after-enter ::path)))
-                                node)]
+    (let [not-visited-after? (fn [node]
+                               (not ($.maestro.search/visited? state-after-enter
+                                                               node)))]
       (println (format "\033[33m%s%s\033[0m%s%s\033[0m"
                        (C.string/join (map (fn [level]
                                              (if-some [level-2 (next level)]
-                                               (if (some (comp not
-                                                               visited?)
+                                               (if (some not-visited-after?
                                                          level-2)
                                                  "│       "
                                                  "·       ")
                                                "        "))
                                            (reverse (rest ($.graph.dfs/frontier state-before-enter)))))
-                       (if unvisited-sibling?
+                       (if (some not-visited-after?
+                                 ($.graph.dfs/pending-sibling+ state-before-enter))
                          "├───────"
                          ,
                          "└───────")
-                       (if node-accepted?
+                       (if ($.maestro.search/accepted? state-after-enter
+                                                       node)
                          "\033[32m"  ; green
                          "\033[31m") ; red
                        node)))))
 
 
 
-(defn- -enter
+(defn- -enter-node
 
   [state]
 
@@ -186,14 +184,11 @@
     (when-not (keyword? node)
       ($.maestro.plugin/fail (format "`%s` should be a keyword!"
                                      (pr-str node))))
-    (if (contains? (state ::visited)
-                   node)
+    (if ($.maestro.search/visited? state
+                                   node)
       state
-      (let [state-2 (-> state
-                        (update ::visited
-                                conj
-                                node)
-                        (search node))]
+      (let [state-2 (search state
+                            node)]
         (-print-node state
                      state-2
                      node)
@@ -225,18 +220,17 @@
   ;;
   (let [node-2+ (-expand-input node+)]
     (-print-tree-start)
-    (-> {::deps-edn         (dissoc deps-maestro-edn
+    (-> {::accepted         #{}
+         ::deps-edn         (dissoc deps-maestro-edn
                                     :aliases)
          ::deps-maestro-edn deps-maestro-edn
          ::input            (set node-2+)
          ::exclude          #{}
          ::include          #{}
          ::path             []
-         ::visited          #{}}
-        ,
-        ($.graph.dfs/walk -enter
+         ::rejected         #{}}
+        ($.graph.dfs/walk -enter-node
                           node-2+)
-        ,
         (-flatten-deps-edn))))
 
 
