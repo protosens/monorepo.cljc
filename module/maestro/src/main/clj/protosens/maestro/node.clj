@@ -1,4 +1,4 @@
-(ns protosens.maestro.search
+(ns protosens.maestro.node
 
   (:require [protosens.graph.dfs :as       $.graph.dfs]
             [protosens.maestro   :as-alias $.maestro]))
@@ -23,7 +23,7 @@
 
 
 
-(defmulti dispatch
+(defmulti enter
 
   #'-dispatch-by-namespace)
 
@@ -33,13 +33,24 @@
 
 (defn accept
 
-  [state node]
 
-  (-> state
-      (update ::$.maestro/accepted
-              conj
-              node)
-      (conj-path node)))
+  ([state node]
+
+   (accept state
+           node
+           nil))
+
+
+  ([state node child+]
+
+   (-> state
+       (update ::$.maestro/accepted
+               conj
+               node)
+       (conj-path node)
+       (cond->
+         (not-empty child+)
+         ($.graph.dfs/deeper child+)))))
 
 
 
@@ -61,16 +72,6 @@
           conj
           [node
            ($.graph.dfs/depth state)]))
-
-
-
-(defn deeper
-
-  [state node node+]
-  
-  (-> state
-      (accept node)
-      ($.graph.dfs/deeper node+)))
 
 
 

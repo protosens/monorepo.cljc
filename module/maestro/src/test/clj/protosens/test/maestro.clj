@@ -1,14 +1,14 @@
 (ns protosens.test.maestro
 
-  (:require [clojure.test             :as T]
-            [protosens.maestro        :as $.maestro]
-            [protosens.maestro.search :as $.maestro.search]))
+  (:require [clojure.test           :as T]
+            [protosens.maestro      :as $.maestro]
+            [protosens.maestro.node :as $.maestro.node]))
 
 
 ;;;;;;;;;; Preparation
 
 
-(defmethod $.maestro.search/dispatch
+(defmethod $.maestro.node/enter
            "UNIT_TEST"
 
   [state node]

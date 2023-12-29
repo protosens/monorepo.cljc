@@ -1,4 +1,4 @@
-(ns protosens.maestro.search.namespace
+(ns protosens.maestro.namespace
 
   (:require [protosens.maestro :as-alias $.maestro]))
 

@@ -1,19 +1,17 @@
 (ns protosens.maestro
 
-  (:require [clojure.java.io                            :as C.java.io]
-            [clojure.pprint                             :as C.pprint]
-            [clojure.string                             :as C.string]
-            [protosens.edn.read                         :as $.edn.read]
-            [protosens.graph.dfs                        :as $.graph.dfs]
-            [protosens.maestro.plugin                   :as $.maestro.plugin]
-            [protosens.maestro.search                   :as $.maestro.search]
-            [protosens.maestro.search.alias             :as $.maestro.search.alias]
-            [protosens.maestro.search.dispatch.default]
-            [protosens.maestro.search.dispatch.every]
-            [protosens.maestro.search.dispatch.god]
-            [protosens.maestro.search.dispatch.shallow]
-            [protosens.maestro.search.namespace         :as $.maestro.search.namespace]
-            [protosens.term.style                       :as $.term.style]))
+  (:require [clojure.java.io                       :as C.java.io]
+            [clojure.pprint                        :as C.pprint]
+            [clojure.string                        :as C.string]
+            [protosens.edn.read                    :as $.edn.read]
+            [protosens.graph.dfs                   :as $.graph.dfs]
+            [protosens.maestro.node                :as $.maestro.node]
+            [protosens.maestro.plugin              :as $.maestro.plugin]
+            [protosens.maestro.node.enter.default]
+            [protosens.maestro.node.enter.every]
+            [protosens.maestro.node.enter.god]
+            [protosens.maestro.node.enter.shallow]
+            [protosens.term.style                  :as $.term.style]))
 
 
 (set! *warn-on-reflection*
@@ -67,8 +65,8 @@
 
   (when $.maestro.plugin/*print-path?*
     (let [not-visited-after? (fn [node]
-                               (not ($.maestro.search/visited? state-after-enter
-                                                               node)))]
+                               (not ($.maestro.node/visited? state-after-enter
+                                                             node)))]
       (println (str -color-edge
                     (C.string/join (map (fn [level]
                                           (if-some [level-2 (next level)]
@@ -84,8 +82,8 @@
                          ,
                          "└───────")
                     $.term.style/reset
-                    (if ($.maestro.search/accepted? state-after-enter
-                                                    node)
+                    (if ($.maestro.node/accepted? state-after-enter
+                                                  node)
                       $.term.style/fg-green
                       $.term.style/fg-red)
                     node
@@ -101,11 +99,11 @@
     (when-not (keyword? node)
       ($.maestro.plugin/fail (format "`%s` should be a keyword!"
                                      (pr-str node))))
-    (if ($.maestro.search/visited? state
-                                   node)
+    (if ($.maestro.node/visited? state
+                                 node)
       state
-      (let [state-2 ($.maestro.search/dispatch state
-                                               node)]
+      (let [state-2 ($.maestro.node/enter state
+                                          node)]
         (-print-node state
                      state-2
                      node)
