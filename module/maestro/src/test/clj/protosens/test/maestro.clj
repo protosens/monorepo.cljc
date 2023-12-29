@@ -1,22 +1,23 @@
 (ns protosens.test.maestro
 
-  (:require [clojure.test      :as T]
-            [protosens.maestro :as $.maestro]))
+  (:require [clojure.test             :as T]
+            [protosens.maestro        :as $.maestro]
+            [protosens.maestro.search :as $.maestro.search]))
 
 
 ;;;;;;;;;; Preparation
 
 
-(defmethod $.maestro/search
+(defmethod $.maestro.search/dispatch
            "UNIT_TEST"
 
-  [state kw]
+  [state node]
 
   (update-in state
              [::$.maestro/deps-maestro-edn
               ::result]
              conj
-             kw))
+             node))
 
 
 ;;;;;;;;;; Reusable assertions

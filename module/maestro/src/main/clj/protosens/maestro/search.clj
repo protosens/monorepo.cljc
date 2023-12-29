@@ -11,6 +11,23 @@
 (declare conj-path)
 
 
+;;;;;;;;;; 
+
+
+(defn- -dispatch-by-namespace
+
+  [_state kw]
+
+  (or (namespace kw)
+      (name kw)))
+
+
+
+(defmulti dispatch
+
+  #'-dispatch-by-namespace)
+
+
 ;;;;;;;;;;
 
 

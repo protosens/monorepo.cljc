@@ -1,117 +1,23 @@
 (ns protosens.maestro
 
-  (:require [clojure.java.io                    :as C.java.io]
-            [clojure.pprint                     :as C.pprint]
-            [clojure.string                     :as C.string]
-            [protosens.edn.read                 :as $.edn.read]
-            [protosens.graph.dfs                :as $.graph.dfs]
-            [protosens.maestro.plugin           :as $.maestro.plugin]
-            [protosens.maestro.search           :as $.maestro.search]
-            [protosens.maestro.search.alias     :as $.maestro.search.alias]
-            [protosens.maestro.search.namespace :as $.maestro.search.namespace]
-            [protosens.term.style               :as $.term.style]))
+  (:require [clojure.java.io                            :as C.java.io]
+            [clojure.pprint                             :as C.pprint]
+            [clojure.string                             :as C.string]
+            [protosens.edn.read                         :as $.edn.read]
+            [protosens.graph.dfs                        :as $.graph.dfs]
+            [protosens.maestro.plugin                   :as $.maestro.plugin]
+            [protosens.maestro.search                   :as $.maestro.search]
+            [protosens.maestro.search.alias             :as $.maestro.search.alias]
+            [protosens.maestro.search.dispatch.default]
+            [protosens.maestro.search.dispatch.every]
+            [protosens.maestro.search.dispatch.god]
+            [protosens.maestro.search.dispatch.shallow]
+            [protosens.maestro.search.namespace         :as $.maestro.search.namespace]
+            [protosens.term.style                       :as $.term.style]))
 
 
 (set! *warn-on-reflection*
       true)
-
-
-;;;;;;;;;; Dispatching keywords which may be aliases or "directives"
-
-
-(defn- -search-dispatch
-
-  [_state kw]
-
-  (or (namespace kw)
-      (name kw)))
-
-
-
-(defmulti search
-
-  #'-search-dispatch)
-
-
-;;;
-
-
-(defmethod search
-           :default
-
-  [state kw]
-
-  (if (qualified-keyword? kw)
-    ;;
-    ;; Qualified, must be an existing alias.
-    (do
-      (when-not ($.maestro.search.alias/defined? state
-                                                 kw)
-        ($.maestro.plugin/fail (format "Node `%s` does not exist"
-                                       kw)))
-      (cond->
-        state
-        ($.maestro.search.alias/include? state
-                                         kw)
-        ($.maestro.search.alias/deeper kw)))
-    ;;
-    ;; Unqualified, might be an existing alias but does not need to be.
-    (-> state
-        ($.maestro.search.namespace/include (name kw))
-        ($.maestro.search.alias/deeper kw))))
-
-
-
-(defmethod search
-           "EVERY"
-
-  [state kw]
-
-  (if-some [nm (name kw)]
-    ($.maestro.search/deeper state
-                             kw
-                             (cons (keyword nm)
-                                   (sort (filter (fn [alias]
-                                                   (= (namespace alias)
-                                                      nm))
-                                                 (keys (get-in state
-                                                               [::deps-maestro-edn
-                                                                :aliases]))))))
-    state))
-
-
-
-(defmethod search
-           "GOD"
-
-  [state kw]
-
-  (when (qualified-keyword? kw)
-    ($.maestro.plugin/fail (format "`:GOD` node should not be namespaced: `%s`"
-                                   kw)))
-  ($.maestro.search/deeper state
-                           kw
-                           (let [alias+ (keys (get-in state
-                                                      [::deps-maestro-edn
-                                                       :aliases]))]
-                             (concat (sort (into #{}
-                                                 (comp (keep namespace)
-                                                       (map keyword))
-                                                 alias+))
-                                     (sort alias+)))))
-
-
-
-(defmethod search
-           "SHALLOW"
-
-  [state kw]
-
-  (-> (if-some [nm (name kw)]
-        (-> state
-            ($.maestro.search.namespace/exclude nm))
-        state)
-      ($.maestro.search/accept kw)))
 
 
 ;;;;;;;;;; Main algorithms
@@ -198,8 +104,8 @@
     (if ($.maestro.search/visited? state
                                    node)
       state
-      (let [state-2 (search state
-                            node)]
+      (let [state-2 ($.maestro.search/dispatch state
+                                               node)]
         (-print-node state
                      state-2
                      node)
