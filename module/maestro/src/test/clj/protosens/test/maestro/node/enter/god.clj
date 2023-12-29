@@ -17,4 +17,18 @@
             :m/b {:maestro/require [:t/b]}
             :t/a {}
             :t/b {}}
-           [[:GOD 0] [:m 1] [:t 1] [:m/a 1] [:m/b 2] [:t/b 3] [:t/a 2]]))
+           [[:GOD 0] [:m 1] [:t 1] [:m/a 1] [:m/b 2] [:t/b 3] [:t/a 2]])
+
+  (-t-path "Previously ignored nodes are visited"
+           [:m/a :GOD]
+           {:m/a {:maestro/require [:m/b
+                                    :t/a]}
+            :m/b {:maestro/require [:d/b]}
+            :d/b {}
+            :t/a {}}
+           [[:m 0] [:m/a 0] [:m/b 1] [:GOD 0] [:d 1] [:t 1] [:d/b 1] [:t/a 1]])
+
+  (T/is (thrown? Exception
+                 ($.maestro/run [:GOD/qualified]
+                                {}))
+        "Should not be namespaced"))

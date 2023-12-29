@@ -17,19 +17,20 @@
   [state node]
 
   (if-some [nm (name node)]
-    (let [node-nmspace (keyword nm)
-          node+        (sort (filter (fn [kw]
-                                       (= (namespace kw)
-                                          nm))
-                                     (keys (get-in state
-                                                   [::$.maestro/deps-maestro-edn
-                                                    :aliases]))))]
-    (-> state
-        ($.maestro.namespace/force-include node-nmspace)
-        ($.maestro.node/unreject+ node+)
-        ($.maestro.node/accept node
-                               (cons node-nmspace
-                                     node+))))
+    (let [node-nmspace   (keyword nm)
+          node-matching+ (sort (filter (fn [kw]
+                                         (= (namespace kw)
+                                            nm))
+                                       (keys (get-in state
+                                                     [::$.maestro/deps-maestro-edn
+                                                      :aliases]))))
+          node+          (cons node-nmspace
+                               node-matching+)]
+      (-> state
+          ($.maestro.namespace/force-include node-nmspace)
+          ($.maestro.node/unreject+ node+)
+          ($.maestro.node/accept node
+                                 node+)))
     state))
 
 
