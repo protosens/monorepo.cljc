@@ -89,29 +89,29 @@
     (protosens.bb.help/undocumented-task+)
     (protosens.bb.help/print))}},
  :deps
- {io.github.borkdude/quickdoc
-  {:git/sha "fc5a18bb419ccac3c8769aa0761384025b27f68c"},
-  babashka/fs {:mvn/version "0.1.11"},
+ {babashka/fs {:mvn/version "0.1.11"},
   selmer/selmer {:mvn/version "1.12.55"},
   babashka/process {:mvn/version "0.2.10"},
-  lambdaisland/kaocha {:mvn/version "1.63.998"}},
+  lambdaisland/kaocha {:mvn/version "1.63.998"},
+  io.github.borkdude/quickdoc
+  {:git/sha "fc5a18bb419ccac3c8769aa0761384025b27f68c"}},
  :paths
- ["module/string/src/main/clj"
-  "module/maestro/src/main/clj"
-  "module/term.style/src/main/clj/"
+ ["module/task/src/main/clj"
+  "module/maestro.idiom/src/main/clj"
+  "module/bb.help/src/main/clj"
   "module/edn/src/main/clj"
-  "module/maestro.plugin.bb/src/main/clj/"
-  "module/task/src/main/clj"
+  "module/string/src/main/clj"
   "module/classpath/src/main/clj"
+  "module/process/src/main/clj"
+  "module/git/src/main/clj"
+  "module/maestro/src/main/clj"
+  "module/deps.edn/src/main/clj"
+  "module/namespace/src/main/clj"
+  "module/graph.dfs/src/main/clj/"
+  "module/term.style/src/main/clj/"
   "module/maestro.plugin.clj-kondo/src/main/clj"
-  "module/maestro.plugin.quickdoc/src/main/clj"
   "module/maestro.plugin.gitlib/src/main/clj"
   "module/maestro.plugin.kaocha/src/main/clj"
-  "module/bb.help/src/main/clj"
-  "module/graph.dfs/src/main/clj/"
-  "module/namespace/src/main/clj"
+  "module/maestro.plugin.quickdoc/src/main/clj"
   "module/symbol/src/main/clj"
-  "module/git/src/main/clj"
-  "module/process/src/main/clj"
-  "module/maestro.idiom/src/main/clj"
-  "module/deps.edn/src/main/clj"]}
+  "module/maestro.plugin.bb/src/main/clj/"]}

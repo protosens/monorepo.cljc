@@ -377,7 +377,6 @@
    :maestro/platform+                   [:bb
                                          :jvm]              
    :maestro/require                     [:ext/babashka.fs
-                                         :module/deps.edn
                                          :module/git
                                          :module/maestro
                                          :test/maestro.plugin.gitlib]

@@ -27,7 +27,7 @@
           node+          (cons node-nmspace
                                node-matching+)]
       (-> state
-          ($.maestro.namespace/force-include node-nmspace)
+          ($.maestro.namespace/unexclude node-nmspace)
           ($.maestro.node/unreject+ node+)
           ($.maestro.node/accept node
                                  node+)))

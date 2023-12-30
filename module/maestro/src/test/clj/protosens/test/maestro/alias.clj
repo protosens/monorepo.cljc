@@ -55,6 +55,20 @@
 
 
 
+(T/deftest accepted
+
+  (T/is (= '(:a :b :c)
+           (-> {::$.maestro/deps-maestro-edn {:aliases {:a {}
+                                                        :b {}
+                                                        :c {}}}}
+               ($.maestro.node/init-state [])
+               ($.maestro.alias/accept :a)
+               ($.maestro.alias/accept :b)
+               ($.maestro.alias/accept :c)
+               ($.maestro.alias/accepted)))))
+
+
+
 (T/deftest copy
 
   (T/is (= -definition
@@ -87,6 +101,24 @@
 
 
 
+(T/deftest dependent+
+
+  (T/is (= [:a :b :c]
+           (-> {::$.maestro/deps-maestro-edn
+                 {:aliases (sorted-map 
+                             :a {:maestro/require [:b
+                                                   :d]}
+                             :b {:maestro/require [:b
+                                                   :c
+                                                   :d]}
+                             :c {:maestro/require [:e]}
+                             :d {}
+                             :e {})}}
+               ($.maestro.alias/dependent+ [:d
+                                            :e])))))
+
+
+
 (T/deftest include?
 
   (T/is (false? ($.maestro.alias/include? -state
@@ -103,3 +135,26 @@
                    ($.maestro.namespace/include "foo")
                    ($.maestro.alias/include? :foo/bar)))
         "Namespace included"))
+
+
+
+(T/deftest inverted-graph
+
+  (T/is (= {:b [:a
+                :b]
+            :c [:b]
+            :d [:a
+                :b]
+            :e [:c]}
+           ($.maestro.alias/inverted-graph {::$.maestro/deps-maestro-edn
+                                              {:aliases (sorted-map 
+                                                          :a {:maestro/require [:b
+                                                                                :d]}
+                                                          :b {:maestro/require [:b
+                                                                                :c
+                                                                                :d]}
+                                                          :c {:maestro/require [:e]}
+                                                          :d {}
+                                                          :e {})}}))))
+
+

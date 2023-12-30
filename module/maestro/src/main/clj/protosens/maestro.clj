@@ -6,13 +6,15 @@
             [protosens.deps.edn                    :as $.deps.edn]
             [protosens.edn.read                    :as $.edn.read]
             [protosens.graph.dfs                   :as $.graph.dfs]
+            [protosens.maestro.alias               :as $.maestro.alias]
             [protosens.maestro.namespace           :as $.maestro.namespace]
             [protosens.maestro.node                :as $.maestro.node]
-            [protosens.maestro.plugin              :as $.maestro.plugin]
             [protosens.maestro.node.enter.default]
             [protosens.maestro.node.enter.every]
             [protosens.maestro.node.enter.god]
+            [protosens.maestro.node.enter.invert]
             [protosens.maestro.node.enter.shallow]
+            [protosens.maestro.plugin              :as $.maestro.plugin]
             [protosens.term.style                  :as $.term.style]))
 
 
@@ -88,14 +90,8 @@
   (update state
           ::deps-edn
           (fn [deps-edn]
-            (let [alias->definition (deps-edn :aliases)
-                  alias+            (keep (fn [[node _depth]]
-                                            (when (contains? alias->definition
-                                                             node)
-                                              node))
-                                          (state ::$.maestro.node/path))]
-              ($.deps.edn/flatten deps-edn
-                                  alias+)))))
+            ($.deps.edn/flatten deps-edn
+                                ($.maestro.alias/accepted state)))))
 
 
 

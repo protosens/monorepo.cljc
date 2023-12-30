@@ -1,9 +1,9 @@
 (ns protosens.maestro.node.enter.god
 
-  (:require [protosens.maestro           :as-alias $.maestro]
-            [protosens.maestro.namespace :as $.maestro.namespace]
-            [protosens.maestro.node      :as       $.maestro.node]
-            [protosens.maestro.plugin    :as       $.maestro.plugin]))
+  (:require [protosens.maestro            :as-alias $.maestro]
+            [protosens.maestro.namespace  :as $.maestro.namespace]
+            [protosens.maestro.node       :as       $.maestro.node]
+            [protosens.maestro.node.enter :as       $.maestro.node.enter]))
 
 
 (set! *warn-on-reflection*
@@ -17,12 +17,12 @@
 
   [state node]
 
-  (when (qualified-keyword? node)
-    ($.maestro.plugin/fail (format "`:GOD` node should not be namespaced: `%s`"
-                                   node)))
-  (let [alias+        (keys (get-in state
-                                    [::$.maestro/deps-maestro-edn
-                                     :aliases]))
+  ($.maestro.node.enter/assert-unqualified node)
+  (let [alias+        (-> state
+                          (get-in [::$.maestro/deps-maestro-edn
+                                   :aliases])
+                          (keys)
+                          (sort))
         node-nmspace+ (sort (into #{}
                                   (comp (keep namespace)
                                         (map keyword))
