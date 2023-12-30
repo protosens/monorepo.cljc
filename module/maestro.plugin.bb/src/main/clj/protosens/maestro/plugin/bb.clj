@@ -1,6 +1,7 @@
 (ns protosens.maestro.plugin.bb
 
   (:import (java.io StringWriter))
+  (:refer-clojure :exclude [sync])
   (:require [clojure.java.io          :as C.java.io]
             [clojure.pprint           :as C.pprint]
             [clojure.string           :as C.string]
@@ -65,21 +66,43 @@
 
 
 
-(defn run
+(defn- -run-from-task
 
   [node]
 
-  ($.maestro.plugin/intro "maestro.plugin.bb")
-  ($.maestro.plugin/step "Computing new `bb.edn` from `bb.maestro.edn` and `deps.maestro.edn`")
+  (-run node
+        (-read-file "bb.edn")
+        (-read-file "bb.maestro.edn")
+        (-read-file "deps.maestro.edn")))
+
+
+
+(defn check
+
+  [node]
+
+  ($.maestro.plugin/intro "maestro.plugin.bb/check")
+  ($.maestro.plugin/step "Checking if `bb.edn` is in sync with `bb.maestro.edn` and `deps.maestro.edn`")
+  ($.maestro.plugin/safe
+    (delay
+      (if (-run-from-task node)
+        ($.maestro.plugin/fail "`bb.edn` is not in sync")
+        ($.maestro.plugin/done "`bb.edn` is in sync")))))
+
+
+
+(defn sync
+
+  [node]
+
+  ($.maestro.plugin/intro "maestro.plugin.bb/sync")
+  ($.maestro.plugin/step "Syncing `bb.edn` with `bb.maestro.edn` and `deps.maestro.edn`")
   ($.maestro.plugin/safe
     (delay
       ($.maestro.plugin/step (format "Selecting everything required for node `%s`"
                                      node))
       (if-some [[bb-edn
-                 tree-string] (-run node
-                                    (-read-file "bb.edn")
-                                    (-read-file "bb.maestro.edn")
-                                    (-read-file "deps.maestro.edn"))]
+                 tree-string] (-run-from-task node)]
         (-write-bb-edn bb-edn
                        tree-string)
         ($.maestro.plugin/done "Nothing changed")))))

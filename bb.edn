@@ -21,7 +21,7 @@
    :task
    (do
     (-> (protosens.maestro/task) (protosens.maestro.plugin.kaocha/run))
-    (protosens.maestro.plugin.bb/run :module/task))},
+    (protosens.maestro.plugin.bb/sync :module/task))},
   module:readme
   {:doc "Generate READMEs for all modules",
    :protosens/doc
@@ -76,6 +76,10 @@
    "Using `clj-kondo` which must be accessible in the terminal.\n\n                   See the `lint:prepare` task which is necessary for initialization.",
    :requires ([protosens.maestro.plugin.clj-kondo]),
    :task (protosens.maestro.plugin.clj-kondo/lint)},
+  deps:bb:check
+  {:doc "",
+   :requires ([protosens.maestro.plugin.bb]),
+   :task (protosens.maestro.plugin.bb/check :module/task)},
   module:listing
   {:doc "Generate `./module/README.md`",
    :protosens/doc "Lists all exposed and private modules.",

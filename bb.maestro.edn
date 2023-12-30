@@ -47,7 +47,13 @@
    :task     (do
                (-> (protosens.maestro/task)
                    (protosens.maestro.plugin.kaocha/run))
-               (protosens.maestro.plugin.bb/run :module/task))}
+               (protosens.maestro.plugin.bb/sync :module/task))}
+
+
+  deps:bb:check
+  {:doc      ""
+   :requires ([protosens.maestro.plugin.bb])
+   :task     (protosens.maestro.plugin.bb/check :module/task)}
 
 
   expose
