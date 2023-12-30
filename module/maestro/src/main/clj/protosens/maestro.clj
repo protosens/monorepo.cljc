@@ -39,9 +39,17 @@
     (let [not-visited-after? (fn [node]
                                (not ($.maestro.node/visited? state-after-enter
                                                              node)))
-          color-node         (if ($.maestro.node/accepted? state-after-enter
-                                                           node)
+          color-node         (cond
+                               ($.maestro.node/input? state-before-enter
+                                                      node)
+                               (str $.term.style/bg-green
+                                    $.term.style/fg-black)
+                               ;;
+                               ($.maestro.node/accepted? state-after-enter
+                                                         node)
                                $.term.style/fg-green
+                               ;;
+                               :else  ; rejected
                                $.term.style/fg-red)
           level              (if (some not-visited-after?
                                        ($.graph.dfs/pending-sibling+ state-before-enter))
@@ -65,6 +73,7 @@
                     $.term.style/reset
                     color-node
                     node
+                    " "
                     $.term.style/reset)))))
 
 
