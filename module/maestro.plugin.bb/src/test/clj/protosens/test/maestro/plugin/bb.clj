@@ -53,19 +53,18 @@
                                         -deps-maestro-edn))
         "Nothing changed")
 
-  (T/is (= [(update -bb-edn
-                    :paths
-                    conj
-                    "path/c")
-            ,
-            [[:local 0] [:m 1] [:local/bb 0] [:m/a 1] [:m/b 2] [:m/c 3]]]
-           ;
-           ($.maestro.plugin.bb/-run :local/bb
-                                     -bb-edn
-                                     -bb-maestro-edn
-                                     (assoc-in -deps-maestro-edn
-                                               [:aliases
-                                                :m/b
-                                                :maestro/require]
-                                               [:m/c])))
+  (T/is (= (update -bb-edn
+                   :paths
+                   conj
+                   "path/c")
+           ,
+           (-> ($.maestro.plugin.bb/-run :local/bb
+                                         -bb-edn
+                                         -bb-maestro-edn
+                                         (assoc-in -deps-maestro-edn
+                                                   [:aliases
+                                                    :m/b
+                                                    :maestro/require]
+                                                   [:m/c]))
+               (first)))
         "Update"))

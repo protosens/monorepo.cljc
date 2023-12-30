@@ -16,11 +16,24 @@
 ;;;;;;;;;; Private side effects
 
 
-(defn- -write-file
+(defn- -read-file
 
-  [bb-edn path]
+  [path]
 
-  (println path)
+  (try
+    ($.edn.read/file path)
+    (catch Throwable ex
+      ($.maestro.plugin/fail (format "Unable to read file `%s`"
+                                     path)
+                             ex))))
+
+
+
+(defn- -write-bb-edn
+
+  [bb-edn tree-string]
+
+  (println tree-string)
   ($.maestro.plugin/step "Writing new `bb.edn`")
   (with-open [file (C.java.io/writer "bb.edn")]
     (C.pprint/pprint bb-edn
@@ -33,38 +46,40 @@
 
 (defn ^:no-doc -run
 
-  [alias bb-edn bb-maestro-edn deps-maestro-edn]
+  [node bb-edn bb-maestro-edn deps-maestro-edn]
 
-  (let [path       (StringWriter.)
-        sorted     (binding [*out*                          path
-                             $.maestro.plugin/*print-path?* true]
-                     ($.maestro/run [alias]
-                                    deps-maestro-edn))
-        bb-edn-new (merge bb-maestro-edn
-                          (-> sorted
-                              (::$.maestro/deps-edn)
-                              (select-keys [:deps
-                                            :paths])))]
+  (let [tree-stream (StringWriter.)
+        sorted      (binding [*out*                          tree-stream
+                              $.maestro.plugin/*print-path?* true]
+                      ($.maestro/run [node]
+                                     deps-maestro-edn))
+        bb-edn-new  (merge bb-maestro-edn
+                           (-> sorted
+                               (::$.maestro/deps-edn)
+                               (select-keys [:deps
+                                             :paths])))]
     (when-not (= bb-edn-new
                  bb-edn)
       [bb-edn-new
-       (str path)])))
+       (str tree-stream)])))
 
 
 
 (defn run
 
-  [alias]
+  [node]
 
   ($.maestro.plugin/intro "maestro.plugin.bb")
   ($.maestro.plugin/step "Computing new `bb.edn` from `bb.maestro.edn` and `deps.maestro.edn`")
-  ($.maestro.plugin/step (format "Selecting everything required for alias `%s`"
-                                 alias))
-  (if-some [[bb-edn
-             path]  (-run alias
-                          ($.edn.read/file "bb.edn")
-                          ($.edn.read/file "bb.maestro.edn")
-                          ($.edn.read/file "deps.maestro.edn"))]
-    (-write-file bb-edn
-                 path)
-    ($.maestro.plugin/done "Nothing changed")))
+  ($.maestro.plugin/safe
+    (delay
+      ($.maestro.plugin/step (format "Selecting everything required for node `%s`"
+                                     node))
+      (if-some [[bb-edn
+                 tree-string] (-run node
+                                    (-read-file "bb.edn")
+                                    (-read-file "bb.maestro.edn")
+                                    (-read-file "deps.maestro.edn"))]
+        (-write-bb-edn bb-edn
+                       tree-string)
+        ($.maestro.plugin/done "Nothing changed")))))
