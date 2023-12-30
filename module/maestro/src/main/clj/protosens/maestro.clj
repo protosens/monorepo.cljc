@@ -92,25 +92,13 @@
 ;;;;;;;;;; Main algorithms
 
 
-(defn- -flatten-deps-edn
-
-  [state]
-
-  (update state
-          ::deps-edn
-          (fn [deps-edn]
-            ($.deps.edn/flatten deps-edn
-                                ($.maestro.alias/accepted state)))))
-
-
-
 (defn- -enter-node
 
   [state]
 
   (let [node ($.graph.dfs/node state)]
     (when-not (keyword? node)
-      ($.maestro.plugin/fail (format "`%s` should be a keyword!"
+      ($.maestro.plugin/fail (format "Node `%s` is not a keyword"
                                      (pr-str node))))
     (if ($.maestro.node/visited? state
                                  node)
@@ -121,6 +109,18 @@
                      state-2
                      node)
         state-2))))
+
+
+
+(defn- -flatten-deps-edn
+
+  [state]
+
+  (update state
+          ::deps-edn
+          (fn [deps-edn]
+            ($.deps.edn/flatten deps-edn
+                                ($.maestro.alias/accepted state)))))
 
 
 
@@ -156,16 +156,13 @@
 
   [string-node+ deps-maestro-edn]
 
-  (run (map (fn [x]
-              (try
-                (keyword x)
-                (catch Exception _ex
-                  ($.maestro.plugin/fail (format "Input `%s` is not a keyword"
-                                                 (pr-str x))))))
-            (-> string-node+
-                (C.string/split #":")
-                (rest)))
-       deps-maestro-edn))
+  (let [node+ (map keyword
+                   (or (-> string-node+
+                           (C.string/split #":")
+                           (next))
+                       ($.maestro.plugin/fail "Given input nodes are not keywords")))]
+    (run node+
+         deps-maestro-edn)))
 
 
 ;;;;;;;;;; Tasks
@@ -182,21 +179,24 @@
   ([string-node+]
 
    ($.maestro.plugin/intro "maestro")
-   ($.maestro.plugin/step "Selecting required modules")
-   (let [alias-str-2      (or string-node+
-                              (first *command-line-args*)
-                              ($.maestro.plugin/fail "No input aliases given"))
-         deps-maestro-edn (try
-                            ($.edn.read/file "deps.maestro.edn")
-                            (catch Exception ex
-                              ($.maestro.plugin/fail "Unable to read `deps.maestro.edn")))
-         deps-edn         (binding [$.maestro.plugin/*print-path?* true]
-                            (-> (run-string alias-str-2
-                                            deps-maestro-edn)
-                                (::deps-edn)))]
-     ($.maestro.plugin/step "Writing selection to `deps.edn`")
-     (with-open [file (C.java.io/writer "deps.edn")]
-       (C.pprint/pprint deps-edn
-                        file))
-     ($.maestro.plugin/done "`deps.edn` is ready")
-     deps-edn)))
+   ($.maestro.plugin/step "Selecting required nodes")
+   ($.maestro.plugin/safe
+     (delay
+       (let [alias-str-2      (or string-node+
+                                  (first *command-line-args*)
+                                  ($.maestro.plugin/fail "No input nodes given as arguments"))
+             deps-maestro-edn (try
+                                ($.edn.read/file "deps.maestro.edn")
+                                (catch Throwable ex
+                                  ($.maestro.plugin/fail "Unable to read `deps.maestro.edn`"
+                                                         ex)))
+             deps-edn         (binding [$.maestro.plugin/*print-path?* true]
+                                (-> (run-string alias-str-2
+                                                deps-maestro-edn)
+                                    (::deps-edn)))]
+         ($.maestro.plugin/step "Writing selection to `deps.edn`")
+         (with-open [file (C.java.io/writer "deps.edn")]
+           (C.pprint/pprint deps-edn
+                            file))
+         ($.maestro.plugin/done "`deps.edn` is ready")
+         deps-edn)))))

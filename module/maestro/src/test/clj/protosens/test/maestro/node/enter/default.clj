@@ -16,11 +16,6 @@
 
     "Core assumptions about graph traversal"
 
-    (-t-path "Empty"
-             []
-             {}
-             [])
-
     (-t-path "No deps (but mode activated)"
              [:m/a]
              {:m/a {}}

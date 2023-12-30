@@ -4,6 +4,13 @@
             [protosens.term.style :as $.term.style]))
 
 
+(set! *warn-on-reflection*
+      true)
+
+
+(declare fail)
+
+
 ;;;;;;;;;; Private
 
 
@@ -49,11 +56,21 @@
 
 (defn fail
 
-  [^String message]
+
+  ([message]
+
+   (fail message
+         nil))
+
+
+  ([^String message ^Throwable exception-cause]
 
   (if (-babashka?)
     (do
       (println)
+      (when exception-cause
+        (.printStackTrace exception-cause)
+        (println))
       (println (str $.term.style/bold
                     $.term.style/fg-red
                     "[x] "
@@ -62,7 +79,8 @@
                     message
                     $.term.style/reset))
       (System/exit 1))
-    (throw (Exception. message))))
+    (throw (Exception. message
+                       exception-cause)))))
 
 
 
@@ -83,6 +101,18 @@
                 "]"
                 $.term.style/reset))
   (println))
+
+
+
+(defn safe
+
+  [delayed]
+
+  (try
+    @delayed
+   (catch Throwable ex
+     (fail "An unforeseen exception occured"
+           ex))))
 
 
 

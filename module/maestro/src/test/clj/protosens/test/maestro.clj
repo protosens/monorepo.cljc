@@ -67,3 +67,12 @@
                                 deps-edn)
                  (::$.maestro/deps-edn)))
           "Selected alias definitions are flattened")))
+
+
+
+(T/deftest run-string
+
+  (T/is (thrown? Exception
+                 ($.maestro/run-string "42"
+                                       {}))
+        "Not keywords"))
