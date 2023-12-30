@@ -81,6 +81,21 @@
 
 
 
+(defn expand-input
+
+  [node+]
+
+  (into []
+        (comp (mapcat (fn [alias]
+                        (if (qualified-keyword? alias)
+                          [(keyword (namespace alias))
+                           alias]
+                          [alias])))
+              (distinct))
+        node+))
+
+
+
 (defn input?
 
   [state node]

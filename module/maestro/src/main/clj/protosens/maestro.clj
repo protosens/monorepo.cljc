@@ -126,21 +126,6 @@
       ($.maestro.node/init-state node+)))
 
 
-
-(defn expand-input
-
-  [node+]
-
-  (into []
-        (comp (mapcat (fn [alias]
-                        (if (qualified-keyword? alias)
-                          [(keyword (namespace alias))
-                           alias]
-                          [alias])))
-              (distinct))
-        node+))
-
-
 ;;;
 
 
@@ -148,7 +133,7 @@
 
   [node+ deps-maestro-edn]
 
-  (let [node-2+ (expand-input node+)]
+  (let [node-2+ ($.maestro.node/expand-input node+)]
     (-print-tree-begin)
     (-> (-init-state deps-maestro-edn
                      node-2+)

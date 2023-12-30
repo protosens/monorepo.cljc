@@ -100,6 +100,22 @@
 
 
 
+(T/deftest expand-input
+
+  (T/is (= []
+           ($.maestro.node/expand-input []))
+        "Empty")
+
+  (T/is (= [:a :b]
+           ($.maestro.node/expand-input [:a :b]))
+        "Nothing to expand")
+
+  (T/is (= [:a :b :b/B :b/B-2 :c :c/C :d :d/D]
+           ($.maestro.node/expand-input [:a :b/B :b/B-2 :c :c/C :d/D]))
+        "Ordered expansion"))
+
+
+
 (T/deftest input?
 
   (T/is (true? ($.maestro.node/input? -state
