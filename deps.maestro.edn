@@ -275,7 +275,7 @@
   :module/maestro
 
   {:extra-paths                         ["module/maestro/src/main/clj"]
-   :maestro/doc                         "Maestro, calmely orchestrating your Clojure (mono)repo."
+   :maestro/doc                         "Maestro, calmly orchestrating your Clojure (mono)repo."
    :maestro/platform+                   [:bb
                                          :jvm]              
    :maestro/require                     [:ext/babashka.fs

@@ -5,7 +5,8 @@
    Most useful for tool authors. [[read]] fetches a `deps.edn` file and other functions
    are used for extracting informations."
 
-  (:refer-clojure :exclude [read])
+  (:refer-clojure :exclude [flatten
+                            read])
   (:require [protosens.edn.read  :as $.edn.read]
             [protosens.namespace :as $.namespace]))
 
@@ -72,7 +73,7 @@
 
   "Returns all `:extra-paths` from the given aliases.
 
-   Prepends them prepended with `:deps/root`."
+   Prepends them with `:deps/root` (if present)."
 
   [deps-edn alias+]
 
@@ -80,6 +81,41 @@
                  (mapcat (comp :extra-paths
                                (deps-edn :aliases))
                          alias+)))
+
+
+
+(defn flatten
+
+
+  ([deps-edn]
+
+   (flatten deps-edn
+            nil))
+
+
+  ([deps-edn alias+]
+
+   (let [alias->definition (deps-edn :aliases)
+         alias-2+          (or alias+
+                               (sort (keys alias->definition)))
+         deps-edn-2        (-> deps-edn
+                               (update :deps
+                                       #(or %
+                                            {}))
+                               (update :paths
+                                       #(or %
+                                            [])))]
+     (reduce (fn [deps-edn-3 alias]
+               (let [definition (alias->definition alias)]
+                 (-> deps-edn-3
+                     (update :deps
+                             merge
+                             (:extra-deps definition))
+                     (update :paths
+                             into
+                             (:extra-paths definition)))))
+             deps-edn-2
+             alias-2+))))
 
 
 
@@ -113,7 +149,7 @@
 
   "Returns all `:paths` and `:extra-paths` for the given aliases.
 
-   Prepends them prepended with `:deps/root`."
+   Prepends them with `:deps/root` (if present)."
 
 
   ([deps-edn]

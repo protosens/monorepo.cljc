@@ -7,6 +7,14 @@ repository.
 ---
 
 
+## {{ next-release }}
+
+- Add
+    - `$.deps.edn/flatten`
+
+---
+
+
 ## `2022-10-10`
 
 Inception.

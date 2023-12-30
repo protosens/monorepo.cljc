@@ -2,7 +2,8 @@
 
   "Testing `$.deps.edn`."
   
-  (:refer-clojure :exclude [read])
+  (:refer-clojure :exclude [flatten
+                            read])
   (:require [clojure.test       :as T]
             [protosens.deps.edn :as $.deps.edn]))
 
@@ -27,6 +28,51 @@
 
 
 ;;;;;;;;;; Tests
+
+
+(T/deftest flatten
+
+  (T/is (= {:deps  {}
+            :paths []}
+           ($.deps.edn/flatten {}))
+        "Empty")
+
+
+  (let [alias->definition {:b {:extra-deps  {'dep/b {3 4}}}
+                           :c {:extra-paths ["path/c"]}
+                           :d {:extra-deps  {'dep/d   {5 6}
+                                             'dep/d-2 {7 8}}
+                               :extra-paths ["path/d"
+                                             "path/d-2"]}}
+        deps-edn          {:aliases alias->definition
+                           :deps    {'dep/a {1 2}}
+                           :paths   ["path/a"]}]
+
+    (T/is (= {:aliases alias->definition
+              :deps    {'dep/a   {1 2}
+                        'dep/b   {3 4}
+                        'dep/d   {5 6}
+                        'dep/d-2 {7 8}}
+              :paths   ["path/a"
+                        "path/c"
+                        "path/d"
+                        "path/d-2"]}
+             ($.deps.edn/flatten deps-edn))
+          "All aliases")
+
+    (T/is (= {:aliases alias->definition
+              :deps    {'dep/a   {1 2}
+                        'dep/d   {5 6}
+                        'dep/d-2 {7 8}}
+              :paths   ["path/a"
+                        "path/d"
+                        "path/d-2"
+                        "path/c"]}
+             ($.deps.edn/flatten deps-edn
+                                 [:d
+                                  :c]))
+          "Selected aliases (in order)")))
+
 
 
 (T/deftest namespace+
