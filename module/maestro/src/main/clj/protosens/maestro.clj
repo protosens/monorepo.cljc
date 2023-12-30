@@ -3,6 +3,7 @@
   (:require [clojure.java.io                       :as C.java.io]
             [clojure.pprint                        :as C.pprint]
             [clojure.string                        :as C.string]
+            [protosens.deps.edn                    :as $.deps.edn]
             [protosens.edn.read                    :as $.edn.read]
             [protosens.graph.dfs                   :as $.graph.dfs]
             [protosens.maestro.namespace           :as $.maestro.namespace]
@@ -87,17 +88,14 @@
   (update state
           ::deps-edn
           (fn [deps-edn]
-            (reduce (fn [deps-edn-2 alias-def]
-                      (-> deps-edn-2
-                          (update :deps
-                                  merge ;; TODO. Ensure that no dep gets overwritten?
-                                  (:extra-deps alias-def))
-                          (update :paths
-                                  (fnil into
-                                        [])
-                                  (:extra-paths alias-def))))
-                    deps-edn
-                    (vals (deps-edn :aliases))))))
+            (let [alias->definition (deps-edn :aliases)
+                  alias+            (keep (fn [[node _depth]]
+                                            (when (contains? alias->definition
+                                                             node)
+                                              node))
+                                          (state ::$.maestro.node/path))]
+              ($.deps.edn/flatten deps-edn
+                                  alias+)))))
 
 
 
@@ -127,8 +125,7 @@
 
   (-> {::deps-edn         (dissoc deps-maestro-edn
                                   :aliases)
-       ::deps-maestro-edn deps-maestro-edn
-       ::path             []}
+       ::deps-maestro-edn deps-maestro-edn}
       ($.maestro.namespace/init-state)
       ($.maestro.node/init-state node+)))
 

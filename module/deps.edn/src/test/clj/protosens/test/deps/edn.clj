@@ -46,6 +46,7 @@
                                              "path/d-2"]}}
         deps-edn          {:aliases alias->definition
                            :deps    {'dep/a {1 2}}
+                           :foo     :bar
                            :paths   ["path/a"]}]
 
     (T/is (= {:aliases alias->definition
@@ -53,6 +54,7 @@
                         'dep/b   {3 4}
                         'dep/d   {5 6}
                         'dep/d-2 {7 8}}
+              :foo     :bar
               :paths   ["path/a"
                         "path/c"
                         "path/d"
@@ -64,6 +66,7 @@
               :deps    {'dep/a   {1 2}
                         'dep/d   {5 6}
                         'dep/d-2 {7 8}}
+              :foo     :bar
               :paths   ["path/a"
                         "path/d"
                         "path/d-2"

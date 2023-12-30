@@ -19,6 +19,7 @@
   (assoc state
          ::accepted #{}
          ::input    (set node+)
+         ::path     []
          ::rejected #{}))
 
 
@@ -58,13 +59,10 @@
        (update ::accepted
                conj
                node)
-       ;;
-       ;; Only needed for tests (but does not harm, might even become more useful).
-       (update ::$.maestro/path
+       (update ::path
                conj
                [node
-                ($.graph.dfs/depth state)])
-       ;;
+                ($.graph.dfs/depth state)])  ;; Depth only useful for tests.
        (cond->
          (not-empty child+)
          ($.graph.dfs/deeper child+)))))

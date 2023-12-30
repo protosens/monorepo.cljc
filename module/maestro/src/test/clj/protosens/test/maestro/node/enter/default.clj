@@ -1,8 +1,9 @@
 (ns protosens.test.maestro.node.enter.default
 
-  (:require [clojure.test           :as    T]
-            [protosens.maestro      :as    $.maestro]
-            [protosens.test.maestro :refer [-t-path]]))
+  (:require [clojure.test           :as       T]
+            [protosens.maestro      :as       $.maestro]
+            [protosens.maestro.node :as-alias $.maestro.node]
+            [protosens.test.maestro :refer    [-t-path]]))
 
 
 ;;;;;;;;;;
@@ -118,7 +119,7 @@
                                            {:aliases def-dep+}))
                           100
                           nil)
-                   (::$.maestro/path)))
+                   (::$.maestro.node/path)))
             message)))
 
 
