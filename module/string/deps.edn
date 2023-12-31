@@ -3,5 +3,4 @@
 ;;
 ;; It is accessible as a Git dependency with `:deps/root` pointing to this directory.
 ;;
-{:deps "https://github.com/protosens/monorepo.cljc",
- :paths ["src/main/clj"]}
+{:deps {}, :paths ["src/main/clj"]}

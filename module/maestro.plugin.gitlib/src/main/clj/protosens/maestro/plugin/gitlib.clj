@@ -167,7 +167,7 @@
 
 
 
-(defn run
+(defn expose
 
   "Task exposing selected modules for consumption by Clojure CLI as Git dependencies.
 
@@ -194,7 +194,7 @@
 
   ([]
 
-   (run nil))
+   (expose nil))
 
 
   ([deps-edn]
@@ -216,7 +216,7 @@
        (-expose git-sha
                 deps-edn-2)
        ($.git/add ["."])
-       ($.git/commit (format "Prepare module exposition as gitlibs
+       ($.git/commit (format "Prepare module exposition as gitlibs (DO NOT USE)
                       
                               Base: %s"
                               git-sha)))
@@ -247,7 +247,7 @@
 
 
 
-(defn run-local
+(defn expose-local
 
   "Local exposition for testing purporses.
 
@@ -260,12 +260,12 @@
 
   ([]
 
-   (run-local nil))
+   (expose-local nil))
 
 
   ([deps-edn]
 
-   (run (-> (or deps-edn
-                (-read-deps-edn))
-            (assoc :maestro.plugin.gitlib/url
-                   (System/getProperty "user.dir"))))))
+   (expose (-> (or deps-edn
+                   (-read-deps-edn))
+               (assoc :maestro.plugin.gitlib/url
+                      (System/getProperty "user.dir"))))))

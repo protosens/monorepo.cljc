@@ -530,9 +530,10 @@
 
   :module/term.style
 
-  {:extra-paths  ["module/term.style/src/main/clj/"]
-   :maestro/doc  "ANSI escape codes for beautiful terminal outputs."
-   :maestro/root "module/term.style"}
+  {:extra-paths                ["module/term.style/src/main/clj/"]
+   :maestro/doc                "ANSI escape codes for beautiful terminal outputs."
+   :maestro/root               "module/term.style"
+   :maestro.plugin.gitlib/name protosens/term.style}
 
 
   }}

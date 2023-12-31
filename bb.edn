@@ -6,7 +6,7 @@
    :protosens/doc
    "By generating a custom `deps.edn` file in the `:meastro/root` of aliases that\n                   have a `:maestro.git.lib/name`.\n                   \n                   Consumers can then require the repository as a Git dependency and point to a\n                   particular module using `:deps/root`.",
    :requires ([protosens.maestro.plugin.gitlib]),
-   :task (protosens.maestro.plugin.gitlib/run)},
+   :task (protosens.maestro.plugin.gitlib/expose)},
   help
   {:doc "Print documentation for the given task",
    :protosens/doc "If there is any.",
@@ -47,7 +47,7 @@
    :protosens/doc
    "Only for testing.\n                  \n                   Allows testing exposition and running tasks like `req:verify` without having\n                   to push commits.",
    :requires ([protosens.maestro.plugin.gitlib]),
-   :task (protosens.maestro.plugin.gitlib/run-local)},
+   :task (protosens.maestro.plugin.gitlib/expose-local)},
   api
   {:doc "Generate documentation for modules",
    :protosens/doc

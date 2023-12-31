@@ -1,5 +1,6 @@
 (ns protosens.test.maestro.plugin.kaocha
 
+  (:refer-clojure :exclude [sync])
   (:require [babashka.fs                     :as bb.fs]
             [clojure.test                    :as T]
             [protosens.edn.read              :as $.edn.read]

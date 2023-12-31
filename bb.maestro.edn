@@ -64,7 +64,7 @@
                    Consumers can then require the repository as a Git dependency and point to a
                    particular module using `:deps/root`."
    :requires      ([protosens.maestro.plugin.gitlib])
-   :task          (protosens.maestro.plugin.gitlib/run)}
+   :task          (protosens.maestro.plugin.gitlib/expose)}
 
 
   expose:local
@@ -74,7 +74,7 @@
                    Allows testing exposition and running tasks like `req:verify` without having
                    to push commits."
    :requires      ([protosens.maestro.plugin.gitlib])
-   :task          (protosens.maestro.plugin.gitlib/run-local)}
+   :task          (protosens.maestro.plugin.gitlib/expose-local)}
 
 
   help
