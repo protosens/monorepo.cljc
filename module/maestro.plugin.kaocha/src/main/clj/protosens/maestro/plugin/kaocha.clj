@@ -13,7 +13,7 @@
 ;;;;;;;;;; Private helpers
 
 
-(defn- -keep-path+
+(defn ^:no-doc -keep-path+
 
   [alias->definition select-namespace?]
 
@@ -25,7 +25,7 @@
 
 
 
-(defn- -path+
+(defn ^:no-doc -path+
 
   [deps-edn namespace+]
 
@@ -40,7 +40,7 @@
 ;;;
 
 
-(defn- -output-path
+(defn ^:no-doc -output-path
 
   [deps-edn]
 
@@ -54,7 +54,7 @@
 
 
 
-(defn- -selector+
+(defn ^:no-doc -selector+
 
   [deps-edn]
 
@@ -86,13 +86,16 @@
 ;;;
 
 
-(defn- -kaocha-required?
+(defn ^:no-doc -kaocha-required?
 
   [deps-edn]
 
-  (some #(= %
-           'lambdaisland/kaocha)
-        (keys (deps-edn :deps))))
+  (-> deps-edn
+      (:deps)
+      (keys)
+      (->> (some #(= %
+                    'lambdaisland/kaocha)))
+      (boolean)))
 
 
 ;;;
@@ -106,7 +109,7 @@
 
 
 
-(defn- -kaocha-required
+(defn ^:no-doc -kaocha-required
 
   [deps-edn]
 
