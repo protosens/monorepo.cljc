@@ -411,7 +411,7 @@
   :test/maestro.plugin.kaocha
 
   {:extra-paths     ["module/maestro.plugin.kaocha/src/test/clj/"]
-   :maestro/require [:module/bb.fs
+   :maestro/require [:ext/babashka.fs
                      :module/edn
                      :module/maestro.plugin.kaocha]}
 

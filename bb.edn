@@ -20,7 +20,9 @@
     [protosens.maestro.plugin.kaocha]),
    :task
    (do
-    (-> (protosens.maestro/task) (protosens.maestro.plugin.kaocha/sync))
+    (->
+     (protosens.maestro/sync)
+     (protosens.maestro.plugin.kaocha/sync))
     (protosens.maestro.plugin.bb/sync :module/task))},
   module:readme
   {:doc "Generate READMEs for all modules",

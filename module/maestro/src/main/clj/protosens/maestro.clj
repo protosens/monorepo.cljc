@@ -1,5 +1,6 @@
 (ns protosens.maestro
 
+  (:refer-clojure :exclude [sync])
   (:require [clojure.java.io                       :as C.java.io]
             [clojure.pprint                        :as C.pprint]
             [clojure.string                        :as C.string]
@@ -138,7 +139,7 @@
 ;;;
 
 
-(defn  run
+(defn run
 
   [node+ deps-maestro-edn]
 
@@ -168,35 +169,50 @@
 ;;;;;;;;;; Tasks
 
 
-(defn task
+(defn- -write-deps-edn
+
+  [deps-edn]
+
+  ($.maestro.plugin/step "Writing selection to `deps.edn`")
+  (with-open [writer (C.java.io/writer "deps.edn")]
+    (C.pprint/pprint deps-edn
+                     writer)))
+
+
+
+(defn sync
 
   
   ([]
 
-   (task nil))
+   (sync nil))
 
 
   ([string-node+]
 
-   ($.maestro.plugin/intro "maestro")
+   (sync string-node+
+         nil))
+
+
+  ([string-node+ deps-maestro-edn]
+
+   ($.maestro.plugin/intro "maestro/sync")
    ($.maestro.plugin/step "Selecting required nodes")
    ($.maestro.plugin/safe
      (delay
        (let [alias-str-2      (or string-node+
                                   (first *command-line-args*)
                                   ($.maestro.plugin/fail "No input nodes given as arguments"))
-             deps-maestro-edn (try
-                                ($.edn.read/file "deps.maestro.edn")
-                                (catch Throwable ex
-                                  ($.maestro.plugin/fail "Unable to read `deps.maestro.edn`"
-                                                         ex)))
+             deps-maestro-edn-2 (or deps-maestro-edn
+                                    (try
+                                      ($.edn.read/file "deps.maestro.edn")
+                                      (catch Throwable ex
+                                        ($.maestro.plugin/fail "Unable to read `deps.maestro.edn`"
+                                                               ex))))
              deps-edn         (binding [$.maestro.plugin/*print-path?* true]
                                 (-> (run-string alias-str-2
-                                                deps-maestro-edn)
+                                                deps-maestro-edn-2)
                                     (::deps-edn)))]
-         ($.maestro.plugin/step "Writing selection to `deps.edn`")
-         (with-open [file (C.java.io/writer "deps.edn")]
-           (C.pprint/pprint deps-edn
-                            file))
+         (-write-deps-edn deps-edn)
          ($.maestro.plugin/done "`deps.edn` is ready")
          deps-edn)))))

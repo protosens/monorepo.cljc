@@ -45,7 +45,7 @@
               [protosens.maestro.plugin.bb]
               [protosens.maestro.plugin.kaocha])
    :task     (do
-               (-> (protosens.maestro/task)
+               (-> (protosens.maestro/sync)
                    (protosens.maestro.plugin.kaocha/sync))
                (protosens.maestro.plugin.bb/sync :module/task))}
 
