@@ -12,6 +12,7 @@
                                    :var-pattern :wikilinks}
  ,
  :maestro.plugin.kaocha/path      "private/maestro-kaocha.edn"
+ :maestro.plugin.kaocha/selector+ [:test/_]
 
 
 

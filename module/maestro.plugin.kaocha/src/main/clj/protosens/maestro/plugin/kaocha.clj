@@ -5,14 +5,128 @@
    Reliably computes source and test paths for aliases you are working with.
    No need to maintain several test suites manually."
 
+  (:refer-clojure :exclude [sync])
   (:require [babashka.fs              :as bb.fs]
             [protosens.maestro.plugin :as $.maestro.plugin]))
 
 
-;;;;;;;;;;
+;;;;;;;;;; Private helpers
 
 
-(defn run
+(defn- -keep-path+
+
+  [alias->definition select-namespace?]
+
+  (into []
+        (mapcat (fn [[alias definition]]
+                  (when (select-namespace? (namespace alias))
+                    (:extra-paths definition))))
+        alias->definition))
+
+
+
+(defn- -path+
+
+  [deps-edn namespace+]
+
+  (let [alias->definition (deps-edn :aliases)]
+    {:kaocha/source-paths (-keep-path+ alias->definition
+                                       (comp not
+                                             namespace+))
+     :kaocha/test-paths   (-keep-path+ alias->definition
+                                       namespace+)}))
+
+
+;;;
+
+
+(defn- -output-path
+
+  [deps-edn]
+
+  (let [path (deps-edn :maestro.plugin.kaocha/path)]
+    (when-not path
+      ($.maestro.plugin/fail "Output path not given"))
+    ($.maestro.plugin/step (format "File to reference in your Kaocha test file being prepared at `%s`"
+                                   path))
+    (bb.fs/create-dirs (bb.fs/parent path))
+    path))
+
+
+
+(defn- -selector+
+
+  [deps-edn]
+
+  (let [selector+ (deps-edn :maestro.plugin.kaocha/selector+)]
+    ;;
+    ;; Validate.
+    (some->
+      (or (when (nil? selector+)
+            "Selectors not provided, need to pick aliases providing test paths")
+          (when-not (vector? selector+)
+            "Selectors must be in a vector")
+          (when (empty? selector+)
+            "Vector of selectors is empty")
+          (when-some [x (some #(when-not (qualified-keyword? %)
+                                 %)
+                              selector+)]
+            (format "Only qualified keywords can be used as selectors, got: %s"
+                    (pr-str x))))
+      ($.maestro.plugin/fail))
+    ;;
+    ;; Compute.
+    (reduce (fn [namespace+ selector]
+              (conj namespace+
+                    (namespace selector)))
+            #{}
+            selector+)))
+
+
+;;;
+
+
+(defn- -kaocha-required?
+
+  [deps-edn]
+
+  (some #(= %
+           'lambdaisland/kaocha)
+        (keys (deps-edn :deps))))
+
+
+;;;
+
+
+(defn- -kaocha-not-required
+
+  []
+
+  ($.maestro.plugin/done "Kaocha is not required"))
+
+
+
+(defn- -kaocha-required
+
+  [deps-edn]
+
+  ($.maestro.plugin/step "Kaocha is required, proceeding")
+  (let [namespace+ (-selector+ deps-edn)]
+    ($.maestro.plugin/step "Aliases providing test paths are namespaced with:")
+    (doseq [nspace (sort namespace+)]
+      ($.maestro.plugin/step 1
+                             (format "`:%s/...`"
+                                     nspace)))
+    (spit (-output-path deps-edn)
+          (-path+ deps-edn
+                  namespace+)))
+  ($.maestro.plugin/done "Ready for testing"))
+
+
+;;;;;;;;;; Task
+
+
+(defn sync
 
   "Produces and EDN file supplementing the Kaocha EDN configuraton file.
 
@@ -34,54 +148,12 @@
                          #include \"<PATH>\"]]}
    ```"
 
-  [deps]
+  [deps-edn]
 
-  ($.maestro.plugin/intro "maestro.plugin.kaocha")
-  (if-not (some #(= %
-                   'lambdaisland/kaocha)
-                (keys (deps :deps)))
-    ;;
-    ($.maestro.plugin/done "Kaocha is not required")
-    ;;
-    (let [alias+ (deps :aliases)
-          path   (deps :maestro.plugin.kaocha/path)
-          for+   (or (deps :maestro.plugin.kaocha/for)
-                     [:test/_])]
-      ($.maestro.plugin/step "Kaocha is required, proceeding")
-      (when-not path
-        ($.maestro.plugin/fail "Kaocha plugin for Maestro requires a path!"))
-      ($.maestro.plugin/step (format "File to reference in your Kaocha test file is `%s`"
-                                     path))
-      (bb.fs/create-dirs (bb.fs/parent path))
-      (when (or (not (coll? for+))
-                (empty? for+))
-        ($.maestro.plugin/fail "Kaocha plugin for Maestro requires a collection of alias namespaces to test!"))
-      (let [for-2+ (reduce (fn [for-2+ kw]
-                             (when-not (qualified-keyword? kw)
-                               ($.maestro.plugin/fail (format "Only qualified keywords can be used to select aliases, got: %s"
-                                                              (pr-str kw))))
-                             (conj for-2+
-                                   (namespace kw)))
-                           #{}
-                           for+)]
-        ($.maestro.plugin/step "Aliases providing test paths are namespaced with:")
-        (doseq [nspace (sort for-2+)]
-          ($.maestro.plugin/step 1
-                                 (format "`:%s/...`"
-                                         nspace)))
-        (spit path
-              (let [alias+ (deps :aliases)]
-                {:kaocha/source-paths (into []
-                                            (mapcat (fn [[alias definition]]
-                                                      (when-not (contains? for-2+
-                                                                           (namespace alias))
-                                                        (:extra-paths definition))))
-                                            alias+)
-                 :kaocha/test-paths   (into []
-                                            (mapcat (fn [[alias definition]]
-                                                      (when (contains? for-2+
-                                                                       (namespace alias))
-                                                        (:extra-paths definition))))
-                                            alias+)})))
-      ($.maestro.plugin/done "Ready for testing")))
-  deps)
+  ($.maestro.plugin/intro "maestro.plugin.kaocha/kaocha")
+  ($.maestro.plugin/safe
+    (delay
+      (if (-kaocha-required? deps-edn)
+        (-kaocha-required deps-edn)
+        (-kaocha-not-required))))
+  deps-edn)
