@@ -68,11 +68,12 @@
 
 (defn- -run-from-task
 
-  [node]
+  [node deps-maestro-edn]
 
   (-run node
         (-read-file "bb.edn")
-        (-read-file "bb.maestro.edn")
+        (or deps-maestro-edn
+            (-read-file "bb.maestro.edn"))
         (-read-file "deps.maestro.edn")))
 
 
@@ -93,16 +94,24 @@
 
 (defn sync
 
-  [node]
 
-  ($.maestro.plugin/intro "maestro.plugin.bb/sync")
-  ($.maestro.plugin/step "Syncing `bb.edn` with `bb.maestro.edn` and `deps.maestro.edn`")
-  ($.maestro.plugin/safe
-    (delay
-      ($.maestro.plugin/step (format "Selecting everything required for node `%s`"
-                                     node))
-      (if-some [[bb-edn
-                 tree-string] (-run-from-task node)]
-        (-write-bb-edn bb-edn
-                       tree-string)
-        ($.maestro.plugin/done "Nothing changed")))))
+  ([node]
+
+   (sync node
+         nil))
+
+
+  ([node deps-maestro-edn]
+
+   ($.maestro.plugin/intro "maestro.plugin.bb/sync")
+   ($.maestro.plugin/step "Syncing `bb.edn` with `bb.maestro.edn` and `deps.maestro.edn`")
+   ($.maestro.plugin/safe
+     (delay
+       ($.maestro.plugin/step (format "Selecting everything required for node `%s`"
+                                      node))
+       (if-some [[bb-edn
+                  tree-string] (-run-from-task node
+                                               deps-maestro-edn)]
+         (-write-bb-edn bb-edn
+                        tree-string)
+         ($.maestro.plugin/done "Nothing changed"))))))
