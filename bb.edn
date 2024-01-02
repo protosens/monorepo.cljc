@@ -30,13 +30,6 @@
    "For each module, writes a header composed of the root and relevant information (link to\n                   API, Git dependency info, etc).\n\n                   If `./doc/README.md` exists relative to the root, its content is appended.",
    :requires ([protosens.maestro.idiom.readme]),
    :task (protosens.maestro.idiom.readme/main)},
-  api:bundle
-  {:doc
-   "Bundle the given vector of aliases and generate a single documentation",
-   :protosens/doc
-   "Similar to the `api` task but all the `:extra-paths` of the input aliases\n                   will be merged and only one markdown file will be generated under `./API.md`.",
-   :requires ([protosens.maestro.plugin.quickdoc]),
-   :task (protosens.maestro.plugin.quickdoc/bundle)},
   stable:tag
   {:doc "Tag the last commit as a stable release",
    :requires ([protosens.maestro.idiom.stable]),
@@ -48,12 +41,6 @@
    "Only for testing.\n                  \n                   Allows testing exposition and running tasks like `req:verify` without having\n                   to push commits.",
    :requires ([protosens.maestro.plugin.gitlib]),
    :task (protosens.maestro.plugin.gitlib/expose-local)},
-  api
-  {:doc "Generate documentation for modules",
-   :protosens/doc
-   "Generate a markdown file for each module specifying a path via\n                   `:maestro.plugin.quickdoc.path/output`.\n                   \n                   It will contain a full description of all namespaces belonging to the module,\n                   with vars and usage.",
-   :requires ([protosens.maestro.plugin.quickdoc]),
-   :task (protosens.maestro.plugin.quickdoc/module+)},
   changelog+
   {:doc "Template all changelogs with the last stable tag",
    :protosens/doc
@@ -66,6 +53,12 @@
    "Must be called prior to using the `lint` task and ideally when dependencies are\n                   updated. This will lint and cache dependencies as well as copying configuration\n                   files.",
    :requires ([protosens.maestro.plugin.clj-kondo]),
    :task (protosens.maestro.plugin.clj-kondo/prepare)},
+  quickdoc
+  {:doc "Generate documentation for modules",
+   :protosens/doc
+   "Generate a markdown file for each module specifying a path via\n                   `:maestro.plugin.quickdoc.path/output`.\n                   \n                   It will contain a full description of all namespaces belonging to the module,\n                   with vars and usage.",
+   :requires ([protosens.maestro.plugin.quickdoc]),
+   :task (protosens.maestro.plugin.quickdoc/module+)},
   pprint-cp
   {:doc "Pretty-print the classpath received from STDIN",
    :protosens/doc

@@ -11,83 +11,44 @@
     {clj-kondo/clj-kondo {:version \"2022.09.08\"}}}
    ```"
 
-  (:require [babashka.fs        :as bb.fs]
-            [protosens.deps.edn :as $.deps.edn]
-            [protosens.edn.read :as $.edn.read]
-            [protosens.maestro  :as $.maestro]
-            [quickdoc.api       :as quickdoc]))
+  (:require [babashka.fs              :as bb.fs]
+            [protosens.maestro.plugin :as $.maestro.plugin]
+            [quickdoc.api             :as quickdoc]))
 
 
 ;;;;;;;;;; Tasks
 
 
-(defn bundle
-
-  "Task generating a single documentation file for the given aliases.
-
-   All `:extra-paths` of those aliases will be merged and used as source paths.
-
-   Quickdoc options may be provided under `:maestro.plugin.quickdoc/option+`."
-  
-
-  ([]
-
-   (bundle nil))
-
-
-  ([proto-basis]
-
-   (let [basis ($.maestro/ensure-basis proto-basis)
-         path+ (sort ($.deps.edn/path+ basis
-                                       (or (basis :maestro.plugin.quickdoc/alias+)
-                                           (some-> (first *command-line-args*)
-                                                   ($.edn.read/string))
-                                           (keys (basis :aliases)))))]
-     (quickdoc/quickdoc (assoc (basis :maestro.plugin.quickdoc/option+)
-                               :source-paths
-                               path+))
-     (run! println
-           path+))))
-
-
-
 (defn module+
 
-  "Task generating documentation for modules automatically.
+  []
 
-   Selects modules that have an `:maestro.plugin.quickdoc.path/output` in their alias data specifying
-   where the markdown file should be written to. Source paths are based on `:extra-paths`.
-
-   Quickdoc options may be provided under `:maestro.plugin.quickdoc/option+`.
-   
-   Prints which modules have produced documentation where."
-
-  ([]
-
-   (module+ nil))
-
-
-  ([proto-basis]
-
-   (let [basis ($.maestro/ensure-basis proto-basis)]
-     (doseq [[alias
-              path-output
-              path-source+] (keep (fn [[alias data]]
-                                    (when-some [path (:maestro.plugin.quickdoc.path/output data)]
-                                      [alias
-                                       path
-                                       (or (not-empty (data :extra-paths))
-                                           ($.maestro/fail (str "Missing extra paths in alias data: "
-                                                                alias)))]))
-                                  (-> basis
-                                      (:aliases)
-                                      (sort)))]
-       (let [dir (bb.fs/parent path-output)]
-         (when-not (bb.fs/exists? dir)
-           (bb.fs/create-dirs dir)))
-       (quickdoc/quickdoc (assoc (basis :maestro.plugin.quickdoc/option+)
-                                 :outfile      path-output
-                                 :source-paths path-source+))
-       (println (format "%s -> %s"
-                        alias
-                        path-output))))))
+  ($.maestro.plugin/intro "maestro.plugin.quickdoc/module+")
+  ($.maestro.plugin/safe
+    (delay
+      (let [deps-edn ($.maestro.plugin/read-deps-maestro-edn)
+            option+  (deps-edn :maestro.plugin.quickdoc/option+)]
+        (when (empty? option+)
+          ($.maestro.plugin/fail "Options for Quickdoc not provided in `deps.maestro.edn`"))
+        ($.maestro.plugin/step "Generating API documentation:")
+        (doseq [[alias
+                 path-output
+                 path-src+]  (keep (fn [[alias definition]]
+                                     (when-some [path-output (:maestro.plugin.quickdoc/output definition)]
+                                       [alias
+                                        path-output
+                                        (or (not-empty (definition :extra-paths))
+                                            ($.maestro.plugin/fail (format "Alias `%s` does not have any `:extra-paths`"
+                                                                           alias)))]))
+                                   (->> ($.maestro.plugin/read-deps-maestro-edn)
+                                        (:aliases)
+                                        (sort-by first)))]
+          (bb.fs/create-dirs (bb.fs/parent path-output))
+          (quickdoc/quickdoc (assoc option+
+                                    :outfile      path-output
+                                    :source-paths path-src+))
+          ($.maestro.plugin/step 1
+                                 (format "%s  ->  %s"
+                                         alias
+                                         path-output)))
+        ($.maestro.plugin/done "API documentation is ready")))))

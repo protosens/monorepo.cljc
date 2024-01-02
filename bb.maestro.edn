@@ -12,7 +12,7 @@
 
 
  :tasks
- {api
+ {quickdoc
   {:doc           "Generate documentation for modules"
    :protosens/doc "Generate a markdown file for each module specifying a path via
                    `:maestro.plugin.quickdoc.path/output`.
@@ -21,14 +21,6 @@
                    with vars and usage."
    :requires      ([protosens.maestro.plugin.quickdoc])
    :task          (protosens.maestro.plugin.quickdoc/module+)}
-
-
-  api:bundle
-  {:doc           "Bundle the given vector of aliases and generate a single documentation"
-   :protosens/doc "Similar to the `api` task but all the `:extra-paths` of the input aliases
-                   will be merged and only one markdown file will be generated under `./API.md`."
-   :requires      ([protosens.maestro.plugin.quickdoc])
-   :task          (protosens.maestro.plugin.quickdoc/bundle)}
 
 
   changelog+

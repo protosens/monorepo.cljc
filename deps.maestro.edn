@@ -5,7 +5,7 @@
 
  :maestro.plugin.gitlib/url       "https://github.com/protosens/monorepo.cljc"
  ,
- :maestro.plugin.quickdoc/option+ {:git/branch  "develop"
+ :maestro.plugin.quickdoc/option+ {:git/branch  "main"
                                    :github/repo "https://github.com/protosens/monorepo.cljc"
                                    :toc         true
                                    :var-links   true
@@ -131,16 +131,16 @@
 
   :module/bb.help
 
-  {:extra-paths                         ["module/bb.help/src/main/clj"]
-   :maestro/doc                         "Printing extra documentation for Babashka tasks."
-   :maestro/platform+                   [:bb
-                                         :jvm]              
-   :maestro/require                     [:module/edn
-                                         :module/string
-                                         :test/bb.help]
-   :maestro/root                        "module/bb.help"
-   :maestro.plugin.gitlib/name          protosens/bb.help
-   :maestro.plugin.quickdoc.path/output "module/bb.help/doc/API.md"}
+  {:extra-paths                    ["module/bb.help/src/main/clj"]
+   :maestro/doc                    "Printing extra documentation for Babashka tasks."
+   :maestro/platform+              [:bb
+                                    :jvm]              
+   :maestro/require                [:module/edn
+                                    :module/string
+                                    :test/bb.help]
+   :maestro/root                   "module/bb.help"
+   :maestro.plugin.gitlib/name     protosens/bb.help
+   :maestro.plugin.quickdoc/output "module/bb.help/doc/API.md"}
 
 
   :test/bb.help
@@ -153,15 +153,15 @@
 
   :module/classpath
 
-  {:extra-paths                         ["module/classpath/src/main/clj"]
-   :maestro/doc                         "Classpath-related utilities."
-   :maestro/platform+                   [:bb
-                                         :jvm]              
-   :maestro/require                     [:module/process
-                                         :test/classpath]
-   :maestro/root                        "module/classpath"
-   :maestro.plugin.gitlib/name          protosens/classpath
-   :maestro.plugin.quickdoc.path/output "module/classpath/doc/API.md"}
+  {:extra-paths                    ["module/classpath/src/main/clj"]
+   :maestro/doc                    "Classpath-related utilities."
+   :maestro/platform+              [:bb
+                                    :jvm]              
+   :maestro/require                [:module/process
+                                    :test/classpath]
+   :maestro/root                   "module/classpath"
+   :maestro.plugin.gitlib/name     protosens/classpath
+   :maestro.plugin.quickdoc/output "module/classpath/doc/API.md"}
 
 
   :test/classpath
@@ -174,16 +174,16 @@
 
   :module/deps.edn
 
-  {:extra-paths                         ["module/deps.edn/src/main/clj"]
-   :maestro/doc                         "Handling `deps.edn` files."
-   :maestro/platform+                   [:bb
-                                         :jvm]
-   :maestro/require                     [:module/edn
-                                         :module/namespace
-                                         :test/deps.edn]
-   :maestro/root                        "module/deps.edn"
-   :maestro.plugin.gitlib/name          protosens/deps.edn
-   :maestro.plugin.quickdoc.path/output "module/deps.edn/doc/API.md"}
+  {:extra-paths                    ["module/deps.edn/src/main/clj"]
+   :maestro/doc                    "Handling `deps.edn` files."
+   :maestro/platform+              [:bb
+                                    :jvm]
+   :maestro/require                [:module/edn
+                                    :module/namespace
+                                    :test/deps.edn]
+   :maestro/root                   "module/deps.edn"
+   :maestro.plugin.gitlib/name     protosens/deps.edn
+   :maestro.plugin.quickdoc/output "module/deps.edn/doc/API.md"}
 
 
   :test/deps.edn
@@ -207,14 +207,14 @@
 
   :module/edn
 
-  {:extra-paths                         ["module/edn/src/main/clj"]
-   :maestro/doc                         "One-liners for reading EDN."
-   :maestro/platform+                   [:bb
-                                         :jvm]              
-   :maestro/require                     [:test/edn]
-   :maestro/root                        "module/edn"
-   :maestro.plugin.gitlib/name          protosens/edn
-   :maestro.plugin.quickdoc.path/output "module/edn/doc/API.md"}
+  {:extra-paths                    ["module/edn/src/main/clj"]
+   :maestro/doc                    "One-liners for reading EDN."
+   :maestro/platform+              [:bb
+                                    :jvm]              
+   :maestro/require                [:test/edn]
+   :maestro/root                   "module/edn"
+   :maestro.plugin.gitlib/name     protosens/edn
+   :maestro.plugin.quickdoc/output "module/edn/doc/API.md"}
 
 
   :test/edn
@@ -227,17 +227,17 @@
 
   :module/git
 
-  {:extra-paths                         ["module/git/src/main/clj"]
-   :maestro/doc                         "One-liners (or almost) for common Git operations."
-   :maestro/platform+                   [:bb
-                                         :jvm]              
-   :maestro/require                     [:ext/babashka.process
-                                         :module/process
-                                         :module/string
-                                         :test/git]
-   :maestro/root                        "module/git"
-   :maestro.plugin.gitlib/name          protosens/git
-   :maestro.plugin.quickdoc.path/output "module/git/doc/API.md"}
+  {:extra-paths                    ["module/git/src/main/clj"]
+   :maestro/doc                    "One-liners (or almost) for common Git operations."
+   :maestro/platform+              [:bb
+                                    :jvm]              
+   :maestro/require                [:ext/babashka.process
+                                    :module/process
+                                    :module/string
+                                    :test/git]
+   :maestro/root                   "module/git"
+   :maestro.plugin.gitlib/name     protosens/git
+   :maestro.plugin.quickdoc/output "module/git/doc/API.md"}
 
 
   :test/git
@@ -263,35 +263,35 @@
 
   :module/lab.bench
 
-  {:extra-paths                         ["module/lab.bench/src/main/clj"]
-   :maestro/doc                         "Higher-level helpers for [Criterium](https://github.com/hugoduncan/criterium)."
-   :maestro/platform+                   [:jvm]
-   :maestro/require                     [:ext/criterium]
-   :maestro/root                        "module/lab.bench"
-   :maestro.plugin.gitlib/name          protosens/lab.bench
-   :maestro.plugin.quickdoc.path/output "module/lab.bench/doc/API.md"}
+  {:extra-paths                    ["module/lab.bench/src/main/clj"]
+   :maestro/doc                    "Higher-level helpers for [Criterium](https://github.com/hugoduncan/criterium)."
+   :maestro/platform+              [:jvm]
+   :maestro/require                [:ext/criterium]
+   :maestro/root                   "module/lab.bench"
+   :maestro.plugin.gitlib/name     protosens/lab.bench
+   :maestro.plugin.quickdoc/output "module/lab.bench/doc/API.md"}
 
   ;---
 
   :module/maestro
 
-  {:extra-paths                         ["module/maestro/src/main/clj"]
-   :maestro/doc                         "Maestro, calmly orchestrating your Clojure (mono)repo."
-   :maestro/platform+                   [:bb
-                                         :jvm]              
-   :maestro/require                     [:ext/babashka.fs
-                                         :module/deps.edn
-                                         :module/edn
-                                         :module/git
-                                         :module/graph.dfs
-                                         :module/namespace
-                                         :module/process
-                                         :module/string
-                                         :module/term.style
-                                         :test/maestro]
-   :maestro/root                        "module/maestro"
-   :maestro.plugin.gitlib/name          protosens/maestro
-   :maestro.plugin.quickdoc.path/output "module/maestro/doc/API.md"}
+  {:extra-paths                    ["module/maestro/src/main/clj"]
+   :maestro/doc                    "Maestro, calmly orchestrating your Clojure (mono)repo."
+   :maestro/platform+              [:bb
+                                    :jvm]              
+   :maestro/require                [:ext/babashka.fs
+                                    :module/deps.edn
+                                    :module/edn
+                                    :module/git
+                                    :module/graph.dfs
+                                    :module/namespace
+                                    :module/process
+                                    :module/string
+                                    :module/term.style
+                                    :test/maestro]
+   :maestro/root                   "module/maestro"
+   :maestro.plugin.gitlib/name     protosens/maestro
+   :maestro.plugin.quickdoc/output "module/maestro/doc/API.md"}
 
 
   :test.release/maestro
@@ -309,29 +309,29 @@
 
   :module/maestro.idiom
 
-  {:extra-paths                         ["module/maestro.idiom/src/main/clj"]
-   :maestro/doc                         "Bundle of modules for idiomatic use of [Maestro](../maestro) and well as more opinionated tooling."
-   :maestro/platform+                   [:bb
-                                         :jvm]
-   :maestro/require                     [:ext/babashka.fs
-                                         :ext/selmer
-                                         :module/bb.help
-                                         :module/classpath
-                                         :module/edn
-                                         :module/git
-                                         :module/maestro
-                                         :module/maestro.plugin.clj-kondo
-                                         :module/maestro.plugin.gitlib
-                                         :module/maestro.plugin.kaocha
-                                         :module/maestro.plugin.quickdoc
-                                         :module/namespace
-                                         :module/process
-                                         :module/string
-                                         :module/symbol
-                                         :test/maestro.idiom]
-   :maestro/root                        "module/maestro.idiom"
-   :maestro.plugin.gitlib/name          protosens/maestro.idiom
-   :maestro.plugin.quickdoc.path/output "module/maestro.idiom/doc/API.md"}
+  {:extra-paths                    ["module/maestro.idiom/src/main/clj"]
+   :maestro/doc                    "Bundle of modules for idiomatic use of [Maestro](../maestro) and well as more opinionated tooling."
+   :maestro/platform+              [:bb
+                                    :jvm]
+   :maestro/require                [:ext/babashka.fs
+                                    :ext/selmer
+                                    :module/bb.help
+                                    :module/classpath
+                                    :module/edn
+                                    :module/git
+                                    :module/maestro
+                                    :module/maestro.plugin.clj-kondo
+                                    :module/maestro.plugin.gitlib
+                                    :module/maestro.plugin.kaocha
+                                    :module/maestro.plugin.quickdoc
+                                    :module/namespace
+                                    :module/process
+                                    :module/string
+                                    :module/symbol
+                                    :test/maestro.idiom]
+   :maestro/root                   "module/maestro.idiom"
+   :maestro.plugin.gitlib/name     protosens/maestro.idiom
+   :maestro.plugin.quickdoc/output "module/maestro.idiom/doc/API.md"}
 
 
   :test/maestro.idiom
@@ -358,31 +358,31 @@
 
   :module/maestro.plugin.clj-kondo
 
-  {:extra-paths                         ["module/maestro.plugin.clj-kondo/src/main/clj"]
-   :maestro/doc                         "Maestro plugin for [Clj-kondo](https://github.com/clj-kondo/clj-kondo), the Clojure linter."
-   :maestro/platform+                   [:bb
-                                         :jvm]              
-   :maestro/require                     [:module/maestro
-                                         :module/term.style]
-   :maestro/root                        "module/maestro.plugin.clj-kondo"
-   :maestro.plugin.gitlib/name          protosens/maestro.plugin.clj-kondo
-   :maestro.plugin.quickdoc.path/output "module/maestro.plugin.clj-kondo/doc/API.md"}
+  {:extra-paths                    ["module/maestro.plugin.clj-kondo/src/main/clj"]
+   :maestro/doc                    "Maestro plugin for [Clj-kondo](https://github.com/clj-kondo/clj-kondo), the Clojure linter."
+   :maestro/platform+              [:bb
+                                    :jvm]              
+   :maestro/require                [:module/maestro
+                                    :module/term.style]
+   :maestro/root                   "module/maestro.plugin.clj-kondo"
+   :maestro.plugin.gitlib/name     protosens/maestro.plugin.clj-kondo
+   :maestro.plugin.quickdoc/output "module/maestro.plugin.clj-kondo/doc/API.md"}
 
   ;---
 
   :module/maestro.plugin.gitlib
 
-  {:extra-paths                         ["module/maestro.plugin.gitlib/src/main/clj"]
-   :maestro/doc                         "Exposing modules as Gitlibs."
-   :maestro/platform+                   [:bb
-                                         :jvm]              
-   :maestro/require                     [:ext/babashka.fs
-                                         :module/git
-                                         :module/maestro
-                                         :test/maestro.plugin.gitlib]
-   :maestro/root                        "module/maestro.plugin.gitlib"
-   :maestro.plugin.gitlib/name          protosens/maestro.plugin.gitlib
-   :maestro.plugin.quickdoc.path/output "module/maestro.plugin.gitlib/doc/API.md"}
+  {:extra-paths                    ["module/maestro.plugin.gitlib/src/main/clj"]
+   :maestro/doc                    "Exposing modules as Gitlibs."
+   :maestro/platform+              [:bb
+                                    :jvm]              
+   :maestro/require                [:ext/babashka.fs
+                                    :module/git
+                                    :module/maestro
+                                    :test/maestro.plugin.gitlib]
+   :maestro/root                   "module/maestro.plugin.gitlib"
+   :maestro.plugin.gitlib/name     protosens/maestro.plugin.gitlib
+   :maestro.plugin.quickdoc/output "module/maestro.plugin.gitlib/doc/API.md"}
 
 
   :test/maestro.plugin.gitlib
@@ -394,17 +394,17 @@
 
   :module/maestro.plugin.kaocha
 
-  {:extra-paths                         ["module/maestro.plugin.kaocha/src/main/clj"]
-   :maestro/doc                         "Maestro plugin for the [Kaocha](https://github.com/lambdaisland/kaocha) test runner."
-   :maestro/platform+                   [:bb
-                                         :jvm]              
-   :maestro/require                     [:ext/babashka.fs
-                                         :ext/kaocha
-                                         :module/maestro
-                                         :test/maestro.plugin.kaocha]
-   :maestro/root                        "module/maestro.plugin.kaocha"
-   :maestro.plugin.gitlib/name          protosens/maestro.plugin.kaocha
-   :maestro.plugin.quickdoc.path/output "module/maestro.plugin.kaocha/doc/API.md"}
+  {:extra-paths                    ["module/maestro.plugin.kaocha/src/main/clj"]
+   :maestro/doc                    "Maestro plugin for the [Kaocha](https://github.com/lambdaisland/kaocha) test runner."
+   :maestro/platform+              [:bb
+                                    :jvm]              
+   :maestro/require                [:ext/babashka.fs
+                                    :ext/kaocha
+                                    :module/maestro
+                                    :test/maestro.plugin.kaocha]
+   :maestro/root                   "module/maestro.plugin.kaocha"
+   :maestro.plugin.gitlib/name     protosens/maestro.plugin.kaocha
+   :maestro.plugin.quickdoc/output "module/maestro.plugin.kaocha/doc/API.md"}
 
 
   :test/maestro.plugin.kaocha
@@ -418,37 +418,37 @@
 
   :module/maestro.plugin.quickdoc
 
-  {:extra-paths                         ["module/maestro.plugin.quickdoc/src/main/clj"]
-   :maestro/doc                         "Maestro plugin for [Quickdock](https://github.com/borkdude/quickdoc), the Markdown API generator.  
-                                         Works on the JVM is the JVM flavor of Quickdoc is required by the user."
-   :maestro/platform+                   [:bb]
-   :maestro/require                     [:ext/babashka.fs
-                                         :ext/quickdoc
-                                         :module/deps.edn
-                                         :module/edn
-                                         :module/maestro
-                                         ;;
-                                         ;; TODO.
-                                         ; {dev :ext/quickdoc.jvm}
-                                         ]
-   :maestro/root                        "module/maestro.plugin.quickdoc"
-   :maestro.plugin.gitlib/name          protosens/maestro.plugin.quickdoc
-   :maestro.plugin.quickdoc.path/output "module/maestro.plugin.quickdoc/doc/API.md"}
+  {:extra-paths                    ["module/maestro.plugin.quickdoc/src/main/clj"]
+   :maestro/doc                    "Maestro plugin for [Quickdock](https://github.com/borkdude/quickdoc), the Markdown API generator.  
+                                    Works on the JVM is the JVM flavor of Quickdoc is required by the user."
+   :maestro/platform+              [:bb]
+   :maestro/require                [:ext/babashka.fs
+                                    :ext/quickdoc
+                                    :module/deps.edn
+                                    :module/edn
+                                    :module/maestro
+                                    ;;
+                                    ;; TODO.
+                                    ; {dev :ext/quickdoc.jvm}
+                                    ]
+   :maestro/root                   "module/maestro.plugin.quickdoc"
+   :maestro.plugin.gitlib/name     protosens/maestro.plugin.quickdoc
+   :maestro.plugin.quickdoc/output "module/maestro.plugin.quickdoc/doc/API.md"}
 
   ;---
 
   :module/namespace
 
-  {:extra-paths                         ["module/namespace/src/main/clj"]
-   :maestro/doc                         "Mainly about finding available namespaces."
-   :maestro/platform+                   [:bb
-                                         :jvm]              
-   :maestro/root                        "module/namespace"
-   :maestro/require                     [:ext/babashka.fs
-                                         :module/classpath
-                                         :test/namespace]
-   :maestro.plugin.gitlib/name          protosens/namespace
-   :maestro.plugin.quickdoc.path/output "module/namespace/doc/API.md"}
+  {:extra-paths                    ["module/namespace/src/main/clj"]
+   :maestro/doc                    "Mainly about finding available namespaces."
+   :maestro/platform+              [:bb
+                                    :jvm]              
+   :maestro/root                   "module/namespace"
+   :maestro/require                [:ext/babashka.fs
+                                    :module/classpath
+                                    :test/namespace]
+   :maestro.plugin.gitlib/name     protosens/namespace
+   :maestro.plugin.quickdoc/output "module/namespace/doc/API.md"}
 
 
   :test/namespace
@@ -460,15 +460,15 @@
 
   :module/process
 
-  {:extra-paths                         ["module/process/src/main/clj"]
-   :maestro/doc                         "Light wrapper over [`babashka/process`](https://github.com/babashka/process)."
-   :maestro/platform+                   [:bb
-                                         :jvm]              
-   :maestro/require                     [:ext/babashka.process
-                                         :test/process]
-   :maestro/root                        "module/process"
-   :maestro.plugin.gitlib/name          protosens/process
-   :maestro.plugin.quickdoc.path/output "module/process/doc/API.md"}
+  {:extra-paths                    ["module/process/src/main/clj"]
+   :maestro/doc                    "Light wrapper over [`babashka/process`](https://github.com/babashka/process)."
+   :maestro/platform+              [:bb
+                                    :jvm]              
+   :maestro/require                [:ext/babashka.process
+                                    :test/process]
+   :maestro/root                   "module/process"
+   :maestro.plugin.gitlib/name     protosens/process
+   :maestro.plugin.quickdoc/output "module/process/doc/API.md"}
 
 
   :test/process
@@ -480,14 +480,14 @@
 
   :module/string
 
-  {:extra-paths                         ["module/string/src/main/clj"]
-   :maestro/doc                         "String manipulation library complementing [`clojure.string`](https://clojuredocs.org/clojure.string)."
-   :maestro/platform+                   [:bb
-                                         :jvm]              
-   :maestro/require                     [:test/string]
-   :maestro/root                        "module/string"
-   :maestro.plugin.gitlib/name          protosens/string
-   :maestro.plugin.quickdoc.path/output "module/string/doc/API.md"}
+  {:extra-paths                    ["module/string/src/main/clj"]
+   :maestro/doc                    "String manipulation library complementing [`clojure.string`](https://clojuredocs.org/clojure.string)."
+   :maestro/platform+              [:bb
+                                    :jvm]              
+   :maestro/require                [:test/string]
+   :maestro/root                   "module/string"
+   :maestro.plugin.gitlib/name     protosens/string
+   :maestro.plugin.quickdoc/output "module/string/doc/API.md"}
 
 
   :test/string
@@ -499,14 +499,14 @@
 
   :module/symbol
 
-  {:extra-paths                         ["module/symbol/src/main/clj"]
-   :maestro/doc                         "Handling symbols."
-   :maestro/platform+                   [:bb
-                                         :jvm]              
-   :maestro/root                        "module/symbol"
-   :maestro/require                     [:test/symbol]
-   :maestro.plugin.gitlib/name          protosens/symbol
-   :maestro.plugin.quickdoc.path/output "module/symbol/doc/API.md"}
+  {:extra-paths                    ["module/symbol/src/main/clj"]
+   :maestro/doc                    "Handling symbols."
+   :maestro/platform+              [:bb
+                                    :jvm]              
+   :maestro/root                   "module/symbol"
+   :maestro/require                [:test/symbol]
+   :maestro.plugin.gitlib/name     protosens/symbol
+   :maestro.plugin.quickdoc/output "module/symbol/doc/API.md"}
 
 
   :test/symbol
