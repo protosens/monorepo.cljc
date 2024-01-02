@@ -362,9 +362,8 @@
    :maestro/doc                         "Maestro plugin for [Clj-kondo](https://github.com/clj-kondo/clj-kondo), the Clojure linter."
    :maestro/platform+                   [:bb
                                          :jvm]              
-   :maestro/require                     [:module/classpath
-                                         :module/maestro
-                                         :module/process]
+   :maestro/require                     [:module/maestro
+                                         :module/term.style]
    :maestro/root                        "module/maestro.plugin.clj-kondo"
    :maestro.plugin.gitlib/name          protosens/maestro.plugin.clj-kondo
    :maestro.plugin.quickdoc.path/output "module/maestro.plugin.clj-kondo/doc/API.md"}
