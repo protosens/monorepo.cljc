@@ -1,6 +1,7 @@
 (ns protosens.maestro.plugin
 
   (:require [clojure.string       :as C.string]
+            [protosens.edn.read   :as $.edn.read]
             [protosens.term.style :as $.term.style]))
 
 
@@ -27,7 +28,7 @@
   (some? (System/getProperty "babashka.version")))
 
 
-;;;;;;;;;; Public
+;;;;;;;;;; Core utilities for plugins
 
 
 (def ^:dynamic *print-path?*
@@ -134,3 +135,28 @@
                  "• "
                  $.term.style/reset
                  message))))
+
+
+;;;;;;;;;; Reading EDN files
+
+
+(defn read-file-edn
+
+  [path]
+
+  (try
+    ($.edn.read/file path)
+    (catch Throwable ex
+      (fail (format "Unable to read file `%s`"
+                    path)
+            ex))))
+
+
+;;;
+
+
+(defn read-deps-maestro-edn
+
+  []
+
+  (read-file-edn "deps.maestro.edn"))

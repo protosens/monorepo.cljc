@@ -17,19 +17,6 @@
 ;;;;;;;;;; Private side effects
 
 
-(defn- -read-file
-
-  [path]
-
-  (try
-    ($.edn.read/file path)
-    (catch Throwable ex
-      ($.maestro.plugin/fail (format "Unable to read file `%s`"
-                                     path)
-                             ex))))
-
-
-
 (defn- -write-bb-edn
 
   [bb-edn tree-string]
@@ -71,10 +58,10 @@
   [node deps-maestro-edn]
 
   (-run node
-        (-read-file "bb.edn")
+        ($.maestro.plugin/read-file-edn "bb.edn")
+        ($.maestro.plugin/read-file-edn "bb.maestro.edn")
         (or deps-maestro-edn
-            (-read-file "bb.maestro.edn"))
-        (-read-file "deps.maestro.edn")))
+            ($.maestro.plugin/read-deps-maestro-edn))))
 
 
 
@@ -86,7 +73,8 @@
   ($.maestro.plugin/step "Checking if `bb.edn` is in sync with `bb.maestro.edn` and `deps.maestro.edn`")
   ($.maestro.plugin/safe
     (delay
-      (if (-run-from-task node)
+      (if (-run-from-task node
+                          nil)
         ($.maestro.plugin/fail "`bb.edn` is not in sync")
         ($.maestro.plugin/done "`bb.edn` is in sync")))))
 
