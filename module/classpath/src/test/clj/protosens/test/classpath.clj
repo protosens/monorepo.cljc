@@ -5,45 +5,14 @@
             [protosens.string    :as $.string]))
 
 
-;;;;;;;;;; Values
-
-
-(def ^:private -cp
-
-  ;; Fake classpath.
-
-  (format "foo%sbar"
-          ($.classpath/separator)))
-
-
-
-(defn- -cp?
-
-  ;; Tests if `x` looks like a classpath.
-
-  [x]
-
-  (T/is (string? x))
-  (T/is (seq ($.classpath/split x))))
-
-
 ;;;;;;;;;;
 
 
 (T/deftest current
 
-  (-cp? ($.classpath/current)))
+  (T/is (string? ($.classpath/current)))
 
-
-
-(T/deftest pprint
-
-  (T/is (= (str "bar"
-                ($.string/newline)
-                "foo"
-                ($.string/newline))
-           (with-out-str
-             ($.classpath/pprint -cp)))))
+  (T/is (seq ($.classpath/split ($.classpath/current)))))
 
 
 
@@ -51,4 +20,5 @@
 
   (T/is (= '("foo"
              "bar")
-           ($.classpath/split -cp))))
+           ($.classpath/split (format "foo%sbar"
+                                      ($.classpath/separator))))))

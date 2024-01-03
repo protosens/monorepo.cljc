@@ -24,28 +24,6 @@
 
 
 
-(defn pprint
-
-  "Pretty-prints the given classpath.
-  
-   Reads input from STDIN by default.
-  
-   Great match for [[compute]]. Classpath is [[split]] and sorted paths are printed
-   line by line."
-
-
-  #?(:clj ([]
-
-   (pprint (slurp *in*))))
-
-
-  ([classpath]
-
-   (run! println
-         (sort (split classpath)))))
-
-
-
 (defn separator
 
   "Returns the platform-dependent separator used in the classpath."

@@ -11,6 +11,7 @@ repository.
 
 - Remove
     - `$.classpath/compute`
+    - `$.classpath/pprint`
 
 ---
 
