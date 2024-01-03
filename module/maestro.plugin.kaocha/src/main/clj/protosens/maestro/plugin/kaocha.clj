@@ -153,7 +153,7 @@
 
   [deps-edn]
 
-  ($.maestro.plugin/intro "maestro.plugin.kaocha/kaocha")
+  ($.maestro.plugin/intro "maestro.plugin.kaocha/sync")
   ($.maestro.plugin/safe
     (delay
       (if (-kaocha-required? deps-edn)

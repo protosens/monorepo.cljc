@@ -1,17 +1,12 @@
 {:min-bb-version "0.8.0",
  :pods {clj-kondo/clj-kondo {:version "2022.09.08"}},
  :tasks
- {expose
-  {:doc "Expose modules meant to be consumed as Git libraries",
-   :protosens/doc
-   "By generating a custom `deps.edn` file in the `:meastro/root` of aliases that\n                   have a `:maestro.git.lib/name`.\n                   \n                   Consumers can then require the repository as a Git dependency and point to a\n                   particular module using `:deps/root`.",
-   :requires ([protosens.maestro.plugin.gitlib]),
-   :task (protosens.maestro.plugin.gitlib/expose)},
-  help
-  {:doc "Print documentation for the given task",
-   :protosens/doc "If there is any.",
-   :requires ([protosens.bb.help]),
-   :task (-> (protosens.bb.help/task) (protosens.bb.help/print))},
+ {changelog+
+  {:doc "Template all changelogs with the last stable tag",
+   :maestro/doc
+   "Changelogs use `{{ next-release }}` as a placeholder for the next\n                   stable tag.",
+   :requires ([protosens.task.changelog]),
+   :task (protosens.task.changelog/main)},
   deps
   {:doc "",
    :requires
@@ -24,69 +19,74 @@
      (protosens.maestro/sync)
      (protosens.maestro.plugin.kaocha/sync))
     (protosens.maestro.plugin.bb/sync :module/task))},
-  module:readme
-  {:doc "Generate READMEs for all modules",
-   :protosens/doc
-   "For each module, writes a header composed of the root and relevant information (link to\n                   API, Git dependency info, etc).\n\n                   If `./doc/README.md` exists relative to the root, its content is appended.",
-   :requires ([protosens.maestro.idiom.readme]),
-   :task (protosens.maestro.idiom.readme/main)},
-  stable:tag
-  {:doc "Tag the last commit as a stable release",
-   :requires ([protosens.maestro.idiom.stable]),
-   :task (println (protosens.maestro.idiom.stable/tag-add))},
-  expose:local
-  {:doc
-   "Like `expose` but Git URL will point to the repository directory",
-   :protosens/doc
-   "Only for testing.\n                  \n                   Allows testing exposition and running tasks like `req:verify` without having\n                   to push commits.",
-   :requires ([protosens.maestro.plugin.gitlib]),
-   :task (protosens.maestro.plugin.gitlib/expose-local)},
-  changelog+
-  {:doc "Template all changelogs with the last stable tag",
-   :protosens/doc
-   "Changelogs use `{{ next-release }}` as a placeholder for the next\n                   stable tag.",
-   :requires ([protosens.task.changelog]),
-   :task (protosens.task.changelog/main)},
-  lint:prepare
-  {:doc "Prepare for `lint`",
-   :protosens/doc
-   "Must be called prior to using the `lint` task and ideally when dependencies are\n                   updated. This will lint and cache dependencies as well as copying configuration\n                   files.",
-   :requires ([protosens.maestro.plugin.clj-kondo]),
-   :task (protosens.maestro.plugin.clj-kondo/prepare)},
-  quickdoc
-  {:doc "Generate documentation for modules",
-   :protosens/doc
-   "Generate a markdown file for each module specifying a path via\n                   `:maestro.plugin.quickdoc.path/output`.\n                   \n                   It will contain a full description of all namespaces belonging to the module,\n                   with vars and usage.",
-   :requires ([protosens.maestro.plugin.quickdoc]),
-   :task (protosens.maestro.plugin.quickdoc/module+)},
-  pprint-cp
-  {:doc "Pretty-print the classpath received from STDIN",
-   :protosens/doc
-   "Useful in combination with `-Spath`. For instance:\n                 \n                       clojure -Spath -A$( bb aliases :module/maestro ) | bb pprint-cp\n                   \n                   In reality, it will pretty print any string where items are separated by `:`.\n                   \n                       bb aliases :module/maestro | bb pprint-cp",
-   :requires ([protosens.classpath]),
-   :task (protosens.classpath/pprint)},
-  lint
-  {:doc "Lint Clojure code throughout the whole repository",
-   :protosens/doc
-   "Using `clj-kondo` which must be accessible in the terminal.\n\n                   See the `lint:prepare` task which is necessary for initialization.",
-   :requires ([protosens.maestro.plugin.clj-kondo]),
-   :task (protosens.maestro.plugin.clj-kondo/lint)},
   deps:bb:check
   {:doc "",
    :requires ([protosens.maestro.plugin.bb]),
    :task (protosens.maestro.plugin.bb/check :module/task)},
-  module:listing
-  {:doc "Generate `./module/README.md`",
-   :protosens/doc "Lists all exposed and private modules.",
-   :requires ([protosens.maestro.idiom.listing]),
-   :task (protosens.maestro.idiom.listing/main "module/README.md")},
+  expose
+  {:doc "Expose modules meant to be consumed as Git libraries",
+   :maestro/doc
+   "By generating a custom `deps.edn` file in the `:meastro/root` of aliases that\n                   have a `:maestro.git.lib/name`.\n                   \n                   Consumers can then require the repository as a Git dependency and point to a\n                   particular module using `:deps/root`.",
+   :requires ([protosens.maestro.plugin.gitlib]),
+   :task (protosens.maestro.plugin.gitlib/expose)},
+  expose:local
+  {:doc
+   "Like `expose` but Git URL will point to the repository directory",
+   :maestro/doc
+   "Only for testing.\n                  \n                   Allows testing exposition and running tasks like `req:verify` without having\n                   to push commits.",
+   :requires ([protosens.maestro.plugin.gitlib]),
+   :task (protosens.maestro.plugin.gitlib/expose-local)},
+  help
+  {:doc "Print documentation for the given task",
+   :maestro/doc "If there is any.",
+   :requires ([protosens.maestro.plugin.bb]),
+   :task (protosens.maestro.plugin.bb/help)},
   help:missing
   {:doc "Print tasks that do no have extra documentation",
    :requires ([protosens.bb.help]),
    :task
    (->
     (protosens.bb.help/undocumented-task+)
-    (protosens.bb.help/print))}},
+    (protosens.bb.help/print))},
+  lint
+  {:doc "Lint Clojure code throughout the whole repository",
+   :maestro/doc
+   "Using `clj-kondo` which must be accessible in the terminal.\n\n                   See the `lint:prepare` task which is necessary for initialization.",
+   :requires ([protosens.maestro.plugin.clj-kondo]),
+   :task (protosens.maestro.plugin.clj-kondo/lint)},
+  lint:prepare
+  {:doc "Prepare for `lint`",
+   :maestro/doc
+   "Must be called prior to using the `lint` task and ideally when dependencies are\n                   updated. This will lint and cache dependencies as well as copying configuration\n                   files.",
+   :requires ([protosens.maestro.plugin.clj-kondo]),
+   :task (protosens.maestro.plugin.clj-kondo/prepare)},
+  module:listing
+  {:doc "Generate `./module/README.md`",
+   :maestro/doc "Lists all exposed and private modules.",
+   :requires ([protosens.maestro.idiom.listing]),
+   :task (protosens.maestro.idiom.listing/main "module/README.md")},
+  module:readme
+  {:doc "Generate READMEs for all modules",
+   :maestro/doc
+   "For each module, writes a header composed of the root and relevant information (link to\n                   API, Git dependency info, etc).\n\n                   If `./doc/README.md` exists relative to the root, its content is appended.",
+   :requires ([protosens.maestro.idiom.readme]),
+   :task (protosens.maestro.idiom.readme/main)},
+  pprint-cp
+  {:doc "Pretty-print the classpath received from STDIN",
+   :maestro/doc
+   "Useful in combination with `-Spath`. For instance:\n                 \n                       clojure -Spath -A$( bb aliases :module/maestro ) | bb pprint-cp\n                   \n                   In reality, it will pretty print any string where items are separated by `:`.\n                   \n                       bb aliases :module/maestro | bb pprint-cp",
+   :requires ([protosens.classpath]),
+   :task (protosens.classpath/pprint)},
+  quickdoc
+  {:doc "Generate documentation for modules",
+   :maestro/doc
+   "Generate a markdown file for each module specifying a path via\n                   `:maestro.plugin.quickdoc.path/output`.\n                   \n                   It will contain a full description of all namespaces belonging to the module,\n                   with vars and usage.",
+   :requires ([protosens.maestro.plugin.quickdoc]),
+   :task (protosens.maestro.plugin.quickdoc/module+)},
+  stable:tag
+  {:doc "Tag the last commit as a stable release",
+   :requires ([protosens.maestro.idiom.stable]),
+   :task (println (protosens.maestro.idiom.stable/tag-add))}},
  :deps
  {babashka/fs {:mvn/version "0.1.11"},
   selmer/selmer {:mvn/version "1.12.55"},
@@ -97,12 +97,11 @@
  :paths
  ["module/task/src/main/clj"
   "module/maestro.idiom/src/main/clj"
-  "module/bb.help/src/main/clj"
-  "module/edn/src/main/clj"
-  "module/string/src/main/clj"
   "module/classpath/src/main/clj"
   "module/process/src/main/clj"
+  "module/edn/src/main/clj"
   "module/git/src/main/clj"
+  "module/string/src/main/clj"
   "module/maestro/src/main/clj"
   "module/deps.edn/src/main/clj"
   "module/namespace/src/main/clj"

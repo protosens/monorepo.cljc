@@ -7,7 +7,8 @@
             [clojure.string           :as C.string]
             [protosens.edn.read       :as $.edn.read]
             [protosens.maestro        :as $.maestro]
-            [protosens.maestro.plugin :as $.maestro.plugin]))
+            [protosens.maestro.plugin :as $.maestro.plugin]
+            [protosens.string         :as $.string]))
 
 
 (set! *warn-on-reflection*
@@ -15,6 +16,14 @@
 
 
 ;;;;;;;;;; Private side effects
+
+
+(defn- -read-bb-edn
+
+  []
+
+  ($.maestro.plugin/read-file-edn "bb.edn"))
+
 
 
 (defn- -write-bb-edn
@@ -32,20 +41,23 @@
 ;;;;;;;;;; Task
 
 
-(defn ^:no-doc -run
+(defn ^:no-doc -sync
 
   [node bb-edn bb-maestro-edn deps-maestro-edn]
 
   (let [tree-stream (StringWriter.)
-        sorted      (binding [*out*                          tree-stream
+        maestro-run (binding [*out*                          tree-stream
                               $.maestro.plugin/*print-path?* true]
                       ($.maestro/run [node]
                                      deps-maestro-edn))
-        bb-edn-new  (merge bb-maestro-edn
-                           (-> sorted
-                               (::$.maestro/deps-edn)
-                               (select-keys [:deps
-                                             :paths])))]
+        bb-edn-new  (-> bb-maestro-edn
+                        (update :tasks
+                                (partial into
+                                         (sorted-map)))
+                        (merge (-> maestro-run
+                                   (::$.maestro/deps-edn)
+                                   (select-keys [:deps
+                                                 :paths]))))]
     (when-not (= bb-edn-new
                  bb-edn)
       [bb-edn-new
@@ -53,15 +65,15 @@
 
 
 
-(defn- -run-from-task
+(defn- -sync-from-task
 
   [node deps-maestro-edn]
 
-  (-run node
-        ($.maestro.plugin/read-file-edn "bb.edn")
-        ($.maestro.plugin/read-file-edn "bb.maestro.edn")
-        (or deps-maestro-edn
-            ($.maestro.plugin/read-deps-maestro-edn))))
+  (-sync node
+         (-read-bb-edn)
+         ($.maestro.plugin/read-file-edn "bb.maestro.edn")
+         (or deps-maestro-edn
+             ($.maestro.plugin/read-deps-maestro-edn))))
 
 
 
@@ -73,8 +85,8 @@
   ($.maestro.plugin/step "Checking if `bb.edn` is in sync with `bb.maestro.edn` and `deps.maestro.edn`")
   ($.maestro.plugin/safe
     (delay
-      (if (-run-from-task node
-                          nil)
+      (if (-sync-from-task node
+                           nil)
         ($.maestro.plugin/fail "`bb.edn` is not in sync")
         ($.maestro.plugin/done "`bb.edn` is in sync")))))
 
@@ -98,8 +110,8 @@
        ($.maestro.plugin/step (format "Selecting everything required for node `%s`"
                                       node))
        (if-some [[bb-edn
-                  tree-string] (-run-from-task node
-                                               deps-maestro-edn)]
+                  tree-string] (-sync-from-task node
+                                                deps-maestro-edn)]
          (-write-bb-edn bb-edn
                         tree-string)
          ($.maestro.plugin/done "Nothing changed"))))))

@@ -45,12 +45,12 @@
 ;;;;;;;;;;
 
 
-(T/deftest -run
+(T/deftest -sync
 
-  (T/is (nil? ($.maestro.plugin.bb/-run :local/bb
-                                        -bb-edn
-                                        -bb-maestro-edn
-                                        -deps-maestro-edn))
+  (T/is (nil? ($.maestro.plugin.bb/-sync :local/bb
+                                         -bb-edn
+                                         -bb-maestro-edn
+                                         -deps-maestro-edn))
         "Nothing changed")
 
   (T/is (= (update -bb-edn
@@ -58,13 +58,13 @@
                    conj
                    "path/c")
            ,
-           (-> ($.maestro.plugin.bb/-run :local/bb
-                                         -bb-edn
-                                         -bb-maestro-edn
-                                         (assoc-in -deps-maestro-edn
-                                                   [:aliases
-                                                    :m/b
-                                                    :maestro/require]
-                                                   [:m/c]))
+           (-> ($.maestro.plugin.bb/-sync :local/bb
+                                          -bb-edn
+                                          -bb-maestro-edn
+                                          (assoc-in -deps-maestro-edn
+                                                    [:aliases
+                                                     :m/b
+                                                     :maestro/require]
+                                                    [:m/c]))
                (first)))
         "Update"))

@@ -15,6 +15,7 @@ provided.
 - Impacted
     - [`module/string`]
 - Remove
+    - [`module/bb.help`]
     - [`module/maestro.plugin.build`] 
 
 
@@ -58,7 +59,7 @@ Inception.
 <!--- Links to module changelogs -->
 
 
-[`module/bb.help`]:                  ../module/bb.help/doc/changelog.md
+[`module/bb.help`]:                  ../module/ARCHIVE/bb.help/doc/changelog.md
 [`module/classpath`]:                ../module/classpath/doc/changelog.md
 [`module/deps.edn`]:                 ../module/deps.edn/doc/changelog.md
 [`module/edn`]:                      ../module/edn/doc/changelog.md

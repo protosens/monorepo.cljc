@@ -129,28 +129,6 @@
   ;; MODULES
 
 
-  :module/bb.help
-
-  {:extra-paths                    ["module/bb.help/src/main/clj"]
-   :maestro/doc                    "Printing extra documentation for Babashka tasks."
-   :maestro/platform+              [:bb
-                                    :jvm]              
-   :maestro/require                [:module/edn
-                                    :module/string
-                                    :test/bb.help]
-   :maestro/root                   "module/bb.help"
-   :maestro.plugin.gitlib/name     protosens/bb.help
-   :maestro.plugin.quickdoc/output "module/bb.help/doc/API.md"}
-
-
-  :test/bb.help
-
-  {:extra-paths     ["module/bb.help/resrc/test"
-                     "module/bb.help/src/test"]
-   :maestro/require [:module/bb.help]}
-
-  ;---
-
   :module/classpath
 
   {:extra-paths                    ["module/classpath/src/main/clj"]
@@ -315,7 +293,6 @@
                                     :jvm]
    :maestro/require                [:ext/babashka.fs
                                     :ext/selmer
-                                    :module/bb.help
                                     :module/classpath
                                     :module/edn
                                     :module/git

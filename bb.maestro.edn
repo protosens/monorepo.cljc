@@ -14,7 +14,7 @@
  :tasks
  {quickdoc
   {:doc           "Generate documentation for modules"
-   :protosens/doc "Generate a markdown file for each module specifying a path via
+   :maestro/doc "Generate a markdown file for each module specifying a path via
                    `:maestro.plugin.quickdoc.path/output`.
                    
                    It will contain a full description of all namespaces belonging to the module,
@@ -25,7 +25,7 @@
 
   changelog+
   {:doc           "Template all changelogs with the last stable tag"
-   :protosens/doc "Changelogs use `{{ next-release }}` as a placeholder for the next
+   :maestro/doc "Changelogs use `{{ next-release }}` as a placeholder for the next
                    stable tag."
    :requires      ([protosens.task.changelog])
    :task          (protosens.task.changelog/main)}
@@ -50,7 +50,7 @@
 
   expose
   {:doc           "Expose modules meant to be consumed as Git libraries"
-   :protosens/doc "By generating a custom `deps.edn` file in the `:meastro/root` of aliases that
+   :maestro/doc "By generating a custom `deps.edn` file in the `:meastro/root` of aliases that
                    have a `:maestro.git.lib/name`.
                    
                    Consumers can then require the repository as a Git dependency and point to a
@@ -61,7 +61,7 @@
 
   expose:local
   {:doc           "Like `expose` but Git URL will point to the repository directory"
-   :protosens/doc "Only for testing.
+   :maestro/doc "Only for testing.
                   
                    Allows testing exposition and running tasks like `req:verify` without having
                    to push commits."
@@ -71,10 +71,9 @@
 
   help
   {:doc           "Print documentation for the given task"
-   :protosens/doc "If there is any."
-   :requires      ([protosens.bb.help])
-   :task          (-> (protosens.bb.help/task)
-                      (protosens.bb.help/print))}
+   :maestro/doc "If there is any."
+   :requires      ([protosens.maestro.plugin.bb])
+   :task          (protosens.maestro.plugin.bb/help)}
 
 
   help:missing
@@ -86,14 +85,14 @@
 
   module:listing
   {:doc           "Generate `./module/README.md`"
-   :protosens/doc "Lists all exposed and private modules."
+   :maestro/doc "Lists all exposed and private modules."
    :requires      ([protosens.maestro.idiom.listing])
    :task          (protosens.maestro.idiom.listing/main "module/README.md")}
 
 
   module:readme
   {:doc           "Generate READMEs for all modules"
-   :protosens/doc "For each module, writes a header composed of the root and relevant information (link to
+   :maestro/doc "For each module, writes a header composed of the root and relevant information (link to
                    API, Git dependency info, etc).
 
                    If `./doc/README.md` exists relative to the root, its content is appended."
@@ -103,7 +102,7 @@
 
   lint
   {:doc           "Lint Clojure code throughout the whole repository"
-   :protosens/doc "Using `clj-kondo` which must be accessible in the terminal.
+   :maestro/doc "Using `clj-kondo` which must be accessible in the terminal.
 
                    See the `lint:prepare` task which is necessary for initialization."
    :requires      ([protosens.maestro.plugin.clj-kondo])
@@ -112,7 +111,7 @@
 
   lint:prepare
   {:doc           "Prepare for `lint`"
-   :protosens/doc "Must be called prior to using the `lint` task and ideally when dependencies are
+   :maestro/doc "Must be called prior to using the `lint` task and ideally when dependencies are
                    updated. This will lint and cache dependencies as well as copying configuration
                    files."
    :requires      ([protosens.maestro.plugin.clj-kondo])
@@ -121,7 +120,7 @@
 
   pprint-cp
   {:doc           "Pretty-print the classpath received from STDIN"
-   :protosens/doc "Useful in combination with `-Spath`. For instance:
+   :maestro/doc "Useful in combination with `-Spath`. For instance:
                  
                        clojure -Spath -A$( bb aliases :module/maestro ) | bb pprint-cp
                    
