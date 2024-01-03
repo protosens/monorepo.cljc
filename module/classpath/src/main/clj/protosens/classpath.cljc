@@ -13,39 +13,6 @@
 ;;;;;;;;;;
 
 
-(defn compute
-
-  "Computes the classpath.
-
-   By running `clojure -Spath ...` in the shell.
-
-   Options may be:
-
-   | Key          | Value                                   | Default |
-   |--------------|-----------------------------------------|---------|
-   | `:alias+`    | Collection of aliases to activate       | `nil`   |
-   | `:deps/root` | Path to directory containing `deps.edn` | `./`    |
-  
-   Returns `nil` if something goes wrong."
-  
-
-  ([]
-
-   (compute nil))
-
-
-  ([option+]
-
-   (-> ($.process/run ["clojure"
-                       "-Spath"
-                       (when-some [alias+ (seq (:alias+ option+))]
-                         (str "-A"
-                               (string/join alias+)))]
-                      {:dir (:deps/root option+)})
-       ($.process/out))))
-
-
-
 (defn current
 
   "Returns the current classpath."
@@ -86,6 +53,7 @@
   []
 
   #?(:clj (System/getProperty "path.separator")))
+
 
 
 (defn split

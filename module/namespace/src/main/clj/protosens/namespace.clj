@@ -1,6 +1,6 @@
 (ns protosens.namespace
 
-  "Mainly about inding available namespaces."
+  "Mainly about finding available namespaces."
 
   (:require [babashka.fs         :as bb.fs]
             [clojure.java.io     :as java.io]

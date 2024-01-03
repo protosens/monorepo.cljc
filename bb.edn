@@ -71,12 +71,6 @@
    "For each module, writes a header composed of the root and relevant information (link to\n                   API, Git dependency info, etc).\n\n                   If `./doc/README.md` exists relative to the root, its content is appended.",
    :requires ([protosens.maestro.idiom.readme]),
    :task (protosens.maestro.idiom.readme/main)},
-  pprint-cp
-  {:doc "Pretty-print the classpath received from STDIN",
-   :maestro/doc
-   "Useful in combination with `-Spath`. For instance:\n                 \n                       clojure -Spath -A$( bb aliases :module/maestro ) | bb pprint-cp\n                   \n                   In reality, it will pretty print any string where items are separated by `:`.\n                   \n                       bb aliases :module/maestro | bb pprint-cp",
-   :requires ([protosens.classpath]),
-   :task (protosens.classpath/pprint)},
   quickdoc
   {:doc "Generate documentation for modules",
    :maestro/doc

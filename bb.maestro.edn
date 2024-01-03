@@ -118,19 +118,6 @@
    :task          (protosens.maestro.plugin.clj-kondo/prepare)}
 
 
-  pprint-cp
-  {:doc           "Pretty-print the classpath received from STDIN"
-   :maestro/doc "Useful in combination with `-Spath`. For instance:
-                 
-                       clojure -Spath -A$( bb aliases :module/maestro ) | bb pprint-cp
-                   
-                   In reality, it will pretty print any string where items are separated by `:`.
-                   
-                       bb aliases :module/maestro | bb pprint-cp"
-   :requires      ([protosens.classpath])
-   :task          (protosens.classpath/pprint)}
-
-
   stable:tag
   {:doc      "Tag the last commit as a stable release"
    :requires ([protosens.maestro.idiom.stable])

@@ -30,12 +30,6 @@
 ;;;;;;;;;;
 
 
-(T/deftest compute
-
-  (-cp? ($.classpath/compute nil)))
-
-
-
 (T/deftest current
 
   (-cp? ($.classpath/current)))
