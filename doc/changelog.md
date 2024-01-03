@@ -13,6 +13,7 @@ provided.
 ## {{ next-release }}
 
 - Impacted
+    - [`module/classpath`]
     - [`module/string`]
 - Remove
     - [`module/bb.help`]

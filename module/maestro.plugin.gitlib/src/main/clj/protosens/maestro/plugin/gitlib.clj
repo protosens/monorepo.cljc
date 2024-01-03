@@ -173,7 +173,7 @@
     ;; Prepare exposition.
     (let [git-sha ($.git/commit-sha 0)]
       ($.maestro.plugin/step "Preparing modules to be exposed as gitlibs")
-      ($.maestro.plugin/step "First commit")
+      ($.maestro.plugin/step "First commit for preparation")
       (-expose git-sha
                deps-maestro-edn-2)
       ($.git/add ["."])
@@ -185,7 +185,7 @@
     ;; Expose and print feedback for all modules.
     (let [git-sha-2 ($.git/commit-sha 0)]
       ($.maestro.plugin/step "Exposing modules as gitlibs")
-      ($.maestro.plugin/step "Second commit")
+      ($.maestro.plugin/step "Second commit for actual exposition")
       ($.maestro.plugin/step "Custom `deps.edn` files created for:")
       (doseq [[alias
                feedback] (-expose git-sha-2
@@ -242,7 +242,7 @@
 
   ([deps-maestro-edn]
 
-   ($.maestro.plugin/intro "maestro.plugin.gitlib")
+   ($.maestro.plugin/intro "maestro.plugin.gitlib/expose")
    ($.maestro.plugin/safe
      (delay
        (-task deps-maestro-edn)

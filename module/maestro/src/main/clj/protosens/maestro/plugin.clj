@@ -51,7 +51,8 @@
                 $.term.style/fg-green
                 message
                 $.term.style/fg-green
-                $.term.style/reset)))
+                $.term.style/reset))
+  (println))
 
 
 
@@ -79,6 +80,7 @@
                     $.term.style/fg-red
                     message
                     $.term.style/reset))
+      (println)
       (System/exit 1))
     (throw (Exception. message
                        exception-cause)))))
@@ -92,7 +94,6 @@
   (when-not (-> (reset-vals! -*first-intro?
                              false)
                 (first))
-    (println)
     (println "──────────"))
   (println)
   (println (str $.term.style/bold
