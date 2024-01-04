@@ -2,8 +2,7 @@
 
   ;; TODO. Could be refactor into a generic module?
 
-  (:require [clojure.set       :as       C.set]
-            [protosens.maestro :as-alias $.maestro]))
+  (:require [clojure.set :as C.set]))
 
 
 (set! *warn-on-reflection*

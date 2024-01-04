@@ -137,7 +137,7 @@
                     state-3))
            ;;
            ;; Entering.
-           (if-some [level (seq (peek stack))]
+           (if-some [_level (seq (peek stack))]
              ;;
              ;; Node to process.
              (let [state-3 (-> state-2

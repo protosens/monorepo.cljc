@@ -1,8 +1,7 @@
 (ns protosens.maestro.plugin.readme.module
 
-  (:require [babashka.fs              :as bb.fs]
-            [protosens.maestro.plugin :as $.maestro.plugin]
-            [protosens.string         :as $.string]))
+  (:require [babashka.fs      :as bb.fs]
+            [protosens.string :as $.string]))
 
 
 (set! *warn-on-reflection*

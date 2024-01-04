@@ -1,8 +1,7 @@
 (ns protosens.test.classpath
 
   (:require [clojure.test        :as T]
-            [protosens.classpath :as $.classpath]
-            [protosens.string    :as $.string]))
+            [protosens.classpath :as $.classpath]))
 
 
 ;;;;;;;;;;

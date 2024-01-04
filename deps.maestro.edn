@@ -535,6 +535,7 @@
                      :module/maestro
                      :module/maestro.plugin.bb
                      :module/maestro.plugin.changelog
+                     :module/maestro.plugin.clj-kondo
                      :module/maestro.plugin.gitlib
                      :module/maestro.plugin.kaocha
                      :module/maestro.plugin.quickdoc

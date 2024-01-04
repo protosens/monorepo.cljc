@@ -1,9 +1,8 @@
 (ns protosens.maestro.node.enter.invert
 
-  (:require [protosens.maestro            :as-alias $.maestro]
-            [protosens.maestro.alias      :as       $.maestro.alias]
-            [protosens.maestro.node       :as       $.maestro.node]
-            [protosens.maestro.node.enter :as       $.maestro.node.enter]))
+  (:require [protosens.maestro.alias      :as $.maestro.alias]
+            [protosens.maestro.node       :as $.maestro.node]
+            [protosens.maestro.node.enter :as $.maestro.node.enter]))
 
 
 ;;;;;;;;;;

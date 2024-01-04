@@ -1,7 +1,6 @@
 (ns protosens.test.maestro.node.enter.shallow
 
   (:require [clojure.test           :as    T]
-            [protosens.maestro      :as    $.maestro]
             [protosens.test.maestro :refer [-t-path]]))
 
 

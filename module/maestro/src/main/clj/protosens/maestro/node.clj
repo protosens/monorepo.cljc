@@ -1,8 +1,7 @@
 (ns protosens.maestro.node
 
-  (:require [clojure.set         :as       C.set]
-            [protosens.graph.dfs :as       $.graph.dfs]
-            [protosens.maestro   :as-alias $.maestro]))
+  (:require [clojure.set         :as C.set]
+            [protosens.graph.dfs :as $.graph.dfs]))
 
 
 (set! *warn-on-reflection*

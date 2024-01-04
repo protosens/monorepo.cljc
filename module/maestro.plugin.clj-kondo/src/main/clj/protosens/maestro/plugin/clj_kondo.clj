@@ -44,7 +44,8 @@
        (let [deps-edn-2 (or deps-edn
                             ($.maestro.plugin/read-file-edn "deps.edn"))
              path+      (deps-edn-2 :paths)
-             analysis   (clj-kondo/run! {:lint     path+
+             analysis   #_:clj-kondo/ignore ;; For some reason, Clj-kondo does not recognize this var.
+                        (clj-kondo/run! {:lint     path+
                                          :parallel true})
              summary    (analysis :summary)
              n-error    (summary :error)
@@ -98,26 +99,17 @@
 
 (defn prepare
 
+  []
 
-  ([]
-
-   (prepare nil))
-
-
-  ([deps-edn]
-
-   ($.maestro.plugin/intro "maestro.plugin.clj-kondo/prepare")
-   ($.maestro.plugin/safe
-     (delay
-       ($.maestro.plugin/step "Preparing everything for Clj-kondo")
-       (let [deps-edn-2 (or deps-edn
-                            ($.maestro.plugin/read-file-edn "deps.edn"))
-
-             _          ($.maestro.plugin/step "Computing classpath based on `deps.edn`")
-             cp         (-classpath)]
-         ($.maestro.plugin/step "Running analysis")
-         (clj-kondo/run! {:copy-configs true
-                          :dependencies true
-                          :lint         cp
-                          :parallel     true})
-         ($.maestro.plugin/done "Clj-kondo is ready"))))))
+  ($.maestro.plugin/intro "maestro.plugin.clj-kondo/prepare")
+  ($.maestro.plugin/safe
+    (delay
+      ($.maestro.plugin/step "Preparing everything for Clj-kondo")
+      ($.maestro.plugin/step "Computing classpath based on `deps.edn`")
+      (let [cp (-classpath)]
+        ($.maestro.plugin/step "Running analysis")
+        (clj-kondo/run! {:copy-configs true
+                         :dependencies true
+                         :lint         cp
+                         :parallel     true})
+        ($.maestro.plugin/done "Clj-kondo is ready")))))

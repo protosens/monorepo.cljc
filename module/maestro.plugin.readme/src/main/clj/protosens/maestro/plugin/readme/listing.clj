@@ -1,9 +1,7 @@
 (ns protosens.maestro.plugin.readme.listing
 
   (:require [babashka.fs                     :as bb.fs]
-            [clojure.java.io                 :as C.java.io]
             [clojure.string                  :as C.string]
-            [protosens.maestro.plugin        :as $.maestro.plugin]
             [protosens.maestro.plugin.gitlib :as $.maestro.plugin.gitlib]
             [protosens.string                :as $.string]))
 

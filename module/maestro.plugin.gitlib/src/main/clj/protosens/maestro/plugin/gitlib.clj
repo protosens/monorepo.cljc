@@ -16,7 +16,6 @@
             [clojure.java.io          :as C.java.io]
             [clojure.pprint           :as C.pprint]
             [clojure.string           :as C.string]
-            [protosens.edn.read       :as $.edn.read]
             [protosens.git            :as $.git]
             [protosens.maestro        :as $.maestro]
             [protosens.maestro.plugin :as $.maestro.plugin]))

@@ -91,6 +91,7 @@
   "module/term.style/src/main/clj/"
   "module/maestro.plugin.bb/src/main/clj/"
   "module/maestro.plugin.changelog/src/main/clj"
+  "module/maestro.plugin.clj-kondo/src/main/clj"
   "module/maestro.plugin.gitlib/src/main/clj"
   "module/maestro.plugin.kaocha/src/main/clj"
   "module/maestro.plugin.quickdoc/src/main/clj"

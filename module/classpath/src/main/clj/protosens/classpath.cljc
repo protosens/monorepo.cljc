@@ -3,8 +3,7 @@
   "Simple classpath utilities that happens to be handy once in a while."
 
   (:require #?(:bb [babashka.classpath :as bb.classpath])
-            [clojure.string    :as string]
-            [protosens.process :as $.process]))
+            [clojure.string    :as string]))
 
 
 (declare split)

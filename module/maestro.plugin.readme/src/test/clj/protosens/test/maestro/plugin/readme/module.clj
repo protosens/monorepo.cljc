@@ -88,7 +88,7 @@
 
 
 
-(T/deftest platform+
+(T/deftest warn-experimental
 
   (T/is (-> -maestro-definition
             ($.maestro.plugin.readme.module/warn-experimental)
