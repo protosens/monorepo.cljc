@@ -65,8 +65,8 @@
        ($.maestro.plugin/step "Generating READMEs for all modules:")
        (let [deps-maestro-edn-2 (or deps-maestro-edn
                                     ($.maestro.plugin/read-deps-maestro-edn))
-             sha                ($.git/commit-sha 0)
-             exposed            {:sha sha
+             exposed            {:sha (or (deps-maestro-edn-2 :maestro.plugin.gitlib/sha)
+                                          ($.git/commit-sha 0))
                                  :url (deps-maestro-edn-2 :maestro.plugin.gitlib/url)}]
          (doseq [[alias
                   definition] ($.maestro.plugin.readme.module/alias+ deps-maestro-edn-2)
