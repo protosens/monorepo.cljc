@@ -36,18 +36,6 @@
    "Only for testing.\n                  \n                   Allows testing exposition and running tasks like `req:verify` without having\n                   to push commits.",
    :requires ([protosens.maestro.plugin.gitlib]),
    :task (protosens.maestro.plugin.gitlib/expose-local)},
-  help
-  {:doc "Print documentation for the given task",
-   :maestro/doc "If there is any.",
-   :requires ([protosens.maestro.plugin.bb]),
-   :task (protosens.maestro.plugin.bb/help)},
-  help:missing
-  {:doc "Print tasks that do no have extra documentation",
-   :requires ([protosens.bb.help]),
-   :task
-   (->
-    (protosens.bb.help/undocumented-task+)
-    (protosens.bb.help/print))},
   lint
   {:doc "Lint Clojure code throughout the whole repository",
    :maestro/doc
@@ -77,33 +65,33 @@
    "Generate a markdown file for each module specifying a path via\n                   `:maestro.plugin.quickdoc.path/output`.\n                   \n                   It will contain a full description of all namespaces belonging to the module,\n                   with vars and usage.",
    :requires ([protosens.maestro.plugin.quickdoc]),
    :task (protosens.maestro.plugin.quickdoc/module+)},
-  stable:tag
-  {:doc "Tag the last commit as a stable release",
-   :requires ([protosens.maestro.idiom.stable]),
-   :task (println (protosens.maestro.idiom.stable/tag-add))}},
+  release
+  {:doc "",
+   :requires ([protosens.task.release]),
+   :task (protosens.task.release/now)}},
  :deps
- {babashka/fs {:mvn/version "0.1.11"},
+ {babashka/process {:mvn/version "0.2.10"},
+  babashka/fs {:mvn/version "0.1.11"},
   selmer/selmer {:mvn/version "1.12.55"},
-  babashka/process {:mvn/version "0.2.10"},
   lambdaisland/kaocha {:mvn/version "1.63.998"},
   io.github.borkdude/quickdoc
   {:git/sha "fc5a18bb419ccac3c8769aa0761384025b27f68c"}},
  :paths
  ["module/task/src/main/clj"
-  "module/maestro.idiom/src/main/clj"
-  "module/classpath/src/main/clj"
-  "module/process/src/main/clj"
-  "module/edn/src/main/clj"
+  "module/calver/src/main/clj"
   "module/git/src/main/clj"
+  "module/process/src/main/clj"
   "module/string/src/main/clj"
   "module/maestro/src/main/clj"
   "module/deps.edn/src/main/clj"
+  "module/edn/src/main/clj"
   "module/namespace/src/main/clj"
+  "module/classpath/src/main/clj"
   "module/graph.dfs/src/main/clj/"
   "module/term.style/src/main/clj/"
-  "module/maestro.plugin.clj-kondo/src/main/clj"
+  "module/maestro.plugin.bb/src/main/clj/"
+  "module/maestro.plugin.changelog/src/main/clj"
   "module/maestro.plugin.gitlib/src/main/clj"
   "module/maestro.plugin.kaocha/src/main/clj"
   "module/maestro.plugin.quickdoc/src/main/clj"
-  "module/symbol/src/main/clj"
-  "module/maestro.plugin.bb/src/main/clj/"]}
+  "module/maestro.plugin.readme/src/main/clj/"]}

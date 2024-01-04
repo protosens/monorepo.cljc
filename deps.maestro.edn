@@ -564,8 +564,15 @@
   {:extra-paths     ["module/task/src/main/clj"]
    :maestro/doc     "Merges dependencies and paths for Babashka tasks.
                      Not meant for public use."
-   :maestro/require [:module/maestro.idiom
-                     :module/maestro.plugin.bb]
+   :maestro/require [:module/calver
+                     :module/git
+                     :module/maestro
+                     :module/maestro.plugin.bb
+                     :module/maestro.plugin.changelog
+                     :module/maestro.plugin.gitlib
+                     :module/maestro.plugin.kaocha
+                     :module/maestro.plugin.quickdoc
+                     :module/maestro.plugin.readme]
    :maestro/root    "module/task"}
 
   ;---

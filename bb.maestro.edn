@@ -69,18 +69,6 @@
    :task          (protosens.maestro.plugin.gitlib/expose-local)}
 
 
-  help
-  {:doc           "Print documentation for the given task"
-   :maestro/doc "If there is any."
-   :requires      ([protosens.maestro.plugin.bb])
-   :task          (protosens.maestro.plugin.bb/help)}
-
-
-  help:missing
-  {:doc      "Print tasks that do no have extra documentation"
-   :requires ([protosens.bb.help])
-   :task     (-> (protosens.bb.help/undocumented-task+)
-                 (protosens.bb.help/print))}
 
 
   module:listing
@@ -118,10 +106,11 @@
    :task          (protosens.maestro.plugin.clj-kondo/prepare)}
 
 
-  stable:tag
-  {:doc      "Tag the last commit as a stable release"
-   :requires ([protosens.maestro.idiom.stable])
-   :task     (println (protosens.maestro.idiom.stable/tag-add))}
+
+  release
+  {:doc      ""
+   :requires ([protosens.task.release])
+   :task     (protosens.task.release/now)}
 
 
   }}
