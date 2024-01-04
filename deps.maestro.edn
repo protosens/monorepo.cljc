@@ -263,6 +263,7 @@
 
   {:extra-paths                    ["module/lab.bench/src/main/clj"]
    :maestro/doc                    "Higher-level helpers for [Criterium](https://github.com/hugoduncan/criterium)."
+   :maestro/experimental?          true
    :maestro/platform+              [:jvm]
    :maestro/require                [:ext/criterium]
    :maestro/root                   "module/lab.bench"
@@ -341,9 +342,12 @@
 
   :module/maestro.plugin.bb
 
-  {:extra-paths     ["module/maestro.plugin.bb/src/main/clj/"]
-   :maestro/require [:module/maestro
-                     :test/maestro.plugin.bb]}
+  {:extra-paths                    ["module/maestro.plugin.bb/src/main/clj/"]
+   :maestro/require                [:module/maestro
+                                    :test/maestro.plugin.bb]
+   :maestro/root                   "module/maestro.plugin.bb"
+   :maestro.plugin.gitlib/name     protosens/maestro.plugin.bb
+   :maestro.plugin.quickdoc/output "module/maestro.plugin.bb/doc/API.md"}
 
 
   :test/maestro.plugin.bb
@@ -437,7 +441,7 @@
   :module/maestro.plugin.quickdoc
 
   {:extra-paths                    ["module/maestro.plugin.quickdoc/src/main/clj"]
-   :maestro/doc                    "Maestro plugin for [Quickdock](https://github.com/borkdude/quickdoc), the Markdown API generator.  
+   :maestro/doc                    "Maestro plugin for [Quickdoc](https://github.com/borkdude/quickdoc), the Markdown API generator.
                                     Works on the JVM is the JVM flavor of Quickdoc is required by the user."
    :maestro/platform+              [:bb]
    :maestro/require                [:ext/babashka.fs
@@ -452,6 +456,29 @@
    :maestro/root                   "module/maestro.plugin.quickdoc"
    :maestro.plugin.gitlib/name     protosens/maestro.plugin.quickdoc
    :maestro.plugin.quickdoc/output "module/maestro.plugin.quickdoc/doc/API.md"}
+
+  ;---
+
+  :module/maestro.plugin.readme
+
+  {:extra-paths                    ["module/maestro.plugin.readme/src/main/clj/"]
+   :maestro/require                [:ext/babashka.fs
+                                    :module/git
+                                    :module/maestro
+                                    :module/maestro.plugin.gitlib
+                                    :module/string
+                                    :test/maestro.plugin.readme]
+   :maestro/root                   "module/maestro.plugin.readme"
+   :maestro.plugin.gitlib/name     protosens/maestro.plugin.readme
+   :maestro.plugin.quickdoc/output "module/maestro.plugin.readme/doc/API.md"}
+
+
+  :test/maestro.plugin.readme
+
+  {:extra-paths     ["module/maestro.plugin.readme/src/test/clj/"]
+   :maestro/require [:module/edn
+                     :module/maestro.plugin.readme]}
+
 
   ;---
 

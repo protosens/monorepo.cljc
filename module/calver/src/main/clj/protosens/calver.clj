@@ -33,13 +33,11 @@
                                    "--tags=release/*"
                                    "--max-count=1"])
                       ($.process/out))]
-    (-> ($.git/exec ["describe"
-                     "--tags"
-                     sha])
-        ($.process/out)
-        ;;
-        ;; Removes `release/`.
-        (some-> ($.string/trunc-left 8)))))
+    [sha
+     (-> ($.git/exec ["describe"
+                      "--tags"
+                      sha])
+         ($.process/out))]))
 
 
 

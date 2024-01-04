@@ -5,6 +5,10 @@
             [selmer.parser            :as selmer.parser]))
 
 
+(set! *warn-on-reflection*
+      true)
+
+
 ;;;;;;;;;; Private
 
 

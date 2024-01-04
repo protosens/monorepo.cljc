@@ -15,6 +15,7 @@ provided.
 - Add
     - [`module/calver`]
     - [`module/maestro.plugin.changelog`]
+    - [`module/maestro.plugin.readme`]
 - Impacted
     - [`module/classpath`]
     - [`module/string`]
@@ -76,6 +77,7 @@ Inception.
 [`module/maestro.plugin.clj-kondo`]: ../module/maestro.plugin.clj-kondo/doc/changelog.md
 [`module/maestro.plugin.kaocha`]:    ../module/maestro.plugin.kaocha/doc/changelog.md
 [`module/maestro.plugin.quickdoc`]:  ../module/maestro.plugin.quickdoc/doc/changelog.md
+[`module/maestro.plugin.readme`]:    ../module/maestro.plugin.readme/doc/changelog.md
 [`module/maestro`]:                  ../module/maestro/doc/changelog.md
 [`module/namespace`]:                ../module/namespace/doc/changelog.md
 [`module/process`]:                  ../module/process/doc/changelog.md
