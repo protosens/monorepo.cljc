@@ -150,6 +150,26 @@
 
   ;---
 
+  :module/calver
+
+  {:extra-paths                    ["module/calver/src/main/clj"]
+   :maestro/doc                    "Version a repository using CalVer."
+   :maestro/platform+              [:bb
+                                    :jvm]              
+   :maestro/require                [:module/git
+                                    :test/calver]
+   :maestro/root                   "module/calver"
+   :maestro.plugin.gitlib/name     protosens/calver
+   :maestro.plugin.quickdoc/output "module/calver/doc/API.md"}
+
+
+  :test/calver
+
+  {:extra-paths     ["module/calver/src/test/clj"]
+   :maestro/require [:module/calver]}
+
+  ;---
+
   :module/deps.edn
 
   {:extra-paths                    ["module/deps.edn/src/main/clj"]

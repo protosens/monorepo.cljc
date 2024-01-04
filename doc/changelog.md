@@ -12,6 +12,8 @@ provided.
 
 ## {{ next-release }}
 
+- Add
+    - [`module/calver`]
 - Impacted
     - [`module/classpath`]
     - [`module/string`]
@@ -61,6 +63,7 @@ Inception.
 
 
 [`module/bb.help`]:                  ../module/ARCHIVE/bb.help/doc/changelog.md
+[`module/calver`]:                   ../module/calver/doc/changelog.md
 [`module/classpath`]:                ../module/classpath/doc/changelog.md
 [`module/deps.edn`]:                 ../module/deps.edn/doc/changelog.md
 [`module/edn`]:                      ../module/edn/doc/changelog.md

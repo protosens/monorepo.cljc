@@ -1,18 +1,5 @@
 (ns protosens.maestro.idiom.stable
 
-  "Tagging stable releases following [calver](https://calver.org).
-
-   See [[today]] about tag format.
-
-   These are the utilities used by the Protosens monorepo but there is no
-   obligation following all that.
-
-   Some functions accept the following options:
-
-   | Key    | Value                                     | Default           |
-   |--------|-------------------------------------------|-------------------|
-   | `:dir` | Directory used for Git-related operations | Current directory |"
-
   (:import (java.time LocalDateTime)
            (java.time.format DateTimeFormatter))
   (:require [clojure.string :as string]
