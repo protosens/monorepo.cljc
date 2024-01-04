@@ -22,6 +22,7 @@ provided.
     - [`module/string`]
 - Remove
     - [`module/bb.help`]
+    - [`module/maestro.idiom`]
     - [`module/maestro.plugin.build`] 
 
 
@@ -72,7 +73,7 @@ Inception.
 [`module/edn`]:                      ../module/edn/doc/changelog.md
 [`module/git`]:                      ../module/git/doc/changelog.md
 [`module/lab.bench`]:                ../module/lab.bench/doc/changelog.md
-[`module/maestro.idiom`]:            ../module/maestro.idiom/doc/changelog.md
+[`module/maestro.idiom`]:            ../module/ARCHIVE/maestro.idiom/doc/changelog.md
 [`module/maestro.plugin.build`]:     ../module/ARCHIVE/maestro.plugin.build/doc/changelog.md
 [`module/maestro.plugin.changelog`]: ../module/maestro.plugin.changelog/doc/changelog.md
 [`module/maestro.plugin.clj-kondo`]: ../module/maestro.plugin.clj-kondo/doc/changelog.md

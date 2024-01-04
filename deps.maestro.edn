@@ -304,40 +304,6 @@
 
   ;---
 
-  :module/maestro.idiom
-
-  {:extra-paths                    ["module/maestro.idiom/src/main/clj"]
-   :maestro/doc                    "Bundle of modules for idiomatic use of [Maestro](../maestro) and well as more opinionated tooling."
-   :maestro/platform+              [:bb
-                                    :jvm]
-   :maestro/require                [:ext/babashka.fs
-                                    :ext/selmer
-                                    :module/classpath
-                                    :module/edn
-                                    :module/git
-                                    :module/maestro
-                                    :module/maestro.plugin.clj-kondo
-                                    :module/maestro.plugin.gitlib
-                                    :module/maestro.plugin.kaocha
-                                    :module/maestro.plugin.quickdoc
-                                    :module/namespace
-                                    :module/process
-                                    :module/string
-                                    :module/symbol
-                                    :test/maestro.idiom]
-   :maestro/root                   "module/maestro.idiom"
-   :maestro.plugin.gitlib/name     protosens/maestro.idiom
-   :maestro.plugin.quickdoc/output "module/maestro.idiom/doc/API.md"}
-
-
-  :test/maestro.idiom
-
-  {:extra-paths     ["module/maestro.idiom/src/test/clj"]
-   :maestro/require [:ext/babashka.fs
-                     :module/maestro.idiom]}
-
-  ;---
-
   :module/maestro.plugin.bb
 
   {:extra-paths                    ["module/maestro.plugin.bb/src/main/clj/"]
