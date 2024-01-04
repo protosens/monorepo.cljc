@@ -2,11 +2,7 @@
 
   (:import (java.time Instant
                       ZoneOffset)
-           (java.time.format DateTimeFormatter))
-  (:refer-clojure :exclude [format])
-  (:require [protosens.git     :as $.git]
-            [protosens.process :as $.process]
-            [protosens.string  :as $.string]))
+           (java.time.format DateTimeFormatter)))
 
 
 (set! *warn-on-reflection*
@@ -25,48 +21,18 @@
 ;;;;;;; Public
 
 
-(defn latest
+(defn instant->version
+
+  [^Instant instant]
+
+  (.format -formatter
+           (or instant
+               (Instant/now))))
+
+
+
+(defn now
 
   []
 
-  (when-some [sha (-> ($.git/exec ["rev-list"
-                                   "--tags=release/*"
-                                   "--max-count=1"])
-                      ($.process/out))]
-    [sha
-     (-> ($.git/exec ["describe"
-                      "--tags"
-                      sha])
-         ($.process/out))]))
-
-
-
-(defn format
-
-
-  ([]
-
-   (format nil))
-
-
-  ([^Instant instant]
-
-   (.format -formatter
-            (or instant
-                (Instant/now)))))
-
-
-
-(defn tag
-
-
-  ([]
-
-   (tag nil))
-
-
-  ([formatted]
-
-   ($.git/tag-add (str "release/"
-                       (or formatted
-                           (format))))))
+  (instant->version (Instant/now)))

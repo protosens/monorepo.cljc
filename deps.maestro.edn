@@ -156,8 +156,7 @@
    :maestro/doc                    "Version a repository using CalVer."
    :maestro/platform+              [:bb
                                     :jvm]              
-   :maestro/require                [:module/git
-                                    :test/calver]
+   :maestro/require                [:test/calver]
    :maestro/root                   "module/calver"
    :maestro.plugin.gitlib/name     protosens/calver
    :maestro.plugin.quickdoc/output "module/calver/doc/API.md"}
@@ -229,8 +228,7 @@
    :maestro/doc                    "One-liners (or almost) for common Git operations."
    :maestro/platform+              [:bb
                                     :jvm]              
-   :maestro/require                [:ext/babashka.process
-                                    :module/process
+   :maestro/require                [:module/process
                                     :module/string
                                     :test/git]
    :maestro/root                   "module/git"

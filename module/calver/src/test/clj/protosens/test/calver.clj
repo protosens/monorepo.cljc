@@ -2,7 +2,6 @@
 
   (:import (java.time LocalDateTime
                       ZoneOffset))
-  (:refer-clojure :exclude [format])
   (:require [clojure.test     :as T]
             [protosens.calver :as $.calver]))
 
@@ -10,9 +9,7 @@
 ;;;;;;;;;;
 
 
-(T/deftest format
-
-  (T/is (string? ($.calver/format)))
+(T/deftest instant->version
 
   (T/is (= "2024.01.03/10h32"
            (-> (LocalDateTime/of 2024
@@ -22,4 +19,10 @@
                                  32)
                (.atZone ZoneOffset/UTC)
                (.toInstant)
-               ($.calver/format)))))
+               ($.calver/instant->version)))))
+
+
+
+(T/deftest now
+
+  (T/is (string? ($.calver/now))))

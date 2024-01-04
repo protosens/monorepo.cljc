@@ -7,6 +7,15 @@ repository.
 ---
 
 
+## `{{ next-release }}`
+
+- Add
+    - `$.git.release`
+
+
+---
+
+
 ## `2022-10-10`
 
 Inception.
