@@ -99,3 +99,16 @@
                      (assoc :maestro/experimental?
                             true)
                      ($.maestro.plugin.readme.module/warn-experimental)))))
+
+
+;;;;;;;;;;
+
+
+(T/deftest alias+
+
+  (T/is (= (list [:c
+                  {:maestro/root "module/c"}])
+           (-> {:aliases {:a nil
+                          :b {}
+                          :c {:maestro/root "module/c"}}}
+               ($.maestro.plugin.readme.module/alias+)))))

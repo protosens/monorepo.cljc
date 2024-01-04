@@ -65,17 +65,12 @@
        ($.maestro.plugin/step "Generating READMEs for all modules:")
        (let [deps-maestro-edn-2 (or deps-maestro-edn
                                     ($.maestro.plugin/read-deps-maestro-edn))
-             alias->definition  (-> deps-maestro-edn-2
-                                    (:aliases))
              sha                ($.git/commit-sha 0)
              exposed            {:sha sha
                                  :url (deps-maestro-edn-2 :maestro.plugin.gitlib/url)}]
          (doseq [[alias
-                  definition] (sort-by first
-                                       alias->definition)
-                 :let         [root (:maestro/root definition)]
-                 :when        root
-                 :let         [path-readme (str root
+                  definition] ($.maestro.plugin.readme.module/alias+ deps-maestro-edn-2)
+                 :let         [path-readme (str (definition :maestro/root)
                                                 "/README.md")]]
            ($.maestro.plugin/step 1
                                   (format "%s  ->  %s"

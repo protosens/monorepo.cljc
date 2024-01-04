@@ -1,7 +1,8 @@
 (ns protosens.maestro.plugin.readme.module
 
-  (:require [babashka.fs      :as bb.fs]
-            [protosens.string :as $.string]))
+  (:require [babashka.fs              :as bb.fs]
+            [protosens.maestro.plugin :as $.maestro.plugin]
+            [protosens.string         :as $.string]))
 
 
 (set! *warn-on-reflection*
@@ -95,3 +96,19 @@
   (when (:maestro/experimental? alias-definition)
     (println "**Attention, this is module is marked as experimental.**")
     (println)))
+
+
+;;;;;;;;;;
+
+
+(defn alias+
+
+  [deps-maestro-edn]
+
+  (for [[alias
+         definition] (sort-by first
+                              (deps-maestro-edn :aliases))
+        :let         [root (:maestro/root definition)]
+        :when        (not-empty root)]
+    [alias
+     definition]))
