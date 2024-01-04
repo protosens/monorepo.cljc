@@ -7,7 +7,7 @@ repository.
 ---
 
 
-## {{ next-release }}
+## `{{ next-release }}`
 
 - Add
     - `$.deps.edn/flatten`

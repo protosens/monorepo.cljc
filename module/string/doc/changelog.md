@@ -7,7 +7,7 @@ repository.
 ---
 
 
-## {{ next-release }}
+## `{{ next-release }}`
 
 - Add
     - `$.string.char` namespace
@@ -21,7 +21,7 @@ repository.
 ---
 
 
-## 2022-10-13
+## `2022-10-13`
 
 - Add
     - `$.string/first-line`

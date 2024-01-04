@@ -10,10 +10,11 @@ provided.
 ---
 
 
-## {{ next-release }}
+## `{{ next-release }}`
 
 - Add
     - [`module/calver`]
+    - [`module/maestro.plugin.changelog`]
 - Impacted
     - [`module/classpath`]
     - [`module/string`]
@@ -25,7 +26,7 @@ provided.
 ---
 
 
-## 2022-10-13
+## `2022-10-13`
 
 - Add
     - [`module/lab.bench`]
@@ -71,6 +72,7 @@ Inception.
 [`module/lab.bench`]:                ../module/lab.bench/doc/changelog.md
 [`module/maestro.idiom`]:            ../module/maestro.idiom/doc/changelog.md
 [`module/maestro.plugin.build`]:     ../module/ARCHIVE/maestro.plugin.build/doc/changelog.md
+[`module/maestro.plugin.changelog`]: ../module/maestro.plugin.changelog/doc/changelog.md
 [`module/maestro.plugin.clj-kondo`]: ../module/maestro.plugin.clj-kondo/doc/changelog.md
 [`module/maestro.plugin.kaocha`]:    ../module/maestro.plugin.kaocha/doc/changelog.md
 [`module/maestro.plugin.quickdoc`]:  ../module/maestro.plugin.quickdoc/doc/changelog.md

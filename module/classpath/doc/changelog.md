@@ -7,7 +7,7 @@ repository.
 ---
 
 
-## {{ next-release }}
+## `{{ next-release }}`
 
 - Remove
     - `$.classpath/compute`

@@ -7,6 +7,6 @@ repository.
 ---
 
 
-## {{ next-release }}
+## `{{ next-release }}`
 
 Inception.

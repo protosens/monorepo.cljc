@@ -353,6 +353,27 @@
 
   ;---
 
+  :module/maestro.plugin.changelog
+
+  {:extra-paths                    ["module/maestro.plugin.changelog/src/main/clj"]
+   :maestro/doc                    "Templating changelogs."
+   :maestro/platform+              [:bb
+                                    :jvm]
+   :maestro/require                [:ext/selmer
+                                    :module/maestro
+                                    :test/maestro.plugin.changelog]
+   :maestro/root                   "module/maestro.plugin.changelog"
+   :maestro.plugin.gitlib/name     protosens/maestro.plugin.changelog
+   :maestro.plugin.quickdoc/output "module/maestro.plugin.changelog/doc/API.md"}
+
+
+  :test/maestro.plugin.changelog
+
+  {:extra-paths     ["module/maestro.plugin.changelog/src/test/clj"]
+   :maestro/require [:module/maestro.plugin.changelog]}
+
+  ;---
+
   :module/maestro.plugin.clj-kondo
 
   {:extra-paths                    ["module/maestro.plugin.clj-kondo/src/main/clj"]
