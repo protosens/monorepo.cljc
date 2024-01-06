@@ -14,6 +14,15 @@
  :tasks
  {
 
+  deps
+  {:doc      "Prepares `deps.edn` for the given aliases"
+   :requires ([protosens.maestro]
+              [protosens.maestro.plugin.kaocha])
+   :task     (do
+               (-> (protosens.maestro/sync)
+                   (protosens.maestro.plugin.kaocha/sync))
+               (run 'deps:bb))}
+
 
   deps:bb
   {:doc      "Syncs `bb.edn` with `bb.maestro.edn` and `deps.maestro.edn`"
@@ -25,16 +34,6 @@
   {:doc      "Checks if `bb.edn` is in sync with `bb.maestro.edn` and `deps.maestro.edn`"
    :requires ([protosens.maestro.plugin.bb])
    :task     (protosens.maestro.plugin.bb/check :module/task)}
-
-
-  deps
-  {:doc      "Prepares `deps.edn` for the given aliases"
-   :requires ([protosens.maestro]
-              [protosens.maestro.plugin.kaocha])
-   :task     (do
-               (-> (protosens.maestro/sync)
-                   (protosens.maestro.plugin.kaocha/sync))
-               (run 'deps:bb))}
 
 
   gitlib

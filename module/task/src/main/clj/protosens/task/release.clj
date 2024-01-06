@@ -3,9 +3,11 @@
   (:require [protosens.calver                   :as $.calver]
             [protosens.git                      :as $.git]
             [protosens.git.release              :as $.git.release]
+            [protosens.maestro                  :as $.maestro]
             [protosens.maestro.plugin           :as $.maestro.plugin]
             [protosens.maestro.plugin.bb        :as $.maestro.plugin.bb]
             [protosens.maestro.plugin.changelog :as $.maestro.plugin.changelog]
+            [protosens.maestro.plugin.clj-kondo :as $.maestro.plugin.clj-kondo]
             [protosens.maestro.plugin.gitlib    :as $.maestro.plugin.gitlib]
             [protosens.maestro.plugin.quickdoc  :as $.maestro.plugin.quickdoc]
             [protosens.maestro.plugin.readme    :as $.maestro.plugin.readme]))
@@ -21,6 +23,8 @@
   ($.maestro.plugin/step (format "Preparing new release `%s`"
                                  version))
   ($.maestro.plugin/step "This script will use Maestro plugins to:")
+  ($.maestro.plugin/step 1
+                         "Lint all modules with Clj-kondo")
   ($.maestro.plugin/step 1
                          "Ensure `bb.edn` is in sync")
   ($.maestro.plugin/step 1
@@ -41,6 +45,10 @@
 
   [version]
 
+  (binding [*command-line-args* [":GOD"]]
+    ($.maestro/sync))
+  ($.maestro.plugin.clj-kondo/prepare)
+  ($.maestro.plugin.clj-kondo/lint)
   ($.maestro.plugin.bb/check :module/task)
   ($.maestro.plugin.gitlib/expose)
   ($.maestro.plugin.quickdoc/module+)
