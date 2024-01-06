@@ -5,7 +5,7 @@
  ;; Required by the `doc:module` task.
  ;;
  :pods
- {clj-kondo/clj-kondo {:version "2022.09.08"}}
+ {clj-kondo/clj-kondo {:version "2023.12.15"}}
 
 
  ;;;;;

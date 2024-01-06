@@ -1,5 +1,5 @@
 {:min-bb-version "0.8.0",
- :pods {clj-kondo/clj-kondo {:version "2022.09.08"}},
+ :pods {clj-kondo/clj-kondo {:version "2023.12.15"}},
  :tasks
  {changelog+
   {:doc "Template all changelogs with the last stable tag",
@@ -71,8 +71,9 @@
    :task (protosens.task.release/now)}},
  :deps
  {babashka/process {:mvn/version "0.2.10"},
-  babashka/fs {:mvn/version "0.1.11"},
+  babashka/fs {:mvn/version "0.2.16"},
   selmer/selmer {:mvn/version "1.12.55"},
+  clj-kondo/clj-kondo {:mvn/version "2023.12.15"},
   lambdaisland/kaocha {:mvn/version "1.63.998"},
   io.github.borkdude/quickdoc
   {:git/sha "fc5a18bb419ccac3c8769aa0761384025b27f68c"}},

@@ -1,11 +1,11 @@
 (ns protosens.test.maestro.alias
 
   (:require [clojure.test                :as       T]
-            [protosens.graph.dfs         :as-alias $.graph.dfs]
+            [protosens.graph.dfs         :as       $.graph.dfs]
             [protosens.maestro           :as-alias $.maestro]
             [protosens.maestro.alias     :as       $.maestro.alias]
             [protosens.maestro.namespace :as       $.maestro.namespace]
-            [protosens.maestro.node      :as-alias $.maestro.node]))
+            [protosens.maestro.node      :as       $.maestro.node]))
 
 
 ;;;;;;;;;; Preparations

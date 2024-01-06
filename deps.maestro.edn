@@ -26,7 +26,7 @@
 
   :ext/babashka.fs
 
-  {:extra-deps  {babashka/fs {:mvn/version "0.1.11"}}
+  {:extra-deps  {babashka/fs {:mvn/version "0.2.16"}}
    :maestro/doc "Library for filesystem operations"
    :maestro/url "https://github.com/babashka/fs"}
 
@@ -37,7 +37,14 @@
    :maestro/doc "Shelling out and spawning process.
                  JVM and BB compatible."
    :maestro/url "https://github.com/babashka/process"}
-  
+
+
+  :ext/clj-kondo
+
+  {:extra-deps  {clj-kondo/clj-kondo {:mvn/version "2023.12.15"}}
+   :maestro/doc "A linter for Clojure that sparks joy"
+   :maestro/url "https://github.com/clj-kondo/clj-kondo"}
+
 
   :ext/clojure.tools.build
 
@@ -348,7 +355,8 @@
    :maestro/doc                    "Maestro plugin for [Clj-kondo](https://github.com/clj-kondo/clj-kondo), the Clojure linter."
    :maestro/platform+              [:bb
                                     :jvm]              
-   :maestro/require                [:module/maestro
+   :maestro/require                [:ext/clj-kondo
+                                    :module/maestro
                                     :module/term.style]
    :maestro/root                   "module/maestro.plugin.clj-kondo"
    :maestro.plugin.gitlib/name     protosens/maestro.plugin.clj-kondo

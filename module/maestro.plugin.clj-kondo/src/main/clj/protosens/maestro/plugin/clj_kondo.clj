@@ -1,27 +1,8 @@
 (ns protosens.maestro.plugin.clj-kondo
 
-  "Maestro plugin for linting Clojure code via [Clj-kondo](https://github.com/clj-kondo/clj-kondo).
-  
-   Assumes `clj-kondo` is installed and available in the shell."
-
-  (:import (java.io StringWriter))
-  (:require [babashka.deps            :as bb.deps]
-            [pod.borkdude.clj-kondo   :as clj-kondo]
-            [protosens.maestro.plugin :as $.maestro.plugin]
-            [protosens.term.style     :as $.term.style]))
-
-
-;;;;;;;;;; Private helpers
-
-
-(defn -classpath
-
-  []
-
-  (let [writer (StringWriter.)]
-    (binding [*out* writer]
-      (bb.deps/clojure ["-Spath"]))
-    [(str writer)]))
+  (:require [protosens.maestro.plugin                :as $.maestro.plugin]
+            [protosens.maestro.plugin.clj-kondo.impl :as $.maestro.plugin.clj-kondo.impl]
+            [protosens.term.style                    :as $.term.style]))
 
 
 ;;;;;;;;;; Tasks
@@ -44,16 +25,16 @@
        (let [deps-edn-2 (or deps-edn
                             ($.maestro.plugin/read-file-edn "deps.edn"))
              path+      (deps-edn-2 :paths)
-             analysis   #_:clj-kondo/ignore ;; For some reason, Clj-kondo does not recognize this var.
-                        (clj-kondo/run! {:lint     path+
-                                         :parallel true})
+             analysis   ($.maestro.plugin.clj-kondo.impl/run
+                          {:lint     path+
+                           :parallel true})
              summary    (analysis :summary)
              n-error    (summary :error)
              n-warning  (summary :warning)]
          (if (or (> n-error
                     0)
                  (> n-warning
-                    0))
+                    0))            
              (do
                ($.maestro.plugin/step "Files to fix:")
                (doseq [[file
@@ -106,10 +87,11 @@
     (delay
       ($.maestro.plugin/step "Preparing everything for Clj-kondo")
       ($.maestro.plugin/step "Computing classpath based on `deps.edn`")
-      (let [cp (-classpath)]
+      (let [cp ($.maestro.plugin.clj-kondo.impl/classpath)]
         ($.maestro.plugin/step "Running analysis")
-        (clj-kondo/run! {:copy-configs true
-                         :dependencies true
-                         :lint         cp
-                         :parallel     true})
+        ($.maestro.plugin.clj-kondo.impl/run
+          {:copy-configs true
+           :dependencies true
+           :lint         cp
+           :parallel     true})
         ($.maestro.plugin/done "Clj-kondo is ready")))))
