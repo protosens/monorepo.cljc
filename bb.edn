@@ -19,6 +19,12 @@
    "Checks if `bb.edn` is in sync with `bb.maestro.edn` and `deps.maestro.edn`",
    :requires ([protosens.maestro.plugin.bb]),
    :task (protosens.maestro.plugin.bb/check :module/task)},
+  deps:newest
+  {:doc "Searches for newest versions of external dependencies",
+   :task
+   (do
+    (binding [*command-line-args* [":GOD"]] (run 'deps))
+    (clojure "-M:ext/antq -m antq.core"))},
   gitlib
   {:doc "Generates custom `deps.edn` files for public modules",
    :requires ([protosens.maestro.plugin.gitlib]),
