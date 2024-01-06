@@ -39,6 +39,7 @@
                      :module
                      :test
                      :ext/criterium
+                     :ext/nrepl
                      :module/dev]}
 
 
@@ -113,6 +114,14 @@
   {:extra-deps  {lambdaisland/kaocha {:mvn/version "1.87.1366"}}
    :maestro/doc "Test runner"
    :maestro/url "https://github.com/lambdaisland/kaocha"}
+
+
+  :ext/nrepl
+  {:extra-deps  {nrepl/nrepl {:mvn/version "1.1.0"}}
+   :maestro/doc "Running NREPL."
+   :maestro/url "https://github.com/nrepl/nrepl"
+   :main-opts   ["-m" "nrepl.cmdline"
+                 "-p" "14563"]}
 
 
   :ext/portal

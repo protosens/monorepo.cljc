@@ -42,6 +42,14 @@
   {:doc "Prepares everything for `lint`",
    :requires ([protosens.maestro.plugin.clj-kondo]),
    :task (protosens.maestro.plugin.clj-kondo/prepare)},
+  nrepl
+  {:doc
+   "Runs `deps.edn` with an NREPL server (`:dev` alias must be active)",
+   :task
+   (clojure
+    (str
+     "-M:ext/nrepl "
+     (clojure.string/join " " *command-line-args*)))},
   quickdoc
   {:doc "Generates API documentation for modules",
    :requires ([protosens.maestro.plugin.quickdoc]),
