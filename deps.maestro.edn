@@ -56,16 +56,23 @@
   ;; EXTERNAL DEPENDENCIES
 
 
+  :ext/antq
+
+  {:extra-deps  {com.github.liquidz/antq {:mvn/version "2.8.1169"}}
+   :maestro/doc "Finding latest versions of external dependencies"
+   :maestro/url "https://github.com/liquidz/antq"}
+
+
   :ext/babashka.fs
 
-  {:extra-deps  {babashka/fs {:mvn/version "0.2.16"}}
+  {:extra-deps  {babashka/fs {:mvn/version "0.5.20"}}
    :maestro/doc "Library for filesystem operations"
    :maestro/url "https://github.com/babashka/fs"}
 
 
   :ext/babashka.process
 
-  {:extra-deps  {babashka/process {:mvn/version "0.2.10"}}
+  {:extra-deps  {babashka/process {:mvn/version "0.5.21"}}
    :maestro/doc "Shelling out and spawning process.
                  JVM and BB compatible."
    :maestro/url "https://github.com/babashka/process"}
@@ -80,8 +87,8 @@
 
   :ext/clojure.tools.build
 
-  {:extra-deps  {io.github.clojure/tools.build {:git/sha "0d20256"
-                                                :git/tag "v0.8.3"}}
+  {:extra-deps  {io.github.clojure/tools.build {:git/sha "8e78bcc"
+                                                :git/tag "v0.9.6"}}
    :maestro/doc "Building jars and uberjars"
    :maestro/url "https://github.com/clojure/tools.build"}
 
@@ -95,21 +102,21 @@
 
   :ext/kaocha
 
-  {:extra-deps  {lambdaisland/kaocha {:mvn/version "1.63.998"}}
+  {:extra-deps  {lambdaisland/kaocha {:mvn/version "1.87.1366"}}
    :maestro/doc "Test runner"
    :maestro/url "https://github.com/lambdaisland/kaocha"}
 
 
   :ext/portal
 
-  {:extra-deps  {djblue/portal {:mvn/version "0.35.0"}}
+  {:extra-deps  {djblue/portal {:mvn/version "0.51.0"}}
    :maestro/doc "Clojure data explorer"
    :maestro/url "https://github.com/djblue/portal"}
 
 
   :ext/quickdoc
 
-  {:extra-deps  {io.github.borkdude/quickdoc {:git/sha "fc5a18bb419ccac3c8769aa0761384025b27f68c"}}
+  {:extra-deps  {io.github.borkdude/quickdoc {:git/sha "d9ac51475ea46e1caf9b059f2a72ddfeeec6111c"}}
    :maestro/doc "Generating markdown documentation for Clojure namespaces
                  Works only with Babashka."
    :maestro/url "https://github.com/borkdude/quickdoc"}
@@ -117,7 +124,7 @@
 
   :ext/selmer
 
-  {:extra-deps  {selmer/selmer {:mvn/version "1.12.55"}}
+  {:extra-deps  {selmer/selmer {:mvn/version "1.12.59"}}
    :maestro/doc "A fast, Django inspired template system"
    :maestro/url "https://github.com/yogthos/selmer"}
 
