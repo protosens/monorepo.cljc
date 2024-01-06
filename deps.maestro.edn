@@ -28,7 +28,8 @@
   :module
 
   {:maestro/doc     "Needed for activating `:module/...`"
-   :maestro/require [:ext]}
+   :maestro/require [:ext
+                     :ext/clojure]}
 
 
   :dev
@@ -83,6 +84,13 @@
   {:extra-deps  {clj-kondo/clj-kondo {:mvn/version "2023.12.15"}}
    :maestro/doc "A linter for Clojure that sparks joy"
    :maestro/url "https://github.com/clj-kondo/clj-kondo"}
+
+
+  :ext/clojure
+
+  {:extra-deps  {org.clojure/clojure {:mvn/version "1.11.1"}}
+   :maestro/doc "Ensures a specific version of Clojure"
+   :maestro/url "https://github.com/clojure/clojure"}
 
 
   :ext/clojure.tools.build

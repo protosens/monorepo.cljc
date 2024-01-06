@@ -64,7 +64,8 @@
    (clojure
     (str "-M:test " (clojure.string/join " " *command-line-args*)))}},
  :deps
- {babashka/process {:mvn/version "0.5.21"},
+ {org.clojure/clojure {:mvn/version "1.11.1"},
+  babashka/process {:mvn/version "0.5.21"},
   babashka/fs {:mvn/version "0.5.20"},
   selmer/selmer {:mvn/version "1.12.59"},
   clj-kondo/clj-kondo {:mvn/version "2023.12.15"},
