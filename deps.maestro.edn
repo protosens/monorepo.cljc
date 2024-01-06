@@ -83,14 +83,6 @@
    :maestro/url "https://github.com/borkdude/quickdoc"}
 
 
-  :ext/quickdoc.jvm
-
-  {:extra-deps  {io.github.borkdude/quickdoc {:deps/root "jvm"
-                                              :git/sha   "fc5a18bb419ccac3c8769aa0761384025b27f68c"}}
-   :maestro/doc "Exactly like `:ext/quickdoc` but works on the JVM by requiring Clj-kondo"
-   :maestro/url "https://github.com/borkdude/quickdoc"}
-
-
   :ext/selmer
 
   {:extra-deps  {selmer/selmer {:mvn/version "1.12.55"}}
@@ -417,14 +409,11 @@
                                     Works on the JVM is the JVM flavor of Quickdoc is required by the user."
    :maestro/platform+              [:bb]
    :maestro/require                [:ext/babashka.fs
+                                    :ext/clj-kondo
                                     :ext/quickdoc
                                     :module/deps.edn
                                     :module/edn
-                                    :module/maestro
-                                    ;;
-                                    ;; TODO.
-                                    ; {dev :ext/quickdoc.jvm}
-                                    ]
+                                    :module/maestro]
    :maestro/root                   "module/maestro.plugin.quickdoc"
    :maestro.plugin.gitlib/name     protosens/maestro.plugin.quickdoc
    :maestro.plugin.quickdoc/output "module/maestro.plugin.quickdoc/doc/API.md"}
