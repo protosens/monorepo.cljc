@@ -24,6 +24,8 @@ provided.
     - [`module/bb.help`]
     - [`module/maestro.idiom`]
     - [`module/maestro.plugin.build`] 
+- Rename
+    - [`module/lab.bench`] -> [`module/bench`]
 
 
 ---
@@ -67,12 +69,13 @@ Inception.
 
 
 [`module/bb.help`]:                  ../module/ARCHIVE/bb.help/doc/changelog.md
+[`module/bench`]:                    ../module/bench/doc/changelog.md
 [`module/calver`]:                   ../module/calver/doc/changelog.md
 [`module/classpath`]:                ../module/classpath/doc/changelog.md
 [`module/deps.edn`]:                 ../module/deps.edn/doc/changelog.md
 [`module/edn`]:                      ../module/edn/doc/changelog.md
 [`module/git`]:                      ../module/git/doc/changelog.md
-[`module/lab.bench`]:                ../module/lab.bench/doc/changelog.md
+[`module/lab.bench`]:                ../module/bench/doc/changelog.md
 [`module/maestro.idiom`]:            ../module/ARCHIVE/maestro.idiom/doc/changelog.md
 [`module/maestro.plugin.build`]:     ../module/ARCHIVE/maestro.plugin.build/doc/changelog.md
 [`module/maestro.plugin.changelog`]: ../module/maestro.plugin.changelog/doc/changelog.md

@@ -128,6 +128,19 @@
   ;; MODULES
 
 
+  :module/bench
+
+  {:extra-paths                    ["module/bench/src/main/clj"]
+   :maestro/doc                    "Higher-level helpers for [Criterium](https://github.com/hugoduncan/criterium)."
+   :maestro/experimental?          true
+   :maestro/platform+              [:jvm]
+   :maestro/require                [:ext/criterium]
+   :maestro/root                   "module/bench"
+   :maestro.plugin.gitlib/name     protosens/bench
+   :maestro.plugin.quickdoc/output "module/bench/doc/API.md"}
+
+  ;---
+
   :module/classpath
 
   {:extra-paths                    ["module/classpath/src/main/clj"]
@@ -253,19 +266,6 @@
 
   {:extra-paths     ["module/graph.dfs/src/test/clj/"]
    :maestro/require [:module/graph.dfs]}
-
-  ;---
-
-  :module/lab.bench
-
-  {:extra-paths                    ["module/lab.bench/src/main/clj"]
-   :maestro/doc                    "Higher-level helpers for [Criterium](https://github.com/hugoduncan/criterium)."
-   :maestro/experimental?          true
-   :maestro/platform+              [:jvm]
-   :maestro/require                [:ext/criterium]
-   :maestro/root                   "module/lab.bench"
-   :maestro.plugin.gitlib/name     protosens/lab.bench
-   :maestro.plugin.quickdoc/output "module/lab.bench/doc/API.md"}
 
   ;---
 
