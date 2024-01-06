@@ -1,72 +1,55 @@
 {:min-bb-version "0.8.0",
  :pods {clj-kondo/clj-kondo {:version "2023.12.15"}},
  :tasks
- {changelog+
-  {:doc "Template all changelogs with the last stable tag",
-   :maestro/doc
-   "Changelogs use `{{ next-release }}` as a placeholder for the next\n                   stable tag.",
-   :requires ([protosens.task.changelog]),
-   :task (protosens.task.changelog/main)},
-  deps
-  {:doc "",
-   :requires
-   ([protosens.maestro]
-    [protosens.maestro.plugin.bb]
-    [protosens.maestro.plugin.kaocha]),
+ {deps
+  {:doc "Prepares `deps.edn` for the given aliases",
+   :requires ([protosens.maestro] [protosens.maestro.plugin.kaocha]),
    :task
    (do
     (->
      (protosens.maestro/sync)
      (protosens.maestro.plugin.kaocha/sync))
-    (protosens.maestro.plugin.bb/sync :module/task))},
+    (run 'deps:bb))},
+  deps:bb
+  {:doc "Syncs `bb.edn` with `bb.maestro.edn` and `deps.maestro.edn`",
+   :requires ([protosens.maestro.plugin.bb]),
+   :task (protosens.maestro.plugin.bb/sync :module/task)},
   deps:bb:check
-  {:doc "",
+  {:doc
+   "Checks if `bb.edn` is in sync with `bb.maestro.edn` and `deps.maestro.edn`",
    :requires ([protosens.maestro.plugin.bb]),
    :task (protosens.maestro.plugin.bb/check :module/task)},
-  expose
-  {:doc "Expose modules meant to be consumed as Git libraries",
-   :maestro/doc
-   "By generating a custom `deps.edn` file in the `:meastro/root` of aliases that\n                   have a `:maestro.git.lib/name`.\n                   \n                   Consumers can then require the repository as a Git dependency and point to a\n                   particular module using `:deps/root`.",
+  gitlib
+  {:doc "Generates custom `deps.edn` files for public modules",
    :requires ([protosens.maestro.plugin.gitlib]),
    :task (protosens.maestro.plugin.gitlib/expose)},
-  expose:local
+  gitlib:local
   {:doc
-   "Like `expose` but Git URL will point to the repository directory",
-   :maestro/doc
-   "Only for testing.\n                  \n                   Allows testing exposition and running tasks like `req:verify` without having\n                   to push commits.",
+   "Like `gitlib` but dependencies to other modules are expressed using file paths",
    :requires ([protosens.maestro.plugin.gitlib]),
    :task (protosens.maestro.plugin.gitlib/expose-local)},
   lint
-  {:doc "Lint Clojure code throughout the whole repository",
-   :maestro/doc
-   "Using `clj-kondo` which must be accessible in the terminal.\n\n                   See the `lint:prepare` task which is necessary for initialization.",
+  {:doc "Lints `:paths` from `deps.edn` with Clj-kondo",
    :requires ([protosens.maestro.plugin.clj-kondo]),
    :task (protosens.maestro.plugin.clj-kondo/lint)},
   lint:prepare
-  {:doc "Prepare for `lint`",
-   :maestro/doc
-   "Must be called prior to using the `lint` task and ideally when dependencies are\n                   updated. This will lint and cache dependencies as well as copying configuration\n                   files.",
+  {:doc "Prepares everything for `lint`",
    :requires ([protosens.maestro.plugin.clj-kondo]),
    :task (protosens.maestro.plugin.clj-kondo/prepare)},
-  module:listing
-  {:doc "Generate `./module/README.md`",
-   :maestro/doc "Lists all exposed and private modules.",
-   :requires ([protosens.maestro.idiom.listing]),
-   :task (protosens.maestro.idiom.listing/main "module/README.md")},
-  module:readme
-  {:doc "Generate READMEs for all modules",
-   :maestro/doc
-   "For each module, writes a header composed of the root and relevant information (link to\n                   API, Git dependency info, etc).\n\n                   If `./doc/README.md` exists relative to the root, its content is appended.",
-   :requires ([protosens.maestro.idiom.readme]),
-   :task (protosens.maestro.idiom.readme/main)},
   quickdoc
-  {:doc "Generate documentation for modules",
-   :maestro/doc
-   "Generate a markdown file for each module specifying a path via\n                   `:maestro.plugin.quickdoc.path/output`.\n                   \n                   It will contain a full description of all namespaces belonging to the module,\n                   with vars and usage.",
+  {:doc "Generates API documentation for modules",
    :requires ([protosens.maestro.plugin.quickdoc]),
    :task (protosens.maestro.plugin.quickdoc/module+)},
+  readme:listing
+  {:doc "Generates `./module/README.md`",
+   :requires ([protosens.maestro.plugin.readme]),
+   :task (protosens.maestro.plugin.readme/listing)},
+  readme:module+
+  {:doc "Generates READMEs for all modules",
+   :requires ([protosens.maestro.plugin.readme]),
+   :task (protosens.maestro.plugin.readme/module+)},
   release
-  {:doc "",
+  {:doc "Prepares everything for a full release",
    :requires ([protosens.task.release]),
    :task (protosens.task.release/now)}},
  :deps
