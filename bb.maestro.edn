@@ -92,4 +92,11 @@
    :task     (protosens.task.release/now)}
 
 
+  test
+  {:doc  "Tests aliases in `deps.edn` using Kaocha"
+   :task (clojure (str "-M:test "
+                       (clojure.string/join " "
+                                            *command-line-args*)))}
+
+
   }}
