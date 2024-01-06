@@ -4,6 +4,7 @@
             [protosens.git                      :as $.git]
             [protosens.git.release              :as $.git.release]
             [protosens.maestro.plugin           :as $.maestro.plugin]
+            [protosens.maestro.plugin.bb        :as $.maestro.plugin.bb]
             [protosens.maestro.plugin.changelog :as $.maestro.plugin.changelog]
             [protosens.maestro.plugin.gitlib    :as $.maestro.plugin.gitlib]
             [protosens.maestro.plugin.quickdoc  :as $.maestro.plugin.quickdoc]
@@ -20,6 +21,8 @@
   ($.maestro.plugin/step (format "Preparing new release `%s`"
                                  version))
   ($.maestro.plugin/step "This script will use Maestro plugins to:")
+  ($.maestro.plugin/step 1
+                         "Ensure `bb.edn` is in sync")
   ($.maestro.plugin/step 1
                          "Expose public modules as gitlibs")
   ($.maestro.plugin/step 1
@@ -38,6 +41,7 @@
 
   [version]
 
+  ($.maestro.plugin.bb/check :module/task)
   ($.maestro.plugin.gitlib/expose)
   ($.maestro.plugin.quickdoc/module+)
   ($.maestro.plugin.changelog/template {:next-release version})
