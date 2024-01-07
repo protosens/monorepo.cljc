@@ -124,6 +124,14 @@
                  "-p" "14563"]}
 
 
+  :ext/nvd-clojure
+
+  {:extra-deps       {nvd-clojure/nvd-clojure {:mvn/version "3.6.0"}}
+   :maestro/doc      "National Vulnerability Database dependency checker for Clojure projects"
+   :maestro/flatten? false
+   :maestro/url      "https://github.com/rm-hull/nvd-clojure"}
+
+
   :ext/portal
 
   {:extra-deps  {djblue/portal {:mvn/version "0.51.0"}}

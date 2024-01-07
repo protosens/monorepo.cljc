@@ -120,8 +120,13 @@
   (update state
           ::deps-edn
           (fn [deps-edn]
-            ($.deps.edn/flatten deps-edn
-                                ($.maestro.alias/accepted state)))))
+            (let [alias->definition (deps-edn :aliases)]
+              ($.deps.edn/flatten deps-edn
+                                  (filter (fn [alias]
+                                            (not (false? (get-in alias->definition
+                                                                 [alias
+                                                                  :maestro/flatten?]))))
+                                          ($.maestro.alias/accepted state)))))))
 
 
 

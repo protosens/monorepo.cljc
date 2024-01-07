@@ -1,5 +1,5 @@
 {:min-bb-version "0.8.0",
- :pods {clj-kondo/clj-kondo {:version "2023.12.15"}},
+ :pods #:clj-kondo{clj-kondo {:version "2023.12.15"}},
  :tasks
  {deps
   {:doc "Prepares `deps.edn` for the given aliases",
@@ -19,6 +19,11 @@
    "Checks if `bb.edn` is in sync with `bb.maestro.edn` and `deps.maestro.edn`",
    :requires ([protosens.maestro.plugin.bb]),
    :task (protosens.maestro.plugin.bb/check :module/task)},
+  deps:cve
+  {:doc
+   "Analyses dependencies from `deps.edn` for vulnerabilities (must contain `:ext/nvd-clojure`)",
+   :requires ([protosens.task.cve]),
+   :task (protosens.task.cve/run)},
   deps:newest
   {:doc "Searches for newest versions of external dependencies",
    :task
@@ -44,7 +49,7 @@
    :task (protosens.maestro.plugin.clj-kondo/prepare)},
   nrepl
   {:doc
-   "Runs `deps.edn` with an NREPL server (`:dev` alias must be active)",
+   "Runs `deps.edn` with an NREPL server (must contain `:ext/nrepl`)",
    :task
    (clojure
     (str
@@ -67,19 +72,20 @@
    :requires ([protosens.task.release]),
    :task (protosens.task.release/now)},
   test
-  {:doc "Tests aliases in `deps.edn` using Kaocha",
+  {:doc
+   "Tests aliases in `deps.edn` using Kaocha (must contain `:test`)",
    :task
    (clojure
     (str "-M:test " (clojure.string/join " " *command-line-args*)))}},
  :deps
- {org.clojure/clojure {:mvn/version "1.11.1"},
-  babashka/process {:mvn/version "0.5.21"},
-  babashka/fs {:mvn/version "0.5.20"},
-  selmer/selmer {:mvn/version "1.12.59"},
-  clj-kondo/clj-kondo {:mvn/version "2023.12.15"},
-  lambdaisland/kaocha {:mvn/version "1.87.1366"},
+ {org.clojure/clojure #:mvn{:version "1.11.1"},
+  babashka/process #:mvn{:version "0.5.21"},
+  babashka/fs #:mvn{:version "0.5.20"},
+  selmer/selmer #:mvn{:version "1.12.59"},
+  clj-kondo/clj-kondo #:mvn{:version "2023.12.15"},
+  lambdaisland/kaocha #:mvn{:version "1.87.1366"},
   io.github.borkdude/quickdoc
-  {:git/sha "d9ac51475ea46e1caf9b059f2a72ddfeeec6111c"}},
+  #:git{:sha "d9ac51475ea46e1caf9b059f2a72ddfeeec6111c"}},
  :paths
  ["module/task/src/main/clj/"
   "module/calver/src/main/clj/"

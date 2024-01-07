@@ -1,0 +1,5 @@
+;;
+;; See https://github.com/rm-hull/nvd-clojure?tab=readme-ov-file#configuration-options
+;;
+{:output-dir       "nvd/target"
+ :suppression-file "nvd/suppress.xml"}

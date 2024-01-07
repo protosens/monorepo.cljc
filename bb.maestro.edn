@@ -14,6 +14,7 @@
  :tasks
  {
 
+
   deps
   {:doc      "Prepares `deps.edn` for the given aliases"
    :requires ([protosens.maestro]
@@ -34,6 +35,12 @@
   {:doc      "Checks if `bb.edn` is in sync with `bb.maestro.edn` and `deps.maestro.edn`"
    :requires ([protosens.maestro.plugin.bb])
    :task     (protosens.maestro.plugin.bb/check :module/task)}
+
+
+  deps:cve
+  {:doc      "Analyses dependencies from `deps.edn` for vulnerabilities (must contain `:ext/nvd-clojure`)"
+   :requires ([protosens.task.cve])
+   :task     (protosens.task.cve/run)}
 
 
   deps:newest
@@ -69,7 +76,7 @@
 
 
   nrepl
-  {:doc  "Runs `deps.edn` with an NREPL server (`:dev` alias must be active)"
+  {:doc  "Runs `deps.edn` with an NREPL server (must contain `:ext/nrepl`)"
    :task (clojure (str "-M:ext/nrepl "
                        (clojure.string/join " "
                                             *command-line-args*)))}
@@ -100,7 +107,7 @@
 
 
   test
-  {:doc  "Tests aliases in `deps.edn` using Kaocha"
+  {:doc  "Tests aliases in `deps.edn` using Kaocha (must contain `:test`)"
    :task (clojure (str "-M:test "
                        (clojure.string/join " "
                                             *command-line-args*)))}
