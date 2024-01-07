@@ -7,6 +7,27 @@
             [protosens.string :as $.string]))
 
 
+;;;;;;;;;; Helpers
+
+
+(defmacro bound*
+
+  [form]
+
+  (if (System/getProperty "babashka.version")
+    `(try
+       ~form
+       false
+       (catch Throwable _ex
+         true))
+    `(= StringIndexOutOfBoundsException
+        (try
+          ~form
+          nil
+          (catch Throwable ex#
+            (class ex#))))))
+
+
 ;;;;;;;;;; Values
 
 
@@ -50,28 +71,28 @@
 
     "Failure"
 
-    (T/is (thrown? Exception
-                   ($.string/cut-out "12345"
-                                     2
-                                     100))
+    (T/is (bound*
+            ($.string/cut-out "12345"
+                              2
+                              100))
           "End too big")
 
-    (T/is (thrown? Exception
-                   ($.string/cut-out "12345"
-                                     3
-                                     2))
+    (T/is (bound*
+            ($.string/cut-out "12345"
+                              3
+                              2))
           "Start > end")
 
-    (T/is (thrown? Exception
-                   ($.string/cut-out "12345"
-                                     -1
-                                     2))
+    (T/is (bound*
+            ($.string/cut-out "12345"
+                              -1
+                              2))
           "Negative start")
 
-    (T/is (thrown? Exception
-                   ($.string/cut-out "12345"
-                                     2
-                                     -1))
+    (T/is (bound*
+            ($.string/cut-out "12345"
+                              2
+                              -1))
           "Negative end")))
 
 
@@ -150,13 +171,13 @@
 
     "Failure"
 
-    (T/is (thrown? Exception
-                   ($.string/n-first "test"
-                                     100)))
+    (T/is (bound*
+            ($.string/n-first "test"
+                              100)))
 
-    (T/is (thrown? Exception
-                   ($.string/n-first "test"
-                                     -1)))))
+    (T/is (bound*
+            ($.string/n-first "test"
+                              -1)))))
 
 
 
@@ -178,13 +199,13 @@
 
     "Failure"
 
-    (T/is (thrown? Exception
-                   ($.string/n-last "test"
-                                    100)))
+    (T/is (bound*
+            ($.string/n-last "test"
+                             100)))
 
-    (T/is (thrown? Exception
-                   ($.string/n-last "test"
-                                    -1)))))
+    (T/is (bound*
+            ($.string/n-last "test"
+                             -1)))))
 
 
 
@@ -270,14 +291,14 @@
 
      "Failure"
 
-     (T/is (thrown? Exception
-                    ($.string/trunc-left "12345"
-                                         100))
+     (T/is (bound*
+             ($.string/trunc-left "12345"
+                                  100))
            "Input too small")
 
-     (T/is (thrown? Exception
-                    ($.string/trunc-left "12345"
-                                         -1))
+     (T/is (bound*
+             ($.string/trunc-left "12345"
+                                  -1))
            "Negative index")))
 
 
@@ -304,12 +325,12 @@
 
      "Failure"
 
-     (T/is (thrown? Exception
-                    ($.string/trunc-right "12345"
-                                          100))
+     (T/is (bound*
+              ($.string/trunc-right "12345"
+                                    100))
            "Input too small")
 
-     (T/is (thrown? Exception
-                    ($.string/trunc-right "12345"
-                                          -1))
+     (T/is (bound*
+             ($.string/trunc-right "12345"
+                                   -1))
            "Negative index")))

@@ -3,10 +3,11 @@
   (:refer-clojure :exclude [first
                             last])
   (:require [clojure.test          :as T]
-            [protosens.string.char :as $.string.char]))
+            [protosens.string.char :as $.string.char]
+            [protosens.test.string :as $.test.string]))
 
 
-;;;;;;;;;;
+;;;;;;;;;; Tests
 
 
 (T/deftest at
@@ -20,9 +21,9 @@
                                 1000))
         "Beyond")
 
-  (T/is (thrown? Exception
-                 ($.string.char/at "bar"
-                                   -1))
+  (T/is ($.test.string/bound*
+          ($.string.char/at "bar"
+                            -1))
         "Negative index fails"))
 
 
@@ -57,9 +58,9 @@
                                     1000))
         "Beyond")
 
-  (T/is (thrown? Exception
-                 ($.string.char/at-end "foo bar"
-                                       -1))
+  (T/is ($.test.string/bound*
+          ($.string.char/at-end "foo bar"
+                                -1))
         "Negative index fails"))
 
 
