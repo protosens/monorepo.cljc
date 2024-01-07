@@ -2,14 +2,35 @@
 
   "Simple classpath utilities that happens to be handy once in a while."
 
-  (:require #?(:bb [babashka.classpath :as bb.classpath])
-            [clojure.string    :as string]))
+  (:require #?(:bb  [babashka.classpath :as bb.classpath])
+            #?(:bb  [babashka.deps      :as bb.deps])
+                    [clojure.string     :as string]
+            #?(:clj [protosens.process  :as $.process])))
+
 
 
 (declare split)
 
 
 ;;;;;;;;;;
+
+
+(defn compute
+
+  "Computes the classpath of `deps.edn`."
+
+  []
+
+  #?(:bb
+     (with-out-str
+       (bb.deps/clojure ["-Spath"]))
+     ,
+     :clj
+     (-> ($.process/run ["clojure"
+                         "-Spath"])
+         (:out)
+         (slurp))))
+
 
 
 (defn current

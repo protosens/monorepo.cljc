@@ -10,7 +10,6 @@ repository.
 ## `{{ next-release }}`
 
 - Remove
-    - `$.classpath/compute`
     - `$.classpath/pprint`
 
 ---

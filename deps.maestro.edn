@@ -564,6 +564,7 @@
    :maestro/doc       "Merges dependencies and paths for Babashka tasks."
    :maestro/platform+ [:bb]
    :maestro/require   [:module/calver
+                       :module/classpath
                        :module/git
                        :module/maestro
                        :module/maestro.plugin.bb

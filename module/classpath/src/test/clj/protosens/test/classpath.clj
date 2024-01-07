@@ -7,6 +7,12 @@
 ;;;;;;;;;;
 
 
+(T/deftest compute
+
+  (T/is (string? ($.classpath/compute))))
+
+
+
 (T/deftest current
 
   (T/is (string? ($.classpath/current)))
