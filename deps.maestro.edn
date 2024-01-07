@@ -564,7 +564,8 @@
   {:extra-paths       ["module/task/src/main/clj/"]
    :maestro/doc       "Merges dependencies and paths for Babashka tasks."
    :maestro/platform+ [:bb]
-   :maestro/require   [:module/calver
+   :maestro/require   [:ext/kaocha
+                       :module/calver
                        :module/classpath
                        :module/git
                        :module/maestro
@@ -581,10 +582,13 @@
 
   :module/term.style
 
-  {:extra-paths                ["module/term.style/src/main/clj/"]
-   :maestro/doc                "ANSI escape codes for beautiful terminal outputs."
-   :maestro/root               "module/term.style/"
-   :maestro.plugin.gitlib/name protosens/term.style}
+  {:extra-paths                    ["module/term.style/src/main/clj/"]
+   :maestro/doc                    "ANSI escape codes for beautiful terminal outputs."
+   :maestro/platform+              [:bb
+                                    :jvm]
+   :maestro/root                   "module/term.style/"
+   :maestro.plugin.gitlib/name     protosens/term.style
+   :maestro.plugin.quickdoc/output "module/term.style/doc/API.md"}
 
 
   }}
