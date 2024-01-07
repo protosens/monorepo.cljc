@@ -382,6 +382,7 @@
    :maestro/platform+              [:bb
                                     :jvm]              
    :maestro/require                [:ext/clj-kondo
+                                    :module/classpath
                                     :module/maestro
                                     :module/term.style]
    :maestro/root                   "module/maestro.plugin.clj-kondo/"

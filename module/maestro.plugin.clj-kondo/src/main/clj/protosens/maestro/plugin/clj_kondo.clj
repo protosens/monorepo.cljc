@@ -1,6 +1,7 @@
 (ns protosens.maestro.plugin.clj-kondo
 
-  (:require [protosens.maestro.plugin                :as $.maestro.plugin]
+  (:require [protosens.classpath                     :as $.classpath]
+            [protosens.maestro.plugin                :as $.maestro.plugin]
             [protosens.maestro.plugin.clj-kondo.impl :as $.maestro.plugin.clj-kondo.impl]
             [protosens.term.style                    :as $.term.style]))
 
@@ -87,11 +88,11 @@
     (delay
       ($.maestro.plugin/step "Preparing everything for Clj-kondo")
       ($.maestro.plugin/step "Computing classpath based on `deps.edn`")
-      (let [cp ($.maestro.plugin.clj-kondo.impl/classpath)]
+      (let [cp ($.classpath/compute)]
         ($.maestro.plugin/step "Running analysis")
         ($.maestro.plugin.clj-kondo.impl/run
           {:copy-configs true
            :dependencies true
-           :lint         cp
+           :lint         [cp]
            :parallel     true})
         ($.maestro.plugin/done "Clj-kondo is ready")))))
