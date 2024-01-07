@@ -29,7 +29,7 @@
    :task
    (do
     (binding [*command-line-args* [":GOD"]] (run 'deps))
-    (clojure "-M:ext/antq -m antq.core"))},
+    (clojure "-T:ext/antq antq.tool/outdated"))},
   gitlib
   {:doc "Generates custom `deps.edn` files for public modules",
    :requires ([protosens.maestro.plugin.gitlib]),

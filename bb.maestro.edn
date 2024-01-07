@@ -48,7 +48,7 @@
    :task (do
             (binding [*command-line-args* [":GOD"]]
               (run 'deps))
-            (clojure "-M:ext/antq -m antq.core"))}
+            (clojure "-T:ext/antq antq.tool/outdated"))}
 
 
   gitlib
