@@ -1,8 +1,7 @@
 (ns protosens.task.cve
 
-  (:require [babashka.deps     :as bb.deps]
-            [clojure.string    :as C.string]
-            [protosens.process :as $.process]))
+  (:require [protosens.classpath :as $.classpath]
+            [protosens.process   :as $.process]))
 
 
 ;;;;;;;;;;
@@ -12,8 +11,7 @@
 
   []
 
-  (let [cp (with-out-str
-             (bb.deps/clojure ["-Spath"]))]
+  (let [cp ($.classpath/compute)]
     @($.process/shell ["clojure"
                        "-T:ext/nvd-clojure"
                        "nvd.task/check"
