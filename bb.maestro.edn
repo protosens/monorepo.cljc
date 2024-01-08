@@ -37,18 +37,18 @@
    :task     (protosens.maestro.plugin.bb/check :module/task)}
 
 
-  deps:cve
-  {:doc      "Analyses dependencies from `deps.edn` for vulnerabilities (must contain `:ext/nvd-clojure`)"
-   :requires ([protosens.task.nvd])
-   :task     (protosens.task.nvd/check)}
-
-
   deps:newest
   {:doc  "Searches for newest versions of external dependencies"
    :task (do
             (binding [*command-line-args* [":GOD"]]
               (run 'deps))
             (clojure "-T:ext/antq antq.tool/outdated"))}
+
+
+  deps:nvd
+  {:doc      "Analyses dependencies from `deps.edn` for vulnerabilities (must contain `:ext/nvd-clojure`)"
+   :requires ([protosens.task.nvd])
+   :task     (protosens.task.nvd/check)}
 
 
   gitlib
