@@ -127,7 +127,7 @@
 
   :ext/nvd-clojure
 
-  {:extra-deps       {nvd-clojure/nvd-clojure {:mvn/version "3.6.0"}}
+  {:extra-deps       {nvd-clojure/nvd-clojure {:mvn/version "4.0.0"}}
    :maestro/doc      "National Vulnerability Database dependency checker for Clojure projects"
    :maestro/flatten? false
    :maestro/url      "https://github.com/rm-hull/nvd-clojure"}
@@ -573,7 +573,8 @@
    :maestro/doc       "Merges dependencies and paths for Babashka tasks."
    :maestro/platform+ [:bb
                        :jvm]
-   :maestro/require   [:ext/kaocha
+   :maestro/require   [:ext/babashka.fs
+                       :ext/kaocha
                        :module/calver
                        :module/classpath
                        :module/git

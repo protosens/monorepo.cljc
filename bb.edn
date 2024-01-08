@@ -23,7 +23,7 @@
   {:doc
    "Analyses dependencies from `deps.edn` for vulnerabilities (must contain `:ext/nvd-clojure`)",
    :requires ([protosens.task.cve]),
-   :task (protosens.task.cve/run)},
+   :task (protosens.task.cve/check)},
   deps:newest
   {:doc "Searches for newest versions of external dependencies",
    :task
@@ -88,9 +88,9 @@
     (str "-M:test " (clojure.string/join " " *command-line-args*)))}},
  :deps
  {org.clojure/clojure #:mvn{:version "1.11.1"},
+  babashka/fs #:mvn{:version "0.5.20"},
   lambdaisland/kaocha #:mvn{:version "1.87.1366"},
   babashka/process #:mvn{:version "0.5.21"},
-  babashka/fs #:mvn{:version "0.5.20"},
   selmer/selmer #:mvn{:version "1.12.59"},
   clj-kondo/clj-kondo #:mvn{:version "2023.12.15"},
   io.github.borkdude/quickdoc
