@@ -191,7 +191,7 @@
                           (vector? x)
                           (first)))
                       (keep f
-                            (in-cp-dir+ option+)))]
+                            (distinct (in-cp-dir+ option+))))]
      (run! (fn [x]
              (prn (list 'require
                         x))

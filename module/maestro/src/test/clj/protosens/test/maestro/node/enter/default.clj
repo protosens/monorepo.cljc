@@ -1,9 +1,9 @@
 (ns protosens.test.maestro.node.enter.default
 
-  (:require [clojure.test           :as       T]
-            [protosens.maestro      :as       $.maestro]
-            [protosens.maestro.node :as-alias $.maestro.node]
-            [protosens.test.maestro :refer    [-t-path]]))
+  (:require [clojure.test                :as       T]
+            [protosens.maestro           :as       $.maestro]
+            [protosens.maestro.node      :as-alias $.maestro.node]
+            [protosens.test.util.maestro :as       $.test.util.maestro]))
 
 
 ;;;;;;;;;;
@@ -16,78 +16,89 @@
 
     "Core assumptions about graph traversal"
 
-    (-t-path "No deps (but mode activated)"
-             [:m/a]
-             {:m/a {}}
-             [[:m 0] [:m/a 0]])
+    ($.test.util.maestro/t-path
+      [:m/a]
+      {:m/a {}}
+      [[:m 0] [:m/a 0]]
+      "No deps (but mode activated)")
 
-    (-t-path "Single dep"
-             [:m/a]
-             {:m/a {:maestro/require [:m/b]}
-              :m/b {}}
-             [[:m 0] [:m/a 0] [:m/b 1]])
+    ($.test.util.maestro/t-path
+      [:m/a]
+      {:m/a {:maestro/require [:m/b]}
+       :m/b {}}
+      [[:m 0] [:m/a 0] [:m/b 1]]
+      "Single dep")
 
-    (-t-path  "Input deduplication"
-              [:m/a :m/a]
-              {:m/a {:maestro/require [:m/b]}
-               :m/b {}}
-              [[:m 0] [:m/a 0] [:m/b 1]])
+    ($.test.util.maestro/t-path
+      [:m/a :m/a]
+      {:m/a {:maestro/require [:m/b]}
+       :m/b {}}
+      [[:m 0] [:m/a 0] [:m/b 1]]
+      "Input deduplication")
 
-    (-t-path "Input deduplication after transitive processing"
-             [:m/a :m/b]
-             {:m/a {:maestro/require [:m/b]}
-              :m/b {}}
-             [[:m 0] [:m/a 0] [:m/b 1]])
+    ($.test.util.maestro/t-path
+      [:m/a :m/b]
+      {:m/a {:maestro/require [:m/b]}
+       :m/b {}}
+      [[:m 0] [:m/a 0] [:m/b 1]]
+      "Input deduplication after transitive processing")
 
-    (-t-path "Transitive dep"
-             [:m/a]
-             {:m/a {:maestro/require [:m/b]}
-              :m/b {:maestro/require [:m/c]}
-              :m/c {}}
-             [[:m 0] [:m/a 0] [:m/b 1] [:m/c 2]])
+    ($.test.util.maestro/t-path
+      [:m/a]
+      {:m/a {:maestro/require [:m/b]}
+       :m/b {:maestro/require [:m/c]}
+       :m/c {}}
+      [[:m 0] [:m/a 0] [:m/b 1] [:m/c 2]]
+      "Transitive dep")
 
-    (-t-path "Transitive dep with input deduplication"
-             [:m/a :m/b]
-             {:m/a {:maestro/require [:m/b]}
-              :m/b {:maestro/require [:m/c]}
-              :m/c {}}
-             [[:m 0] [:m/a 0] [:m/b 1] [:m/c 2]])
+    ($.test.util.maestro/t-path
+      [:m/a :m/b]
+      {:m/a {:maestro/require [:m/b]}
+       :m/b {:maestro/require [:m/c]}
+       :m/c {}}
+      [[:m 0] [:m/a 0] [:m/b 1] [:m/c 2]]
+      "Transitive dep with input deduplication")
 
-    (-t-path "Transitive deps with transitive deduplication"
-             [:m/a]
-             {:m/a {:maestro/require [:m/b]}
-              :m/b {:maestro/require [:m/c
-                                      :m/d]}
-              :m/c {:maestro/require [:m/d]}
-              :m/d {}} 
-             [[:m 0] [:m/a 0] [:m/b 1] [:m/c 2] [:m/d 3]])
+    ($.test.util.maestro/t-path
+      [:m/a]
+      {:m/a {:maestro/require [:m/b]}
+       :m/b {:maestro/require [:m/c
+                               :m/d]}
+       :m/c {:maestro/require [:m/d]}
+       :m/d {}} 
+      [[:m 0] [:m/a 0] [:m/b 1] [:m/c 2] [:m/d 3]]
+      "Transitive deps with transitive deduplication")
 
-    (-t-path "Dep but relevant mode not activated"
-             [:m/a]
-             {:m/a {:maestro/require [:t/a]}
-              :t/a {}}
-             [[:m 0] [:m/a 0]])
+    ($.test.util.maestro/t-path
+      [:m/a]
+      {:m/a {:maestro/require [:t/a]}
+       :t/a {}}
+      [[:m 0] [:m/a 0]]
+      "Dep but relevant mode not activated")
 
-    (-t-path "Dep by preactivating relevant mode"
-             [:t :m/a]
-             {:m/a {:maestro/require [:t/a]}
-              :t/a {}}
-             [[:t 0] [:m 0] [:m/a 0] [:t/a 1]])
+    ($.test.util.maestro/t-path
+      [:t :m/a]
+      {:m/a {:maestro/require [:t/a]}
+       :t/a {}}
+      [[:t 0] [:m 0] [:m/a 0] [:t/a 1]]
+      "Dep by preactivating relevant mode")
 
-    (-t-path "Dep by postactivating a mode"
-              [:m/a :t]
-              {:m/a {:maestro/require [:t/a]}
-               :t/a {}}
-              [[:m 0] [:m/a 0] [:t 0]])
-    
-    (-t-path "Transitive deps on mode with further mode activation"
-             [:t :m/a]
-             {:m/a   {:maestro/require [:t/a]}
-              :t/a   {}
-              :t     {:maestro/require [:e
-                                        :e/lib]}
-              :e/lib {}}
-             [[:t 0] [:e 1] [:e/lib 1] [:m 0] [:m/a 0] [:t/a 1]]))
+    ($.test.util.maestro/t-path
+      [:m/a :t]
+      {:m/a {:maestro/require [:t/a]}
+       :t/a {}}
+      [[:m 0] [:m/a 0] [:t 0]]
+      "Dep by postactivating a mode")
+
+    ($.test.util.maestro/t-path
+      [:t :m/a]
+      {:m/a   {:maestro/require [:t/a]}
+       :t/a   {}
+       :t     {:maestro/require [:e
+                                 :e/lib]}
+       :e/lib {}}
+      [[:t 0] [:e 1] [:e/lib 1] [:m 0] [:m/a 0] [:t/a 1]]
+      "Transitive deps on mode with further mode activation"))
 
 
   (T/testing
@@ -122,12 +133,12 @@
 
     "Throws when namespaced aliases are missing"
 
-    (T/is (thrown? Exception
-                   ($.maestro/run [:m/a]
-                                  {}))
-          "Empty")
+    ($.test.util.maestro/t-fail*
+      ($.maestro/run [:m/a]
+                     {})
+      "Empty")
 
-    (T/is (thrown? Exception
-                   ($.maestro/run [:m/a]
-                                  {:aliases {:m/a {:maestro/require [:m/b]}}}))
-          "Missing dep")))
+    ($.test.util.maestro/t-fail*
+      ($.maestro/run [:m/a]
+                     {:aliases {:m/a {:maestro/require [:m/b]}}})
+      "Missing dep")))

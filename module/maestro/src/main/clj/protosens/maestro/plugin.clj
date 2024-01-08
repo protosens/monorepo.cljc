@@ -15,17 +15,15 @@
 ;;;;;;;;;; Private
 
 
+(def ^:no-doc ^:dynamic -*exit-on-fail?*
+
+  (some? (System/getProperty "babashka.version")))
+
+
+
 (def ^:private -*first-intro?
 
   (atom true))
-
-
-
-(defn- -babashka?
-
-  []
-
-  (some? (System/getProperty "babashka.version")))
 
 
 ;;;;;;;;;; Core utilities for plugins
@@ -67,7 +65,7 @@
 
   ([^String message ^Throwable exception-cause]
 
-  (if (-babashka?)
+  (if -*exit-on-fail?*
     (do
       (println)
       (when exception-cause
@@ -82,8 +80,9 @@
                     $.term.style/reset))
       (println)
       (System/exit 1))
-    (throw (Exception. message
-                       exception-cause)))))
+    (throw (ex-info message
+                    {:type ::failure}
+                    exception-cause)))))
 
 
 

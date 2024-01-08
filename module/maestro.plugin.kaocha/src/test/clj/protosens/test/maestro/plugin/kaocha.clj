@@ -4,7 +4,8 @@
   (:require [babashka.fs                     :as bb.fs]
             [clojure.test                    :as T]
             [protosens.edn.read              :as $.edn.read]
-            [protosens.maestro.plugin.kaocha :as $.maestro.plugin.kaocha]))
+            [protosens.maestro.plugin.kaocha :as $.maestro.plugin.kaocha]
+            [protosens.test.util.maestro     :as $.test.util.maestro]))
 
 
 ;;;;;;;;;; Preparations
@@ -100,9 +101,9 @@
 
 (T/deftest -output-path
 
-  (T/is (thrown? Exception
-                 ($.maestro.plugin.kaocha/-output-path {}))
-        "Missing")
+  ($.test.util.maestro/t-fail*
+    ($.maestro.plugin.kaocha/-output-path {})
+    "Missing")
 
   (T/is (let [[dir
                path] (-output)]
@@ -114,26 +115,29 @@
 
 (T/deftest -selector+
 
-  (T/is (thrown? Exception
-                 ($.maestro.plugin.kaocha/-selector+ {})
-                 ($.maestro.plugin.kaocha/-selector+ {:maestro.plugin.kaocha/selector+ nil}))
-        "Missing")
+  ($.test.util.maestro/t-fail*
+    ($.maestro.plugin.kaocha/-selector+ {})
+    "Missing (1)")
 
-  (T/is (thrown? Exception
-                 ($.maestro.plugin.kaocha/-selector+ {:maestro.plugin.kaocha/selector+ 42}))
-        "Not sequential")
+  ($.test.util.maestro/t-fail*
+    ($.maestro.plugin.kaocha/-selector+ {:maestro.plugin.kaocha/selector+ nil})
+    "Missing (2)")
 
-  (T/is (thrown? Exception
-                 ($.maestro.plugin.kaocha/-selector+ {:maestro.plugin.kaocha/selector+ []}))
-        "Empty")
+  ($.test.util.maestro/t-fail*
+    ($.maestro.plugin.kaocha/-selector+ {:maestro.plugin.kaocha/selector+ 42})
+    "Not sequential")
 
-  (T/is (thrown? Exception
-                 ($.maestro.plugin.kaocha/-selector+ {:maestro.plugin.kaocha/selector+ [42]}))
-        "Not keywords")
+  ($.test.util.maestro/t-fail*
+    ($.maestro.plugin.kaocha/-selector+ {:maestro.plugin.kaocha/selector+ []})
+    "Empty")
 
-  (T/is (thrown? Exception
-                 ($.maestro.plugin.kaocha/-selector+ {:maestro.plugin.kaocha/selector+ [:foo]}))
-        "Not qualified keywords")
+  ($.test.util.maestro/t-fail*
+    ($.maestro.plugin.kaocha/-selector+ {:maestro.plugin.kaocha/selector+ [42]})
+    "Not keywords")
+
+  ($.test.util.maestro/t-fail*
+    ($.maestro.plugin.kaocha/-selector+ {:maestro.plugin.kaocha/selector+ [:foo]})
+    "Not qualified keywords")
 
   (T/is (= #{"test"
              "test.release"}

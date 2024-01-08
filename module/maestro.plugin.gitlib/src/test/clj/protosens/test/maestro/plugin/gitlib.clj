@@ -1,7 +1,8 @@
 (ns protosens.test.maestro.plugin.gitlib
 
   (:require [clojure.test                    :as T]
-            [protosens.maestro.plugin.gitlib :as $.maestro.plugin.gitlib]))
+            [protosens.maestro.plugin.gitlib :as $.maestro.plugin.gitlib]
+            [protosens.test.util.maestro     :as $.test.util.maestro]))
 
 
 ;;;;;;;;;; `deps.edn` files for test
@@ -119,32 +120,32 @@
                                                       :m/a))
         "Success")
 
-  (T/is (thrown? Exception
-                 (-> -deps-edn-root
-                     (update-in [:aliases
-                                 :m/a]
-                                dissoc
-                                :maestro/root)
-                     ($.maestro.plugin.gitlib/-prepare-deps-edn "SOME_SHA"
-                                                                :m/a)))
-        "Missing root directory")
+  ($.test.util.maestro/t-fail*
+    (-> -deps-edn-root
+        (update-in [:aliases
+                    :m/a]
+                   dissoc
+                   :maestro/root)
+        ($.maestro.plugin.gitlib/-prepare-deps-edn "SOME_SHA"
+                                                   :m/a))
+    "Missing root directory")
 
-  (T/is (thrown? Exception
-                 (-> -deps-edn-root
-                     (assoc-in [:aliases
-                                :m/a
-                                :extra-paths]
-                               ["../foo"])
-                     ($.maestro.plugin.gitlib/-prepare-deps-edn "SOME_SHA"
-                                                                :m/a)))
-        "Path outside of module")
+  ($.test.util.maestro/t-fail*
+    (-> -deps-edn-root
+        (assoc-in [:aliases
+                   :m/a
+                   :extra-paths]
+                  ["../foo"])
+        ($.maestro.plugin.gitlib/-prepare-deps-edn "SOME_SHA"
+                                                   :m/a))
+    "Path outside of module")
 
-   (T/is (thrown? Exception
-                 (-> -deps-edn-root
-                     (update-in [:aliases
-                                 :m/b]
-                                dissoc
-                                :maestro.plugin.gitlib/name)
-                     ($.maestro.plugin.gitlib/-prepare-deps-edn "SOME_SHA"
-                                                                :m/a)))
-        "Require local modules that is not exposed"))
+  ($.test.util.maestro/t-fail*
+    (-> -deps-edn-root
+        (update-in [:aliases
+                    :m/b]
+                   dissoc
+                   :maestro.plugin.gitlib/name)
+        ($.maestro.plugin.gitlib/-prepare-deps-edn "SOME_SHA"
+                                                   :m/a))
+    "Require local modules that is not exposed"))

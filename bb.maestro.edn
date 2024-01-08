@@ -106,8 +106,21 @@
    :task     (protosens.task.release/now)}
 
 
-  test
-  {:doc  "Tests aliases in `deps.edn` using Kaocha (must contain `:test`)"
+  test:bb
+  {:doc      "Tests current `:test/...` aliases on Babashka"
+   :requires ([babashka.classpath]
+              [kaocha.runner]
+              [protosens.classpath])
+   :task     (do
+               (babashka.classpath/add-classpath (protosens.classpath/compute))
+               (apply kaocha.runner/-main 
+                      (concat ["--config-file"
+                               "kaocha.edn"]
+                              *command-line-args*)))}
+
+
+  test:jvm
+  {:doc  "Tests current `:test/...` aliases on the JVM"
    :task (clojure (str "-M:test "
                        (clojure.string/join " "
                                             *command-line-args*)))}

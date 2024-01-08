@@ -1,31 +1,12 @@
 (ns protosens.test.maestro
 
-  (:require [clojure.string         :as       C.string]
-            [clojure.test           :as       T]
-            [protosens.maestro      :as       $.maestro]
-            [protosens.maestro.node :as-alias $.maestro.node]))
+  (:require [clojure.test                :as       T]
+            [protosens.maestro           :as       $.maestro]
+            [protosens.maestro.node      :as-alias $.maestro.node]
+            [protosens.test.util.maestro :as       $.test.util.maestro]))
 
 
-;;;;;;;;;; Reusable assertions
-
-
-(defn -t-path
-
-  [message input alias-def+ path]
-
-  (let [run (fn [f input-2]
-              (-> (f input-2
-                     {:aliases alias-def+})
-                  (::$.maestro.node/path)))]
-    (T/is (= path
-             (run $.maestro/run
-                  input)
-             (run $.maestro/run-string
-                  (C.string/join input)))
-        message)))
-
-
-;;;;;;;;;; Tests
+;;;;;;;;;;
 
 
 (T/deftest run
@@ -72,7 +53,7 @@
 
 (T/deftest run-string
 
-  (T/is (thrown? Exception
-                 ($.maestro/run-string "42"
-                                       {}))
-        "Not keywords"))
+  ($.test.util.maestro/t-fail*
+    ($.maestro/run-string "42"
+                          {})
+    "Not keywords"))

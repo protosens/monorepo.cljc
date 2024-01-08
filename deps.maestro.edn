@@ -50,6 +50,7 @@
    :maestro/doc     "Provides utilities for testing, notably Kaocha"
    :maestro/require [:ext
                      :module
+                     :test.util
                      :ext/kaocha]}
 
 
@@ -326,11 +327,16 @@
    :maestro.plugin.quickdoc/output "module/maestro/doc/API.md"}
 
 
-
   :test/maestro
 
   {:extra-paths     ["module/maestro/src/test/clj/"]
-   :maestro/require [:module/maestro]}
+   :maestro/require [:module/maestro
+                     :test.util/maestro]}
+
+
+  :test.util/maestro
+
+  {:extra-paths ["module/maestro/src/test.util/clj/"]}
 
   ;---
 
@@ -409,7 +415,8 @@
   :test/maestro.plugin.gitlib
 
   {:extra-paths     ["module/maestro.plugin.gitlib/src/test/clj/"]
-   :maestro/require [:module/maestro.plugin.gitlib]}
+   :maestro/require [:module/maestro.plugin.gitlib
+                     :test.util/maestro]}
 
   ;---
 
@@ -433,7 +440,8 @@
   {:extra-paths     ["module/maestro.plugin.kaocha/src/test/clj/"]
    :maestro/require [:ext/babashka.fs
                      :module/edn
-                     :module/maestro.plugin.kaocha]}
+                     :module/maestro.plugin.kaocha
+                     :test.util/maestro]}
 
   ;---
 
@@ -563,7 +571,8 @@
 
   {:extra-paths       ["module/task/src/main/clj/"]
    :maestro/doc       "Merges dependencies and paths for Babashka tasks."
-   :maestro/platform+ [:bb]
+   :maestro/platform+ [:bb
+                       :jvm]
    :maestro/require   [:ext/kaocha
                        :module/calver
                        :module/classpath

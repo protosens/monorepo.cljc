@@ -1,7 +1,8 @@
 (ns protosens.test.maestro.node.enter
 
   (:require [clojure.test                 :as T]
-            [protosens.maestro.node.enter :as $.maestro.node.enter]))
+            [protosens.maestro.node.enter :as $.maestro.node.enter]
+            [protosens.test.util.maestro  :as $.test.util.maestro]))
 
 
 ;;;;;;;;;;
@@ -11,5 +12,5 @@
 
   (T/is (nil? ($.maestro.node.enter/assert-unqualified :FOO)))
 
-  (T/is (thrown? Exception
-                 ($.maestro.node.enter/assert-unqualified :FOO/bar))))
+  ($.test.util.maestro/t-fail*
+    ($.maestro.node.enter/assert-unqualified :FOO/bar)))
