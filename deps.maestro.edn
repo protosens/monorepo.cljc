@@ -135,7 +135,7 @@
 
   :ext/portal
 
-  {:extra-deps  {djblue/portal {:mvn/version "0.51.0"}}
+  {:extra-deps  {djblue/portal {:mvn/version "0.51.1"}}
    :maestro/doc "Clojure data explorer"
    :maestro/url "https://github.com/djblue/portal"}
 
@@ -153,6 +153,13 @@
   {:extra-deps  {selmer/selmer {:mvn/version "1.12.59"}}
    :maestro/doc "A fast, Django inspired template system"
    :maestro/url "https://github.com/yogthos/selmer"}
+
+
+  :ext/shadow-cljs
+
+  {:extra-deps  {thheller/shadow-cljs {:mvn/version "2.26.2"}}
+   :maestro/doc "Clojurescript compilation made easy"
+   :maestro/url "https://github.com/thheller/shadow-cljs"}
 
 
 

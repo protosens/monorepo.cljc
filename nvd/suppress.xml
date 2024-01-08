@@ -1,11 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
-   <suppress>
-      <notes><![CDATA[
-      Triggered by some dependencies used by `:ext/antq`.
-      Cannot be fixed as of 2024/01/07 and not crucial since merely used with the `deps:newest` task.
-      ]]></notes>
-      <cve>CVE-2022-4244</cve>
-      <cve>CVE-2022-4245</cve>
+
+  <suppress>
+    <notes><![CDATA[
+    Triggered by some dependencies used by `:ext/antq`.
+    Cannot be fixed as of 2024/01/07 and not crucial since merely used with the `deps:newest` task.
+    ]]></notes>
+    <cve>CVE-2022-4244</cve>
+    <cve>CVE-2022-4245</cve>
    </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+    Triggered by `:ext/shadow-cljs`.
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.clojure/clojurescript@.*$</packageUrl>
+    <cve>CVE-2023-0247</cve>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+    Triggered by `:ext/shadow-cljs`.
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.clojure/google\-closure\-library\-third\-party@.*$</packageUrl>
+    <cve>CVE-2020-8910</cve>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+    Triggered by `:ext/shadow-cljs`.
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/com\.google\.javascript/closure\-compiler\-unshaded@.*$</packageUrl>
+    <cve>CVE-2020-8910</cve>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+    Triggered by `:ext/shadow-cljs`.
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/commons\-fileupload/commons\-fileupload@.*$</packageUrl>
+    <cve>CVE-2023-24998</cve>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+    Triggered by `:ext/shadow-cljs`.
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.clojure/google\-closure\-library@.*$</packageUrl>
+    <cve>CVE-2020-8910</cve>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+    Triggered by `:ext/shadow-cljs`.
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/com\.google\.guava/guava@.*$</packageUrl>
+    <cve>CVE-2023-2976</cve>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+    Triggered by `:ext/shadow-cljs`.
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/com\.google\.guava/guava@.*$</packageUrl>
+    <cve>CVE-2020-8908</cve>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+    Triggered by `:ext/shadow-cljs`.
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/io\.undertow/undertow\-core@.*$</packageUrl>
+    <vulnerabilityName>CVE-2023-5379</vulnerabilityName>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+    Triggered by `:ext/shadow-cljs`.
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/io\.undertow/undertow\-core@.*$</packageUrl>
+    <vulnerabilityName>CVE-2016-6311</vulnerabilityName>
+  </suppress>
+
 </suppressions>
