@@ -39,8 +39,8 @@
 
   deps:cve
   {:doc      "Analyses dependencies from `deps.edn` for vulnerabilities (must contain `:ext/nvd-clojure`)"
-   :requires ([protosens.task.cve])
-   :task     (protosens.task.cve/check)}
+   :requires ([protosens.task.nvd])
+   :task     (protosens.task.nvd/check)}
 
 
   deps:newest

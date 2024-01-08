@@ -1,4 +1,4 @@
-(ns protosens.task.cve
+(ns protosens.task.nvd
 
   (:require [babashka.fs              :as bb.fs]
             [protosens.classpath      :as $.classpath]
@@ -9,16 +9,7 @@
 ;;;;;;;;;; Private
 
 
-(defn- -classpath
-
-  []
-
-  ($.maestro.plugin/step "Computing classpath to check from current `deps.edn`")
-  ($.classpath/compute))
-
-
-
-(defn- -nvd-token
+(defn- -api-token
 
   []
 
@@ -33,6 +24,15 @@
                                        path)))))
 
 
+
+(defn- -classpath
+
+  []
+
+  ($.maestro.plugin/step "Computing classpath to check from current `deps.edn`")
+  ($.classpath/compute))
+
+
 ;;;;;;;;;; Public
 
 
@@ -40,11 +40,11 @@
 
   []
 
-  ($.maestro.plugin/intro "protosens.task.cve/check")
+  ($.maestro.plugin/intro "protosens.task.nvd/check")
   ($.maestro.plugin/safe
     (delay
-      (let [cp        (-classpath)
-            nvd-token (-nvd-token)]
+      (let [token (-api-token)
+            cp    (-classpath)]
         ($.maestro.plugin/done "Everything is ready, will now run `:ext/nvd-clojure`")
         @($.process/shell ["clojure"
                            "-T:ext/nvd-clojure"
@@ -54,4 +54,4 @@
                                    cp)
                            ":config-filename"
                            "\"nvd/config.edn\""]
-                          {:extra-env {"NVD_API_TOKEN" nvd-token}})))))
+                          {:extra-env {"NVD_API_TOKEN" token}})))))
