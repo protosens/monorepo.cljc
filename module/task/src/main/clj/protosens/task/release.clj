@@ -10,7 +10,8 @@
             [protosens.maestro.plugin.clj-kondo :as $.maestro.plugin.clj-kondo]
             [protosens.maestro.plugin.gitlib    :as $.maestro.plugin.gitlib]
             [protosens.maestro.plugin.quickdoc  :as $.maestro.plugin.quickdoc]
-            [protosens.maestro.plugin.readme    :as $.maestro.plugin.readme]))
+            [protosens.maestro.plugin.readme    :as $.maestro.plugin.readme]
+            [protosens.task.nvd                 :as $.task.nvd]))
 
 
 ;;;;;;;;;; Helpers
@@ -23,20 +24,16 @@
   ($.maestro.plugin/step (format "Preparing new release `%s`"
                                  version))
   ($.maestro.plugin/step "This script will use Maestro plugins to:")
-  ($.maestro.plugin/step 1
-                         "Lint all modules with Clj-kondo")
-  ($.maestro.plugin/step 1
-                         "Ensure `bb.edn` is in sync")
-  ($.maestro.plugin/step 1
-                         "Expose public modules as gitlibs")
-  ($.maestro.plugin/step 1
-                         "Generate API documentation")
-  ($.maestro.plugin/step 1
-                         "Template changelogs with the new version")
-  ($.maestro.plugin/step 1
-                         "Update `module/README.md`")
-  ($.maestro.plugin/step 1
-                         "Update READMEs for all modules")
+  (doseq [line ["Lint all modules with Clj-kondo"
+                "Ensure `bb.edn` is in sync"
+                "Look for vulnerabilities using NVD"
+                "Expose public modules as gitlibs"
+                "Generate API documentation"
+                "Template changelogs with the new version"
+                "Update `module/README.md`"
+                "Update READMEs for all modules"]]
+    ($.maestro.plugin/step 1
+                           line))
   ($.maestro.plugin/done "Ready to proceed"))
 
 
@@ -50,6 +47,7 @@
   ($.maestro.plugin.clj-kondo/prepare)
   ($.maestro.plugin.clj-kondo/lint)
   ($.maestro.plugin.bb/check :module/task)
+  ($.task.nvd/check)
   ($.maestro.plugin.gitlib/expose)
   ($.maestro.plugin.quickdoc/module+)
   ($.maestro.plugin.changelog/template {:next-release version})

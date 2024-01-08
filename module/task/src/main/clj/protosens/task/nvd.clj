@@ -45,13 +45,17 @@
     (delay
       (let [token (-api-token)
             cp    (-classpath)]
-        ($.maestro.plugin/done "Everything is ready, will now run `:ext/nvd-clojure`")
-        @($.process/shell ["clojure"
-                           "-T:ext/nvd-clojure"
-                           "nvd.task/check"
-                           ":classpath"
-                           (format "\"%s\""
-                                   cp)
-                           ":config-filename"
-                           "\"nvd/config.edn\""]
-                          {:extra-env {"NVD_API_TOKEN" token}})))))
+        ($.maestro.plugin/step "Everything is ready, will now run `:ext/nvd-clojure`")
+        (println)
+        (if (-> ($.process/shell ["clojure"
+                                  "-T:ext/nvd-clojure"
+                                  "nvd.task/check"
+                                  ":classpath"
+                                  (format "\"%s\""
+                                          cp)
+                                  ":config-filename"
+                                  "\"nvd/config.edn\""]
+                                 {:extra-env {"NVD_API_TOKEN" token}})
+                ($.process/success?))
+          ($.maestro.plugin/done "No vulnerabilities found")
+          ($.maestro.plugin/fail "Some vulnerabilities were found"))))))
