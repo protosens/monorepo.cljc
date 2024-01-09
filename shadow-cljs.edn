@@ -8,14 +8,7 @@
  :builds
 
 
- {:dev/node
-
-  {:exports-var protosens.graph.dfs/walk
-   :output-to   "private/tmp/dev_node.js"
-   :target      :node-library}
-
-
-  :test/node
+ {:test/node
 
   {:autorun    true
    :ns-regexp  "protosens.test.*"
