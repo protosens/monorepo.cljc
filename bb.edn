@@ -71,6 +71,13 @@
   {:doc "Prepares everything for a full release",
    :requires ([protosens.task.release]),
    :task (protosens.task.release/now)},
+  shadow
+  {:doc "Runs Shadow-cljs from `deps.edn`",
+   :requires ([protosens.process]),
+   :task
+   (deref
+    (protosens.process/shell
+     (concat ["clojure" "-M:ext/shadow-cljs"] *command-line-args*)))},
   test:bb
   {:doc "Tests current `:test/...` aliases on Babashka",
    :requires
@@ -85,7 +92,31 @@
   {:doc "Tests current `:test/...` aliases on the JVM",
    :task
    (clojure
-    (str "-M:test " (clojure.string/join " " *command-line-args*)))}},
+    (str "-M:test " (clojure.string/join " " *command-line-args*)))},
+  test:jvm:watch
+  {:doc "Like `test:jvm` but in watch mode",
+   :task
+   (binding
+    [*command-line-args* (cons "--watch" *command-line-args*)]
+    (run 'test:jvm))},
+  test:node
+  {:doc "Tests current `deps.edn` on Node with `:ext/shadow-cljs`",
+   :task
+   (binding
+    [*command-line-args* ["compile" ":test/node"]]
+    (run 'shadow))},
+  test:node:advanced
+  {:doc "Like `test:node` but with advanced compilation",
+   :task
+   (binding
+    [*command-line-args* ["release" ":test/node"]]
+    (run 'shadow))},
+  test:node:watch
+  {:doc "Like `test:node` but in watch mode",
+   :task
+   (binding
+    [*command-line-args* ["watch" ":test/node"]]
+    (run 'shadow))}},
  :deps
  {org.clojure/clojure #:mvn{:version "1.11.1"},
   babashka/fs #:mvn{:version "0.5.20"},
