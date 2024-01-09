@@ -8,7 +8,14 @@
  :builds
 
 
- {:test/node
+ {:test/browser
+
+  {:ns-regexp "protosens.test.*"
+   :target    :browser-test
+   :test-dir  "private/tmp/browser_test/"}
+
+
+  :test/node
 
   {:autorun    true
    :ns-regexp  "protosens.test.*"

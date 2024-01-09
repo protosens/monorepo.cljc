@@ -127,6 +127,37 @@
                               *command-line-args*)))}
 
 
+  test:browser
+  {:doc  "Tests current `deps.edn` in the browser with `:ext/shadow-cljs`"
+   :task (do
+           (binding [*command-line-args* ["compile"
+                                          ":test/browser"]]
+             (run 'shadow))
+           (run 'test:browser:open))}
+
+
+  test:browser:advanced
+  {:doc  "Like `test:browser` but with advanced compilation"
+   :task (do
+           (binding [*command-line-args* ["compile"
+                                          ":test/browser"]]
+             (run 'shadow))
+           (run 'test:browser:open))}
+
+
+  test:browser:open
+  {:doc      "Opens a browser tab for running browser tests"
+   :requires ([clojure.java.browse])
+   :task     (clojure.java.browse/browse-url "test_browser.html")}
+
+
+  test:browser:watch
+  {:doc  "Like `test:browser` but in watch mode ; when ready, run `test:browser:open`"
+   :task (binding [*command-line-args* ["watch"
+                                        ":test/browser"]]
+           (run 'shadow))}
+
+
   test:node
   {:doc  "Tests current `deps.edn` on Node with `:ext/shadow-cljs`"
    :task (binding [*command-line-args* ["compile"
