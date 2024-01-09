@@ -52,7 +52,8 @@
                      :module
                      :test.util
                      :ext/shadow-cljs
-                     :ext/kaocha]}
+                     :ext/kaocha
+                     :module/playwright.test.cljs]}
 
 
 
@@ -139,6 +140,14 @@
    :maestro/doc      "National Vulnerability Database dependency checker for Clojure projects"
    :maestro/flatten? false
    :maestro/url      "https://github.com/rm-hull/nvd-clojure"}
+
+
+  :ext/playwright
+
+  {:extra-deps      {com.microsoft.playwright/playwright {:mvn/version "1.40.0"}}
+   :maestro/doc     "Browser testing and automation"
+   :maestro/javadoc "https://javadoc.io/doc/com.microsoft.playwright/playwright/latest/index.html"
+   :maestro/url     "https://github.com/microsoft/playwright-java"}
 
 
   :ext/portal
@@ -254,7 +263,8 @@
 
   :module/dev
 
-  {:extra-paths     ["module/dev/src/dev/clj/"]
+  {:extra-paths     ["module/dev/src/dev/clj/"
+                     "private/workspace/"]
    :maestro/doc     "Dev utilities used in this repository."
    :maestro/root    "module/dev/"
    :maestro/require [:ext/portal
@@ -526,6 +536,21 @@
 
   {:extra-paths     ["module/namespace/src/test/clj/"]
    :maestro/require [:module/namespace]}
+
+  ;---
+
+  :module/playwright.test.cljs
+
+  {:exec-args                      {:file "test_playwright.html"}
+   :extra-paths                    ["module/playwright.test.cljs/src/main/clj/"]
+   :maestro/doc                    "Running CLJS tests using headless browsers"
+   :maestro/platform+              [:jvm]              
+   :maestro/require                [:ext/playwright
+                                    :ext/shadow-cljs]
+   :maestro/root                   "module/playwright.test.cljs/"
+   :maestro.plugin.gitlib/name     protosens/playwright.test.cljs
+   :maestro.plugin.quickdoc/output "module/playwright.test.cljs/doc/API.md"
+   :ns-default                     protosens.playwright.test.cljs}
 
   ;---
 

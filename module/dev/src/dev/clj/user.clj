@@ -72,8 +72,9 @@
          :as
          ($.symbol/replace-first nmspace
                                  'protosens
-                                 '$)]))))
-
+                                 '$)]))
+    {:extension+ [".clj"
+                  ".cljc"]}))
 
 
 

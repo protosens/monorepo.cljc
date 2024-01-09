@@ -17,7 +17,13 @@
 
   :test/node
 
-  {:autorun    true
-   :ns-regexp  "protosens.test.*"
+  {:ns-regexp  "protosens.test.*"
    :output-to  "private/tmp/test_node.js"
-   :target     :node-test}}}
+   :target     :node-test}
+
+
+  :test/playwright
+  {:ns-regexp "protosens.test.*"
+   :runner-ns protosens.shadow.runner.log
+   :target    :browser-test
+   :test-dir  "private/tmp/browser_test/"}}}

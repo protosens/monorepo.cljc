@@ -158,23 +158,66 @@
            (run 'shadow))}
 
 
+  test:headless
+  {:doc  "Tests the output of `test:playwright` with major browsers"
+   :task (do
+           (run 'test:headless:chromium)
+           (run 'test:headless:firefox)
+           (run 'test:headless:webkit))}
+
+
+  test:headless:chromium
+  {:doc      "Tests the output of `test:playwright` with Firefox"
+   :requires ([protosens.process])
+   :task     (-> (protosens.process/shell ["./module/task/src/main/bash/test/headless/chromium.sh"])
+                 (protosens.process/exit-code)
+                 (System/exit))}
+
+
+  test:headless:firefox
+  {:doc      "Tests the output of `test:playwright` with Firefox"
+   :requires ([protosens.process])
+   :task     (-> (protosens.process/shell ["./module/task/src/main/bash/test/headless/firefox.sh"])
+                 (protosens.process/exit-code)
+                 (System/exit))}
+
+
+  test:headless:webkit
+  {:doc      "Tests the output of `test:playwright` with Webkit"
+   :requires ([protosens.process])
+   :task     (-> (protosens.process/shell ["./module/task/src/main/bash/test/headless/webkit.sh"])
+                 (protosens.process/exit-code)
+                 (System/exit))}
+
+
   test:node
-  {:doc  "Tests current `deps.edn` on Node with `:ext/shadow-cljs`"
-   :task (binding [*command-line-args* ["compile"
-                                        ":test/node"]]
-           (run 'shadow))}
+  {:doc      "Tests the output of `test:node:*` tasks"
+   :requires ([protosens.process])
+   :task     (-> (protosens.process/shell ["node"
+                                           "private/tmp/test_node.js"])
+                 (protosens.process/exit-code)
+                 (System/exit))}
 
 
   test:node:advanced
-  {:doc  "Like `test:node` but with advanced compilation"
+  {:doc  "Like `test:node:compile` but with advanced compilation"
    :task (binding [*command-line-args* ["release"
                                         ":test/node"]]
            (run 'shadow))}
 
 
+  test:node:compile
+  {:doc  "Compile tests from `deps.edn` for Node with `:ext/shadow-cljs`"
+   :task (binding [*command-line-args* ["compile"
+                                        ":test/node"]]
+           (run 'shadow))}
+
+
   test:node:watch
-  {:doc  "Like `test:node` but in watch mode"
-   :task (binding [*command-line-args* ["watch"
+  {:doc  "Like `test:node` but runs tests in watch mode"
+   :task (binding [*command-line-args* ["--config-merge"
+                                        "{:autorun true}"
+                                        "watch"
                                         ":test/node"]]
            (run 'shadow))}
 
@@ -190,6 +233,20 @@
    :task (binding [*command-line-args* (cons "--watch"
                                              *command-line-args*)]
            (run 'test:jvm))}
+
+
+  test:playwright:advanced
+  {:doc  "Like `test:playwright:compile` but with advanced compilation"
+   :task (binding [*command-line-args* ["release"
+                                        ":test/playwright"]]
+           (run 'shadow))}
+
+
+  test:playwright:compile
+  {:doc  "Compiles tests from `deps.edn` for headless browser testing with `test:headless:*` tasks"
+   :task (binding [*command-line-args* ["compile"
+                                        ":test/playwright"]]
+           (run 'shadow))}
 
 
   }}
