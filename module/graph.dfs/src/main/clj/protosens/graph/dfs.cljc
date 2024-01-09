@@ -1,8 +1,8 @@
 (ns protosens.graph.dfs)
 
 
-(set! *warn-on-reflection*
-      true)
+#?(:clj (set! *warn-on-reflection*
+              true))
 
 
 (declare frontier

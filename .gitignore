@@ -11,3 +11,7 @@ pom.xml
 **/pom.xml
 
 nvd/target
+
+.shadow-cljs
+
+node_modules

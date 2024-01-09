@@ -1,0 +1,23 @@
+{:deps  true
+ :nrepl {:port 14563}
+
+
+;;;;;;;;;;
+
+
+ :builds
+
+
+ {:dev/node
+
+  {:exports-var protosens.graph.dfs/walk
+   :output-to   "private/tmp/dev_node.js"
+   :target      :node-library}
+
+
+  :test/node
+
+  {:autorun    true
+   :ns-regexp  "protosens.test.*"
+   :output-to  "private/tmp/test_node.js"
+   :target     :node-test}}}

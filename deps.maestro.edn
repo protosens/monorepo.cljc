@@ -81,6 +81,13 @@
    :maestro/url "https://github.com/babashka/process"}
 
 
+  :ext/cider-nrepl
+
+  {:extra-deps  {cider/cider-nrepl {:mvn/version "0.44.0"}}
+   :maestro/doc "NREPL middleware"
+   :maestro/url "https://github.com/clojure-emacs/cider-nrepl"}
+
+
   :ext/clj-kondo
 
   {:extra-deps  {clj-kondo/clj-kondo {:mvn/version "2023.12.15"}}
@@ -157,9 +164,12 @@
 
   :ext/shadow-cljs
 
-  {:extra-deps  {thheller/shadow-cljs {:mvn/version "2.26.2"}}
-   :maestro/doc "Clojurescript compilation made easy"
-   :maestro/url "https://github.com/thheller/shadow-cljs"}
+  {:extra-deps      {thheller/shadow-cljs {:mvn/version "2.26.2"}}
+   :main-opts       ["-m"
+                     "shadow.cljs.devtools.cli"]
+   :maestro/doc     "Clojurescript compilation made easy"
+   :maestro/require [:ext/cider-nrepl]
+   :maestro/url     "https://github.com/thheller/shadow-cljs"}
 
 
 
@@ -299,7 +309,8 @@
   {:extra-paths                    ["module/graph.dfs/src/main/clj/"]
    :maestro/doc                    "Depth-First Search."
    :maestro/plaform+               [:bb
-                                    :jvm]
+                                    :jvm
+                                    :node]
    :maestro/require                [:test/graph.dfs]
    :maestro/root                   "module/graph.dfs/"
    :maestro.plugin.gitlib/name     protosens/graph.dfs
