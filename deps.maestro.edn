@@ -45,9 +45,7 @@
 
   :test
 
-  {:main-opts       ["-m" "kaocha.runner"
-                     "--config-file" "kaocha.edn"]
-   :maestro/doc     "Provides utilities for testing, notably Kaocha"
+  {:maestro/doc     "Provides utilities for testing, notably Kaocha"
    :maestro/require [:ext
                      :module
                      :test.util
@@ -122,6 +120,8 @@
   :ext/kaocha
 
   {:extra-deps  {lambdaisland/kaocha {:mvn/version "1.87.1366"}}
+   :main-opts   ["-m" "kaocha.runner"
+                 "--config-file" "test/kaocha.edn"]
    :maestro/doc "Test runner"
    :maestro/url "https://github.com/lambdaisland/kaocha"}
 
@@ -541,7 +541,7 @@
 
   :module/playwright.test.cljs
 
-  {:exec-args                      {:file "test_playwright.html"}
+  {:exec-args                      {:file "test/playwright.html"}
    :extra-paths                    ["module/playwright.test.cljs/src/main/clj/"]
    :maestro/doc                    "Running CLJS tests using headless browsers"
    :maestro/platform+              [:jvm]              

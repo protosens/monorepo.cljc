@@ -87,7 +87,9 @@
     (babashka.classpath/add-classpath (protosens.classpath/compute))
     (apply
      kaocha.runner/-main
-     (concat ["--config-file" "kaocha.edn"] *command-line-args*)))},
+     (concat
+      ["--config-file" "test/kaocha.edn"]
+      *command-line-args*)))},
   test:browser
   {:doc
    "Tests current `deps.edn` in the browser with `:ext/shadow-cljs`",
@@ -108,7 +110,7 @@
   test:browser:open
   {:doc "Opens a browser tab for running browser tests",
    :requires ([clojure.java.browse]),
-   :task (clojure.java.browse/browse-url "test_browser.html")},
+   :task (clojure.java.browse/browse-url "test/browser.html")},
   test:browser:watch
   {:doc
    "Like `test:browser` but in watch mode ; when ready, run `test:browser:open`",
@@ -116,13 +118,6 @@
    (binding
     [*command-line-args* ["watch" ":test/browser"]]
     (run 'shadow))},
-  test:headless
-  {:doc "Tests the output of `test:playwright` with major browsers",
-   :task
-   (do
-    (run 'test:headless:chromium)
-    (run 'test:headless:firefox)
-    (run 'test:headless:webkit))},
   test:headless:chromium
   {:doc "Tests the output of `test:playwright` with Firefox",
    :requires ([protosens.process]),
@@ -154,7 +149,9 @@
   {:doc "Tests current `:test/...` aliases on the JVM",
    :task
    (clojure
-    (str "-M:test " (clojure.string/join " " *command-line-args*)))},
+    (str
+     "-M:ext/kaocha "
+     (clojure.string/join " " *command-line-args*)))},
   test:jvm:watch
   {:doc "Like `test:jvm` but in watch mode",
    :task
