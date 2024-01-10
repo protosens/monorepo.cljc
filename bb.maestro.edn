@@ -15,6 +15,12 @@
  {
 
 
+  clean
+  {:doc      "Deletes `./private/tmp/`"
+   :requires ([babashka.fs])
+   :task     (babashka.fs/delete-tree "private/tmp/")}
+
+
   deps
   {:doc      "Prepares `deps.edn` for the given aliases"
    :requires ([protosens.maestro]
