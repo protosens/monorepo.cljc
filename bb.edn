@@ -118,8 +118,18 @@
    (binding
     [*command-line-args* ["watch" ":test/browser"]]
     (run 'shadow))},
+  test:headless
+  {:doc
+   "Tests the output of `test:playwright:*` with all supported browsers",
+   :requires ([protosens.process]),
+   :task
+   (->
+    (protosens.process/shell
+     ["./module/task/src/main/bash/test/headless/all.sh"])
+    (protosens.process/exit-code)
+    (System/exit))},
   test:headless:chromium
-  {:doc "Tests the output of `test:playwright` with Firefox",
+  {:doc "Tests the output of `test:playwright:*` with Firefox",
    :requires ([protosens.process]),
    :task
    (->
@@ -128,7 +138,7 @@
     (protosens.process/exit-code)
     (System/exit))},
   test:headless:firefox
-  {:doc "Tests the output of `test:playwright` with Firefox",
+  {:doc "Tests the output of `test:playwright:*` with Firefox",
    :requires ([protosens.process]),
    :task
    (->
@@ -137,7 +147,7 @@
     (protosens.process/exit-code)
     (System/exit))},
   test:headless:webkit
-  {:doc "Tests the output of `test:playwright` with Webkit",
+  {:doc "Tests the output of `test:playwright:*` with Webkit",
    :requires ([protosens.process]),
    :task
    (->
@@ -174,7 +184,7 @@
     (run 'shadow))},
   test:node:compile
   {:doc
-   "Compile tests from `deps.edn` for Node with `:ext/shadow-cljs`",
+   "Compiles tests from `deps.edn` for Node with `:ext/shadow-cljs`",
    :task
    (binding
     [*command-line-args* ["compile" ":test/node"]]

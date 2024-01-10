@@ -546,7 +546,8 @@
    :maestro/doc                    "Running CLJS tests using headless browsers"
    :maestro/platform+              [:jvm]              
    :maestro/require                [:ext/playwright
-                                    :ext/shadow-cljs]
+                                    :ext/shadow-cljs
+                                    :module/term.style]
    :maestro/root                   "module/playwright.test.cljs/"
    :maestro.plugin.gitlib/name     protosens/playwright.test.cljs
    :maestro.plugin.quickdoc/output "module/playwright.test.cljs/doc/API.md"
