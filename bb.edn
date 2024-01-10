@@ -100,7 +100,7 @@
      (run 'shadow))
     (run 'test:browser:open))},
   test:browser:advanced
-  {:doc "Like `test:browser` but with advanced compilation",
+  {:doc "Like `test:browser` but uses advanced compilation",
    :task
    (do
     (binding
@@ -129,7 +129,7 @@
     (protosens.process/exit-code)
     (System/exit))},
   test:headless:chromium
-  {:doc "Tests the output of `test:playwright:*` with Firefox",
+  {:doc "Tests the output of `test:playwright:*` with Chromium",
    :requires ([protosens.process]),
    :task
    (->
@@ -177,7 +177,7 @@
     (protosens.process/exit-code)
     (System/exit))},
   test:node:advanced
-  {:doc "Like `test:node:compile` but with advanced compilation",
+  {:doc "Like `test:node:compile` but uses advanced compilation",
    :task
    (binding
     [*command-line-args* ["release" ":test/node"]]
@@ -197,7 +197,7 @@
      ["--config-merge" "{:autorun true}" "watch" ":test/node"]]
     (run 'shadow))},
   test:playwright:advanced
-  {:doc "Like `test:playwright:compile` but with advanced compilation",
+  {:doc "Like `test:playwright:compile` but uses advanced compilation",
    :task
    (binding
     [*command-line-args* ["release" ":test/playwright"]]

@@ -137,7 +137,7 @@
 
 
   test:browser:advanced
-  {:doc  "Like `test:browser` but with advanced compilation"
+  {:doc  "Like `test:browser` but uses advanced compilation"
    :task (do
            (binding [*command-line-args* ["compile"
                                           ":test/browser"]]
@@ -167,7 +167,7 @@
 
 
   test:headless:chromium
-  {:doc      "Tests the output of `test:playwright:*` with Firefox"
+  {:doc      "Tests the output of `test:playwright:*` with Chromium"
    :requires ([protosens.process])
    :task     (-> (protosens.process/shell ["./module/task/src/main/bash/test/headless/chromium.sh"])
                  (protosens.process/exit-code)
@@ -200,7 +200,7 @@
 
 
   test:node:advanced
-  {:doc  "Like `test:node:compile` but with advanced compilation"
+  {:doc  "Like `test:node:compile` but uses advanced compilation"
    :task (binding [*command-line-args* ["release"
                                         ":test/node"]]
            (run 'shadow))}
@@ -236,7 +236,7 @@
 
 
   test:playwright:advanced
-  {:doc  "Like `test:playwright:compile` but with advanced compilation"
+  {:doc  "Like `test:playwright:compile` but uses advanced compilation"
    :task (binding [*command-line-args* ["release"
                                         ":test/playwright"]]
            (run 'shadow))}
