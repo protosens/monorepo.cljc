@@ -11,7 +11,7 @@
             [protosens.maestro.plugin.gitlib    :as $.maestro.plugin.gitlib]
             [protosens.maestro.plugin.quickdoc  :as $.maestro.plugin.quickdoc]
             [protosens.maestro.plugin.readme    :as $.maestro.plugin.readme]
-            [protosens.task.nvd                 :as $.task.nvd]))
+            [protosens.task.deps.nvd            :as $.task.deps.nvd]))
 
 
 ;;;;;;;;;; Helpers
@@ -47,7 +47,7 @@
   ($.maestro.plugin.clj-kondo/prepare)
   ($.maestro.plugin.clj-kondo/lint)
   ($.maestro.plugin.bb/check :module/task)
-  ($.task.nvd/check)
+  ($.task.deps.nvd/check)
   ($.maestro.plugin.gitlib/expose)
   ($.maestro.plugin.quickdoc/module+)
   ($.maestro.plugin.changelog/template {:next-release version})

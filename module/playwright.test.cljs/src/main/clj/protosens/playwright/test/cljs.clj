@@ -185,8 +185,9 @@
     (let [exit-code+ (map (comp first
                                 deref)
                           f*browser+)
-          exit-code  (or (some #(= %
-                                   1)
+          exit-code  (or (some #(when (= %
+                                         1)
+                                  1)
                                exit-code+)
                          0)]
       (-terminate exit-code))))

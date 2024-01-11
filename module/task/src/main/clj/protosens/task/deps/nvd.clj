@@ -1,4 +1,4 @@
-(ns protosens.task.nvd
+(ns protosens.task.deps.nvd
 
   (:require [babashka.fs              :as bb.fs]
             [protosens.classpath      :as $.classpath]
@@ -40,7 +40,7 @@
 
   []
 
-  ($.maestro.plugin/intro "protosens.task.nvd/check")
+  ($.maestro.plugin/intro "protosens.task.deps.nvd/check")
   ($.maestro.plugin/safe
     (delay
       (let [token (-api-token)

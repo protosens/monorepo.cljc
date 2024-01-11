@@ -16,6 +16,7 @@
 
 
   clean
+  ;; TODO. Clean Shadow as well.
   {:doc      "Deletes `./private/tmp/`"
    :requires ([babashka.fs])
    :task     (babashka.fs/delete-tree "private/tmp/")}
@@ -23,12 +24,8 @@
 
   deps
   {:doc      "Prepares `deps.edn` for the given aliases"
-   :requires ([protosens.maestro]
-              [protosens.maestro.plugin.kaocha])
-   :task     (do
-               (-> (protosens.maestro/sync)
-                   (protosens.maestro.plugin.kaocha/sync))
-               (run 'deps:bb))}
+   :requires ([protosens.task.deps])
+   :task     (protosens.task.deps/sync)}
 
 
   deps:bb
@@ -44,17 +41,15 @@
 
 
   deps:newest
-  {:doc  "Searches for newest versions of external dependencies"
-   :task (do
-            (binding [*command-line-args* [":GOD"]]
-              (run 'deps))
-            (clojure "-T:ext/antq antq.tool/outdated"))}
+  {:doc      "Searches for newest versions of external dependencies"
+   :requires ([protosens.task.deps.newest])
+   :task     (protosens.task.deps.newest/check)}
 
 
   deps:nvd
   {:doc      "Analyses dependencies from `deps.edn` for vulnerabilities (must contain `:ext/nvd-clojure`)"
-   :requires ([protosens.task.nvd])
-   :task     (protosens.task.nvd/check)}
+   :requires ([protosens.task.deps.nvd])
+   :task     (protosens.task.deps.nvd/check)}
 
 
   gitlib
@@ -82,10 +77,9 @@
 
 
   nrepl
-  {:doc  "Runs `deps.edn` with an NREPL server (must contain `:ext/nrepl`)"
-   :task (clojure (str "-M:ext/nrepl "
-                       (clojure.string/join " "
-                                            *command-line-args*)))}
+  {:doc      "Runs `deps.edn` with an NREPL server (must contain `:ext/nrepl`)"
+   :requires ([protosens.task.nrepl])
+   :task     (protosens.task.nrepl/run)}
 
 
   quickdoc
@@ -114,145 +108,104 @@
 
   shadow
   {:doc      "Runs Shadow-cljs from `deps.edn`"
-   :requires ([protosens.process])
-   :task     (deref (protosens.process/shell (concat ["clojure"
-                                                      "-M:ext/shadow-cljs"]
-                                                     *command-line-args*)))}
+   :requires ([protosens.task.shadow])
+   :task     (protosens.task.shadow/run)}
 
 
   test:bb
   {:doc      "Tests current `:test/...` aliases on Babashka"
-   :requires ([babashka.classpath]
-              [kaocha.runner]
-              [protosens.classpath])
-   :task     (do
-               (babashka.classpath/add-classpath (protosens.classpath/compute))
-               (apply kaocha.runner/-main 
-                      (concat ["--config-file"
-                               "test/kaocha.edn"]
-                              *command-line-args*)))}
-
-
-  test:browser
-  {:doc  "Tests current `deps.edn` in the browser with `:ext/shadow-cljs`"
-   :task (do
-           (binding [*command-line-args* ["compile"
-                                          ":test/browser"]]
-             (run 'shadow))
-           (run 'test:browser:open))}
+   :requires ([protosens.task.bb])
+   :task     (protosens.task.bb/test)}
 
 
   test:browser:advanced
-  {:doc  "Like `test:browser` but uses advanced compilation"
-   :task (do
-           (binding [*command-line-args* ["compile"
-                                          ":test/browser"]]
-             (run 'shadow))
-           (run 'test:browser:open))}
+  {:doc      "Like `test:browser` but uses advanced compilation"
+   :requires ([protosens.task.test.browser])
+   :task     (protosens.task.test.browser/advanced)}
 
 
-  test:browser:open
-  {:doc      "Opens a browser tab for running browser tests"
-   :requires ([clojure.java.browse])
-   :task     (clojure.java.browse/browse-url "test/browser.html")}
+  test:browser:simple
+  {:doc      "Tests current `deps.edn` in the browser with `:ext/shadow-cljs`"
+   :requires ([protosens.task.test.browser])
+   :task     (protosens.task.test.browser/simple)}
 
 
   test:browser:watch
-  {:doc  "Like `test:browser` but in watch mode ; when ready, run `test:browser:open`"
-   :task (binding [*command-line-args* ["watch"
-                                        ":test/browser"]]
-           (run 'shadow))}
+  {:doc      "Like `test:browser` but in watch mode ; when ready, run `test:browser:open`"
+   :requires ([protosens.task.test.browser])
+   :task     (protosens.task.test.browser/watch)}
 
 
   test:headless
   {:doc      "Tests the output of `test:playwright:*` with all supported browsers"
-   :requires ([protosens.process])
-   :task     (-> (protosens.process/shell ["./module/task/src/main/bash/test/headless/all.sh"])
-                 (protosens.process/exit-code)
-                 (System/exit))}
+   :requires ([protosens.task])
+   :task     (protosens.task/shell ["./module/task/src/main/bash/test/headless/all.sh"])}
 
 
   test:headless:chromium
   {:doc      "Tests the output of `test:playwright:*` with Chromium"
-   :requires ([protosens.process])
-   :task     (-> (protosens.process/shell ["./module/task/src/main/bash/test/headless/chromium.sh"])
-                 (protosens.process/exit-code)
-                 (System/exit))}
+   :requires ([protosens.task])
+   :task     (protosens.task/shell ["./module/task/src/main/bash/test/headless/chromium.sh"])}
 
 
   test:headless:firefox
   {:doc      "Tests the output of `test:playwright:*` with Firefox"
-   :requires ([protosens.process])
-   :task     (-> (protosens.process/shell ["./module/task/src/main/bash/test/headless/firefox.sh"])
-                 (protosens.process/exit-code)
-                 (System/exit))}
+   :requires ([protosens.task])
+   :task     (protosens.task/shell ["./module/task/src/main/bash/test/headless/firefox.sh"])}
 
 
   test:headless:webkit
   {:doc      "Tests the output of `test:playwright:*` with Webkit"
-   :requires ([protosens.process])
-   :task     (-> (protosens.process/shell ["./module/task/src/main/bash/test/headless/webkit.sh"])
-                 (protosens.process/exit-code)
-                 (System/exit))}
+   :requires ([protosens.task])
+   :task     (protosens.task/shell ["./module/task/src/main/bash/test/headless/webkit.sh"])}
 
 
   test:node
   {:doc      "Tests the output of `test:node:*` tasks"
-   :requires ([protosens.process])
-   :task     (-> (protosens.process/shell ["node"
-                                           "private/tmp/test_node.js"])
-                 (protosens.process/exit-code)
-                 (System/exit))}
+   :requires ([protosens.task.node])
+   :task     (protosens.task.node/run "private/tmp/test_node.js")}
 
 
   test:node:advanced
-  {:doc  "Like `test:node:compile` but uses advanced compilation"
-   :task (binding [*command-line-args* ["release"
-                                        ":test/node"]]
-           (run 'shadow))}
+  {:doc      "Like `test:node:compile` but uses advanced compilation"
+   :requires ([protosens.task.test.node])
+   :task     (protosens.task.test.node/advanced)}
 
 
-  test:node:compile
-  {:doc  "Compiles tests from `deps.edn` for Node with `:ext/shadow-cljs`"
-   :task (binding [*command-line-args* ["compile"
-                                        ":test/node"]]
-           (run 'shadow))}
+  test:node:simple
+  {:doc      "Compiles tests from `deps.edn` for Node with `:ext/shadow-cljs`"
+   :requires ([protosens.task.test.node])
+   :task     (protosens.task.test.node/simple)}
 
 
   test:node:watch
-  {:doc  "Like `test:node` but runs tests in watch mode"
-   :task (binding [*command-line-args* ["--config-merge"
-                                        "{:autorun true}"
-                                        "watch"
-                                        ":test/node"]]
-           (run 'shadow))}
+  {:doc      "Like `test:node` but runs tests in watch mode"
+   :requires ([protosens.task.test.node])
+   :task     (protosens.task.test.node/watch)}
 
 
   test:jvm
-  {:doc  "Tests current `:test/...` aliases on the JVM"
-   :task (clojure (str "-M:ext/kaocha "
-                       (clojure.string/join " "
-                                            *command-line-args*)))}
+  {:doc      "Tests current `:test/...` aliases on the JVM"
+   :requires ([protosens.task.test.jvm])
+   :task     (protosens.task.test.jvm/run)}
+
 
   test:jvm:watch
-  {:doc  "Like `test:jvm` but in watch mode"
-   :task (binding [*command-line-args* (cons "--watch"
-                                             *command-line-args*)]
-           (run 'test:jvm))}
+  {:doc      "Like `test:jvm` but in watch mode"
+   :requires ([protosens.task.test.jvm])
+   :task     (protosens.task.test.jvm/run ["--watch"])}
 
 
   test:playwright:advanced
-  {:doc  "Like `test:playwright:compile` but uses advanced compilation"
-   :task (binding [*command-line-args* ["release"
-                                        ":test/playwright"]]
-           (run 'shadow))}
+  {:doc      "Like `test:playwright:compile` but uses advanced compilation"
+   :requires ([protosens.task.test.playwright])
+   :task     (protosens.task.test.playwright/compile "release")}
 
 
-  test:playwright:compile
-  {:doc  "Compiles tests from `deps.edn` for headless browser testing with `test:headless:*` tasks"
-   :task (binding [*command-line-args* ["compile"
-                                        ":test/playwright"]]
-           (run 'shadow))}
+  test:playwright:simple
+  {:doc      "Compiles tests from `deps.edn` for headless browser testing with `test:headless:*` tasks"
+   :requires ([protosens.task.test.playwright])
+   :task     (protosens.task.test.playwright/compile "compile")}
 
 
   }}
