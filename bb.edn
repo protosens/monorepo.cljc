@@ -2,9 +2,9 @@
  :pods #:clj-kondo{clj-kondo {:version "2023.12.15"}},
  :tasks
  {clean
-  {:doc "Deletes `./private/tmp/`",
-   :requires ([babashka.fs]),
-   :task (babashka.fs/delete-tree "private/tmp/")},
+  {:doc "Deletes some temporary directories",
+   :requires ([protosens.task.clean]),
+   :task (protosens.task.clean/everything)},
   deps
   {:doc "Prepares `deps.edn` for the given aliases",
    :requires ([protosens.task.deps]),
