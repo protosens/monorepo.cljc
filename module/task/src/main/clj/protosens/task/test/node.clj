@@ -16,13 +16,10 @@
                                   task-name))
   ($.maestro.plugin/safe
     (delay
-      ($.maestro.plugin/step "Compiling CLJS tests for Node with Shadow-CLJS")
-      ($.maestro.plugin/step (format "Compilation mode is `%s`"
-                                     compilation-mode))
-      (println)
-      ($.task.shadow/run (concat arg+
-                                 [compilation-mode
-                                  ":test/node"])))))
+      ($.maestro.plugin/step "Preparing tests for Node")
+      ($.task.shadow/compile-test+ compilation-mode
+                                   arg+
+                                   ":test/node"))))
 
 
 
@@ -35,6 +32,8 @@
            compilation-mode)
   ($.maestro.plugin/done "Tests are compiled and can be run with task `test:node`"))
 
+
+;;;
 
 
 (defn advanced
@@ -65,7 +64,7 @@
   ($.maestro.plugin/safe
     (delay
       (let [js-file "./private/tmp/test/node.js"]
-        ($.maestro.plugin/step (format "Running compiled CLJS tests: %s"
+        ($.maestro.plugin/step (format "Running compiled CLJS tests on Node: %s"
                                        js-file))
         (println)
         (if (-> ($.process/shell ["node"

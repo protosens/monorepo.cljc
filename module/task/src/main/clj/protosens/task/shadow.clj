@@ -33,6 +33,22 @@
      exit-code)))
 
 
+;;;
+
+
+(defn compile-test+
+
+  [compilation-mode arg+ build-target]
+
+  ($.maestro.plugin/step "Compiling CLJS tests with Shadow-CLJS")
+  ($.maestro.plugin/step 1
+                         (format "Compilation mode is `%s`"
+                                 compilation-mode))
+  (println)
+  (run (concat arg+
+               [compilation-mode
+                build-target])))
+
 
 (defn task
 
