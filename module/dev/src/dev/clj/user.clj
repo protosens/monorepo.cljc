@@ -68,11 +68,7 @@
     (fn [nmspace]
       (when ($.symbol/starts-with? nmspace
                                    'protosens.)
-        [nmspace
-         :as
-         ($.symbol/replace-first nmspace
-                                 'protosens
-                                 '$)]))
+        nmspace))
     {:extension+ [".clj"
                   ".cljc"]}))
 
@@ -83,3 +79,9 @@
   "Namespace required automatically."
 
   (req))
+
+
+;;;;;;;;;;
+
+
+(println)

@@ -90,6 +90,7 @@
       ($.maestro.plugin/step "Computing classpath based on `deps.edn`")
       (let [cp ($.classpath/compute)]
         ($.maestro.plugin/step "Running analysis")
+        (println)
         ($.maestro.plugin.clj-kondo.impl/run
           {:copy-configs true
            :dependencies true
