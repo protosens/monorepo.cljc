@@ -18,10 +18,10 @@
    "Checks if `bb.edn` is in sync with `bb.maestro.edn` and `deps.maestro.edn`",
    :requires ([protosens.maestro.plugin.bb]),
    :task (protosens.maestro.plugin.bb/check :module/task)},
-  deps:newest
+  deps:new
   {:doc "Searches for newest versions of external dependencies",
-   :requires ([protosens.task.deps.newest]),
-   :task (protosens.task.deps.newest/check)},
+   :requires ([protosens.task.deps.new]),
+   :task (protosens.task.deps.new/check)},
   deps:nvd
   {:doc
    "Analyses dependencies from `deps.edn` for vulnerabilities (must contain `:ext/nvd-clojure`)",

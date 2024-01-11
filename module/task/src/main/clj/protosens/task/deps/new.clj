@@ -1,4 +1,4 @@
-(ns protosens.task.deps.newest
+(ns protosens.task.deps.new
 
   (:require [protosens.maestro        :as $.maestro]
             [protosens.maestro.plugin :as $.maestro.plugin]
@@ -14,7 +14,7 @@
 
   (binding [*command-line-args* [":GOD"]]
     ($.maestro/sync))
-  ($.maestro.plugin/intro "protosens.task.deps/newest")
+  ($.maestro.plugin/intro "protosens.task.deps.new/check")
   ($.maestro.plugin/step "Repository prepared in :GOD mode")
   ($.maestro.plugin/step "Running Antq to find newest versions of dependencies")
   (println)
