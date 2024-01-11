@@ -27,6 +27,10 @@
    "Analyses dependencies from `deps.edn` for vulnerabilities (must contain `:ext/nvd-clojure`)",
    :requires ([protosens.task.deps.nvd]),
    :task (protosens.task.deps.nvd/check)},
+  git:commit
+  {:doc "Runs `git commit` with additional checks like linting",
+   :requires ([protosens.task.git]),
+   :task (protosens.task.git/commit)},
   gitlib
   {:doc
    "Generates custom `deps.edn` files for public modules to expose them as gitlibs",
