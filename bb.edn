@@ -19,7 +19,7 @@
    :requires ([protosens.maestro.plugin.bb]),
    :task (protosens.maestro.plugin.bb/check :module/task)},
   deps:new
-  {:doc "Searches for newest versions of external dependencies",
+  {:doc "Searches for new versions of external dependencies",
    :requires ([protosens.task.deps.new]),
    :task (protosens.task.deps.new/check)},
   deps:nvd
@@ -28,7 +28,8 @@
    :requires ([protosens.task.deps.nvd]),
    :task (protosens.task.deps.nvd/check)},
   gitlib
-  {:doc "Generates custom `deps.edn` files for public modules",
+  {:doc
+   "Generates custom `deps.edn` files for public modules to expose them as gitlibs",
    :requires ([protosens.maestro.plugin.gitlib]),
    :task (protosens.maestro.plugin.gitlib/expose)},
   gitlib:local
@@ -66,21 +67,20 @@
    :requires ([protosens.task.release]),
    :task (protosens.task.release/now)},
   shadow
-  {:doc "Runs Shadow-cljs from `deps.edn`",
+  {:doc "Runs Shadow-CLJS from `deps.edn`",
    :requires ([protosens.task.shadow]),
    :task (protosens.task.shadow/run)},
   test:bb
-  {:doc "Tests current `:test/...` aliases on Babashka",
+  {:doc "Tests current `deps.edn` aliases on Babashka",
    :requires ([protosens.task.bb]),
    :task (protosens.task.bb/test)},
   test:browser
   {:doc
-   "Tests current `deps.edn` in the browser with `:ext/shadow-cljs`, with simple compilation",
+   "Tests current `deps.edn` in the browser with simple compilation",
    :requires ([protosens.task.test.browser]),
    :task (protosens.task.test.browser/run)},
   test:browser:watch
-  {:doc
-   "Like `test:browser` but in watch mode ; when ready, run `test:browser:open`",
+  {:doc "Like `test:browser` but in watch mode",
    :requires ([protosens.task.test.browser]),
    :task (protosens.task.test.browser/watch)},
   test:headless
@@ -109,7 +109,7 @@
    (protosens.task/shell
     ["./module/task/src/main/bash/test/headless/webkit.sh"])},
   test:jvm
-  {:doc "Tests current `:test/...` aliases on the JVM",
+  {:doc "Tests current `deps.edn` on the JVM",
    :requires ([protosens.task.test.jvm]),
    :task (protosens.task.test.jvm/run)},
   test:jvm:watch
@@ -121,20 +121,20 @@
    :requires ([protosens.task.node]),
    :task (protosens.task.node/run "private/tmp/test/node.js")},
   test:node:advanced
-  {:doc "Like `test:node:compile` but uses advanced compilation",
+  {:doc "Like `test:node:simple` but uses advanced compilation",
    :requires ([protosens.task.test.node]),
    :task (protosens.task.test.node/advanced)},
   test:node:simple
-  {:doc
-   "Compiles tests from `deps.edn` for Node with `:ext/shadow-cljs`",
+  {:doc "Compiles tests from current `deps.edn` for Node",
    :requires ([protosens.task.test.node]),
    :task (protosens.task.test.node/simple)},
   test:node:watch
-  {:doc "Like `test:node` but runs tests in watch mode",
+  {:doc
+   "Compiles tests from current `deps.edn` and runs them on Node in watch mode",
    :requires ([protosens.task.test.node]),
    :task (protosens.task.test.node/watch)},
   test:playwright:advanced
-  {:doc "Like `test:playwright:compile` but uses advanced compilation",
+  {:doc "Like `test:playwright:simple` but uses advanced compilation",
    :requires ([protosens.task.test.playwright]),
    :task (protosens.task.test.playwright/compile "release")},
   test:playwright:simple
