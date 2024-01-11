@@ -12,7 +12,8 @@
 
   [compilation-mode]
 
-  ($.maestro.plugin/step (format "Compiling CLJS with Shadow-CLJS, compilation mode is `%s`"
+  ($.maestro.plugin/step "Compiling CLJS tests for the browser with Shadow-CLJS")
+  ($.maestro.plugin/step (format "Compilation mode is `%s`"
                                  compilation-mode))
   (println)
   ($.task.shadow/run [compilation-mode

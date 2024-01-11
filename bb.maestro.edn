@@ -98,8 +98,8 @@
 
   readme:module+
   {:doc      "Generates READMEs for all modules"
-   :requires  ([protosens.maestro.plugin.readme])
-   :task      (protosens.maestro.plugin.readme/module+)}
+   :requires ([protosens.maestro.plugin.readme])
+   :task     (protosens.maestro.plugin.readme/module+)}
 
 
   release
@@ -158,8 +158,8 @@
 
   test:node
   {:doc      "Tests the output of `test:node:*` tasks"
-   :requires ([protosens.task.node])
-   :task     (protosens.task.node/run "private/tmp/test/node.js")}
+   :requires ([protosens.task.test.node])
+   :task     (protosens.task.test.node/run)}
 
 
   test:node:advanced

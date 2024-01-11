@@ -121,8 +121,8 @@
    :task (protosens.task.test.jvm/run ["--watch"])},
   test:node
   {:doc "Tests the output of `test:node:*` tasks",
-   :requires ([protosens.task.node]),
-   :task (protosens.task.node/run "private/tmp/test/node.js")},
+   :requires ([protosens.task.test.node]),
+   :task (protosens.task.test.node/run)},
   test:node:advanced
   {:doc "Like `test:node:simple` but uses advanced compilation",
    :requires ([protosens.task.test.node]),
