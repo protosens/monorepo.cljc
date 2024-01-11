@@ -95,4 +95,6 @@
                   -path-cached-deps-maestro-edn)))
       ;;
       ;; Prepares `deps.edn` for user-given nodes.
-      ($.maestro/sync))))
+      (binding [*command-line-args* (or (not-empty *command-line-args*)
+                                        [":GOD"])]
+        ($.maestro/sync)))))
