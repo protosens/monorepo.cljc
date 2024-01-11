@@ -26,16 +26,7 @@
 ;;;;;;;;;;
 
 
-(defn advanced
-
-  []
-
-  (-compile "release")
-  (-open-tab))
-
-
-
-(defn simple
+(defn run
 
   []
 

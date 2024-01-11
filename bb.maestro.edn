@@ -117,16 +117,10 @@
    :task     (protosens.task.bb/test)}
 
 
-  test:browser:advanced
-  {:doc      "Like `test:browser` but uses advanced compilation"
+  test:browser
+  {:doc      "Tests current `deps.edn` in the browser with `:ext/shadow-cljs`, with simple compilation"
    :requires ([protosens.task.test.browser])
-   :task     (protosens.task.test.browser/advanced)}
-
-
-  test:browser:simple
-  {:doc      "Tests current `deps.edn` in the browser with `:ext/shadow-cljs`"
-   :requires ([protosens.task.test.browser])
-   :task     (protosens.task.test.browser/simple)}
+   :task     (protosens.task.test.browser/run)}
 
 
   test:browser:watch

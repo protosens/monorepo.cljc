@@ -73,15 +73,11 @@
   {:doc "Tests current `:test/...` aliases on Babashka",
    :requires ([protosens.task.bb]),
    :task (protosens.task.bb/test)},
-  test:browser:advanced
-  {:doc "Like `test:browser` but uses advanced compilation",
-   :requires ([protosens.task.test.browser]),
-   :task (protosens.task.test.browser/advanced)},
-  test:browser:simple
+  test:browser
   {:doc
-   "Tests current `deps.edn` in the browser with `:ext/shadow-cljs`",
+   "Tests current `deps.edn` in the browser with `:ext/shadow-cljs`, with simple compilation",
    :requires ([protosens.task.test.browser]),
-   :task (protosens.task.test.browser/simple)},
+   :task (protosens.task.test.browser/run)},
   test:browser:watch
   {:doc
    "Like `test:browser` but in watch mode ; when ready, run `test:browser:open`",

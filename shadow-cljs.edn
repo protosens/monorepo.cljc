@@ -17,9 +17,9 @@
 
   :test/node
 
-  {:ns-regexp  "protosens.test.*"
-   :output-to  "private/tmp/test/node.js"
-   :target     :node-test}
+  {:ns-regexp "protosens.test.*"
+   :output-to "private/tmp/test/node.js"
+   :target    :node-test}
 
 
   :test/playwright
