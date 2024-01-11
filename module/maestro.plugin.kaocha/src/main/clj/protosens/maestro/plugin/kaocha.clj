@@ -7,6 +7,7 @@
 
   (:refer-clojure :exclude [sync])
   (:require [babashka.fs              :as bb.fs]
+            [protosens.deps.edn       :as $.deps.edn]
             [protosens.maestro.plugin :as $.maestro.plugin]))
 
 
@@ -151,12 +152,20 @@
                          #include \"<PATH>\"]]}
    ```"
 
-  [deps-edn]
 
-  ($.maestro.plugin/intro "maestro.plugin.kaocha/sync")
-  ($.maestro.plugin/safe
-    (delay
-      (if (-kaocha-required? deps-edn)
-        (-kaocha-required deps-edn)
-        (-kaocha-not-required))))
-  deps-edn)
+  ([]
+
+   (sync nil))
+
+
+  ([deps-edn]
+
+   ($.maestro.plugin/intro "maestro.plugin.kaocha/sync")
+   ($.maestro.plugin/safe
+     (delay
+       (let [deps-edn-2 (or deps-edn
+                            ($.deps.edn/read))]
+         (if (-kaocha-required? deps-edn-2)
+           (-kaocha-required deps-edn-2)
+           (-kaocha-not-required))
+         deps-edn-2)))))

@@ -458,6 +458,7 @@
                                     :jvm]              
    :maestro/require                [:ext/babashka.fs
                                     :ext/kaocha
+                                    :module/deps.edn
                                     :module/maestro
                                     :test/maestro.plugin.kaocha]
    :maestro/root                   "module/maestro.plugin.kaocha/"
@@ -613,6 +614,7 @@
 
   ;---
 
+
   :module/task
 
   {:extra-paths       ["module/task/src/main/clj/"]
@@ -623,6 +625,7 @@
                        :ext/kaocha
                        :module/calver
                        :module/classpath
+                       :module/edn
                        :module/git
                        :module/maestro
                        :module/maestro.plugin.bb
