@@ -50,24 +50,21 @@
    :requires ([protosens.task.deps.nvd])
    :task     (protosens.task.deps.nvd/check)}
 
-
-  git:commit
-  {:doc      "Runs `git commit` with additional checks like linting"
-   :requires ([protosens.task.git])
-   :task     (protosens.task.git/commit)}
-
-
-  gitlib
+  expose
   {:doc      "Generates custom `deps.edn` files for public modules to expose them as gitlibs"
    :requires ([protosens.maestro.plugin.gitlib])
    :task     (protosens.maestro.plugin.gitlib/expose)}
 
 
-  gitlib:local
-  {:doc      "Like `gitlib` but dependencies to other modules are expressed using file paths"
+  expose:local
+  {:doc      "Like `expose` but dependencies to other modules are expressed using file paths (for testing)"
    :requires ([protosens.maestro.plugin.gitlib])
    :task     (protosens.maestro.plugin.gitlib/expose-local)}
 
+  git:commit
+  {:doc      "Runs `git commit` with additional checks like linting"
+   :requires ([protosens.task.git])
+   :task     (protosens.task.git/commit)}
 
   lint
   {:doc      "Lints `:paths` from `deps.edn` with Clj-kondo"
