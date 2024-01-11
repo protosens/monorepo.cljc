@@ -111,7 +111,7 @@
   shadow
   {:doc      "Runs Shadow-CLJS from `deps.edn`"
    :requires ([protosens.task.shadow])
-   :task     (protosens.task.shadow/run)}
+   :task     (protosens.task.shadow/task)}
 
 
   test:bb
