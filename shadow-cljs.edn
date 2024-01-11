@@ -12,13 +12,13 @@
 
   {:ns-regexp "protosens.test.*"
    :target    :browser-test
-   :test-dir  "private/tmp/browser_test/"}
+   :test-dir  "private/tmp/test/browser/"}
 
 
   :test/node
 
   {:ns-regexp  "protosens.test.*"
-   :output-to  "private/tmp/test_node.js"
+   :output-to  "private/tmp/test/node.js"
    :target     :node-test}
 
 
@@ -26,4 +26,4 @@
   {:ns-regexp "protosens.test.*"
    :runner-ns protosens.shadow.runner.log
    :target    :browser-test
-   :test-dir  "private/tmp/browser_test/"}}}
+   :test-dir  "private/tmp/test/playwright/"}}}

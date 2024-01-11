@@ -123,7 +123,7 @@
   test:node
   {:doc "Tests the output of `test:node:*` tasks",
    :requires ([protosens.task.node]),
-   :task (protosens.task.node/run "private/tmp/test_node.js")},
+   :task (protosens.task.node/run "private/tmp/test/node.js")},
   test:node:advanced
   {:doc "Like `test:node:compile` but uses advanced compilation",
    :requires ([protosens.task.test.node]),
