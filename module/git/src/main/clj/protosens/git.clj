@@ -232,19 +232,19 @@
 
 (defn commit-message
 
-  "Returns the message of the given commit (by `ref`).
+  "Returns the message of the given commit (by `rev`).
   
    Or nil if commit not found."
 
-  ([ref]
+  ([rev]
 
-   (commit-message ref
+   (commit-message rev
                    nil))
 
 
-  ([ref option+]
+  ([rev option+]
 
-   (let [process (exec ["show" "-s" "--format=%B" ref]
+   (let [process (exec ["show" "-s" "--format=%B" rev]
                        option+)]
      (when ($.process/success? process)
        ($.process/out process)))))
@@ -369,24 +369,50 @@
 
 (defn resolve
 
-  "Resolves the given `ref` (e.g. a tag) to a full SHA.
+  "Resolves the given `rev` (e.g. a tag) to a full SHA.
   
    Or returns `nil` if it does not resolve to anything."
 
 
-  ([ref]
+  ([rev]
 
-   (resolve ref
+   (resolve rev
             nil))
 
 
-  ([ref option+]
+  ([rev option+]
 
-   (let [out (-> (exec ["rev-parse" ref]
+   (let [out (-> (exec ["rev-parse" rev]
                        option+)
                  ($.process/out))]
      (when (full-sha? out)
        out))))
+
+
+
+(defn show-file
+
+  "If found, returns an `InputStream` of the file at `path` from revision `rev` (defaults to `\"HEAD\"`)."
+
+  
+  ([rev path]
+
+   (show-file rev
+              path
+              nil))
+
+
+  ([rev path option+]
+
+   (let [rev-2   (or rev
+                     "HEAD")
+         process (exec ["show"
+                        (format "%s:%s"
+                                rev-2
+                                path)]
+                       option+)]
+     (when ($.process/success? process)
+       (:out process)))))
 
 
 

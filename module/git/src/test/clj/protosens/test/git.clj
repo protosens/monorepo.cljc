@@ -133,6 +133,15 @@
       (T/is (false? ($.git/unstaged? option+))
             "Nothing can be deemed unstaged after a fresh commit")
 
+      (T/is (= "Foo"
+               (slurp ($.git/show-file nil
+                                       "foo.txt"
+                                       option+))
+               (slurp ($.git/show-file sha-1
+                                       "foo.txt"
+                                       option+)))
+            "Can retrieve a committed file")
+
       (T/is (true? ($.git/tag-add "some-tag"
                                   option+))
             "Add tag to latest commit")
