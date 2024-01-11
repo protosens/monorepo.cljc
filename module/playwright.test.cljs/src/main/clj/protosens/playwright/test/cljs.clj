@@ -80,9 +80,8 @@
   [browser version]
 
   (println)
-  (println (format "%s%sTesting against %s %s %s"
+  (println (format "%sTesting against %s %s %s"
                    $.term.style/bold
-                   $.term.style/fg-cyan
                    browser
                    version
                    $.term.style/reset))

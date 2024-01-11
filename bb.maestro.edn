@@ -134,26 +134,26 @@
 
   test:headless
   {:doc      "Tests the output of `test:playwright:*` with all supported browsers"
-   :requires ([protosens.task])
-   :task     (protosens.task/shell ["./module/task/src/main/bash/test/headless/all.sh"])}
+   :requires ([protosens.task.test.headless])
+   :task     (protosens.task.test.headless/all)}
 
 
   test:headless:chromium
   {:doc      "Tests the output of `test:playwright:*` with Chromium"
-   :requires ([protosens.task])
-   :task     (protosens.task/shell ["./module/task/src/main/bash/test/headless/chromium.sh"])}
+   :requires ([protosens.task.test.headless])
+   :task     (protosens.task.test.headless/chromium)}
 
 
   test:headless:firefox
   {:doc      "Tests the output of `test:playwright:*` with Firefox"
-   :requires ([protosens.task])
-   :task     (protosens.task/shell ["./module/task/src/main/bash/test/headless/firefox.sh"])}
+   :requires ([protosens.task.test.headless])
+   :task     (protosens.task.test.headless/firefox)}
 
 
   test:headless:webkit
   {:doc      "Tests the output of `test:playwright:*` with Webkit"
-   :requires ([protosens.task])
-   :task     (protosens.task/shell ["./module/task/src/main/bash/test/headless/webkit.sh"])}
+   :requires ([protosens.task.test.headless])
+   :task     (protosens.task.test.headless/webkit)}
 
 
   test:node
