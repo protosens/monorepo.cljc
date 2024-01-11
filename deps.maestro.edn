@@ -614,7 +614,6 @@
 
   ;---
 
-
   :module/task
 
   {:extra-paths       ["module/task/src/main/clj/"]
@@ -625,6 +624,7 @@
                        :ext/kaocha
                        :module/calver
                        :module/classpath
+                       :module/deps.edn
                        :module/edn
                        :module/git
                        :module/maestro

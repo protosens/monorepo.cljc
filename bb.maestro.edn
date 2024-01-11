@@ -82,9 +82,9 @@
 
 
   nrepl
-  {:doc      "Runs `deps.edn` with an NREPL server (must contain `:ext/nrepl`)"
+  {:doc      "Runs `deps.edn` with an NREPL server"
    :requires ([protosens.task.nrepl])
-   :task     (protosens.task.nrepl/run)}
+   :task     (protosens.task.nrepl/server)}
 
 
   quickdoc

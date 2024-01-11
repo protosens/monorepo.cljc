@@ -50,10 +50,9 @@
    :requires ([protosens.maestro.plugin.clj-kondo]),
    :task (protosens.maestro.plugin.clj-kondo/prepare)},
   nrepl
-  {:doc
-   "Runs `deps.edn` with an NREPL server (must contain `:ext/nrepl`)",
+  {:doc "Runs `deps.edn` with an NREPL server",
    :requires ([protosens.task.nrepl]),
-   :task (protosens.task.nrepl/run)},
+   :task (protosens.task.nrepl/server)},
   quickdoc
   {:doc "Generates API documentation for modules",
    :requires ([protosens.maestro.plugin.quickdoc]),
@@ -160,12 +159,12 @@
   "module/calver/src/main/clj/"
   "module/classpath/src/main/clj/"
   "module/process/src/main/clj/"
+  "module/deps.edn/src/main/clj/"
   "module/edn/src/main/clj/"
+  "module/namespace/src/main/clj/"
   "module/git/src/main/clj/"
   "module/string/src/main/clj/"
   "module/maestro/src/main/clj/"
-  "module/deps.edn/src/main/clj/"
-  "module/namespace/src/main/clj/"
   "module/graph.dfs/src/main/clj/"
   "module/term.style/src/main/clj/"
   "module/maestro.plugin.bb/src/main/clj/"
