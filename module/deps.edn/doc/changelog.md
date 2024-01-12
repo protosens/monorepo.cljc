@@ -10,6 +10,7 @@ repository.
 ## `{{ next-release }}`
 
 - Add
+    - `$.deps.edn/alias->path+`
     - `$.deps.edn/flatten`
 
 ---

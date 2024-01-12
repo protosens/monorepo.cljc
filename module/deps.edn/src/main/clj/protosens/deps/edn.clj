@@ -69,6 +69,36 @@
 ;;;;;;;;;; Extracting information from `deps.edn` files
 
 
+(defn alias->path+
+
+  "Returns a map of `alias` -> `path+` by extracting `:extra-paths` from
+   the alias definitions of the given `alias+` (defaults to all aliases in
+   `deps-edn`)."
+
+
+  ([deps-edn]
+
+   (alias->path+ deps-edn
+                 nil))
+
+
+  ([deps-edn alias+]
+
+   (let [alias->definition (deps-edn :aliases)
+         alias-2+          (or alias+
+                               (keys alias->definition))]
+     (into {}
+           (keep (fn [alias]
+                   (when-some [path+ (-> alias->definition
+                                         (get-in [alias
+                                                 :extra-paths])
+                                         (seq))]
+                     [alias
+                      path+])))
+           alias-2+))))
+
+
+
 (defn extra-path+
 
   "Returns all `:extra-paths` from the given aliases.

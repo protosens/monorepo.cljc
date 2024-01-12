@@ -18,6 +18,7 @@ provided.
     - [`module/maestro.plugin.readme`]
 - Impacted
     - [`module/classpath`]
+    - [`module/deps.edn`]
     - [`module/git`]
     - [`module/string`]
 - Remove

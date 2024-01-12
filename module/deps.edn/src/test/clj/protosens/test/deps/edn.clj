@@ -30,6 +30,26 @@
 ;;;;;;;;;; Tests
 
 
+(T/deftest alias->path+
+
+  (let [deps-edn {:aliases {:a {:extra-paths ["./a/"]}
+                            :b {:extra-paths ["./b/"]}
+                            :c {:extra-paths []}
+                            :d {:extra-paths nil}
+                            :e {}}}]
+    (T/is (= {:a ["./a/"]
+              :b ["./b/"]}
+             ($.deps.edn/alias->path+ deps-edn))
+          "All aliases")
+
+    (T/is (= {:a ["./a/"]}
+             ($.deps.edn/alias->path+ deps-edn
+                                      [:a
+                                       :c]))
+          "Selected aliases")))
+
+
+
 (T/deftest flatten
 
   (T/is (= {:deps  {}
