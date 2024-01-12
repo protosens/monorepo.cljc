@@ -2,6 +2,7 @@
 
   (:require [clojure.string       :as C.string]
             [protosens.edn.read   :as $.edn.read]
+            [protosens.git        :as $.git]
             [protosens.term.style :as $.term.style]))
 
 
@@ -157,6 +158,18 @@
 
 (defn read-deps-maestro-edn
 
-  []
 
-  (read-file-edn "deps.maestro.edn"))
+  ([]
+
+   (read-deps-maestro-edn nil))
+
+
+  ([rev]
+
+   (let [path "./deps.maestro.edn"]
+     (if rev
+       (-> ($.git/show-file rev
+                            path)
+            (slurp)
+            ($.edn.read/string))
+       (read-file-edn path)))))
