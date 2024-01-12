@@ -248,6 +248,7 @@
                                     :jvm]
    :maestro/require                [:module/edn
                                     :module/namespace
+                                    :module/path
                                     :test/deps.edn]
    :maestro/root                   "module/deps.edn/"
    :maestro.plugin.gitlib/name     protosens/deps.edn

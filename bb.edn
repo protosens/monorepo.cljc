@@ -154,6 +154,7 @@
   "module/deps.edn/src/main/clj/"
   "module/edn/src/main/clj/"
   "module/namespace/src/main/clj/"
+  "module/path/src/main/clj/"
   "module/git/src/main/clj/"
   "module/string/src/main/clj/"
   "module/maestro/src/main/clj/"

@@ -12,6 +12,7 @@ repository.
 - Add
     - `$.deps.edn/alias->path+`
     - `$.deps.edn/flatten`
+    - `$.deps.edn.alias.definition`
 
 ---
 
