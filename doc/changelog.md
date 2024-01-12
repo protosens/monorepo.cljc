@@ -16,6 +16,7 @@ provided.
     - [`module/calver`]
     - [`module/maestro.plugin.changelog`]
     - [`module/maestro.plugin.readme`]
+    - [`module/path`]
 - Impacted
     - [`module/classpath`]
     - [`module/deps.edn`]
@@ -86,6 +87,7 @@ Inception.
 [`module/maestro.plugin.readme`]:    ../module/maestro.plugin.readme/doc/changelog.md
 [`module/maestro`]:                  ../module/maestro/doc/changelog.md
 [`module/namespace`]:                ../module/namespace/doc/changelog.md
+[`module/path`]:                     ../module/path/doc/changelog.md
 [`module/process`]:                  ../module/process/doc/changelog.md
 [`module/string`]:                   ../module/string/doc/changelog.md
 [`module/symbol`]:                   ../module/symbol/doc/changelog.md

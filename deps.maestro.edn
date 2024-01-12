@@ -540,6 +540,25 @@
 
   ;---
 
+  :module/path
+
+  {:extra-paths                    ["module/path/src/main/clj/"]
+   :maestro/doc                    "Helpers for `java.nio.file.Path`."
+   :maestro/platform+              [:bb
+                                    :jvm]              
+   :maestro/require                [:test/path]
+   :maestro/root                   "module/path/"
+   :maestro.plugin.gitlib/name     protosens/path
+   :maestro.plugin.quickdoc/output "module/path/doc/API.md"}
+
+
+  :test/path
+
+  {:extra-paths     ["module/path/src/test/clj/"]
+   :maestro/require [:module/path]}
+
+  ;---
+
   :module/playwright.test.cljs
 
   {:exec-args                      {:file "test/playwright.html"}
