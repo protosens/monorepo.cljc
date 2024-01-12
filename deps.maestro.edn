@@ -343,12 +343,12 @@
    :maestro/doc                    "Maestro, calmly orchestrating your Clojure (mono)repo."
    :maestro/platform+              [:bb
                                     :jvm]              
-   :maestro/require                [:ext/babashka.fs
-                                    :module/deps.edn
+   :maestro/require                [:module/deps.edn
                                     :module/edn
                                     :module/git
                                     :module/graph.dfs
                                     :module/namespace
+                                    :module/path
                                     :module/process
                                     :module/string
                                     :module/term.style
@@ -361,7 +361,8 @@
   :test/maestro
 
   {:extra-paths     ["module/maestro/src/test/clj/"]
-   :maestro/require [:module/maestro
+   :maestro/require [:ext/babashka.fs
+                     :module/maestro
                      :test.util/maestro]}
 
 
