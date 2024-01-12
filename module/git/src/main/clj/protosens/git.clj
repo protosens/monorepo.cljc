@@ -12,7 +12,7 @@
    For a fully-featured Clojure JVM client for Git, see [`clj-jgit`](https://github.com/clj-jgit/clj-jgit)."
 
   (:refer-clojure :exclude [resolve])
-  (:require [clojure.string    :as string]
+  (:require [clojure.string    :as C.string]
             [protosens.process :as $.process]
             [protosens.string  :as $.string]))
 
@@ -141,7 +141,7 @@
    (or (-> (exec ["branch"]
                  option+)
            ($.process/out)
-           (some-> (string/split-lines)
+           (some-> (C.string/split-lines)
                    (->> (map (fn [branch]
                                ($.string/trunc-left branch
                                                     2))))))
@@ -303,6 +303,34 @@
 
 
 
+(defn diff-path+
+
+
+  ([rev-old rev-new path+]
+
+   (diff-path+ rev-old
+               rev-new
+               path+
+               nil))
+
+
+  ([rev-old rev-new path+ option+]
+
+   (-> (exec (concat ["diff"
+                      "--name-only"]
+                     (if rev-new
+                       [rev-old
+                        rev-new]
+                       [rev-old])
+                     ["--"]
+                     path+)
+             option+)
+       (:out)
+       (slurp)
+       (C.string/split (re-pattern ($.string/newline))))))
+
+
+
 (defn init
 
   "Initializes a new Git repository.
@@ -431,7 +459,7 @@
    (or (-> (exec ["tag"]
                  option+)
            ($.process/out)
-           (some-> (string/split-lines)))
+           (some-> (C.string/split-lines)))
        [])))
 
 

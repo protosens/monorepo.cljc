@@ -167,6 +167,13 @@
       (T/is (true? ($.git/unstaged? option+))
             "Modified file is currently unstaged")
 
+      (T/is (= ["foo.txt"]
+               ($.git/diff-path+ "HEAD"
+                                 nil
+                                 ["foo.txt"]
+                                 option+))
+            "Diff paths against working tree")
+
       (T/is (true? ($.git/add ["."]
                               option+))
             "Staging modified file")
@@ -205,6 +212,13 @@
 
         (T/is (true? ($.git/clean? option+))
               "Repo is clean again after second commit")
+
+        (T/is (= ["foo.txt"]
+                 ($.git/diff-path+ sha-1
+                                   sha-2
+                                   ["foo.txt"]
+                                   option+))
+              "Diff paths for 2 revisions")
 
         (spit file-bar
               "Bar")

@@ -10,6 +10,7 @@ repository.
 ## `{{ next-release }}`
 
 - Add
+    - `$.git/diff-path+`
     - `$.git/show-file`
     - `$.git.release`
 
