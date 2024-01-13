@@ -39,6 +39,12 @@
    :task     (protosens.maestro.plugin.bb/check :module/task)}
 
 
+  deps:diff
+  {:doc      "Prints aliases modified between `HEAD` and `working tree` (or given Git revs)"
+   :requires ([protosens.maestro.diff])
+   :task     (protosens.maestro.diff/print)}
+
+
   deps:new
   {:doc      "Searches for new versions of external dependencies"
    :requires ([protosens.task.deps.new])

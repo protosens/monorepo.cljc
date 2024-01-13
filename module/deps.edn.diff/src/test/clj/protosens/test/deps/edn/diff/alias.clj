@@ -186,4 +186,5 @@
            (-> {::$.deps.edn.diff.alias/added               #{:a :b}
                 ::$.deps.edn.diff.alias/modified-definition #{:c :d}
                 ::$.deps.edn.diff.alias/modified-path+      #{:e :f}}
-               ($.deps.edn.diff.alias/dirty)))))
+               ($.deps.edn.diff.alias/dirty)
+               (set)))))

@@ -158,6 +158,6 @@
 
   [state]
 
-  (C.set/union (state ::$.deps.edn.diff.alias/added)
-               (state ::$.deps.edn.diff.alias/modified-definition)
-               (state ::$.deps.edn.diff.alias/modified-path+)))
+  (concat (state ::$.deps.edn.diff.alias/added)
+          (state ::$.deps.edn.diff.alias/modified-definition)
+          (state ::$.deps.edn.diff.alias/modified-path+)))
