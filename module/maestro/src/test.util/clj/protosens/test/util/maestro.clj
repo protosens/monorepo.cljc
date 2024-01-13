@@ -2,12 +2,13 @@
 
   (:require [clojure.string           :as       C.string]
             [clojure.test             :as       T]
+            [protosens.edn.read       :as       $.edn.read]
             [protosens.maestro        :as       $.maestro]
             [protosens.maestro.node   :as-alias $.maestro.node]
             [protosens.maestro.plugin :as       $.maestro.plugin]))
 
 
-;;;;;;;;;;
+;;;;;;;;;; Assertions
 
 
 (defmacro t-fail*
@@ -46,3 +47,33 @@
              (run $.maestro/run-string
                   (C.string/join input)))
         message)))
+
+
+;;;;;;;;;; Miscellaneous helpers
+
+
+(defn with-new-deps-maestro-edn
+
+  [f]
+
+  (let [path     "./deps.maestro.edn"
+        saved    (slurp path)
+        modified (-> saved
+                     ($.edn.read/string)
+                     (update :aliases
+                             #(-> %
+                                  (assoc-in [:dev
+                                             :extra-paths]
+                                            ["test"])
+                                  (assoc :added-for-testing
+                                         {}))))]
+    (try
+      ;;
+      (spit path
+            modified)
+      (f ($.maestro.plugin/read-deps-maestro-edn "HEAD")
+         modified)
+      ;;
+      (finally
+        (spit path
+              saved)))))

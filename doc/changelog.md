@@ -14,6 +14,7 @@ provided.
 
 - Add
     - [`module/calver`]
+    - [`module/deps.edn.diff`]
     - [`module/maestro.plugin.changelog`]
     - [`module/maestro.plugin.readme`]
     - [`module/path`]
@@ -75,6 +76,7 @@ Inception.
 [`module/calver`]:                   ../module/calver/doc/changelog.md
 [`module/classpath`]:                ../module/classpath/doc/changelog.md
 [`module/deps.edn`]:                 ../module/deps.edn/doc/changelog.md
+[`module/deps.edn.diff`]:            ../module/deps.edn.diff/doc/changelog.md
 [`module/edn`]:                      ../module/edn/doc/changelog.md
 [`module/git`]:                      ../module/git/doc/changelog.md
 [`module/lab.bench`]:                ../module/bench/doc/changelog.md

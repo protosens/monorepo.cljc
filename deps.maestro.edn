@@ -246,7 +246,8 @@
    :maestro/doc                    "Helpers for handling `deps.edn` files."
    :maestro/platform+              [:bb
                                     :jvm]
-   :maestro/require                [:module/edn
+   :maestro/require                [:module/deps.edn
+                                    :module/git
                                     :module/namespace
                                     :module/path
                                     :test/deps.edn]
@@ -254,11 +255,44 @@
    :maestro.plugin.gitlib/name     protosens/deps.edn
    :maestro.plugin.quickdoc/output "module/deps.edn/doc/API.md"}
 
-
+          
   :test/deps.edn
 
   {:extra-paths     ["module/deps.edn/src/test/clj/"]
    :maestro/require [:module/deps.edn]}
+
+
+  ;---
+
+  :module/deps.edn.diff
+
+  {:extra-paths                    ["module/deps.edn.diff/src/main/clj/"]
+   :maestro/doc                    "Helpers for handling `deps.edn` files."
+   :maestro/platform+              [:bb
+                                    :jvm]
+   :maestro/require                [:module/deps.edn
+                                    :module/edn
+                                    :module/git
+                                    :module/path
+                                    :test/deps.edn.diff]
+   :maestro/root                   "module/deps.edn.diff/"
+   :maestro.plugin.gitlib/name     protosens/deps.edn.diff
+   :maestro.plugin.quickdoc/output "module/deps.edn.diff/doc/API.md"}
+
+
+  :test/deps.edn.diff
+
+  {:extra-paths     ["module/deps.edn.diff/src/test/clj/"]
+   :maestro/require [:module/deps.edn.diff
+                     :test.util/deps.edn.diff]}
+
+
+  :test.util/deps.edn.diff
+
+  {:extra-paths     ["module/deps.edn.diff/src/test.util/clj/"]
+   :maestro/require [:ext/babashka.fs
+                     :module/maestro
+                     :test.util/maestro]}
 
   ;---
 
@@ -344,6 +378,7 @@
    :maestro/platform+              [:bb
                                     :jvm]              
    :maestro/require                [:module/deps.edn
+                                    :module/deps.edn.diff
                                     :module/edn
                                     :module/git
                                     :module/graph.dfs
@@ -363,6 +398,7 @@
   {:extra-paths     ["module/maestro/src/test/clj/"]
    :maestro/require [:ext/babashka.fs
                      :module/maestro
+                     :test.util/deps.edn.diff
                      :test.util/maestro]}
 
 

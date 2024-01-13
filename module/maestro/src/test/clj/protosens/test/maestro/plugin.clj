@@ -47,8 +47,10 @@
   (T/is (map? ($.maestro.plugin/read-deps-maestro-edn)))
 
   (T/is (= ($.maestro.plugin/read-file-edn "./deps.maestro.edn")
-           ($.maestro.plugin/read-deps-maestro-edn)))
+           ($.maestro.plugin/read-deps-maestro-edn))
+        "From working tree")
 
   (T/is (= ($.maestro.plugin/read-deps-maestro-edn)
-           ($.maestro.plugin/read-deps-maestro-edn "HEAD"))))
+           ($.maestro.plugin/read-deps-maestro-edn "HEAD"))
+        "From revision"))
 
