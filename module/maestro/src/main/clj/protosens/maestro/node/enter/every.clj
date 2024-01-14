@@ -1,7 +1,7 @@
 (ns protosens.maestro.node.enter.every
 
   (:require [protosens.maestro           :as-alias $.maestro]
-            [protosens.maestro.namespace :as $.maestro.namespace]
+            [protosens.maestro.namespace :as       $.maestro.namespace]
             [protosens.maestro.node      :as       $.maestro.node]))
 
 

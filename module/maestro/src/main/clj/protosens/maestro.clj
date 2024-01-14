@@ -11,6 +11,7 @@
             [protosens.maestro.namespace           :as $.maestro.namespace]
             [protosens.maestro.node                :as $.maestro.node]
             [protosens.maestro.node.enter.default]
+            [protosens.maestro.node.enter.diff]
             [protosens.maestro.node.enter.every]
             [protosens.maestro.node.enter.god]
             [protosens.maestro.node.enter.invert]
@@ -134,8 +135,9 @@
 
   [deps-maestro-edn node+]
 
-  (-> {::deps-edn         (dissoc deps-maestro-edn
-                                  :aliases)
+  (-> {::deps-edn         (assoc deps-maestro-edn
+                                 :aliases
+                                 {})
        ::deps-maestro-edn deps-maestro-edn}
       ($.maestro.namespace/init-state)
       ($.maestro.node/init-state node+)))

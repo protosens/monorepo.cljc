@@ -39,6 +39,8 @@
 
   [state]
 
+  ;; TODO. Shouldn't it rather rely on `::$.maestro.node/accepted`?
+
   (keep (fn [[node _depth]]
           (when (defined? state
                           node)
