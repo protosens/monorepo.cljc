@@ -103,19 +103,37 @@
 
 (T/deftest dependent+
 
-  (T/is (= [:a :b :c]
+  (T/is (= [:M/a :N/b :L/c]
            (-> {::$.maestro/deps-maestro-edn
                  {:aliases (sorted-map 
-                             :a {:maestro/require [:b
-                                                   :d]}
-                             :b {:maestro/require [:b
-                                                   :c
-                                                   :d]}
-                             :c {:maestro/require [:e]}
-                             :d {}
-                             :e {})}}
-               ($.maestro.alias/dependent+ [:d
-                                            :e])))))
+                             :M/a {:maestro/require [:N/b
+                                                     :M/d]}
+                             :N/b {:maestro/require [:N/b
+                                                     :L/c
+                                                     :M/d]}
+                             :L/c {:maestro/require [:M/e]}
+                             :M/d {}
+                             :M/e {})}}
+               ($.maestro.alias/dependent+ [:M/d
+                                            :M/e])))
+        "Without `visit?`")
+
+  (T/is (= [:a]
+           (let [state {::$.maestro/deps-maestro-edn
+                         {:aliases (sorted-map
+                                     :a {:maestro/require [:b
+                                                           :c]}
+                                     :b {:maestro/require [:c]}
+                                     :c {})}}]
+             (-> state
+                 ($.maestro.alias/dependent+ [:c]
+                                             (fn [state-2 node]
+                                               (T/is (= (state-2 ::$.maestro/deps-maestro-edn)
+                                                        (state ::$.maestro/deps-maestro-edn))
+                                                     "State passed as expected")
+                                               (not= node
+                                                     :b))))))
+        "With `visit?`"))
 
 
 

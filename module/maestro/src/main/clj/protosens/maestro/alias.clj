@@ -87,27 +87,41 @@
 
 (defn dependent+
 
-  [state alias+]
 
-  (let [alias->required-by (inverted-graph state)]
-    (-> {::path     []
-         ::visited #{}}
-        ($.graph.dfs/walk (fn enter [state]
-                            (let [alias ($.graph.dfs/node state)]
-                              (cond->
-                                state
-                                (not (contains? (state ::visited)
+  ([state alias+]
+
+   (dependent+ state
+               alias+
+               nil))
+
+
+  ([state alias+ visit?]
+
+   (let [alias->required-by (inverted-graph state)
+         visit-2?           (or visit?
+                                (fn visit-2? [_state-2 _alias]
+                                  true))]
+     (-> state
+         (assoc ::path     []
+                ::visited #{})
+         ($.graph.dfs/walk (fn enter [state]
+                             (let [alias ($.graph.dfs/node state)]
+                               (cond->
+                                 state
+                                 (and (not (contains? (state ::visited)
+                                                      alias))
+                                      (visit-2? state
                                                 alias))
-                                (-> (update ::path
-                                            conj
-                                            alias)
-                                    (update ::visited
-                                            conj
-                                            alias)
-                                    ($.graph.dfs/deeper (alias->required-by alias))))))
-                          (mapcat alias->required-by
-                                  alias+))
-        (::path))))
+                                 (-> (update ::path
+                                             conj
+                                             alias)
+                                     (update ::visited
+                                             conj
+                                             alias)
+                                     ($.graph.dfs/deeper (alias->required-by alias))))))
+                           (mapcat alias->required-by
+                                   alias+))
+         (::path)))))
 
 
 
