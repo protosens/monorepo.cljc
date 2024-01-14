@@ -9,7 +9,10 @@
 
 (T/deftest compute
 
-  (T/is (string? ($.classpath/compute))))
+  (T/is (string? ($.classpath/compute)))
+
+  (T/is (string? ($.classpath/compute [:ext/kaocha
+                                       :module/maestro]))))
 
 
 
