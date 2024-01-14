@@ -1,9 +1,12 @@
 (ns protosens.maestro.diff
 
   (:refer-clojure :exclude [print])
-  (:require [protosens.deps.edn.diff       :as-alias $.deps.edn.diff]
+  (:require [clojure.set                   :as       C.set]
+            [protosens.deps.edn.diff       :as-alias $.deps.edn.diff]
             [protosens.deps.edn.diff.alias :as       $.deps.edn.diff.alias]
             [protosens.deps.edn.diff.rev   :as-alias $.deps.edn.diff.rev]
+            [protosens.maestro             :as-alias $.maestro]
+            [protosens.maestro.alias       :as       $.maestro.alias]
             [protosens.maestro.diff        :as-alias $.maestro.diff]
             [protosens.maestro.diff.deps   :as-alias $.maestro.diff.deps]
             [protosens.maestro.diff.rev    :as-alias $.maestro.diff.rev]
@@ -80,6 +83,19 @@
        ($.deps.edn.diff.alias/augmented))))
 
 
+
+(defn impacted
+
+  [state]
+
+  (let [dirty        ($.deps.edn.diff.alias/dirty state)
+        all-impacted ($.maestro.alias/dependent+ {::$.maestro/deps-maestro-edn
+                                                  (state ::$.deps.edn.diff/new)}
+                                                 dirty)]
+    (C.set/difference (set all-impacted)
+                      (set dirty))))
+
+
 ;;;;;;;;;;
 
 
@@ -97,11 +113,11 @@
                                                                    "HEAD")
                                                                (or rev-new
                                                                    "working tree")))
-            diffed              (augmented {::$.deps.edn.diff.rev/old rev-old
+            state               (augmented {::$.deps.edn.diff.rev/old rev-old
                                             ::$.deps.edn.diff.rev/new rev-new})
-            added               (diffed ::$.deps.edn.diff.alias/added)
-            modified-definition (diffed ::$.deps.edn.diff.alias/modified-definition)
-            modified-path+      (diffed ::$.deps.edn.diff.alias/modified-path+)]
+            added               (state ::$.deps.edn.diff.alias/added)
+            modified-definition (state ::$.deps.edn.diff.alias/modified-definition)
+            modified-path+      (state ::$.deps.edn.diff.alias/modified-path+)]
         (doseq [[title
                  alias+] [["Added"
                            added]
@@ -110,7 +126,10 @@
                            modified-definition]
                           ,
                           ["Modified files"
-                           modified-path+]]
+                           modified-path+]
+                          ,
+                          ["Indirectly impacted"
+                           (impacted state)]]
                 :when    (seq alias+)]
         ($.maestro.plugin/step (str $.term.style/bold
                                     title
@@ -118,6 +137,6 @@
         (doseq [alias (sort alias+)]
           ($.maestro.plugin/step 1
                                  alias)))
-        (if (seq ($.deps.edn.diff.alias/dirty diffed))
+        (if (seq ($.deps.edn.diff.alias/dirty state))
           ($.maestro.plugin/fail "Some aliases were modified")
           ($.maestro.plugin/done "No change detected"))))))
