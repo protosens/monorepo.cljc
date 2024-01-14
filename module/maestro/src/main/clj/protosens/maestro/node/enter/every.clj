@@ -1,8 +1,8 @@
 (ns protosens.maestro.node.enter.every
 
   (:require [protosens.maestro           :as-alias $.maestro]
-            [protosens.maestro.namespace :as       $.maestro.namespace]
-            [protosens.maestro.node      :as       $.maestro.node]))
+            [protosens.maestro.node      :as       $.maestro.node]
+            [protosens.maestro.qualifier :as       $.maestro.qualifier]))
 
 
 (set! *warn-on-reflection*
@@ -18,17 +18,17 @@
 
   (if (qualified-keyword? node)
     (let [nm             (name node)
-          node-nmspace   (keyword nm)
+          node-qualifier (keyword nm)
           node-matching+ (sort (filter (fn [kw]
                                          (= (namespace kw)
                                             nm))
                                        (keys (get-in state
                                                      [::$.maestro/deps-maestro-edn
                                                       :aliases]))))
-          node+          (cons node-nmspace
+          node+          (cons node-qualifier
                                node-matching+)]
       (-> state
-          ($.maestro.namespace/unexclude node-nmspace)
+          ($.maestro.qualifier/unexclude node-qualifier)
           ($.maestro.node/unreject+ node+)
           ($.maestro.node/accept node
                                  node+)))

@@ -8,7 +8,6 @@
             [protosens.edn.read                    :as $.edn.read]
             [protosens.graph.dfs                   :as $.graph.dfs]
             [protosens.maestro.alias               :as $.maestro.alias]
-            [protosens.maestro.namespace           :as $.maestro.namespace]
             [protosens.maestro.node                :as $.maestro.node]
             [protosens.maestro.node.enter.default]
             [protosens.maestro.node.enter.diff]
@@ -17,6 +16,7 @@
             [protosens.maestro.node.enter.invert]
             [protosens.maestro.node.enter.shallow]
             [protosens.maestro.plugin              :as $.maestro.plugin]
+            [protosens.maestro.qualifier           :as $.maestro.qualifier]
             [protosens.term.style                  :as $.term.style]))
 
 
@@ -139,7 +139,7 @@
                                  :aliases
                                  {})
        ::deps-maestro-edn deps-maestro-edn}
-      ($.maestro.namespace/init-state)
+      ($.maestro.qualifier/init-state)
       ($.maestro.node/init-state node+)))
 
 

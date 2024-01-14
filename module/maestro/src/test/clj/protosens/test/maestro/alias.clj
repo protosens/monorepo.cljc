@@ -4,8 +4,8 @@
             [protosens.graph.dfs         :as       $.graph.dfs]
             [protosens.maestro           :as-alias $.maestro]
             [protosens.maestro.alias     :as       $.maestro.alias]
-            [protosens.maestro.namespace :as       $.maestro.namespace]
-            [protosens.maestro.node      :as       $.maestro.node]))
+            [protosens.maestro.node      :as       $.maestro.node]
+            [protosens.maestro.qualifier :as       $.maestro.qualifier]))
 
 
 ;;;;;;;;;; Preparations
@@ -149,8 +149,8 @@
         "Namspace not included but is an input")
 
   (T/is (true? (-> -state
-                   ($.maestro.namespace/init-state)
-                   ($.maestro.namespace/include "foo")
+                   ($.maestro.qualifier/init-state)
+                   ($.maestro.qualifier/include "foo")
                    ($.maestro.alias/include? :foo/bar)))
         "Namespace included"))
 

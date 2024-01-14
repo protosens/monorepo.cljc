@@ -28,7 +28,7 @@
 ;;;;;;;;;; Important, entry point for handling nodes
 
 
-(defn- -dispatch-by-namespace
+(defn- -dispatch-by-qualifier
 
   [_state kw]
 
@@ -39,7 +39,7 @@
 
 (defmulti enter
 
-  #'-dispatch-by-namespace)
+  #'-dispatch-by-qualifier)
 
 
 ;;;;;;;;;; API

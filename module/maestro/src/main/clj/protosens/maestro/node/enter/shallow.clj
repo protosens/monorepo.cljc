@@ -1,7 +1,7 @@
 (ns protosens.maestro.node.enter.shallow
 
-  (:require [protosens.maestro.namespace :as $.maestro.namespace]
-            [protosens.maestro.node      :as $.maestro.node]))
+  (:require [protosens.maestro.node      :as $.maestro.node]
+            [protosens.maestro.qualifier :as $.maestro.qualifier]))
 
 
 (set! *warn-on-reflection*
@@ -18,7 +18,7 @@
   (-> state
       (cond->
         (qualified-keyword? node)
-        ($.maestro.namespace/exclude (name node)))
+        ($.maestro.qualifier/exclude (name node)))
       ($.maestro.node/accept node)))
 
 

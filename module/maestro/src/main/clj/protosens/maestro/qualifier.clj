@@ -1,6 +1,6 @@
-(ns protosens.maestro.namespace
+(ns protosens.maestro.qualifier
 
-  ;; TODO. Could be refactor into a generic module?
+  ;; TODO. Could be refactor into a generic module? Allow/deny list?
 
   (:require [clojure.set :as C.set]))
 
@@ -33,96 +33,96 @@
 
 (defn exclude
 
-  [state nmspace]
+  [state qualifier]
 
   (update state
           ::exclude
           conj
-          nmspace))
+          qualifier))
 
 
 
 (defn force-include
 
-  [state nmspace]
+  [state qualifier]
 
   (-> state
-      (unexclude nmspace)
-      (include nmspace)))
+      (unexclude qualifier)
+      (include qualifier)))
 
 
 
 (defn force-include+
 
-  [state nmspace+]
+  [state qualifier+]
 
-  (let [nmspace-2+ (set nmspace+)]
+  (let [qualifier-2+ (set qualifier+)]
     (-> state
-        (unexclude+ nmspace-2+)
-        (include+ nmspace-2+))))
+        (unexclude+ qualifier-2+)
+        (include+ qualifier-2+))))
 
 
 
 (defn include
 
-  [state nmspace]
+  [state qualifier]
 
   (update state
           ::include
           conj
-          nmspace))
+          qualifier))
 
 
 
 (defn include+
 
-  [state nmspace+]
+  [state qualifier+]
 
   (update state
           ::include
           C.set/union
-          (set nmspace+)))
+          (set qualifier+)))
 
 
 
 (defn included?
 
-  [state nmspace]
+  [state qualifier]
 
   (and (not (contains? (state ::exclude)
-                       nmspace))
+                       qualifier))
        (contains? (state ::include)
-                  nmspace)))
+                  qualifier)))
 
 
 
 (defn uninclude
 
-  [state nmspace]
+  [state qualifier]
 
   (update state
           ::include
           disj
-          nmspace))
+          qualifier))
 
 
 
 (defn unexclude
 
-  [state nmspace]
+  [state qualifier]
 
   (update state
           ::exclude
           disj
-          nmspace))
+          qualifier))
 
 
 
 (defn unexclude+
 
-  [state nmspace+]
+  [state qualifier+]
 
   (update state
           ::exclude
           C.set/difference
-          (set nmspace+)))
+          (set qualifier+)))

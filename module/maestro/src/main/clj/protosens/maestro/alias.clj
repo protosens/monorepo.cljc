@@ -2,8 +2,8 @@
 
   (:require [protosens.graph.dfs         :as       $.graph.dfs]
             [protosens.maestro           :as-alias $.maestro]
-            [protosens.maestro.namespace :as       $.maestro.namespace]
-            [protosens.maestro.node      :as       $.maestro.node]))
+            [protosens.maestro.node      :as       $.maestro.node]
+            [protosens.maestro.qualifier :as       $.maestro.qualifier]))
 
 
 (set! *warn-on-reflection*
@@ -129,7 +129,7 @@
 
   [state node]
 
-  (or ($.maestro.namespace/included? state
+  (or ($.maestro.qualifier/included? state
                                      (namespace node))
       ($.maestro.node/input? state
                              node)))

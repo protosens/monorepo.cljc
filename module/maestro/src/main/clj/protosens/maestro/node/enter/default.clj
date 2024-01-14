@@ -3,7 +3,7 @@
   (:require [protosens.maestro.alias     :as $.maestro.alias]
             [protosens.maestro.plugin    :as $.maestro.plugin]
             [protosens.maestro.node      :as $.maestro.node]
-            [protosens.maestro.namespace :as $.maestro.namespace]))
+            [protosens.maestro.qualifier :as $.maestro.qualifier]))
 
 
 (set! *warn-on-reflection*
@@ -38,7 +38,7 @@
   [state node]
 
   (-> state
-      ($.maestro.namespace/include (name node))
+      ($.maestro.qualifier/include (name node))
       ($.maestro.alias/accept node)))
 
 
