@@ -16,8 +16,9 @@
 
   [state node]
 
-  (if-some [nm (name node)]
-    (let [node-nmspace   (keyword nm)
+  (if (qualified-keyword? node)
+    (let [nm             (name node)
+          node-nmspace   (keyword nm)
           node-matching+ (sort (filter (fn [kw]
                                          (= (namespace kw)
                                             nm))
@@ -31,7 +32,8 @@
           ($.maestro.node/unreject+ node+)
           ($.maestro.node/accept node
                                  node+)))
-    state))
+    ($.maestro.node/accept state
+                           node)))
 
 
 

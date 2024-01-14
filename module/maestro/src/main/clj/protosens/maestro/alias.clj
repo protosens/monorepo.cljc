@@ -39,7 +39,8 @@
 
   [state]
 
-  ;; TODO. Shouldn't it rather rely on `::$.maestro.node/accepted`?
+  ;; Using `$.maestro.node/path` instead of `$.maestro.node/accepted` allows us
+  ;; to see the order of acceptance, in case that matters.
 
   (keep (fn [[node _depth]]
           (when (defined? state

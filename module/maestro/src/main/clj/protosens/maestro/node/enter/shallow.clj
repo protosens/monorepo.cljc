@@ -15,10 +15,10 @@
 
   [state node]
 
-  (-> (if-some [nm (name node)]
-        ($.maestro.namespace/exclude state
-                                     nm)
-        state)
+  (-> state
+      (cond->
+        (qualified-keyword? node)
+        ($.maestro.namespace/exclude (name node)))
       ($.maestro.node/accept node)))
 
 

@@ -40,7 +40,8 @@
           ($.maestro.node/init-state input)
           ($.maestro.node/accept node
                                  input)))
-    state))
+    ($.maestro.node/accept state
+                           node)))
 
 
 
