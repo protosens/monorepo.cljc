@@ -12,13 +12,23 @@
 
   ($.test.util.maestro/t-path
     [:m/b :INVERT]
-    {:m/a {:maestro/require [:m/b]}
-     :m/b {:maestro/require [:m/c]}
-     :m/c {}
+    {:m/a {:maestro/require [:m/b
+                             :t/a]}
+     :m/b {:maestro/require [:m/c
+                             :t/b]}
+     :m/c {:maestro/require [:t/c]}
      :m/d {:maestro/require [:m/c
-                             :m/f]}
-     :m/e {:maestro/require [:m/d]}
-     :m/f {}}
+                             :m/f
+                             :t/d]}
+     :m/e {:maestro/require [:m/d
+                             :t/e]}
+     :m/f {:maestro/require [:t/f]}
+     :t/a {}
+     :t/b {}
+     :t/c {}
+     :t/d {}
+     :t/e {}
+     :t/f {}}
     [[:m 0] [:m/b 0] [:m/c 1] [:INVERT 0] [:m/a 1] [:m/d 1] [:m/f 2] [:m/e 1]]
     "Dependents are required (and their own dependencies)")
 

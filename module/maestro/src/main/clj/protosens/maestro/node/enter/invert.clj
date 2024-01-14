@@ -15,7 +15,8 @@
   ($.maestro.node.enter/assert-unqualified node)
   (let [alias-accepted+  ($.maestro.alias/accepted state)
         alias-dependent+ ($.maestro.alias/dependent+ state
-                                                     alias-accepted+)]
+                                                     alias-accepted+
+                                                     $.maestro.alias/include?)]
     (-> state
         ($.maestro.node/unreject+ alias-dependent+)
         ($.maestro.node/accept node
