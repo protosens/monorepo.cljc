@@ -29,25 +29,10 @@
                                   :extra-paths     ["path/d"]}}
                   :deps    {'dep/foo :dep/foo}
                   :paths   ["path/foo"]}]
-    (T/is (= (-> deps-edn
-                 (update :deps
-                         merge
-                         {'dep/a :dep/a
-                          'dep/b :dep/b})
-                 (update :paths
-                         into
-                         ["path/a"
-                          "path/c"])
-                 (assoc-in [:aliases
-                            :m]
-                           nil)
-                 (update :aliases
-                         dissoc
-                         :m/d))
+    (T/is (= [[:m 0] [:m/a 0] [:m/b 1] [:m/c 2]]
              (-> ($.maestro/run [:m/a]
                                 deps-edn)
-                 (::$.maestro/deps-edn)))
-          "Selected alias definitions are flattened")))
+                 (::$.maestro.node/path))))))
 
 
 

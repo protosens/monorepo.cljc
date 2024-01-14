@@ -54,17 +54,17 @@
 
   ([state]
 
-   (let [rev-old              (or (resolve-rev state
-                                               ::$.deps.edn.diff.rev/old)
-                                  ($.git/commit-sha 0))
-         rev-new              (resolve-rev state
-                                           ::$.deps.edn.diff.rev/new)
-         deps-maestro-edn-new ($.maestro.plugin/read-deps-maestro-edn rev-new)]
+   (let [rev-old      (or (resolve-rev state
+                                       ::$.deps.edn.diff.rev/old)
+                          ($.git/commit-sha 0))
+         rev-new      (resolve-rev state
+                                   ::$.deps.edn.diff.rev/new)
+         deps-edn-new ($.maestro.plugin/read-deps-edn rev-new)]
      (-> state
          (assoc ::$.deps.edn.diff.alias/=definition =definition
                 ::$.deps.edn.diff.rev/old           rev-old
-                ::$.deps.edn.diff/new               deps-maestro-edn-new
-                ::$.deps.edn.diff/old               ($.maestro.plugin/read-deps-maestro-edn rev-old))
+                ::$.deps.edn.diff/new               deps-edn-new
+                ::$.deps.edn.diff/old               ($.maestro.plugin/read-deps-edn rev-old))
          ($.deps.edn.diff.alias/init)))))
 
 
@@ -89,7 +89,7 @@
   [state]
 
   (let [dirty        ($.deps.edn.diff.alias/dirty state)
-        all-impacted ($.maestro.alias/dependent+ {::$.maestro/deps-maestro-edn
+        all-impacted ($.maestro.alias/dependent+ {::$.maestro/deps.edn
                                                   (state ::$.deps.edn.diff/new)}
                                                  dirty)]
     (C.set/difference (set all-impacted)

@@ -12,15 +12,14 @@
 
   []
 
-  (binding [*command-line-args* [":GOD"]]
-    ($.maestro/sync))
   ($.maestro.plugin/intro "protosens.task.deps.new/check")
-  ($.maestro.plugin/step "Repository prepared in :GOD mode")
-  ($.maestro.plugin/step "Running Antq to find newest versions of dependencies")
-  (println)
-  (if (-> ($.process/shell ["clojure"
-                            "-T:ext/antq"
-                            "antq.tool/outdated"])
-          ($.process/success?))
-    ($.maestro.plugin/done "Everything looks up-to-date")
-    ($.maestro.plugin/fail "Newer versions found")))
+  ($.maestro.plugin/safe
+    (delay
+      ($.maestro.plugin/step "Running Antq to find newest versions of dependencies")
+      (println)
+      (if (-> ($.process/shell ["clojure"
+                                "-T:ext/antq"
+                                "antq.tool/outdated"])
+              ($.process/success?))
+        ($.maestro.plugin/done "Everything looks up-to-date")
+        ($.maestro.plugin/fail "Newer versions found")))))

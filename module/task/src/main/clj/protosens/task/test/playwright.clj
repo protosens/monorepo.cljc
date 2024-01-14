@@ -2,7 +2,8 @@
 
   (:refer-clojure :exclude [compile])
   (:require [protosens.maestro.plugin :as $.maestro.plugin]
-            [protosens.task.shadow    :as $.task.shadow]))
+            [protosens.task.shadow    :as $.task.shadow]
+            [protosens.task           :as $.task]))
 
 
 ;;;;;;;;;;
@@ -16,7 +17,9 @@
   ($.maestro.plugin/safe
     (delay
       ($.maestro.plugin/step "Preparing for headless browser testing with Playwright")
-      ($.task.shadow/compile-test+ compilation-mode
-                                   nil
-                                   ":test/playwright")
+      ($.task/with-appended-alias+
+        [:module/playwright.test.cljs]
+        (delay
+          ($.task.shadow/compile-test+ compilation-mode
+                                       ":test/playwright")))
       ($.maestro.plugin/done "Tests are ready, see `test:headless:*` tasks"))))

@@ -1,7 +1,8 @@
 (ns protosens.test.maestro.plugin.bb
 
-  (:require [clojure.test                :as T]
-            [protosens.maestro.plugin.bb :as $.maestro.plugin.bb]))
+  (:require [clojure.test                :as       T]
+            [protosens.maestro           :as-alias $.maestro]
+            [protosens.maestro.plugin.bb :as       $.maestro.plugin.bb]))
 
 
 ;;;;;;;;;;
@@ -27,7 +28,7 @@
 
 
 
-(def -deps-maestro-edn
+(def -deps-edn
 
   {:aliases {:m/a {:extra-deps      {'foo/lib-1 {1 2}}
                    :extra-paths     ["path/a"]
@@ -47,10 +48,13 @@
 
 (T/deftest -sync
 
-  (T/is (nil? ($.maestro.plugin.bb/-sync :local/bb
-                                         -bb-edn
-                                         -bb-maestro-edn
-                                         -deps-maestro-edn))
+  (T/is (-> {::$.maestro.plugin.bb/bb.edn         -bb-edn
+             ::$.maestro.plugin.bb/bb.maestro.edn -bb-maestro-edn
+             ::$.maestro.plugin.bb/node           :local/bb
+             ::$.maestro/deps.edn                 -deps-edn}
+            ($.maestro.plugin.bb/-sync)
+            (::$.maestro.plugin.bb/bb.edn)
+            (nil?))
         "Nothing changed")
 
   (T/is (= (update -bb-edn
@@ -58,13 +62,14 @@
                    conj
                    "path/c")
            ,
-           (-> ($.maestro.plugin.bb/-sync :local/bb
-                                          -bb-edn
-                                          -bb-maestro-edn
-                                          (assoc-in -deps-maestro-edn
-                                                    [:aliases
-                                                     :m/b
-                                                     :maestro/require]
-                                                    [:m/c]))
-               (first)))
+           (-> {::$.maestro.plugin.bb/bb.edn         -bb-edn
+                ::$.maestro.plugin.bb/bb.maestro.edn -bb-maestro-edn
+                ::$.maestro.plugin.bb/node           :local/bb
+                ::$.maestro/deps.edn                 (assoc-in -deps-edn
+                                                               [:aliases
+                                                                :m/b
+                                                                :maestro/require]
+                                                               [:m/c])}
+               ($.maestro.plugin.bb/-sync)
+               (::$.maestro.plugin.bb/bb.edn)))
         "Update"))

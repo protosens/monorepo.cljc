@@ -127,8 +127,8 @@
 
   ($.test.util.deps.edn.diff/with-touched-path+
     (fn [_dir+ _file+]
-      (let [deps-maestro-edn ($.maestro.plugin/read-deps-maestro-edn)]
-        (T/is (= {::$.deps.edn.diff.alias/clean          (C.set/difference (-> (deps-maestro-edn :aliases)
+      (let [deps-edn ($.maestro.plugin/read-deps-edn)]
+        (T/is (= {::$.deps.edn.diff.alias/clean          (C.set/difference (-> (deps-edn :aliases)
                                                                                (keys)
                                                                                (set))
                                                                            #{:module/maestro
@@ -136,15 +136,15 @@
                   ::$.deps.edn.diff.alias/modified-path+ #{:module/maestro
                                                            :test/maestro}
                   ::$.deps.edn.diff.rev/old              "HEAD"
-                  ::$.deps.edn.diff/old                  deps-maestro-edn
-                  ::$.deps.edn.diff/new                  deps-maestro-edn}
+                  ::$.deps.edn.diff/old                  deps-edn
+                  ::$.deps.edn.diff/new                  deps-edn}
                  ,
-                 (-> {::$.deps.edn.diff.alias/unprocessed (-> (deps-maestro-edn :aliases)
+                 (-> {::$.deps.edn.diff.alias/unprocessed (-> (deps-edn :aliases)
                                                               (keys)
                                                               (set))
                       ::$.deps.edn.diff.rev/old           "HEAD"
-                      ::$.deps.edn.diff/old               deps-maestro-edn
-                      ::$.deps.edn.diff/new               deps-maestro-edn}
+                      ::$.deps.edn.diff/old               deps-edn
+                      ::$.deps.edn.diff/new               deps-edn}
                      ($.deps.edn.diff.alias/init)
                      ($.deps.edn.diff.alias/modified-path+))))))))
 
@@ -154,9 +154,9 @@
 
   ($.test.util.deps.edn.diff/with-touched-path+
     (fn [_dir+ _file+]
-      ($.test.util.maestro/with-new-deps-maestro-edn
-        (fn [deps-maestro-edn-old deps-maestro-edn-new]
-          (let [unprocessed (-> (deps-maestro-edn-new :aliases)
+      ($.test.util.maestro/with-new-deps-edn
+        (fn [deps-edn-old deps-edn-new]
+          (let [unprocessed (-> (deps-edn-new :aliases)
                                 (keys)
                                 (set))]
             (T/is (= {::$.deps.edn.diff.alias/clean               (C.set/difference unprocessed
@@ -169,13 +169,13 @@
                       ::$.deps.edn.diff.alias/modified-path+      #{:module/maestro
                                                                     :test/maestro}
                       ::$.deps.edn.diff.rev/old                   "HEAD"
-                      ::$.deps.edn.diff/old                       deps-maestro-edn-old
-                      ::$.deps.edn.diff/new                       deps-maestro-edn-new}
+                      ::$.deps.edn.diff/old                       deps-edn-old
+                      ::$.deps.edn.diff/new                       deps-edn-new}
                      ,
                      (-> {::$.deps.edn.diff.alias/unprocessed unprocessed
                           ::$.deps.edn.diff.rev/old           "HEAD"
-                          ::$.deps.edn.diff/old               deps-maestro-edn-old
-                          ::$.deps.edn.diff/new               deps-maestro-edn-new}
+                          ::$.deps.edn.diff/old               deps-edn-old
+                          ::$.deps.edn.diff/new               deps-edn-new}
                          ($.deps.edn.diff.alias/augmented))))))))))
 
 

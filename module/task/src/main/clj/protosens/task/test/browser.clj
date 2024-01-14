@@ -2,7 +2,8 @@
 
   (:require [clojure.java.browse      :as C.java.browse]
             [protosens.maestro.plugin :as $.maestro.plugin]
-            [protosens.task.shadow    :as $.task.shadow]))
+            [protosens.task.shadow    :as $.task.shadow]
+            [protosens.term.style     :as $.term.style]))
 
 
 ;;;;;;;;;;
@@ -14,7 +15,6 @@
 
   ($.maestro.plugin/step "Preparing browser tests")
   ($.task.shadow/compile-test+ compilation-mode
-                               nil
                                ":test/browser")
   (println))
 
@@ -54,5 +54,7 @@
   ($.maestro.plugin/safe
     (delay
       (-open-tab)
-      ($.maestro.plugin/step "After the first compilation, refresh this page")
+      ($.maestro.plugin/step (str $.term.style/bold
+                                  "After the first compilation, refresh this page"
+                                  $.term.style/reset))
       (-compile "watch"))))

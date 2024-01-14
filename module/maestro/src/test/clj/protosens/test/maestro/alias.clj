@@ -23,7 +23,7 @@
 
 
 (def -state
-     (-> {::$.maestro/deps-maestro-edn {:aliases {-node -definition}}}
+     (-> {::$.maestro/deps.edn {:aliases {-node -definition}}}
          ($.maestro.node/init-state [:m/a])))
 
 
@@ -34,11 +34,6 @@
 
   (let [-state-2 ($.maestro.alias/accept -state
                                          -node)]
-
-    (T/is (= -state-2
-             ($.maestro.alias/copy -state-2
-                                   -node))
-          "Was already copied")
   
     (T/is (= '((:m/b :t/a))
              ($.graph.dfs/frontier -state-2))
@@ -58,25 +53,14 @@
 (T/deftest accepted
 
   (T/is (= '(:a :b :c)
-           (-> {::$.maestro/deps-maestro-edn {:aliases {:a {}
-                                                        :b {}
-                                                        :c {}}}}
+           (-> {::$.maestro/deps.edn {:aliases {:a {}
+                                                :b {}
+                                                :c {}}}}
                ($.maestro.node/init-state [])
                ($.maestro.alias/accept :a)
                ($.maestro.alias/accept :b)
                ($.maestro.alias/accept :c)
                ($.maestro.alias/accepted)))))
-
-
-
-(T/deftest copy
-
-  (T/is (= -definition
-           (-> -state
-               ($.maestro.alias/copy -node)
-               (get-in [::$.maestro/deps-edn
-                        :aliases
-                        -node])))))
 
 
 
@@ -104,7 +88,7 @@
 (T/deftest dependent+
 
   (T/is (= [:M/a :N/b :L/c]
-           (-> {::$.maestro/deps-maestro-edn
+           (-> {::$.maestro/deps.edn
                  {:aliases (sorted-map 
                              :M/a {:maestro/require [:N/b
                                                      :M/d]}
@@ -119,7 +103,7 @@
         "Without `visit?`")
 
   (T/is (= [:a]
-           (let [state {::$.maestro/deps-maestro-edn
+           (let [state {::$.maestro/deps.edn
                          {:aliases (sorted-map
                                      :a {:maestro/require [:b
                                                            :c]}
@@ -128,8 +112,8 @@
              (-> state
                  ($.maestro.alias/dependent+ [:c]
                                              (fn [state-2 node]
-                                               (T/is (= (state-2 ::$.maestro/deps-maestro-edn)
-                                                        (state ::$.maestro/deps-maestro-edn))
+                                               (T/is (= (state-2 ::$.maestro/deps.edn)
+                                                        (state ::$.maestro/deps.edn))
                                                      "State passed as expected")
                                                (not= node
                                                      :b))))))
@@ -164,7 +148,7 @@
             :d [:a
                 :b]
             :e [:c]}
-           ($.maestro.alias/inverted-graph {::$.maestro/deps-maestro-edn
+           ($.maestro.alias/inverted-graph {::$.maestro/deps.edn
                                               {:aliases (sorted-map 
                                                           :a {:maestro/require [:b
                                                                                 :d]}

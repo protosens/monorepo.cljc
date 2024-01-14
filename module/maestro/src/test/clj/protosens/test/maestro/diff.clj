@@ -48,8 +48,8 @@
 
 (T/deftest init
 
-  ($.test.util.maestro/with-new-deps-maestro-edn
-    (fn [deps-maestro-edn-old deps-maestro-edn-new]
+  ($.test.util.maestro/with-new-deps-edn
+    (fn [deps-edn-old deps-edn-new]
       (let [state-default ($.maestro.diff/init)
             sha-head      ($.git/commit-sha 0)]
 
@@ -57,7 +57,7 @@
 
           "Defaults"
 
-          (T/is (= (-> (deps-maestro-edn-new :aliases)
+          (T/is (= (-> (deps-edn-new :aliases)
                        (keys)
                        (set))
                    (state-default ::$.deps.edn.diff.alias/unprocessed))
@@ -67,14 +67,14 @@
                    (state-default ::$.deps.edn.diff.rev/old))
                 "Aim to diff against head")
 
-          (T/is (= deps-maestro-edn-old
+          (T/is (= deps-edn-old
                    (state-default ::$.deps.edn.diff/old))
                 "Checked out old `deps.maestro.edn`")
 
           (T/is (nil? (state-default ::$.deps.edn.diff.rev/new))
                 "AIm to diff from working tree")
 
-          (T/is (= deps-maestro-edn-new
+          (T/is (= deps-edn-new
                    (state-default ::$.deps.edn.diff/new))
                 "Checked out new `deps.maestro.edn`"))))))
 
@@ -84,10 +84,10 @@
 
   ($.test.util.deps.edn.diff/with-touched-path+
     (fn [_dir+ _file+]
-      ($.test.util.maestro/with-new-deps-maestro-edn
-        (fn [deps-maestro-edn-old deps-maestro-edn-new]
+      ($.test.util.maestro/with-new-deps-edn
+        (fn [deps-edn-old deps-edn-new]
           (T/is (= {::$.deps.edn.diff.alias/=definition         $.maestro.diff/=definition
-                    ::$.deps.edn.diff.alias/clean               (C.set/difference (-> (deps-maestro-edn-new :aliases)
+                    ::$.deps.edn.diff.alias/clean               (C.set/difference (-> (deps-edn-new :aliases)
                                                                                       (keys)
                                                                                       (set))
                                                                                   #{:added-for-testing
@@ -99,7 +99,7 @@
                     ::$.deps.edn.diff.alias/modified-path+      #{:module/maestro
                                                                   :test/maestro}
                     ::$.deps.edn.diff.rev/old                   ($.git/commit-sha 0)
-                    ::$.deps.edn.diff/old                       deps-maestro-edn-old
-                    ::$.deps.edn.diff/new                       deps-maestro-edn-new}
+                    ::$.deps.edn.diff/old                       deps-edn-old
+                    ::$.deps.edn.diff/new                       deps-edn-new}
                    ,
                    ($.maestro.diff/augmented))))))))

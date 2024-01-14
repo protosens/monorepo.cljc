@@ -21,10 +21,23 @@
    :task     (protosens.task.clean/everything)}
 
 
+  clj
+  {:doc      "Runs `clj` by expanding aliases with Maestro"
+   :requires ([protosens.maestro.task])
+   :task     (protosens.maestro.task/clj)}
+
+
+  clojure
+  {:doc              "Runs `clojure` by expanding aliases with Maestro"
+   :override-builtin true
+   :requires         ([protosens.maestro.task])
+   :task             (protosens.maestro.task/clojure)}
+
+
   deps
-  {:doc      "Prepares `deps.edn` for the given aliases"
-   :requires ([protosens.task.deps])
-   :task     (protosens.task.deps/sync)}
+  {:doc      "Prints a graph by expanding given aliases against `deps.edn` with Maestro"
+   :requires ([protosens.maestro.task])
+   :task     (protosens.maestro.task/graph)}
 
 
   deps:bb
@@ -56,16 +69,24 @@
    :requires ([protosens.task.deps.nvd])
    :task     (protosens.task.deps.nvd/check)}
 
+
+  deps:sync
+  {:doc      "Syncs `deps.edn` with some other tools if necessary"
+   :requires ([protosens.task.deps.sync])
+   :task     (protosens.task.deps.sync/run)}
+
+
   expose
   {:doc      "Generates custom `deps.edn` files for public modules to expose them as gitlibs"
-   :requires ([protosens.maestro.plugin.gitlib])
-   :task     (protosens.maestro.plugin.gitlib/expose)}
+   :requires ([protosens.task.gitlib])
+   :task     (protosens.task.gitlib/expose)}
 
 
   expose:local
   {:doc      "Like `expose` but dependencies to other modules are expressed using file paths (for testing)"
-   :requires ([protosens.maestro.plugin.gitlib])
-   :task     (protosens.maestro.plugin.gitlib/expose-local)}
+   :requires ([protosens.task.gitlib])
+   :task     (protosens.task.gitlib/expose-local)}
+
 
   git:commit
   {:doc      "Runs `git commit` with additional checks like linting"
@@ -122,8 +143,8 @@
 
   test:bb
   {:doc      "Tests current `deps.edn` aliases on Babashka"
-   :requires ([protosens.task.bb])
-   :task     (protosens.task.bb/test)}
+   :requires ([protosens.task.test.bb])
+   :task     (protosens.task.test.bb/run)}
 
 
   test:browser

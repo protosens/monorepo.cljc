@@ -23,7 +23,7 @@
                                          (= (namespace kw)
                                             nm))
                                        (keys (get-in state
-                                                     [::$.maestro/deps-maestro-edn
+                                                     [::$.maestro/deps.edn
                                                       :aliases]))))
           node+          (cons node-qualifier
                                node-matching+)]

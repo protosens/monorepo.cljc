@@ -19,7 +19,7 @@
 
   ($.maestro.node.enter/assert-unqualified node)
   (let [alias+         (-> state
-                           (get-in [::$.maestro/deps-maestro-edn
+                           (get-in [::$.maestro/deps.edn
                                     :aliases])
                            (keys)
                            (sort))

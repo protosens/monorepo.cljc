@@ -22,7 +22,7 @@
 
 (defn ^:no-doc -module-path+
 
-  [deps-maestro-edn]
+  [deps-edn]
 
   (into []
         (keep (fn [[alias definition]]
@@ -32,7 +32,7 @@
                     (when (bb.fs/exists? path-changelog)
                       [alias
                        path-changelog]))))
-        (deps-maestro-edn :aliases))))
+        (deps-edn :aliases))))
 
 
 
@@ -54,10 +54,11 @@
 
 (defn- -module+
 
-  [context deps-maestro-edn]
+  [context deps-edn]
 
   (doseq [[alias
-           path-changelog] (-module-path+ deps-maestro-edn)]
+           path-changelog] (-> ($.maestro.plugin/read-deps-edn)
+                               (-module-path+))]
     ($.maestro.plugin/step 1
                            (format "%s  ->  %s"
                                    alias
@@ -83,21 +84,12 @@
 
 (defn template
 
+  [context]
 
-  ([context]
-
-   (template context
-             nil))
-
-
-  ([context deps-maestro-edn]
-
-   ($.maestro.plugin/intro "maestro.plugin.changelog/template")
-   ($.maestro.plugin/safe
-     (delay
-       ($.maestro.plugin/step "Templating changelogs:")
-       (-top context)
-       (-module+ context
-                 (or deps-maestro-edn
-                     ($.maestro.plugin/read-deps-maestro-edn)))
-       ($.maestro.plugin/done "Changelogs are ready")))))
+  ($.maestro.plugin/intro "maestro.plugin.changelog/template")
+  ($.maestro.plugin/safe
+    (delay
+      ($.maestro.plugin/step "Templating changelogs:")
+      (-top context)
+      (-module+ context)
+      ($.maestro.plugin/done "Changelogs are ready"))))

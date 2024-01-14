@@ -2,6 +2,8 @@
 
   (:require [babashka.fs              :as bb.fs]
             [protosens.classpath      :as $.classpath]
+            [protosens.maestro        :as $.maestro]
+            [protosens.maestro.alias  :as $.maestro.alias]
             [protosens.maestro.plugin :as $.maestro.plugin]
             [protosens.process        :as $.process]))
 
@@ -13,7 +15,7 @@
 
   []
 
-  (let [path "private/nvd-token.txt"]
+  (let [path "./private/nvd-token.txt"]
     ($.maestro.plugin/step (format "Retrieving NVD API token from `%s`"
                                    path))
     (when-not (bb.fs/exists? path)
@@ -30,7 +32,14 @@
   []
 
   ($.maestro.plugin/step "Computing classpath to check from current `deps.edn`")
-  ($.classpath/compute))
+  (binding [$.maestro.plugin/*print-path?* true]
+    (let [alias+ (->> ($.maestro/run-string (or (first *command-line-args*)
+                                                ":GOD")
+                                            ($.maestro.plugin/read-deps-edn))
+                      ($.maestro.alias/accepted)
+                      (filter #(not= %
+                                     :ext/nvd-clojure)))]
+      ($.classpath/compute alias+))))
 
 
 ;;;;;;;;;; Public
@@ -54,8 +63,8 @@
                                   (format "\"%s\""
                                           cp)
                                   ":config-filename"
-                                  "\"nvd/config.edn\""]
+                                  "\"./nvd/config.edn\""]
                                  {:extra-env {"NVD_API_TOKEN" token}})
                 ($.process/success?))
           ($.maestro.plugin/done "No vulnerabilities found")
-          ($.maestro.plugin/fail "Some vulnerabilities were found"))))))
+          ($.maestro.plugin/fail "Some vulnerabilities were found or an error occured"))))))

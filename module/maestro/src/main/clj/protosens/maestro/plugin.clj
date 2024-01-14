@@ -156,17 +156,17 @@
 ;;;
 
 
-(defn read-deps-maestro-edn
+(defn read-deps-edn
 
 
   ([]
 
-   (read-deps-maestro-edn nil))
+   (read-deps-edn nil))
 
 
   ([rev]
 
-   (let [path "./deps.maestro.edn"]
+   (let [path "./deps.edn"]
      (if rev
        (-> ($.git/show-file rev
                             path)

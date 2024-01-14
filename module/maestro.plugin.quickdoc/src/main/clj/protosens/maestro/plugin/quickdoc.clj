@@ -26,7 +26,7 @@
   ($.maestro.plugin/intro "maestro.plugin.quickdoc/module+")
   ($.maestro.plugin/safe
     (delay
-      (let [deps-edn ($.maestro.plugin/read-deps-maestro-edn)
+      (let [deps-edn ($.maestro.plugin/read-deps-edn)
             option+  (deps-edn :maestro.plugin.quickdoc/option+)]
         (when (empty? option+)
           ($.maestro.plugin/fail "Options for Quickdoc not provided in `deps.maestro.edn`"))
@@ -40,9 +40,8 @@
                                         (or (not-empty (definition :extra-paths))
                                             ($.maestro.plugin/fail (format "Alias `%s` does not have any `:extra-paths`"
                                                                            alias)))]))
-                                   (->> ($.maestro.plugin/read-deps-maestro-edn)
-                                        (:aliases)
-                                        (sort-by first)))]
+                                   (sort-by first
+                                            (deps-edn :aliases)))]
           (bb.fs/create-dirs (bb.fs/parent path-output))
           (quickdoc/quickdoc (assoc option+
                                     :outfile      path-output

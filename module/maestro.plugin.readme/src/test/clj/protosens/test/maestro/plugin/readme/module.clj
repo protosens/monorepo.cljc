@@ -9,17 +9,11 @@
 ;;;;;;;;;; Helpers
 
 
-(def ^:private -deps-maestro-edn
-
-  ($.edn.read/file "deps.maestro.edn"))
-
-
-
 (def ^:private -maestro-definition
 
-  (get-in -deps-maestro-edn
-          [:aliases
-           :module/maestro]))
+  (-> ($.edn.read/file "./deps.edn")
+      (get-in [:aliases
+               :module/maestro])))
 
 
 

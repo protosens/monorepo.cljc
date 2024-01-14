@@ -38,19 +38,19 @@
 
 (T/deftest read-file-edn
 
-  (T/is (map? ($.maestro.plugin/read-file-edn "./deps.maestro.edn"))))
+  (T/is (map? ($.maestro.plugin/read-file-edn "./deps.edn"))))
 
 
 
-(T/deftest read-deps-maestro-edn
+(T/deftest read-deps-edn
 
-  (T/is (map? ($.maestro.plugin/read-deps-maestro-edn)))
+  (T/is (map? ($.maestro.plugin/read-deps-edn)))
 
-  (T/is (= ($.maestro.plugin/read-file-edn "./deps.maestro.edn")
-           ($.maestro.plugin/read-deps-maestro-edn))
+  (T/is (= ($.maestro.plugin/read-file-edn "./deps.edn")
+           ($.maestro.plugin/read-deps-edn))
         "From working tree")
 
-  (T/is (= ($.maestro.plugin/read-deps-maestro-edn)
-           ($.maestro.plugin/read-deps-maestro-edn "HEAD"))
+  (T/is (= ($.maestro.plugin/read-deps-edn)
+           ($.maestro.plugin/read-deps-edn "HEAD"))
         "From revision"))
 

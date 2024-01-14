@@ -17,6 +17,8 @@
             [protosens.maestro.node.enter.shallow]
             [protosens.maestro.plugin              :as $.maestro.plugin]
             [protosens.maestro.qualifier           :as $.maestro.qualifier]
+            [protosens.process                     :as $.process]
+            [protosens.string                      :as $.string]
             [protosens.term.style                  :as $.term.style]))
 
 
@@ -114,31 +116,11 @@
 
 
 
-(defn- -flatten-deps-edn
-
-  [state]
-
-  (update state
-          ::deps-edn
-          (fn [deps-edn]
-            (let [alias->definition (deps-edn :aliases)]
-              ($.deps.edn/flatten deps-edn
-                                  (filter (fn [alias]
-                                            (not (false? (get-in alias->definition
-                                                                 [alias
-                                                                  :maestro/flatten?]))))
-                                          ($.maestro.alias/accepted state)))))))
-
-
-
 (defn- -init-state
 
-  [deps-maestro-edn node+]
+  [deps-edn node+]
 
-  (-> {::deps-edn         (assoc deps-maestro-edn
-                                 :aliases
-                                 {})
-       ::deps-maestro-edn deps-maestro-edn}
+  (-> {::deps.edn deps-edn}
       ($.maestro.qualifier/init-state)
       ($.maestro.node/init-state node+)))
 
@@ -148,21 +130,20 @@
 
 (defn run
 
-  [node+ deps-maestro-edn]
+  [node+ deps-edn]
 
   (let [node-2+ ($.maestro.node/expand-input node+)]
     (-print-tree-begin)
-    (-> (-init-state deps-maestro-edn
+    (-> (-init-state deps-edn
                      node-2+)
         ($.graph.dfs/walk -enter-node
-                          node-2+)
-        (-flatten-deps-edn))))
+                          node-2+))))
 
 
 
 (defn run-string
 
-  [string-node+ deps-maestro-edn]
+  [string-node+ deps-edn]
 
   (let [node+ (map keyword
                    (or (-> string-node+
@@ -170,56 +151,54 @@
                            (next))
                        ($.maestro.plugin/fail "Given input nodes are not keywords")))]
     (run node+
-         deps-maestro-edn)))
+         deps-edn)))
 
 
 ;;;;;;;;;; Tasks
 
 
-(defn- -write-deps-edn
+(defn- -clojure
 
-  [deps-edn]
+  [command arg+]
 
-  ($.maestro.plugin/step "Writing selection to `deps.edn`")
-  (with-open [writer (C.java.io/writer "deps.edn")]
-    (C.pprint/pprint deps-edn
-                     writer)))
+  (-> ($.process/shell (cons command
+                             (map (fn [arg]
+                                    (let [-? ($.string/cut-out arg
+                                                               0
+                                                               2)]
+                                      (if (contains? #{"-A"
+                                                       "-M"
+                                                       "-T"
+                                                       "-X"}
+                                                     -?)
+                                        (let [alias+ (-> arg
+                                                         ($.string/trunc-left 2)
+                                                         (run-string ($.maestro.plugin/read-deps-edn))
+                                                         ($.maestro.alias/accepted))]
+                                          (when $.maestro.plugin/*print-path?*
+                                            (println))
+                                          (str -?
+                                               (C.string/join ""
+                                                              alias+)))
+                                        arg)))
+                                  arg+)))
+      ($.process/exit-code)))
 
 
 
-(defn sync
+(defn clj
 
-  
-  ([]
+  [arg+]
 
-   (sync nil))
-
-
-  ([string-node+]
-
-   (sync string-node+
-         nil))
+  (binding [$.maestro.plugin/*print-path?* true]
+    (-clojure "clj"
+              arg+)))
 
 
-  ([string-node+ deps-maestro-edn]
 
-   ($.maestro.plugin/intro "maestro/sync")
-   ($.maestro.plugin/step "Selecting required nodes")
-   ($.maestro.plugin/safe
-     (delay
-       (let [alias-str-2      (or string-node+
-                                  (first *command-line-args*)
-                                  ($.maestro.plugin/fail "No input nodes given as arguments"))
-             deps-maestro-edn-2 (or deps-maestro-edn
-                                    (try
-                                      ($.edn.read/file "deps.maestro.edn")
-                                      (catch Throwable ex
-                                        ($.maestro.plugin/fail "Unable to read `deps.maestro.edn`"
-                                                               ex))))
-             deps-edn         (binding [$.maestro.plugin/*print-path?* true]
-                                (-> (run-string alias-str-2
-                                                deps-maestro-edn-2)
-                                    (::deps-edn)))]
-         (-write-deps-edn deps-edn)
-         ($.maestro.plugin/done "`deps.edn` is ready")
-         deps-edn)))))
+(defn clojure
+
+  [arg+]
+
+  (-clojure "clojure"
+            arg+))

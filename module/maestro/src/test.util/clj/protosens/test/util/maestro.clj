@@ -52,11 +52,11 @@
 ;;;;;;;;;; Miscellaneous helpers
 
 
-(defn with-new-deps-maestro-edn
+(defn with-new-deps-edn
 
   [f]
 
-  (let [path     "./deps.maestro.edn"
+  (let [path     "./deps.edn"
         saved    (slurp path)
         modified (-> saved
                      ($.edn.read/string)
@@ -71,7 +71,7 @@
       ;;
       (spit path
             modified)
-      (f ($.maestro.plugin/read-deps-maestro-edn "HEAD")
+      (f ($.maestro.plugin/read-deps-edn "HEAD")
          modified)
       ;;
       (finally

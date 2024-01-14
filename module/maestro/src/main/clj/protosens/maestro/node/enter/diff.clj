@@ -34,7 +34,7 @@
                     $.term.style/reset))
       (println)
       (-> state
-          (update-in [::$.maestro/deps-edn
+          (update-in [::$.maestro/deps.edn
                       :aliases]
                      empty)
           ($.maestro.node/init-state input)

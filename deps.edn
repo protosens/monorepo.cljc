@@ -2,17 +2,11 @@
 
 
  ;; OPTIONS FOR MAESTRO AND PLUGINS
-
- :maestro.plugin.gitlib/url       "https://github.com/protosens/monorepo.cljc"
- ,
- :maestro.plugin.quickdoc/option+ {:git/branch  "main"
-                                   :github/repo "https://github.com/protosens/monorepo.cljc"
-                                   :toc         true
-                                   :var-links   true
-                                   :var-pattern :wikilinks}
- ,
- :maestro.plugin.kaocha/path      "./private/tmp/maestro-kaocha.edn"
- :maestro.plugin.kaocha/selector+ [:test/_]
+ :maestro.plugin.quickdoc/option+  {:git/branch  "main"
+                                    :github/repo "https://github.com/protosens/monorepo.cljc"
+                                    :toc         true
+                                    :var-links   true
+                                    :var-pattern :wikilinks}
 
 
 
@@ -39,7 +33,6 @@
                      :module
                      :test
                      :ext/criterium
-                     :ext/nrepl
                      :module/dev]}
 
 
@@ -48,10 +41,7 @@
   {:maestro/doc     "Provides utilities for testing, notably Kaocha"
    :maestro/require [:ext
                      :module
-                     :test.util
-                     :ext/shadow-cljs
-                     :ext/kaocha
-                     :module/playwright.test.cljs]}
+                     :test.util]}
 
 
 
@@ -120,26 +110,21 @@
   :ext/kaocha
 
   {:extra-deps  {lambdaisland/kaocha {:mvn/version "1.87.1366"}}
-   :main-opts   ["-m" "kaocha.runner"
-                 "--config-file" "test/kaocha.edn"]
    :maestro/doc "Test runner"
    :maestro/url "https://github.com/lambdaisland/kaocha"}
 
 
   :ext/nrepl
   {:extra-deps  {nrepl/nrepl {:mvn/version "1.1.0"}}
-   :maestro/doc "Running NREPL."
-   :maestro/url "https://github.com/nrepl/nrepl"
-   :main-opts   ["-m" "nrepl.cmdline"
-                 "-p" "14563"]}
+   :maestro/doc "Running NREPL"
+   :maestro/url "https://github.com/nrepl/nrepl"}
 
 
   :ext/nvd-clojure
 
-  {:extra-deps       {nvd-clojure/nvd-clojure {:mvn/version "4.0.0"}}
-   :maestro/doc      "National Vulnerability Database dependency checker for Clojure projects"
-   :maestro/flatten? false
-   :maestro/url      "https://github.com/rm-hull/nvd-clojure"}
+  {:extra-deps  {nvd-clojure/nvd-clojure {:mvn/version "4.0.0"}}
+   :maestro/doc "National Vulnerability Database dependency checker for Clojure projects"
+   :maestro/url "https://github.com/rm-hull/nvd-clojure"}
 
 
   :ext/playwright
@@ -174,9 +159,7 @@
 
   :ext/shadow-cljs
 
-  {:extra-deps      {thheller/shadow-cljs {:mvn/version "2.26.3"}}
-   :main-opts       ["-m"
-                     "shadow.cljs.devtools.cli"]
+  {:extra-deps      {thheller/shadow-cljs {:mvn/version "2.26.4"}}
    :maestro/doc     "Clojurescript compilation made easy"
    :maestro/require [:ext/cider-nrepl]
    :maestro/url     "https://github.com/thheller/shadow-cljs"}
@@ -414,7 +397,9 @@
    :maestro/doc                    "Maestro plugin for syncinc `deps.maestro.edn` with `bb.edn`."
    :maestro/platform+              [:bb
                                     :jvm]              
-   :maestro/require                [:module/maestro
+   :maestro/require                [:module/deps.edn
+                                    :module/maestro
+                                    :module/path
                                     :test/maestro.plugin.bb]
    :maestro/root                   "module/maestro.plugin.bb/"
    :maestro.plugin.gitlib/name     protosens/maestro.plugin.bb
@@ -457,6 +442,7 @@
                                     :jvm]              
    :maestro/require                [:ext/clj-kondo
                                     :module/classpath
+                                    :module/deps.edn
                                     :module/maestro
                                     :module/term.style]
    :maestro/root                   "module/maestro.plugin.clj-kondo/"
@@ -472,8 +458,10 @@
    :maestro/platform+              [:bb
                                     :jvm]              
    :maestro/require                [:ext/babashka.fs
+                                    :module/deps.edn
                                     :module/git
                                     :module/maestro
+                                    :module/path
                                     :test/maestro.plugin.gitlib]
    :maestro/root                   "module/maestro.plugin.gitlib/"
    :maestro.plugin.gitlib/name     protosens/maestro.plugin.gitlib
@@ -483,7 +471,8 @@
   :test/maestro.plugin.gitlib
 
   {:extra-paths     ["module/maestro.plugin.gitlib/src/test/clj/"]
-   :maestro/require [:module/maestro.plugin.gitlib
+   :maestro/require [:module/edn
+                     :module/maestro.plugin.gitlib
                      :test.util/maestro]}
 
   ;---
@@ -495,8 +484,6 @@
    :maestro/platform+              [:bb
                                     :jvm]              
    :maestro/require                [:ext/babashka.fs
-                                    :ext/kaocha
-                                    :module/deps.edn
                                     :module/maestro
                                     :test/maestro.plugin.kaocha]
    :maestro/root                   "module/maestro.plugin.kaocha/"

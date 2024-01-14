@@ -18,72 +18,59 @@
 (defn listing
 
 
-  ([]
+  []
 
-   (listing nil))
-
-
-  ([deps-maestro-edn]
-
-   ($.maestro.plugin/intro "maestro.plugin.readme/listing")
-   ($.maestro.plugin/safe
-     (delay
-       ($.maestro.plugin/step "Generating `module/README.md`")
-       (let [alias->definition (-> (or deps-maestro-edn
-                                       ($.maestro.plugin/read-deps-maestro-edn))
-                                   (:aliases))
-             path              "module/README.md"]
-         (bb.fs/create-dirs "module")
-         (with-open [writer (C.java.io/writer path)]
-           (binding [*out* writer]
-             (println "# Modules")
-             (println)
-             (println "---")
-             (println)
-             ($.maestro.plugin.readme.listing/exposed alias->definition)
-             (println)
-             (println "---")
-             (println)
-             ($.maestro.plugin.readme.listing/internal alias->definition))))
-       ($.maestro.plugin/done "`module/README.md` is ready")))))
+  ($.maestro.plugin/intro "maestro.plugin.readme/listing")
+  ($.maestro.plugin/safe
+    (delay
+      ($.maestro.plugin/step "Generating `module/README.md`")
+      (let [alias->definition (-> ($.maestro.plugin/read-deps-edn)
+                                  (:aliases))
+            path              "module/README.md"]
+        (bb.fs/create-dirs "module")
+        (with-open [writer (C.java.io/writer path)]
+          (binding [*out* writer]
+            (println "# Modules")
+            (println)
+            (println "---")
+            (println)
+            ($.maestro.plugin.readme.listing/exposed alias->definition)
+            (println)
+            (println "---")
+            (println)
+            ($.maestro.plugin.readme.listing/internal alias->definition))))
+      ($.maestro.plugin/done "`module/README.md` is ready"))))
 
 
 
 (defn module+
 
+  []
 
-  ([]
-
-   (module+ nil))
-
-
-  ([deps-maestro-edn]
-
-   ($.maestro.plugin/intro "maestro.plugin.readme/module+")
-   ($.maestro.plugin/safe
-     (delay
-       ($.maestro.plugin/step "Generating READMEs for all modules:")
-       (let [deps-maestro-edn-2 (or deps-maestro-edn
-                                    ($.maestro.plugin/read-deps-maestro-edn))
-             exposed            {:sha (or (deps-maestro-edn-2 :maestro.plugin.gitlib/sha)
-                                          ($.git/commit-sha 0))
-                                 :url (deps-maestro-edn-2 :maestro.plugin.gitlib/url)}]
-         (doseq [[alias
-                  definition] ($.maestro.plugin.readme.module/alias+ deps-maestro-edn-2)
-                 :let         [path-readme (str (definition :maestro/root)
-                                                "/README.md")]]
-           ($.maestro.plugin/step 1
-                                  (format "%s  ->  %s"
-                                          alias
-                                          path-readme))
-           (with-open [writer (C.java.io/writer path-readme)]
-             (binding [*out* writer]
-               ($.maestro.plugin.readme.module/header definition)
-               (println)
-               ($.maestro.plugin.readme.module/warn-experimental definition)
-               ($.maestro.plugin.readme.module/docstring definition)
-               ($.maestro.plugin.readme.module/gitlib definition
-                                                      exposed)
-               ($.maestro.plugin.readme.module/platform+ definition)
-               ($.maestro.plugin.readme.module/body definition)))))
-       ($.maestro.plugin/done "READMEs ready for all modules")))))
+  ($.maestro.plugin/intro "maestro.plugin.readme/module+")
+  ($.maestro.plugin/safe
+    (delay
+      ($.maestro.plugin/step "Generating READMEs for all modules:")
+      (let [deps-edn ($.maestro.plugin/read-deps-edn)
+            exposed  {:sha (or (deps-edn :maestro.plugin.gitlib/sha)
+                               ($.git/commit-sha 0))
+                      :url (deps-edn :maestro.plugin.gitlib/url)}]
+        (doseq [[alias
+                 definition] ($.maestro.plugin.readme.module/alias+ deps-edn)
+                :let         [path-readme (str (definition :maestro/root)
+                                               "/README.md")]]
+          ($.maestro.plugin/step 1
+                                 (format "%s  ->  %s"
+                                         alias
+                                         path-readme))
+          (with-open [writer (C.java.io/writer path-readme)]
+            (binding [*out* writer]
+              ($.maestro.plugin.readme.module/header definition)
+              (println)
+              ($.maestro.plugin.readme.module/warn-experimental definition)
+              ($.maestro.plugin.readme.module/docstring definition)
+              ($.maestro.plugin.readme.module/gitlib definition
+                                                     exposed)
+              ($.maestro.plugin.readme.module/platform+ definition)
+              ($.maestro.plugin.readme.module/body definition)))))
+      ($.maestro.plugin/done "READMEs ready for all modules"))))

@@ -2,10 +2,13 @@
 
   (:import (java.io StringWriter))
   (:refer-clojure :exclude [sync])
-  (:require [clojure.java.io          :as C.java.io]
-            [clojure.pprint           :as C.pprint]
-            [protosens.maestro        :as $.maestro]
-            [protosens.maestro.plugin :as $.maestro.plugin]))
+  (:require [clojure.java.io             :as       C.java.io]
+            [clojure.pprint              :as       C.pprint]
+            [protosens.deps.edn          :as       $.deps.edn]
+            [protosens.maestro           :as       $.maestro]
+            [protosens.maestro.alias     :as       $.maestro.alias]
+            [protosens.maestro.plugin    :as       $.maestro.plugin]
+            [protosens.maestro.plugin.bb :as-alias $.maestro.plugin.bb]))
 
 
 (set! *warn-on-reflection*
@@ -17,21 +20,23 @@
 
 (defn- -read-bb-edn
 
-  []
+  [state]
 
-  ($.maestro.plugin/read-file-edn "bb.edn"))
+  (assoc state
+         ::$.maestro.plugin.bb/bb.edn
+         ($.maestro.plugin/read-file-edn "bb.edn")))
 
 
 
 (defn- -write-bb-edn
 
-  [bb-edn tree-string]
+  [state]
 
-  (println tree-string)
-  ($.maestro.plugin/step "Writing new `bb.edn`")
-  (with-open [file (C.java.io/writer "bb.edn")]
-    (C.pprint/pprint bb-edn
-                 file))
+  (println (state ::$.maestro.plugin.bb/tree))
+  ($.maestro.plugin/step "Writing new `./bb.edn`")
+  (with-open [file (C.java.io/writer "./bb.edn")]
+    (C.pprint/pprint (state ::$.maestro.plugin.bb/bb.edn)
+                     file))
   ($.maestro.plugin/done "Ready to use Babashka"))
 
 
@@ -40,37 +45,43 @@
 
 (defn ^:no-doc -sync
 
-  [node bb-edn bb-maestro-edn deps-maestro-edn]
+  [state]
 
-  (let [tree-stream (StringWriter.)
-        maestro-run (binding [*out*                          tree-stream
-                              $.maestro.plugin/*print-path?* true]
-                      ($.maestro/run [node]
-                                     deps-maestro-edn))
-        bb-edn-new  (-> bb-maestro-edn
-                        (update :tasks
-                                (partial into
-                                         (sorted-map)))
-                        (merge (-> maestro-run
-                                   (::$.maestro/deps-edn)
-                                   (select-keys [:deps
-                                                 :paths]))))]
-    (when-not (= bb-edn-new
-                 bb-edn)
-      [bb-edn-new
-       (str tree-stream)])))
+  (let [tree-stream   (StringWriter.)
+        deps-edn      (state ::$.maestro/deps.edn)
+        node          (state ::$.maestro.plugin.bb/node)
+        maestro-state (binding [*out*                          tree-stream
+                                $.maestro.plugin/*print-path?* true]
+                        ($.maestro/run [node]
+                                       deps-edn))
+        alias+        ($.maestro.alias/accepted maestro-state)
+        bb-edn-new    (-> (state ::$.maestro.plugin.bb/bb.maestro.edn)
+                          (update :tasks
+                                  (partial into
+                                           (sorted-map)))
+                          (merge (-> ($.deps.edn/flatten deps-edn
+                                                         alias+)
+                                     (select-keys [:deps
+                                                   :paths]))))]
+    (if (= bb-edn-new
+           (state ::$.maestro.plugin.bb/bb.edn))
+      (dissoc state
+              ::$.maestro.plugin.bb/bb.edn)
+      (assoc state
+             ::$.maestro.plugin.bb/bb.edn bb-edn-new
+             ::$.maestro.plugin.bb/tree   (str tree-stream)))))
 
 
 
 (defn- -sync-from-task
 
-  [node deps-maestro-edn]
+  [node]
 
-  (-sync node
-         (-read-bb-edn)
-         ($.maestro.plugin/read-file-edn "bb.maestro.edn")
-         (or deps-maestro-edn
-             ($.maestro.plugin/read-deps-maestro-edn))))
+  (-> {::$.maestro.plugin.bb/bb.edn         ($.maestro.plugin/read-file-edn "./bb.edn")
+       ::$.maestro.plugin.bb/bb.maestro.edn ($.maestro.plugin/read-file-edn "./bb.maestro.edn")
+       ::$.maestro.plugin.bb/node           node
+       ::$.maestro/deps.edn                 ($.maestro.plugin/read-deps-edn)}
+      (-sync)))
 
 
 
@@ -82,33 +93,27 @@
   ($.maestro.plugin/step "Checking if `bb.edn` is in sync with `bb.maestro.edn` and `deps.maestro.edn`")
   ($.maestro.plugin/safe
     (delay
-      (if (-sync-from-task node
-                           nil)
-        ($.maestro.plugin/fail "`bb.edn` is not in sync")
-        ($.maestro.plugin/done "`bb.edn` is in sync")))))
+      (let [state (-sync-from-task node)]
+        (if (state ::$.maestro.plugin.bb/bb.edn)
+          ($.maestro.plugin/fail "`bb.edn` is not in sync")
+          ($.maestro.plugin/done "`bb.edn` is in sync"))
+        state))))
 
 
 
 (defn sync
 
+  [node]
 
-  ([node]
-
-   (sync node
-         nil))
-
-
-  ([node deps-maestro-edn]
-
-   ($.maestro.plugin/intro "maestro.plugin.bb/sync")
-   ($.maestro.plugin/step "Syncing `bb.edn` with `bb.maestro.edn` and `deps.maestro.edn`")
-   ($.maestro.plugin/safe
-     (delay
-       ($.maestro.plugin/step (format "Selecting everything required for node `%s`"
-                                      node))
-       (if-some [[bb-edn
-                  tree-string] (-sync-from-task node
-                                                deps-maestro-edn)]
-         (-write-bb-edn bb-edn
-                        tree-string)
-         ($.maestro.plugin/done "Nothing changed"))))))
+  ($.maestro.plugin/intro "maestro.plugin.bb/sync")
+  ($.maestro.plugin/step "Syncing `bb.edn` with `bb.maestro.edn` and `deps.edn`")
+  ($.maestro.plugin/safe
+    (delay
+      ($.maestro.plugin/step (format "Selecting everything required for node `%s`"
+                                     node))
+      (let [state (-sync-from-task node)]
+        (if (state ::$.maestro.plugin.bb/bb.edn)
+          (-write-bb-edn state)
+          (do
+            ($.maestro.plugin/done "Nothing changed")
+            state))))))

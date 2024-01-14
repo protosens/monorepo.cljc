@@ -99,6 +99,17 @@
 
 
 
+(defn relative
+
+  ^Path
+
+  [^Path parent ^Path child]
+
+  (.relativize parent
+               child))
+
+
+
 (defn starts-with?
 
   [^Path path-a ^Path path-b]

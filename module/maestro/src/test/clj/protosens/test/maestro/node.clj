@@ -21,7 +21,7 @@
   [state node]
 
   (update-in state
-             [::$.maestro/deps-maestro-edn
+             [::$.maestro/deps.edn
               ::result]
              conj
              node))
@@ -43,7 +43,7 @@
                                       ,
                                       ::result
                                       []})
-               (get-in [::$.maestro/deps-maestro-edn
+               (get-in [::$.maestro/deps.edn
                         ::result])))))
 
 

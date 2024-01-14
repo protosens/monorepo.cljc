@@ -10,7 +10,7 @@
 
 (defn- -shadow
 
-  [task-name arg+ compilation-mode]
+  [task-name compilation-mode]
 
   ($.maestro.plugin/intro (format "protosens.task.test.node/%s"
                                   task-name))
@@ -18,7 +18,6 @@
     (delay
       ($.maestro.plugin/step "Preparing tests for Node")
       ($.task.shadow/compile-test+ compilation-mode
-                                   arg+
                                    ":test/node"))))
 
 
@@ -28,7 +27,6 @@
   [task-name compilation-mode]
 
   (-shadow task-name
-           nil
            compilation-mode)
   ($.maestro.plugin/done "Tests are compiled and can be run with task `test:node`"))
 
@@ -79,7 +77,8 @@
 
   []
 
-  (-shadow "watch"
-           ["--config-merge"
-            "{:autorun true}"]
-           "watch"))
+  (binding [*command-line-args* (concat *command-line-args*
+                                        ["--config-merge"
+                                         "{:autorun true}"])]
+    (-shadow "watch"
+             "watch")))

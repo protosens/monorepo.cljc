@@ -15,9 +15,11 @@
 ;;;;;;;;;;
 
 
-(defn compute
+#?(:clj (defn compute
 
   "Computes the classpath of `deps.edn`."
+
+  ;; TODO. Avoid starting another JVM in Clojure.
 
 
   ([]
@@ -27,11 +29,11 @@
 
   ([alias+]
 
-   (let [arg+ (cons "-Spath"
-                    (when (seq alias+)
-                      (str "-A"
-                           (C.string/join ""
-                                          alias+))))]
+   (let [arg+ ["-Spath"
+               (when (seq alias+)
+                 (str "-A"
+                      (C.string/join ""
+                                     alias+)))]]
      #?(:bb
         (with-out-str
           (bb.deps/clojure arg+))
@@ -40,7 +42,7 @@
         (-> ($.process/run (cons "clojure"
                                  arg+))
             (:out)
-            (slurp))))))
+            (slurp)))))))
 
 
 

@@ -30,10 +30,9 @@
 
   []
 
-  (binding [*command-line-args* [":GOD"]]
-      ($.maestro/sync))
   ($.maestro.plugin.bb/check :module/task)
-  ($.maestro.plugin.clj-kondo/lint))
+  (binding [*command-line-args* [":GOD"]]
+    ($.maestro.plugin.clj-kondo/lint)))
 
 
 
@@ -42,8 +41,7 @@
   []
 
   ($.maestro.plugin/step "Before committing, this script will:")
-  (doseq [line ["Prepare `deps.edn` in `:GOD` mode"
-                "Ensure that `bb.edn` is in sync with `bb.maestro.edn` and `deps.maestro.edn`"
+  (doseq [line ["Ensure that `bb.edn` is in sync with `bb.maestro.edn` and `deps.edn`"
                 "Lint the whole repository"]]
     ($.maestro.plugin/step 1
                            line))

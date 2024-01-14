@@ -6,125 +6,133 @@
    No need to maintain several test suites manually."
 
   (:refer-clojure :exclude [sync])
-  (:require [babashka.fs              :as bb.fs]
-            [protosens.deps.edn       :as $.deps.edn]
-            [protosens.maestro.plugin :as $.maestro.plugin]))
+  (:require [babashka.fs                     :as       bb.fs]
+            [clojure.java.io                 :as       C.java.io]
+            [clojure.pprint                  :as       C.pprint]
+            [protosens.maestro               :as       $.maestro]
+            [protosens.maestro.alias         :as       $.maestro.alias]
+            [protosens.maestro.plugin        :as       $.maestro.plugin]
+            [protosens.maestro.plugin.kaocha :as-alias $.maestro.plugin.kaocha]))
+
+
+(set! *warn-on-reflection*
+      true)
 
 
 ;;;;;;;;;; Private helpers
 
 
+(defn- -terminate
+
+  [state]
+
+  ($.maestro.plugin/done "Ready for testing")
+  (state ::$.maestro.plugin.kaocha/alias+))
+
+
+
+(defn ^:no-doc -write-config
+
+  [state]
+
+  (let [output (state ::$.maestro.plugin.kaocha/output)]
+
+    ($.maestro.plugin/step (format "File to reference in your Kaocha test file being prepared at %s"
+                                   (pr-str output)))
+    (bb.fs/create-dirs (bb.fs/parent output))
+    (with-open [file (C.java.io/writer output)]
+      (-> (state ::$.maestro.plugin.kaocha/config)
+          (update-vals (comp vec
+                             sort))
+          (C.pprint/pprint file))))
+  state)
+
+
+
 (defn ^:no-doc -keep-path+
 
-  [alias->definition select-namespace?]
+  [alias->definition alias+ select-qualifier?]
 
-  (into []
-        (mapcat (fn [[alias definition]]
-                  (when (select-namespace? (namespace alias))
-                    (:extra-paths definition))))
-        alias->definition))
-
-
-
-(defn ^:no-doc -path+
-
-  [deps-edn namespace+]
-
-  (let [alias->definition (deps-edn :aliases)]
-    {:kaocha/source-paths (-keep-path+ alias->definition
-                                       (comp not
-                                             namespace+))
-     :kaocha/test-paths   (-keep-path+ alias->definition
-                                       namespace+)}))
-
-
-;;;
-
-
-(defn ^:no-doc -output-path
-
-  [deps-edn]
-
-  (let [path (deps-edn :maestro.plugin.kaocha/path)]
-    (when-not path
-      ($.maestro.plugin/fail "Output path not given"))
-    ($.maestro.plugin/step (format "File to reference in your Kaocha test file being prepared at `%s`"
-                                   path))
-    (bb.fs/create-dirs (bb.fs/parent path))
-    path))
+  (-> (mapcat (fn [alias]
+                (when (select-qualifier? (namespace alias))
+                  (get-in alias->definition
+                          [alias
+                           :extra-paths])))
+              alias+)
+      (sort)
+      (vec)))
 
 
 
-(defn ^:no-doc -selector+
+(defn ^:no-doc -prepare-config
 
-  [deps-edn]
 
-  (let [selector+ (deps-edn :maestro.plugin.kaocha/selector+)]
-    ;;
-    ;; Validate.
+  ([state]
+
+   (let [deps-edn      ($.maestro.plugin/read-deps-edn)
+         alias+        (or (first *command-line-args*)
+                           ":GOD")
+         maestro-state (binding [$.maestro.plugin/*print-path?* true]
+                         ($.maestro/run-string alias+
+                                               deps-edn))
+         alias-2+      ($.maestro.alias/accepted maestro-state)]
+     (assoc state
+            ,
+            ::$.maestro.plugin.kaocha/alias+
+            alias-2+
+            ,
+            ::$.maestro.plugin.kaocha/config
+            (-prepare-config deps-edn
+                             alias-2+
+                             (state ::$.maestro.plugin.kaocha/qualifier+)))))
+
+
+  ([deps-edn alias+ qualifier+]
+
+   (let [alias->definition (deps-edn :aliases)]
+     {:kaocha/source-paths (-keep-path+ alias->definition
+                                        alias+
+                                        (comp not
+                                              qualifier+))
+      :kaocha/test-paths   (-keep-path+ alias->definition
+                                        alias+
+                                        qualifier+)})))
+
+
+
+(defn ^:no-doc -prepare-qualifier+
+
+  [state]
+
+  (let [qualifier+ (state ::$.maestro.plugin.kaocha/qualifier+)]
     (some->
-      (or (when (nil? selector+)
-            "Selectors not provided, need to pick aliases providing test paths")
-          (when-not (vector? selector+)
-            "Selectors must be in a vector")
-          (when (empty? selector+)
-            "Vector of selectors is empty")
-          (when-some [x (some #(when-not (qualified-keyword? %)
+      (or (when (nil? qualifier+)
+            "Qualifiers not provided, need to pick aliases providing test paths")
+          (when-not (vector? qualifier+)
+            "Qualifiers must be in a vector")
+          (when (empty? qualifier+)
+            "Vector of qualifiers is empty")
+          (when-some [x (some #(when-not (keyword? %)
                                  %)
-                              selector+)]
-            (format "Only qualified keywords can be used as selectors, got: %s"
+                              qualifier+)]
+            (format "Given qualifier is not a keyword, got: %s"
                     (pr-str x))))
       ($.maestro.plugin/fail))
     ;;
     ;; Compute.
-    (reduce (fn [namespace+ selector]
-              (conj namespace+
-                    (namespace selector)))
-            #{}
-            selector+)))
-
-
-;;;
-
-
-(defn ^:no-doc -kaocha-required?
-
-  [deps-edn]
-
-  (-> deps-edn
-      (:deps)
-      (keys)
-      (->> (some #(= %
-                    'lambdaisland/kaocha)))
-      (boolean)))
-
-
-;;;
-
-
-(defn- -kaocha-not-required
-
-  []
-
-  ($.maestro.plugin/done "Kaocha is not required"))
-
-
-
-(defn ^:no-doc -kaocha-required
-
-  [deps-edn]
-
-  ($.maestro.plugin/step "Kaocha is required, proceeding")
-  (let [namespace+ (-selector+ deps-edn)]
-    ($.maestro.plugin/step "Aliases providing test paths are namespaced with:")
-    (doseq [nspace (sort namespace+)]
-      ($.maestro.plugin/step 1
-                             (format "`:%s/...`"
-                                     nspace)))
-    (spit (-output-path deps-edn)
-          (-path+ deps-edn
-                  namespace+)))
-  ($.maestro.plugin/done "Ready for testing"))
+    (let [qualifier-2+ (reduce (fn [qualifier-2+ qualifier]
+                                 (conj qualifier-2+
+                                       (name qualifier)))
+                               #{}
+                               qualifier+)]
+      ($.maestro.plugin/step "Aliases providing test paths are qualified with:")
+      (doseq [qualifier (sort qualifier-2+)]
+        ($.maestro.plugin/step 1
+                               (format ":%s/..."
+                                       qualifier)))
+      (assoc state
+             ::$.maestro.plugin.kaocha/qualifier+
+             qualifier-2+))))
 
 
 ;;;;;;;;;; Task
@@ -152,20 +160,14 @@
                          #include \"<PATH>\"]]}
    ```"
 
+  [output qualifier+]
 
-  ([]
-
-   (sync nil))
-
-
-  ([deps-edn]
-
-   ($.maestro.plugin/intro "maestro.plugin.kaocha/sync")
-   ($.maestro.plugin/safe
-     (delay
-       (let [deps-edn-2 (or deps-edn
-                            ($.deps.edn/read))]
-         (if (-kaocha-required? deps-edn-2)
-           (-kaocha-required deps-edn-2)
-           (-kaocha-not-required))
-         deps-edn-2)))))
+  ($.maestro.plugin/intro "maestro.plugin.kaocha/sync")
+  ($.maestro.plugin/safe
+    (delay
+      (-> {::$.maestro.plugin.kaocha/output     output
+           ::$.maestro.plugin.kaocha/qualifier+ qualifier+}
+          (-prepare-qualifier+)
+          (-prepare-config)
+          (-write-config)
+          (-terminate)))))

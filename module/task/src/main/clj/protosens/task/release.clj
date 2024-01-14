@@ -8,10 +8,10 @@
             [protosens.maestro.plugin.bb        :as $.maestro.plugin.bb]
             [protosens.maestro.plugin.changelog :as $.maestro.plugin.changelog]
             [protosens.maestro.plugin.clj-kondo :as $.maestro.plugin.clj-kondo]
-            [protosens.maestro.plugin.gitlib    :as $.maestro.plugin.gitlib]
             [protosens.maestro.plugin.quickdoc  :as $.maestro.plugin.quickdoc]
             [protosens.maestro.plugin.readme    :as $.maestro.plugin.readme]
-            [protosens.task.deps.nvd            :as $.task.deps.nvd]))
+            [protosens.task.deps.nvd            :as $.task.deps.nvd]
+            [protosens.task.gitlib              :as $.task.gitlib]))
 
 
 ;;;;;;;;;; Helpers
@@ -30,7 +30,7 @@
                 "Expose public modules as gitlibs"
                 "Generate API documentation"
                 "Template changelogs with the new version"
-                "Update `module/README.md`"
+                "Update `./module/README.md`"
                 "Update READMEs for all modules"]]
     ($.maestro.plugin/step 1
                            line))
@@ -43,16 +43,15 @@
   [version]
 
   (binding [*command-line-args* [":GOD"]]
-    ($.maestro/sync))
-  ($.maestro.plugin.clj-kondo/prepare)
-  ($.maestro.plugin.clj-kondo/lint)
-  ($.maestro.plugin.bb/check :module/task)
-  ($.task.deps.nvd/check)
-  ($.maestro.plugin.gitlib/expose)
-  ($.maestro.plugin.quickdoc/module+)
-  ($.maestro.plugin.changelog/template {:next-release version})
-  ($.maestro.plugin.readme/listing)
-  ($.maestro.plugin.readme/module+))
+    ($.maestro.plugin.clj-kondo/prepare)
+    ($.maestro.plugin.clj-kondo/lint)
+    ($.maestro.plugin.bb/check :module/task)
+    ($.task.deps.nvd/check)
+    ($.task.gitlib/expose)
+    ($.maestro.plugin.quickdoc/module+)
+    ($.maestro.plugin.changelog/template {:next-release version})
+    ($.maestro.plugin.readme/listing)
+    ($.maestro.plugin.readme/module+)))
 
 
 

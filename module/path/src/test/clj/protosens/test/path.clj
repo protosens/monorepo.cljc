@@ -116,6 +116,18 @@
 
 
 
+(T/deftest relative
+
+  (T/is (= ($.path/from-string "c/d")
+           ($.path/relative ($.path/from-string "a/b")
+                            ($.path/from-string "a/b/c/d"))))
+
+  (T/is (= ($.path/from-string "../../../../e/b")
+           ($.path/relative ($.path/from-string "a/b/c/d")
+                            ($.path/from-string "e/b")))))
+
+
+
 (T/deftest starts-with?
 
   (T/is (true? ($.path/starts-with? ($.path/from-string "/a/b")

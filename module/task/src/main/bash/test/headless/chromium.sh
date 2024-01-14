@@ -2,4 +2,4 @@
 
 
 set -e
-clj -X:module/playwright.test.cljs chromium
+bb clojure -X:module/playwright.test.cljs chromium

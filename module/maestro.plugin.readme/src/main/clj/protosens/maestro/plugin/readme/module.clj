@@ -102,11 +102,11 @@
 
 (defn alias+
 
-  [deps-maestro-edn]
+  [deps-edn]
 
   (for [[alias
          definition] (sort-by first
-                              (deps-maestro-edn :aliases))
+                              (deps-edn :aliases))
         :let         [root (:maestro/root definition)]
         :when        (not-empty root)]
     [alias

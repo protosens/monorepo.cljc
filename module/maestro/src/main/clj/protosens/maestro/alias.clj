@@ -10,8 +10,7 @@
       true)
 
 
-(declare copy
-         defined?
+(declare defined?
          definition
          inverted-graph)
 
@@ -24,14 +23,13 @@
   [state node]
 
   (let [required+ (get-in state
-                          [::$.maestro/deps-maestro-edn
+                          [::$.maestro/deps.edn
                            :aliases
                            node
                           :maestro/require])]
-    (-> state
-        (copy node)
-        ($.maestro.node/accept node
-                               required+))))
+    ($.maestro.node/accept state
+                           node
+                           required+)))
 
 
 
@@ -40,7 +38,7 @@
   [state]
 
   ;; Using `$.maestro.node/path` instead of `$.maestro.node/accepted` allows us
-  ;; to see the order of acceptance, in case that matters.
+  ;; to see the order of acceptance.
 
   (keep (fn [[node _depth]]
           (when (defined? state
@@ -50,25 +48,12 @@
 
 
 
-(defn copy
-
-  [state node]
-
-  (assoc-in state       
-            [::$.maestro/deps-edn
-             :aliases
-             node]
-            (definition state
-                        node)))
-
-
-
 (defn defined?
 
   [state node]
 
   (contains? (get-in state
-                     [::$.maestro/deps-maestro-edn
+                     [::$.maestro/deps.edn
                       :aliases])
              node))
 
@@ -79,7 +64,7 @@
   [state node]
 
   (get-in state
-          [::$.maestro/deps-maestro-edn
+          [::$.maestro/deps.edn
            :aliases
           node]))
 
@@ -141,7 +126,7 @@
   [state]
 
   (let [alias->definition (get-in state
-                                  [::$.maestro/deps-maestro-edn
+                                  [::$.maestro/deps.edn
                                    :aliases])]
     (reduce-kv (fn [state alias definition]
                  (reduce (fn [state-2 node]
