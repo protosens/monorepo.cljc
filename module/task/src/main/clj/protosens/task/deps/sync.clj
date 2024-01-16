@@ -4,7 +4,6 @@
 
   (:require [babashka.fs                        :as bb.fs]
             [protosens.edn.read                 :as $.edn.read]
-            [protosens.maestro                  :as $.maestro]
             [protosens.maestro.plugin           :as $.maestro.plugin]
             [protosens.maestro.plugin.bb        :as $.maestro.plugin.bb]
             [protosens.maestro.plugin.clj-kondo :as $.maestro.plugin.clj-kondo]
@@ -12,17 +11,6 @@
 
 
 ;;;;;;;;;;
-
-
-(defn- -cache
-
-  [path-target path-target-cached]
-
-  (bb.fs/create-dirs (bb.fs/parent path-target-cached))
-  (bb.fs/copy path-target
-              path-target-cached
-              {:replace-existing true}))
-
 
 
 (defn init
@@ -152,7 +140,7 @@
   ($.maestro.plugin/intro "protosens.task.deps/commit")
   ($.maestro.plugin/safe
     (delay
-      (if-some [commit (not-empty (state ::commit))]
+      (if (not-empty (state ::commit))
         (do
           ($.maestro.plugin/step "Caching state for diffing next time")
           (doseq [[path

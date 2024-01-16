@@ -54,7 +54,7 @@
 
 (defn- -module+
 
-  [context deps-edn]
+  [context]
 
   (doseq [[alias
            path-changelog] (-> ($.maestro.plugin/read-deps-edn)

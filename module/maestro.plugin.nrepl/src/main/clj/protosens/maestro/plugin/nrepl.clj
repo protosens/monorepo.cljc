@@ -4,6 +4,10 @@
             [protosens.maestro.plugin :as $.maestro.plugin]))
 
 
+(set! *warn-on-reflection*
+      true)
+
+
 ;;;;;;;;;;
 
 

@@ -3,7 +3,6 @@
   (:require [protosens.calver                   :as $.calver]
             [protosens.git                      :as $.git]
             [protosens.git.release              :as $.git.release]
-            [protosens.maestro                  :as $.maestro]
             [protosens.maestro.plugin           :as $.maestro.plugin]
             [protosens.maestro.plugin.bb        :as $.maestro.plugin.bb]
             [protosens.maestro.plugin.changelog :as $.maestro.plugin.changelog]

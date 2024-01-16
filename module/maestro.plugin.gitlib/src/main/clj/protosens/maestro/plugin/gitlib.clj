@@ -12,11 +12,8 @@
 
    The [[deploy]] task does the necessary step for exposition."
 
-  (:require [babashka.fs              :as bb.fs]
-            [clojure.java.io          :as C.java.io]
+  (:require [clojure.java.io          :as C.java.io]
             [clojure.pprint           :as C.pprint]
-            [clojure.string           :as C.string]
-            [protosens.deps.edn       :as $.deps.edn]
             [protosens.git            :as $.git]
             [protosens.maestro        :as $.maestro]
             [protosens.maestro.alias  :as $.maestro.alias]

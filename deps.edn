@@ -73,7 +73,7 @@
 
   :ext/cider-nrepl
 
-  {:extra-deps  {cider/cider-nrepl {:mvn/version "0.44.0"}}
+  {:extra-deps  {cider/cider-nrepl {:mvn/version "0.45.0"}}
    :maestro/doc "NREPL middleware"
    :maestro/url "https://github.com/clojure-emacs/cider-nrepl"}
 
@@ -159,7 +159,7 @@
 
   :ext/shadow-cljs
 
-  {:extra-deps      {thheller/shadow-cljs {:mvn/version "2.26.4"}}
+  {:extra-deps      {thheller/shadow-cljs {:mvn/version "2.26.5"}}
    :maestro/doc     "Clojurescript compilation made easy"
    :maestro/require [:ext/cider-nrepl]
    :maestro/url     "https://github.com/thheller/shadow-cljs"}
@@ -457,9 +457,7 @@
    :maestro/doc                    "Maestro plugin for exposing selected modules as Gitlibs."
    :maestro/platform+              [:bb
                                     :jvm]              
-   :maestro/require                [:ext/babashka.fs
-                                    :module/deps.edn
-                                    :module/git
+   :maestro/require                [:module/git
                                     :module/maestro
                                     :module/path
                                     :test/maestro.plugin.gitlib]

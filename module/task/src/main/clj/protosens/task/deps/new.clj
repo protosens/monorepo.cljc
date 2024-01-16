@@ -1,7 +1,6 @@
 (ns protosens.task.deps.new
 
-  (:require [protosens.maestro        :as $.maestro]
-            [protosens.maestro.plugin :as $.maestro.plugin]
+  (:require [protosens.maestro.plugin :as $.maestro.plugin]
             [protosens.process        :as $.process]))
 
 

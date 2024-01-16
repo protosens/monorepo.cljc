@@ -1,11 +1,6 @@
 (ns protosens.maestro
 
-  (:refer-clojure :exclude [sync])
-  (:require [clojure.java.io                       :as C.java.io]
-            [clojure.pprint                        :as C.pprint]
-            [clojure.string                        :as C.string]
-            [protosens.deps.edn                    :as $.deps.edn]
-            [protosens.edn.read                    :as $.edn.read]
+  (:require [clojure.string                        :as C.string]
             [protosens.graph.dfs                   :as $.graph.dfs]
             [protosens.maestro.alias               :as $.maestro.alias]
             [protosens.maestro.node                :as $.maestro.node]

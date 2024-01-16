@@ -1,7 +1,6 @@
 (ns protosens.task.git
 
-  (:require [protosens.maestro                  :as $.maestro]
-            [protosens.maestro.plugin           :as $.maestro.plugin]
+  (:require [protosens.maestro.plugin           :as $.maestro.plugin]
             [protosens.maestro.plugin.bb        :as $.maestro.plugin.bb]
             [protosens.maestro.plugin.clj-kondo :as $.maestro.plugin.clj-kondo]
             [protosens.process                  :as $.process]))

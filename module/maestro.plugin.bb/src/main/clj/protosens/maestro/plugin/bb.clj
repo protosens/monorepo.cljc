@@ -15,17 +15,7 @@
       true)
 
 
-;;;;;;;;;; Private side effects
-
-
-(defn- -read-bb-edn
-
-  [state]
-
-  (assoc state
-         ::$.maestro.plugin.bb/bb.edn
-         ($.maestro.plugin/read-file-edn "bb.edn")))
-
+;;;;;;;;;;
 
 
 (defn- -write-bb-edn
@@ -38,9 +28,6 @@
     (C.pprint/pprint (state ::$.maestro.plugin.bb/bb.edn)
                      file))
   ($.maestro.plugin/done "Ready to use Babashka"))
-
-
-;;;;;;;;;; Task
 
 
 (defn ^:no-doc -sync
