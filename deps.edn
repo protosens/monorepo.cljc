@@ -499,6 +499,20 @@
                      :module/maestro.plugin.kaocha
                      :test.util/maestro]}
 
+  ;--
+
+  :module/maestro.plugin.nrepl
+
+  {:extra-paths                    ["module/maestro.plugin.nrepl/src/main/clj/"]
+   :maestro/doc                    "Maestro plugin for [NREPL](https://nrepl.org/nrepl)"
+   :maestro/platform+              [:bb
+                                    :jvm]              
+   :maestro/require                [:ext/nrepl
+                                    :module/maestro]
+   :maestro/root                   "module/maestro.plugin.nrepl/"
+   :maestro.plugin.gitlib/name     protosens/maestro.plugin.nrepl
+   :maestro.plugin.quickdoc/output "module/maestro.plugin.nrepl/doc/API.md"}
+
   ;---
 
   :module/maestro.plugin.quickdoc
@@ -677,6 +691,7 @@
                        :module/maestro.plugin.clj-kondo
                        :module/maestro.plugin.gitlib
                        :module/maestro.plugin.kaocha
+                       :module/maestro.plugin.nrepl
                        :module/maestro.plugin.quickdoc
                        :module/maestro.plugin.readme]
    :maestro/root      "module/task/"}

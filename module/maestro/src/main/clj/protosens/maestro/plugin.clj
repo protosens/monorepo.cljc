@@ -118,6 +118,14 @@
 
 
 
+(defmacro safe*
+
+  [& form+]
+
+  `(safe (delay ~@form+)))
+
+
+
 (defn step
 
 
@@ -173,3 +181,34 @@
             (slurp)
             ($.edn.read/string))
        (read-file-edn path)))))
+
+
+;;;;;;;;;; Helpers for handling CLI arguments
+
+
+(defn ^:no-doc -with-appended-cli-alias+
+
+  [alias+ delayed]
+
+  (let [cli-alias+  (first *command-line-args*)
+        cli-alias+? (= (first cli-alias+)
+                       \:)]
+    (binding [*command-line-args* (cons (apply str
+                                               (when cli-alias+?
+                                                 cli-alias+)
+                                               alias+)
+                                        (cond->
+                                          *command-line-args*
+                                          cli-alias+?
+                                          (rest)))]
+      @delayed)))
+
+
+
+(defmacro with-appended-cli-alias+*
+
+  [alias+ & form+]
+
+  `(-with-appended-cli-alias+ ~alias+
+                              (delay
+                                ~@form+)))
