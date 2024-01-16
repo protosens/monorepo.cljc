@@ -183,32 +183,17 @@
        (read-file-edn path)))))
 
 
-;;;;;;;;;; Helpers for handling CLI arguments
+;;;;;;;;;; Helpers for handling CLI stuff
 
 
-(defn ^:no-doc -with-appended-cli-alias+
+(defn split-cli-arg+
 
-  [alias+ delayed]
+  []
 
-  (let [cli-alias+  (first *command-line-args*)
-        cli-alias+? (= (first cli-alias+)
-                       \:)]
-    (binding [*command-line-args* (cons (apply str
-                                               (when cli-alias+?
-                                                 cli-alias+)
-                                               alias+)
-                                        (cond->
-                                          *command-line-args*
-                                          cli-alias+?
-                                          (rest)))]
-      @delayed)))
-
-
-
-(defmacro with-appended-cli-alias+*
-
-  [alias+ & form+]
-
-  `(-with-appended-cli-alias+ ~alias+
-                              (delay
-                                ~@form+)))
+  (let [cli-alias+ (first *command-line-args*)]
+    (if (= (first cli-alias+)
+           \:)
+      [(first *command-line-args*)
+       (rest *command-line-args*)]
+      [nil
+       *command-line-args*])))

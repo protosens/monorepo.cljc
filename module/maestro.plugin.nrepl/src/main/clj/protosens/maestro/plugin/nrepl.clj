@@ -18,9 +18,12 @@
   ($.maestro.plugin/intro "protosens.maestro.plugin.nrepl/server")
   ($.maestro.plugin/safe*
     ($.maestro.plugin/step "Starting NREPL server")
-    ($.maestro.plugin/with-appended-cli-alias+*
-      alias+
-      ($.maestro/clj (concat [(str "-M"
-                                   (first *command-line-args*))]
+    (let [[cli-alias+
+           cli-arg+]  ($.maestro.plugin/split-cli-arg+)]
+      ($.maestro/clj (concat [(apply str
+                                     "-M"
+                                     (concat (or cli-alias+
+                                                 [:GOD])
+                                             alias+))]
                              prepend-arg+
-                             (rest *command-line-args*))))))
+                             cli-arg+)))))
