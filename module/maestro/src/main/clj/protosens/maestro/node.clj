@@ -18,11 +18,13 @@
 
   [state node+]
 
-  (assoc state
-         ::accepted #{}
-         ::input    (set node+)
-         ::path     []
-         ::rejected #{}))
+  (-> state
+      (assoc ::accepted #{}
+             ::path     []
+             ::rejected #{})
+      (update ::input
+              #(into (set %)
+                     node+))))
 
 
 ;;;;;;;;;; Important, entry point for handling nodes

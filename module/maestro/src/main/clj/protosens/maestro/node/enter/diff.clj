@@ -25,8 +25,7 @@
                      ::$.deps.edn.diff.rev/old           (name node)}
                     ($.maestro.diff/augmented)
                     ($.deps.edn.diff.alias/dirty))
-          input (conj (vec dirty)
-                      :INVERT)]
+          input (vec dirty)]
       (println)
       (println (str $.term.style/bold
                     $.term.style/fg-red
@@ -34,9 +33,6 @@
                     $.term.style/reset))
       (println)
       (-> state
-          (update-in [::$.maestro/deps.edn
-                      :aliases]
-                     empty)
           ($.maestro.node/init-state input)
           ($.maestro.node/accept node
                                  input)))
